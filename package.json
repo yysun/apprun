@@ -1,0 +1,35 @@
+{
+  "name": "apprun",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/apprun.js",
+  "typings": "index.ts",
+  "scripts": {
+    "build": "webpack -p",
+    "build:dev": "webpack -d"
+  },
+  "keywords": ["JavaScript", "TypeScript", "model-view-update",
+    "elm architecture", "virtual DOM", "apprun", "app.run", "app.start"],
+  "author": "Yiyi Sun <yiyisun@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yysun/apprun.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yysun/apprun/issues"
+  },
+  "homepage": "https://github.com/yysun/apprun#readme",
+  "dependencies": {
+    "html-to-vdom": "^0.7.0",
+    "vdom-as-json": "^1.0.9",
+    "vdom-serialized-patch": "^1.0.6",
+    "virtual-dom": "^2.1.1"
+  },
+  "devDependencies": {
+    "json-loader": "^0.5.4",
+    "ts-loader": "^0.8.2",
+    "typescript": "^2.0.3",
+    "webpack": "^1.13.0"
+  }
+}
