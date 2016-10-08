@@ -49,7 +49,7 @@ const model = 0;
 
 ## Define Update
 
-Update is defined as JavaScript object declaratively.
+Update re-creates the model. Update is defined as JavaScript object declaratively.
 ```
 const update = {
   '+1': (model) => model + 1,
@@ -69,15 +69,17 @@ const update = {};
 update['+1'] = (model) => model + 1;
 update['-1'] = (model) => model - 1;
 ```
-Update re-creates the model.
-
+```
+app.on('+1', (model) => model + 1);
+app.on('-1', (model) => model - 1);
+```
 ## Run Update
 
 app.run is the function to run the update.
 ```
 app.run('INCREASE');
 ```
-It can be used in HTML markup:
+It can be used in HTML markup directly:
 ```
 <button id="inc" onclick="app.run('INCREASE')">+1</button>
 ```
@@ -116,11 +118,15 @@ The steps to make an application are
 
 * Create a model that can be a number, an array or an object
 * Create a update object that has functions to re-create the model
-* Create a view that creates HTML string based on the model
+* Create a view that generates HTML string based on the model
 * Start the app in an element - app.start
-* Run the update - app.run
+* Trigger the update - app.run
 
-That's all. You can find examples that are made this way in [example projects](https://github.com/yysun/apprun-examples) .
+That's all. You can find examples that are made this way in
+[this project](https://github.com/yysun/apprun-examples), or try it online:
+
+* [Single counter](https://jsfiddle.net/ap1kgyeb/)
+* [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
 
 ## License
 
