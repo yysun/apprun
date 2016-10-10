@@ -35,14 +35,14 @@ export default class Component {
   constructor(private element: HTMLElement,
     private state: any,
     private view: (any) => string,
-    update: Update,
+    update: Update = {},
     options?) {
 
     console.assert(!!element);
     options = options || {};
-    this.enable_history = options.history;
+    this.enable_history = !!options.history;
     if (this.enable_history) {
-      app.on('history-prev', () => {
+      app.on(options.history.prev || 'history-prev', () => {
         this._history_idx --;
         if (this._history_idx >=0) {
           this.set_state(this._history[this._history_idx]);
@@ -51,7 +51,7 @@ export default class Component {
           this._history_idx = 0;
         }
       });
-      app.on('history-next', () => {
+      app.on(options.history.next || 'history-next', () => {
         this._history_idx ++;
         if (this._history_idx < this._history.length) {
           this.set_state(this._history[this._history_idx]);
@@ -63,7 +63,7 @@ export default class Component {
     }
 
     this.view = view;
-    this.add_actions(update || {});
+    this.add_actions(update);
     this.push_state(state);
   }
 
