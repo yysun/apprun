@@ -2,9 +2,5 @@
 	"compilerOptions": {
 		"target": "es5",
     "module": "commonjs"
-  },
-  "include": [
-    "./*.ts"
-  ]
-
+	}
 }
