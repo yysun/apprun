@@ -1,4 +1,4 @@
-/// <reference path="smurfs.d.ts" />
+/// <reference path="../../dist/apprun.d.ts" />
 var model = 0;
 var view = function (model) {
     return "<div>\n    <h1>" + model + "</h1>\n    <button onclick='app.run(\"-1\")'>-1</button>\n    <button onclick='app.run(\"+1\")'>+1</button>\n  </div>";

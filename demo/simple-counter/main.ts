@@ -1,4 +1,4 @@
-/// <reference path="smurfs.d.ts" />
+/// <reference path="../../dist/apprun.d.ts" />
 
 const model = 0;
 
