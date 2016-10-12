@@ -6,7 +6,8 @@
   "typings": "index.ts",
   "scripts": {
     "build": "webpack -p",
-    "build:dev": "webpack -d"
+    "build:dev": "webpack -d",
+    "build:lite": "webpack -p --config webpack.config.lite.js"
   },
   "keywords": ["JavaScript", "TypeScript", "model-view-update",
     "elm architecture", "virtual DOM", "apprun", "app.run", "app.start"],

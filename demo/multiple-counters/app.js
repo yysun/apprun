@@ -84,15 +84,6 @@
 	if (typeof window === 'object') {
 	    window['app'] = app_1.default;
 	}
-	(function ($) {
-	    if (!$)
-	        return;
-	    $.fn.start = function (components) {
-	        var _this = this;
-	        components.forEach(function (c) { return c(_this); });
-	        return this;
-	    };
-	}(jQuery));
 
 
 /***/ },
