@@ -5,17 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>my app</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
 </head>
 <body>
   <div id="my-app"></div>
   <input oninput="app.run('render', this.value)"/>
 
   <script src="apprun.lite.js"></script>
-  <script>
+  <script type="text/babel">
+   
+    const element = document.getElementById('my-app');
+
     var model = 'hello world';
     var view = function (val) {
-      return '<div><div>' + val + '</div>' +
-             '<input value="' + val + '" oninput="app.run(\'render\', this.value)"/></div>';
+      ReactDOM.render(
+        <div>
+          <div>{val}</div>
+          <input value={val}
+            oninput="app.run('render', this.value)"/>
+        </div>,
+        element
+      );
     }
     window.addEventListener('hashchange', (e) => {
       app.run('route', location.hash);
@@ -29,9 +41,25 @@
         return val;
       }
     }
-    element = document.getElementById('my-app');
     app.start(element, model, view, update);
   </script>
 
 </body>
 </html>
+
+    <!--class HelloWorld extends React.Component {
+
+      oninput(val) {
+        app.run('render', this.props.val);
+      }
+
+      render() {
+        return (
+        <div>
+          <div>{this.props.val}</div>
+          <input value={message} onChange={this.handleChange}
+            onInput={this.oninput}/>
+        </div>
+        );
+      }
+    }-->
