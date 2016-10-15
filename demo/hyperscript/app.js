@@ -47,24 +47,22 @@
 	"use strict";
 	var index_1 = __webpack_require__(1);
 	var h = __webpack_require__(94);
-	var model = 0;
-	var view = function (model) {
-	    return h('div', {
-	        style: {
-	            textAlign: 'center',
-	            lineHeight: (100 + model) + 'px',
-	            border: '1px solid red',
-	            width: (100 + model) + 'px',
-	            height: (100 + model) + 'px'
-	        }
-	    }, [String(model)]);
+	var model = 'hello world';
+	var view = function (val) {
+	    console.log(val);
+	    return h('div', [
+	        h('div', {}, val),
+	        h('input', {
+	            value: val,
+	            oninput: function () { index_1.default.run('render', this.value); }
+	        }, null)
+	    ]);
 	};
 	var update = {
-	    'render': function (model) { return model + 1; },
+	    'render': function (_, val) { return val; },
 	};
 	var element = document.getElementById('my-app');
 	var component = index_1.default.start(element, model, view, update);
-	setInterval(function () { return index_1.default.run('render'); }, 1000);
 
 
 /***/ },
@@ -79,8 +77,6 @@
 	app_1.default.start = function (element, model, view, update, options) {
 	    return new component_1.default(element, model, view, update, options);
 	};
-	// app.router = (id: string, components: Array<Component>, home: string)=>
-	//   router(id, components, home);
 	if (typeof window === 'object') {
 	    window['app'] = app_1.default;
 	}

@@ -1,26 +1,24 @@
 import app from '../../index';
 import h = require('virtual-dom/h');
 
-const model = 0;
+const model = 'hello world';
 
-const view = (model) => {
-  return h('div', {
-    style: {
-      textAlign: 'center',
-      lineHeight: (100 + model) + 'px',
-      border: '1px solid red',
-      width: (100 + model) + 'px',
-      height: (100 + model) + 'px'
-    }
-  }, [String(model)]);
+const view = (val) => {
+  console.log(val);
+  return h('div', [
+    h('div', {}, val),
+    h('input', {
+      value: val,
+      oninput: function() { app.run('render', this.value)}
+    }, null)
+  ]);
 };
 
 const update = {
-  'render': (model) => model + 1,
+  'render': (_, val) => val,
 };
 
 const element = document.getElementById('my-app');
 const component = app.start(element, model, view, update);
 
-setInterval(()=>app.run('render'), 1000);
 
