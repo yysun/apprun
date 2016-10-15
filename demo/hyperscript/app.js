@@ -46,17 +46,20 @@
 
 	"use strict";
 	var index_1 = __webpack_require__(1);
-	var h = __webpack_require__(94);
+	var hh = __webpack_require__(94);
+	var h = function (el, props) {
+	    var children = [];
+	    for (var _i = 2; _i < arguments.length; _i++) {
+	        children[_i - 2] = arguments[_i];
+	    }
+	    return hh(el, props, children);
+	};
 	var model = 'hello world';
 	var view = function (val) {
-	    console.log(val);
-	    return h('div', [
-	        h('div', {}, val),
-	        h('input', {
-	            value: val,
-	            oninput: function () { index_1.default.run('render', this.value); }
-	        }, null)
-	    ]);
+	    return h('div', {}, h('div', {}, val), h('input', {
+	        value: val,
+	        oninput: function () { index_1.default.run('render', this.value); }
+	    }, null));
 	};
 	var update = {
 	    'render': function (_, val) { return val; },
@@ -92,8 +95,7 @@
 	        this._events = {};
 	    }
 	    App.prototype.on = function (name, fn, options) {
-	        if (options === void 0) { options = null; }
-	        options = options || {};
+	        if (options === void 0) { options = {}; }
 	        if (options.debug)
 	            console.debug('on: ' + name);
 	        this._events[name] = this._events[name] || [];
@@ -101,13 +103,9 @@
 	    };
 	    App.prototype.run = function (name) {
 	        var _this = this;
-	        var p = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            p[_i - 1] = arguments[_i];
-	        }
 	        var args = [];
-	        for (var i = 1, j = arguments.length; i < j; i++) {
-	            args.push(arguments[i]);
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
 	        }
 	        var subscribers = this._events[name];
 	        console.assert(!!subscribers, 'No subscriber for event: ' + name);

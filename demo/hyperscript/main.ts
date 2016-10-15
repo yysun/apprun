@@ -1,17 +1,18 @@
 import app from '../../index';
-import h = require('virtual-dom/h');
+import hh = require('virtual-dom/h');
+
+const h = (el, props, ...children) => hh(el,props, children);
 
 const model = 'hello world';
 
 const view = (val) => {
-  console.log(val);
-  return h('div', [
+  return h('div', {},
     h('div', {}, val),
     h('input', {
       value: val,
       oninput: function() { app.run('render', this.value)}
     }, null)
-  ]);
+  );
 };
 
 const update = {
