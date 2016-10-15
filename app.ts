@@ -7,18 +7,13 @@ export class App {
     this._events = {};
   }
 
-  on(name: string, fn: (...p) => void, options: any = null) {
-    options = options || {};
+  on(name: string, fn: (args?) => void, options: any = {}) {
     if (options.debug) console.debug('on: ' + name);
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn: fn, options: options });
   }
 
-  run(name: string, ...p) {
-    let args = [];
-    for (let i = 1, j = arguments.length; i < j; i++) {
-      args.push(arguments[i]);
-    }
+  run(name: string, ...args) {
     const subscribers = this._events[name];
     console.assert(!!subscribers, 'No subscriber for event: ' + name);
     if (subscribers) this._events[name] = subscribers.filter((sub) => {
