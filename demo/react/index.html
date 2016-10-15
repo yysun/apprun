@@ -15,7 +15,7 @@
 
   <script src="apprun.lite.js"></script>
   <script type="text/babel">
-   
+
     const element = document.getElementById('my-app');
 
     var model = 'hello world';
@@ -23,10 +23,11 @@
       ReactDOM.render(
         <div>
           <div>{val}</div>
-          <input value={val}
-            oninput="app.run('render', this.value)"/>
-        </div>,
-        element
+          <div>{val}</div>
+          <div>{val}</div>
+          <div>{val}</div>
+        </div>
+        ,element
       );
     }
     window.addEventListener('hashchange', (e) => {

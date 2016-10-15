@@ -47,25 +47,30 @@
 	"use strict";
 	/** @jsx h */
 	var h = __webpack_require__(1);
-	var hyper = { createElement: h };
+	var hyper = { createElement: function (el, props) {
+	        var children = [];
+	        for (var _i = 2; _i < arguments.length; _i++) {
+	            children[_i - 2] = arguments[_i];
+	        }
+	        return h(el, props, children);
+	    } };
 	var index_1 = __webpack_require__(19);
-	var element = document.getElementById('my-app');
 	var model = 'hello world';
-	var view = function (model) {
-	    return hyper.createElement("input", {value: model, oninput: "app.run('render', this.value)"});
+	// const view = (model) => {
+	//   return <div>
+	//     <div>{model}</div>
+	//     <input value={model} oninput = {app.run('render', this.value)}/>
+	//   </div>
+	// };
+	var view = function (val) {
+	    return hyper.createElement("div", null, 
+	        hyper.createElement("div", null, val), 
+	        hyper.createElement("input", {value: val, oninput: function () { index_1.default.run('render', this.value); }}));
 	};
-	window.addEventListener('hashchange', function (e) {
-	    index_1.default.run('route', location.hash);
-	});
 	var update = {
-	    'route': function (_, hash) {
-	        return hash.replace('#', '');
-	    },
-	    'render': function (_, val) {
-	        location.hash = '#' + val;
-	        return val;
-	    }
+	    'render': function (_, val) { return val; }
 	};
+	var element = document.getElementById('my-app');
 	index_1.default.start(element, model, view, update);
 
 
@@ -732,8 +737,7 @@
 	        this._events = {};
 	    }
 	    App.prototype.on = function (name, fn, options) {
-	        if (options === void 0) { options = null; }
-	        options = options || {};
+	        if (options === void 0) { options = {}; }
 	        if (options.debug)
 	            console.debug('on: ' + name);
 	        this._events[name] = this._events[name] || [];
@@ -741,13 +745,9 @@
 	    };
 	    App.prototype.run = function (name) {
 	        var _this = this;
-	        var p = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            p[_i - 1] = arguments[_i];
-	        }
 	        var args = [];
-	        for (var i = 1, j = arguments.length; i < j; i++) {
-	            args.push(arguments[i]);
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
 	        }
 	        var subscribers = this._events[name];
 	        console.assert(!!subscribers, 'No subscriber for event: ' + name);
