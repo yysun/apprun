@@ -1,5 +1,4 @@
-import app from './app';
-// import updateElement from './vdom'
+import app from '../app';
 
 type Model = any;
 type View = (model: Model) => string;
@@ -20,8 +19,6 @@ export default class Component {
     this.state = state;
     if (this.view) {
       this.view(this.state);
-      // const html = this.view(this.state);
-      // if (html) updateElement(this.element, html);
     }
   }
 

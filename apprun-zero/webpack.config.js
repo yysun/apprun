@@ -1,8 +1,7 @@
-
 module.exports = {
-  entry: './index.lite.ts',
+  entry: './apprun-zero/index.ts',
   output: {
-    filename: './dist/apprun.lite.js'
+    filename: './dist/apprun-zero.js'
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']

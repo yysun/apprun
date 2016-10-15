@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack -p",
     "build:dev": "webpack -d",
-    "build:lite": "webpack -p --config webpack.config.lite.js"
+    "build:zero": "webpack -p --config ./apprun-zero/webpack.config.js",
+    "build:jsx": "webpack -p --config ./apprun-jsx/webpack.config.js"
   },
   "keywords": ["JavaScript", "TypeScript", "model-view-update",
     "elm architecture", "virtual DOM", "apprun", "app.run", "app.start"],

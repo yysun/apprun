@@ -1,5 +1,5 @@
-import app from './app';
-import Component from './component.lite';
+import app from '../app';
+import Component from './component';
 export default app;
 
 export type Model = any;
