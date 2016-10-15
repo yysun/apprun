@@ -128,6 +128,19 @@ That's all. You can find examples that are made this way in
 * [Single counter](https://jsfiddle.net/ap1kgyeb/)
 * [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
 
+## Three Editions
+
+* apprun-zero.js: 1K, write view function with your preferred technology, such as React
+* apprun-jsx.js: 4K, write view function using [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md) or jsx/tsx
+* apprun.js: 64K, write view function in plain HTML
+
+
+## TypeScript
+
+Apprun is written in TypeScript. It can be used by referencing to the type definition
+file apprun.d.ts. It can also be compiled/bundled with your ts file using webpack.
+
+
 ## License
 
 MIT

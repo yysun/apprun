@@ -6,13 +6,6 @@ import app from '../../index';
 
 var model = 'hello world';
 
-// const view = (model) => {
-//   return <div>
-//     <div>{model}</div>
-//     <input value={model} oninput = {app.run('render', this.value)}/>
-//   </div>
-// };
-
 const view = (val) => {
   return <div>
     <div>{val}</div>
