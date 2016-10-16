@@ -1,8 +1,4 @@
-/** @jsx h */
-import h = require('virtual-dom/h');
-const hyper = {createElement: (el, props, ...children) => h(el,props, children)};
-
-import app from '../../index';
+import app from '../../apprun-jsx/index';
 
 var model = 'hello world';
 

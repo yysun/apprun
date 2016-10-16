@@ -2,6 +2,6 @@
 	"compilerOptions": {
 		"target": "es5",
 		"jsx": "react",
-		"reactNamespace": "hyper"
+		"reactNamespace": "app"
 	}
 }
