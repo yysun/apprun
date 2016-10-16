@@ -130,16 +130,20 @@ That's all. You can find examples that are made this way in
 
 ## Three Editions
 
-* apprun-zero.js: 1K, write view function with your preferred technology, such as React
+AppRun converts HTML generated from the view function to [virtual DOM](https://github.com/Matt-Esch/virtual-dom) by default.
+In case you want to use other technology, e.g. React, hyperScript and JSX, there two smaller size editions of js files.
+
+* apprun-zero.js: 1K, write view function with your preferred DOM virtualization technology, such as React
 * apprun-jsx.js: 4K, write view function using [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md) or jsx/tsx
-* apprun.js: 64K, write view function in plain HTML
+* apprun.js: 64K, full edition, write view function in hyperScript, jsx and plain HTML
 
 
 ## TypeScript
 
-Apprun is written in TypeScript. It can be used by referencing to the type definition
-file apprun.d.ts. It can also be compiled/bundled with your ts file using webpack.
+Once AppRun exposes a global object app that is accessible by JavaScript and TypScript directly.
+It can also be compiled/bundled with your TypeScript file using webpack.
 
+Have fun and send pull requests.
 
 ## License
 
