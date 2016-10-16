@@ -1,6 +1,6 @@
 {
   "name": "apprun",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "dist/apprun.js",
   "typings": "index.ts",
@@ -10,8 +10,16 @@
     "build:zero": "webpack -p --config ./apprun-zero/webpack.config.js",
     "build:jsx": "webpack -p --config ./apprun-jsx/webpack.config.js"
   },
-  "keywords": ["JavaScript", "TypeScript", "model-view-update",
-    "elm architecture", "virtual DOM", "apprun", "app.run", "app.start"],
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "model-view-update",
+    "elm architecture",
+    "virtual DOM",
+    "apprun",
+    "app.run",
+    "app.start"
+  ],
   "author": "Yiyi Sun <yiyisun@gmail.com>",
   "license": "MIT",
   "repository": {
