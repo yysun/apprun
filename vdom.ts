@@ -27,27 +27,6 @@ export default function updateElement(element, html) {
   element.vtree = vtree;
 }
 
-// import fromJson = require('vdom-as-json/fromJson');
-// import toJson = require('vdom-as-json/toJson');
-// const worker = new Worker("vdom.worker.js");
-
-// export default function updateElement(element, html) {
-//   console.assert(!!element);
-//   worker.onmessage = ({data}) => {
-//     const {vtree, patches} = data;
-//     element.vtree = fromJson(vtree);
-//     if (patches) {
-//       requestAnimationFrame(() => {
-//         patch(element.firstChild, patches)
-//       });
-//     }
-//   }
-//   if (element.vtree) {
-//       worker.postMessage({vtree: toJson(element.vtree), html});
-//   } else {
-//     const node = createElement(vtree);
-//     element.appendChild(node);
-//     worker.postMessage({vtree: null, html});
-//   }
-
-// }
+import app from './app';
+app.h = (el, props, ...children) => h(el,props, children);
+app.createElement = app.h;

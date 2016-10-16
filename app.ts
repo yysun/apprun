@@ -2,6 +2,8 @@ export class App {
 
   private _events: Object;
   public start;
+  public h;
+  public createElement;
 
   constructor() {
     this._events = {};

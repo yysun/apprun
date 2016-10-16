@@ -18,3 +18,7 @@ export default function updateElement(element, vtree) {
   }
   element.vtree = vtree;
 }
+
+import app from '../app';
+app.h = (el, props, ...children) => h(el,props, children);
+app.createElement = app.h;
