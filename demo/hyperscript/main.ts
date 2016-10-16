@@ -1,7 +1,7 @@
-import app from '../../index';
+import app from '../../apprun-jsx/index';
 import hh = require('virtual-dom/h');
 
-const h = (el, props, ...children) => hh(el,props, children);
+const h = app.h;
 
 const model = 'hello world';
 
