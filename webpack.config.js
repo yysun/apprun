@@ -1,7 +1,12 @@
 module.exports = {
-  entry: './index.ts',
+  entry: {
+    'apprun': './index.ts',
+    'apprun-jsx':  './apprun-jsx/index.ts',
+    'apprun-zero': './apprun-zero/index.ts',
+  },
   output: {
-    filename: './dist/apprun.js'
+    path: 'dist',
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']

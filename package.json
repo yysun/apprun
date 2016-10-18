@@ -6,9 +6,7 @@
   "typings": "index.ts",
   "scripts": {
     "build": "webpack -p",
-    "build:dev": "webpack -d",
-    "build:zero": "webpack -p --config ./apprun-zero/webpack.config.js",
-    "build:jsx": "webpack -p --config ./apprun-jsx/webpack.config.js"
+    "build:dev": "webpack -d"
   },
   "keywords": [
     "JavaScript",
@@ -32,8 +30,6 @@
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
     "html-to-vdom": "^0.7.0",
-    "vdom-as-json": "^1.0.9",
-    "vdom-serialized-patch": "^1.0.6",
     "virtual-dom": "^2.1.1"
   },
   "devDependencies": {
