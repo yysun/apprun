@@ -6,7 +6,7 @@
   "typings": "index.ts",
   "scripts": {
     "build": "webpack -p",
-    "build:dev": "webpack -d",
+    "build:dev": "webpack -w",
     "build:test": "webpack --config tests/webpack.config.js",
     "test": "karma start --single-run"
   },

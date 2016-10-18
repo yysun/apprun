@@ -9,16 +9,19 @@ import createElement = require('virtual-dom/create-element');
 
 export default function updateElement(element, vtree) {
   console.assert(!!element);
-  if (element.vtree) {
+  if (element.firstChild && element.vtree) {
     const patches = diff(element.vtree, vtree);
     patch(element.firstChild, patches);
   } else {
     const node = createElement(vtree);
-    element.appendChild(node);
+    if (element.firstChild) {
+      element.replaceChild(node, element.firstChild);
+    } else {
+      element.appendChild(node);
+    }
   }
-  element.vtree = vtree;
 }
 
 import app from '../app';
-app.h = (el, props, ...children) => h(el,props, children);
+app.h = (el, props, ...children) => h(el, props, children);
 app.createElement = app.h;

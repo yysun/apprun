@@ -9,7 +9,7 @@ export class App {
     this._events = {};
   }
 
-  on(name: string, fn: (args?) => void, options: any = {}) {
+  on(name: string, fn: (...args) => void, options: any = {}) {
     if (options.debug) console.debug('on: ' + name);
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn: fn, options: options });
