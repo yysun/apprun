@@ -1,7 +1,7 @@
 # AppRun
 
-AppRun is a library to help implementing the [elm](http://elm-lang.org/)/
-[Redux](http://redux.js.org/) model-view-update architecture in plain JavaScript
+AppRun is a library to help implementing the
+[elm](http://elm-lang.org/)/[Redux](http://redux.js.org/) model-view-update architecture in plain JavaScript
 or TypeScript code.
 
 ## An Example
@@ -59,19 +59,15 @@ const update = {
 There are a couple of more creative ways to define the update object.
 
 ```
-const update = {
-  INCREASE: (model) => model + 1,
-  DECREASE: (model) => model - 1
-}
-```
-```
 const update = {};
 update['+1'] = (model) => model + 1;
 update['-1'] = (model) => model - 1;
 ```
 ```
-app.on('+1', (model) => model + 1);
-app.on('-1', (model) => model - 1);
+const update = {
+  INCREASE: (model) => model + 1,
+  DECREASE: (model) => model - 1
+}
 ```
 ## Run Update
 
@@ -96,8 +92,9 @@ $('#inc').on('click', () => app.run('INCREASE'));
 ## HTML View
 
 Once the update re-creates model, AppRun passes the new model into the view function.
-The view function generates HTML using the model. AppRun calculates the differences
-against the web page element and renders the changes.
+The view function generates HTML using the model. AppRun parses the HTML string into
+virtual dom. It then calculates the differences against the web page element and r
+enders the changes.
 
 ```
 const view = (model) => `<div>${model}</div>`;
@@ -112,17 +109,49 @@ const view = (numbers) => {
 }
 ```
 
+# HyperScript and JSX View
+
+AppRun supports [HyperScript](https://github.com/dominictarr/hyperscript).
+It converts HyperScript to [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md)
+internally to work with [virtual DOM](https://github.com/Matt-Esch/virtual-dom).
+
+```
+const h = app.h;
+const view = (val) => {
+  return h('div', {},
+    h('div', {}, val),
+    h('input', {
+      value: val,
+      oninput: function() { app.run('render', this.value)}
+    }, null)
+  );
+};
+```
+The internal conversion from HyperScript to virtual-hyperscript make AppRun
+compatible with Babel and TypeScript (TSX).
+```
+/* @jsx h */
+const h = app.h;
+const view = (val) => {
+  return <div>
+    <div>{val}</div>
+    <input value={val}
+      oninput={function() { app.run('render', this.value)}}/>
+  </div>
+};
+```
+
 ## Conclusion
 
 The steps to make an application are
 
 * Create a model that can be a number, an array or an object
 * Create a update object that has functions to re-create the model
-* Create a view that generates HTML string based on the model
+* Create a view that generates HTML string / JSX / hyperScript based on the model
 * Start the app in an element - app.start
 * Trigger the update - app.run
 
-That's all. You can find examples that are made this way in
+That's all. You can find examples that are made this way in the demo folder,
 [this project](https://github.com/yysun/apprun-examples), or try it online:
 
 * [Single counter](https://jsfiddle.net/ap1kgyeb/)
@@ -134,13 +163,13 @@ AppRun converts HTML generated from the view function to [virtual DOM](https://g
 In case you want to use other technology, e.g. React, hyperScript and JSX, there two smaller size editions of js files.
 
 * apprun-zero.js: 1K, write view function with your preferred DOM virtualization technology, such as React
-* apprun-jsx.js: 4K, write view function using [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md) or jsx/tsx
+* apprun-jsx.js: 4K, write view function using virtual-hyperScript or jsx/tsx
 * apprun.js: 64K, full edition, write view function in hyperScript, jsx and plain HTML
 
 
 ## TypeScript
 
-Once AppRun exposes a global object app that is accessible by JavaScript and TypScript directly.
+AppRun exposes a global object named app that is accessible by JavaScript and TypScript directly.
 It can also be compiled/bundled with your TypeScript file using webpack.
 
 Have fun and send pull requests.
