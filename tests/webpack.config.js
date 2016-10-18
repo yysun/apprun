@@ -2,7 +2,9 @@ module.exports = {
 
   entry: {
     app: "./tests/app.spec.ts",
-    component: "./tests/component.spec.ts"
+    component: "./tests/component.spec.ts",
+    vdom_jsx: "./tests/vdom_jsx.spec.tsx",
+    vdom_html: "./tests/vdom_html.spec.ts"
   },
   output: {
     filename: "./tests/[name].spec.js"

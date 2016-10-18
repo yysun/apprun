@@ -40,14 +40,13 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(103);
-	var component_1 = __webpack_require__(104);
+	var index_1 = __webpack_require__(2);
+	var component_1 = __webpack_require__(3);
 	var model = 'x';
 	var view = function (_) { return ''; };
 	var update = {
@@ -89,8 +88,7 @@
 
 
 /***/ },
-
-/***/ 1:
+/* 1 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -147,13 +145,12 @@
 
 
 /***/ },
-
-/***/ 103:
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var app_1 = __webpack_require__(1);
-	var component_1 = __webpack_require__(104);
+	var component_1 = __webpack_require__(3);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = app_1.default;
 	app_1.default.start = function (element, model, view, update, options) {
@@ -165,8 +162,7 @@
 
 
 /***/ },
-
-/***/ 104:
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -247,5 +243,4 @@
 
 
 /***/ }
-
-/******/ });
+/******/ ]);
