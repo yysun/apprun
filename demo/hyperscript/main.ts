@@ -1,10 +1,8 @@
 import app from '../../apprun-jsx/index';
-import hh = require('virtual-dom/h');
-
-const h = app.h;
 
 const model = 'hello world';
 
+const h = app.h;
 const view = (val) => {
   return h('div', {},
     h('div', {}, val),
