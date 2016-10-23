@@ -44,4 +44,19 @@ describe('Component', () => {
     expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
   });
 
+  it('should overwrite view', () => {
+    const view_spy = jasmine.createSpy('view');
+    const view2 = _ => {};
+    const view_spy2 = jasmine.createSpy('view2');
+    update['hi2'] = _ => {
+      return {
+        view: view_spy2
+      };
+    };
+    const component = new Component(document.body, {}, view_spy, update);
+    app.run('hi2', {});
+    expect(view_spy).toHaveBeenCalledTimes(1);
+    expect(view_spy2).toHaveBeenCalledTimes(1);
+  });
+
 })

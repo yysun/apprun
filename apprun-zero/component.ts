@@ -17,7 +17,10 @@ export default class Component {
 
   private set_state(state) {
     this.state = state;
-    if (this.view) {
+    if (state && state.view && typeof state.view === 'function') {
+      state.view(state);
+      state.view = undefined;
+    } else if (this.view) {
       this.view(this.state);
     }
   }
