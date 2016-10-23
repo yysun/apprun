@@ -206,7 +206,11 @@
 	    });
 	    Component.prototype.set_state = function (state) {
 	        this.state = state;
-	        if (this.view) {
+	        if (state && state.view && typeof state.view === 'function') {
+	            state.view(this.state);
+	            state.view = undefined;
+	        }
+	        else if (this.view) {
 	            var html = this.view(this.state);
 	            if (html)
 	                vdom_1.default(this.element, html);

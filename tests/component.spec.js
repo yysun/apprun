@@ -84,6 +84,20 @@
 	        index_1.default.run('next');
 	        expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
 	    });
+	    it('should overwrite view', function () {
+	        var view_spy = jasmine.createSpy('view');
+	        var view2 = function (_) { };
+	        var view_spy2 = jasmine.createSpy('view2');
+	        update['hi2'] = function (_) {
+	            return {
+	                view: view_spy2
+	            };
+	        };
+	        var component = new component_1.default(document.body, {}, view_spy, update);
+	        index_1.default.run('hi2', {});
+	        expect(view_spy).toHaveBeenCalledTimes(1);
+	        expect(view_spy2).toHaveBeenCalledTimes(1);
+	    });
 	});
 
 
@@ -212,7 +226,11 @@
 	    });
 	    Component.prototype.set_state = function (state) {
 	        this.state = state;
-	        if (this.view) {
+	        if (state && state.view && typeof state.view === 'function') {
+	            state.view(state);
+	            state.view = undefined;
+	        }
+	        else if (this.view) {
 	            this.view(this.state);
 	        }
 	    };
