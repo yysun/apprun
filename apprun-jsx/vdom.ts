@@ -6,20 +6,19 @@ import diff = require('virtual-dom/diff');
 import VNode = require('virtual-dom/vnode/vnode');
 import VText = require('virtual-dom/vnode/vtext');
 import createElement = require('virtual-dom/create-element');
+import virtualize = require('vdom-virtualize');
 
 export default function updateElement(element, vtree) {
   console.assert(!!element);
-  if (element.firstChild && element.vtree) {
-    const patches = diff(element.vtree, vtree);
+  if (element.firstChild) {
+    const prev = element.firstChild.vtree || virtualize(element.firstChild);
+    const patches = diff(prev, vtree);
     patch(element.firstChild, patches);
   } else {
     const node = createElement(vtree);
-    if (element.firstChild) {
-      element.replaceChild(node, element.firstChild);
-    } else {
-      element.appendChild(node);
-    }
+    element.appendChild(node);
   }
+  element.firstChild.vtree = vtree;
 }
 
 import app from '../app';

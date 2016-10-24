@@ -6,6 +6,7 @@ import diff = require('virtual-dom/diff');
 import VNode = require('virtual-dom/vnode/vnode');
 import VText = require('virtual-dom/vnode/vtext');
 import createElement = require('virtual-dom/create-element');
+import virtualize = require('vdom-virtualize');
 import html2vdom = require('html-to-vdom');
 const convertHTML = html2vdom({ VNode, VText });
 const convertHTMLWithKey = convertHTML.bind(null, {
@@ -17,18 +18,15 @@ const convertHTMLWithKey = convertHTML.bind(null, {
 export default function updateElement(element, html) {
   console.assert(!!element);
   const vtree = (typeof html === 'string') ? convertHTMLWithKey(html) : html;
-  if (element.firstChild && element.vtree) {
-    const patches = diff(element.vtree, vtree);
+  if (element.firstChild) {
+    const prev = element.firstChild.vtree || virtualize(element.firstChild);
+    const patches = diff(prev, vtree);
     patch(element.firstChild, patches);
   } else {
     const node = createElement(vtree);
-    if (element.firstChild) {
-      element.replaceChild(node, element.firstChild);
-    } else {
-      element.appendChild(node);
-    }
+    element.appendChild(node);
   }
-  element.vtree = vtree;
+  element.firstChild.vtree = vtree;
 }
 
 import app from './app';
