@@ -254,7 +254,8 @@
 	var VNode = __webpack_require__(10);
 	var VText = __webpack_require__(16);
 	var createElement = __webpack_require__(40);
-	var html2vdom = __webpack_require__(41);
+	var virtualize = __webpack_require__(41);
+	var html2vdom = __webpack_require__(43);
 	var convertHTML = html2vdom({ VNode: VNode, VText: VText });
 	var convertHTMLWithKey = convertHTML.bind(null, {
 	    getVNodeKey: function (attributes) {
@@ -264,20 +265,16 @@
 	function updateElement(element, html) {
 	    console.assert(!!element);
 	    var vtree = (typeof html === 'string') ? convertHTMLWithKey(html) : html;
-	    if (element.firstChild && element.vtree) {
-	        var patches = diff(element.vtree, vtree);
+	    if (element.firstChild) {
+	        var prev = element.firstChild.vtree || virtualize(element.firstChild);
+	        var patches = diff(prev, vtree);
 	        patch(element.firstChild, patches);
 	    }
 	    else {
 	        var node = createElement(vtree);
-	        if (element.firstChild) {
-	            element.replaceChild(node, element.firstChild);
-	        }
-	        else {
-	            element.appendChild(node);
-	        }
+	        element.appendChild(node);
 	    }
-	    element.vtree = vtree;
+	    element.firstChild.vtree = vtree;
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = updateElement;
@@ -2079,7 +2076,277 @@
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var convertHTML = __webpack_require__(42);
+	/*!
+	* vdom-virtualize
+	* Copyright 2014 by Marcel Klehr <mklehr@gmx.net>
+	*
+	* (MIT LICENSE)
+	* Permission is hereby granted, free of charge, to any person obtaining a copy
+	* of this software and associated documentation files (the "Software"), to deal
+	* in the Software without restriction, including without limitation the rights
+	* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	* copies of the Software, and to permit persons to whom the Software is
+	* furnished to do so, subject to the following conditions:
+	*
+	* The above copyright notice and this permission notice shall be included in
+	* all copies or substantial portions of the Software.
+	*
+	* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	* THE SOFTWARE.
+	*/
+	var VNode = __webpack_require__(10)
+	  , VText = __webpack_require__(16)
+	  , VComment = __webpack_require__(42)
+
+	module.exports = createVNode
+
+	function createVNode(domNode, key) {
+	  key = key || null // XXX: Leave out `key` for now... merely used for (re-)ordering
+
+	  if(domNode.nodeType == 1) return createFromElement(domNode, key)
+	  if(domNode.nodeType == 3) return createFromTextNode(domNode, key)
+	  if(domNode.nodeType == 8) return createFromCommentNode(domNode, key)
+	  return
+	}
+
+	function createFromTextNode(tNode) {
+	  return new VText(tNode.nodeValue)
+	}
+
+
+	function createFromCommentNode(cNode) {
+	  return new VComment(cNode.nodeValue)
+	}
+
+
+	function createFromElement(el) {
+	  var tagName = el.tagName
+	  , namespace = el.namespaceURI == 'http://www.w3.org/1999/xhtml'? null : el.namespaceURI
+	  , properties = getElementProperties(el)
+	  , children = []
+
+	  for (var i = 0; i < el.childNodes.length; i++) {
+	    children.push(createVNode(el.childNodes[i]/*, i*/))
+	  }
+
+	  return new VNode(tagName, properties, children, null, namespace)
+	}
+
+
+	function getElementProperties(el) {
+	  var obj = {}
+
+	  for(var i=0; i<props.length; i++) {
+	    var propName = props[i]
+	    if(!el[propName]) continue
+
+	    // Special case: style
+	    // .style is a DOMStyleDeclaration, thus we need to iterate over all
+	    // rules to create a hash of applied css properties.
+	    //
+	    // You can directly set a specific .style[prop] = value so patching with vdom
+	    // is possible.
+	    if("style" == propName) {
+	      var css = {}
+	        , styleProp
+	      if ('undefined' !== typeof el.style.length) {
+	        for(var j=0; j<el.style.length; j++) {
+	          styleProp = el.style[j]
+	          css[styleProp] = el.style.getPropertyValue(styleProp) // XXX: add support for "!important" via getPropertyPriority()!
+	        }
+	      } else { // IE8
+	        for (var styleProp in el.style) {
+	          if (el.style[styleProp] && el.style.hasOwnProperty(styleProp)) {
+	            css[styleProp] = el.style[styleProp];
+	          }
+	        }
+	      }
+
+	      if(Object.keys(css).length) obj[propName] = css
+	      continue
+	    }
+
+	    // https://msdn.microsoft.com/en-us/library/cc848861%28v=vs.85%29.aspx
+	    // The img element does not support the HREF content attribute.
+	    // In addition, the href property is read-only for the img Document Object Model (DOM) object
+	    if (el.tagName.toLowerCase() === 'img' && propName === 'href') {
+	      continue;
+	    }
+
+	    // Special case: dataset
+	    // we can iterate over .dataset with a simple for..in loop.
+	    // The all-time foo with data-* attribs is the dash-snake to camelCase
+	    // conversion.
+	    //
+	    // *This is compatible with h(), but not with every browser, thus this section was removed in favor
+	    // of attributes (specified below)!*
+	    //
+	    // .dataset properties are directly accessible as transparent getters/setters, so
+	    // patching with vdom is possible.
+	    /*if("dataset" == propName) {
+	      var data = {}
+	      for(var p in el.dataset) {
+	        data[p] = el.dataset[p]
+	      }
+	      obj[propName] = data
+	      return
+	    }*/
+
+	    // Special case: attributes
+	    // these are a NamedNodeMap, but we can just convert them to a hash for vdom,
+	    // because of https://github.com/Matt-Esch/virtual-dom/blob/master/vdom/apply-properties.js#L57
+	    if("attributes" == propName){
+	      var atts = Array.prototype.slice.call(el[propName]);
+	      var hash = {}
+	      for(var k=0; k<atts.length; k++){
+	        var name = atts[k].name;
+	        if(obj[name] || obj[attrBlacklist[name]]) continue;
+	        hash[name] = el.getAttribute(name);
+	      }
+	      obj[propName] = hash;
+	      continue
+	    }
+	    if("tabIndex" == propName && el.tabIndex === -1) continue
+
+	    // Special case: contentEditable
+	    // browser use 'inherit' by default on all nodes, but does not allow setting it to ''
+	    // diffing virtualize dom will trigger error
+	    // ref: https://github.com/Matt-Esch/virtual-dom/issues/176
+	    if("contentEditable" == propName && el[propName] === 'inherit') continue
+
+	    if('object' === typeof el[propName]) continue
+
+	    // default: just copy the property
+	    obj[propName] = el[propName]
+	  }
+
+	  return obj
+	}
+
+	/**
+	 * DOMNode property white list
+	 * Taken from https://github.com/Raynos/react/blob/dom-property-config/src/browser/ui/dom/DefaultDOMPropertyConfig.js
+	 */
+	var props =
+
+	module.exports.properties = [
+	 "accept"
+	,"accessKey"
+	,"action"
+	,"alt"
+	,"async"
+	,"autoComplete"
+	,"autoPlay"
+	,"cellPadding"
+	,"cellSpacing"
+	,"checked"
+	,"className"
+	,"colSpan"
+	,"content"
+	,"contentEditable"
+	,"controls"
+	,"crossOrigin"
+	,"data"
+	//,"dataset" removed since attributes handles data-attributes
+	,"defer"
+	,"dir"
+	,"download"
+	,"draggable"
+	,"encType"
+	,"formNoValidate"
+	,"href"
+	,"hrefLang"
+	,"htmlFor"
+	,"httpEquiv"
+	,"icon"
+	,"id"
+	,"label"
+	,"lang"
+	,"list"
+	,"loop"
+	,"max"
+	,"mediaGroup"
+	,"method"
+	,"min"
+	,"multiple"
+	,"muted"
+	,"name"
+	,"noValidate"
+	,"pattern"
+	,"placeholder"
+	,"poster"
+	,"preload"
+	,"radioGroup"
+	,"readOnly"
+	,"rel"
+	,"required"
+	,"rowSpan"
+	,"sandbox"
+	,"scope"
+	,"scrollLeft"
+	,"scrolling"
+	,"scrollTop"
+	,"selected"
+	,"span"
+	,"spellCheck"
+	,"src"
+	,"srcDoc"
+	,"srcSet"
+	,"start"
+	,"step"
+	,"style"
+	,"tabIndex"
+	,"target"
+	,"title"
+	,"type"
+	,"value"
+
+	// Non-standard Properties
+	,"autoCapitalize"
+	,"autoCorrect"
+	,"property"
+
+	, "attributes"
+	]
+
+	var attrBlacklist =
+	module.exports.attrBlacklist = {
+	  'class': 'className'
+	}
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = VirtualComment
+
+	function VirtualComment(text) {
+	  this.text = String(text)
+	}
+
+	VirtualComment.prototype.type = 'Widget'
+
+	VirtualComment.prototype.init = function() {
+	  return document.createComment(this.text)
+	}
+
+	VirtualComment.prototype.update = function(previous, domNode) {
+	  if(this.text === previous.text) return
+	  domNode.nodeValue = this.text
+	}
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var convertHTML = __webpack_require__(44);
 	module.exports = function initializeConverter (dependencies) {
 	    if (!dependencies.VNode || !dependencies.VText) {
 	        throw new Error('html-to-vdom needs to be initialized with VNode and VText');
@@ -2089,11 +2356,11 @@
 
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createConverter = __webpack_require__(43);
-	var parseHTML = __webpack_require__(52);
+	var createConverter = __webpack_require__(45);
+	var parseHTML = __webpack_require__(54);
 
 	module.exports = function initializeHtmlToVdom (VTree, VText) {
 	    var htmlparserToVdom = createConverter(VTree, VText);
@@ -2123,11 +2390,11 @@
 
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var decode = __webpack_require__(44).decode;
-	var convertTagAttributes = __webpack_require__(51);
+	var decode = __webpack_require__(46).decode;
+	var convertTagAttributes = __webpack_require__(53);
 
 	module.exports = function createConverter (VNode, VText) {
 	    var converter = {
@@ -2161,19 +2428,19 @@
 
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.encode = __webpack_require__(45);
-	exports.decode = __webpack_require__(49);
+	exports.encode = __webpack_require__(47);
+	exports.decode = __webpack_require__(51);
 
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var punycode = __webpack_require__(46);
-	var revEntities = __webpack_require__(48);
+	var punycode = __webpack_require__(48);
+	var revEntities = __webpack_require__(50);
 
 	module.exports = encode;
 
@@ -2214,7 +2481,7 @@
 
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -2749,10 +3016,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(47)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)(module), (function() { return this; }())))
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -2768,7 +3035,7 @@
 
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -4088,11 +4355,11 @@
 	};
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var punycode = __webpack_require__(46);
-	var entities = __webpack_require__(50);
+	var punycode = __webpack_require__(48);
+	var entities = __webpack_require__(52);
 
 	module.exports = decode;
 
@@ -4126,7 +4393,7 @@
 
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -6364,13 +6631,13 @@
 	};
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
 	    Adapted from https://github.com/facebook/react/blob/c265504fe2fdeadf0e5358879a3c141628b37a23/src/renderers/dom/shared/HTMLDOMPropertyConfig.js
 	 */
-	var decode = __webpack_require__(44).decode;
+	var decode = __webpack_require__(46).decode;
 
 	var MUST_USE_ATTRIBUTE = 0x1;
 	var MUST_USE_PROPERTY = 0x2;
@@ -6647,10 +6914,10 @@
 
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var htmlparser = __webpack_require__(53);
+	var htmlparser = __webpack_require__(55);
 
 	var parseHTML = function parseHTML (html) {
 	    var handler = new htmlparser.DomHandler();
@@ -6666,11 +6933,11 @@
 
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Parser = __webpack_require__(54),
-	    DomHandler = __webpack_require__(63);
+	var Parser = __webpack_require__(56),
+	    DomHandler = __webpack_require__(65);
 
 	function defineProp(name, value){
 		delete module.exports[name];
@@ -6680,26 +6947,26 @@
 
 	module.exports = {
 		Parser: Parser,
-		Tokenizer: __webpack_require__(55),
-		ElementType: __webpack_require__(64),
+		Tokenizer: __webpack_require__(57),
+		ElementType: __webpack_require__(66),
 		DomHandler: DomHandler,
 		get FeedHandler(){
-			return defineProp("FeedHandler", __webpack_require__(67));
+			return defineProp("FeedHandler", __webpack_require__(69));
 		},
 		get Stream(){
-			return defineProp("Stream", __webpack_require__(68));
+			return defineProp("Stream", __webpack_require__(70));
 		},
 		get WritableStream(){
-			return defineProp("WritableStream", __webpack_require__(69));
+			return defineProp("WritableStream", __webpack_require__(71));
 		},
 		get ProxyHandler(){
-			return defineProp("ProxyHandler", __webpack_require__(91));
+			return defineProp("ProxyHandler", __webpack_require__(93));
 		},
 		get DomUtils(){
-			return defineProp("DomUtils", __webpack_require__(92));
+			return defineProp("DomUtils", __webpack_require__(94));
 		},
 		get CollectingHandler(){
-			return defineProp("CollectingHandler", __webpack_require__(104));
+			return defineProp("CollectingHandler", __webpack_require__(106));
 		},
 		// For legacy support
 		DefaultHandler: DomHandler,
@@ -6740,10 +7007,10 @@
 
 
 /***/ },
-/* 54 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Tokenizer = __webpack_require__(55);
+	var Tokenizer = __webpack_require__(57);
 
 	/*
 		Options:
@@ -6865,7 +7132,7 @@
 		if(this._cbs.onparserinit) this._cbs.onparserinit(this);
 	}
 
-	__webpack_require__(61)(Parser, __webpack_require__(62).EventEmitter);
+	__webpack_require__(63)(Parser, __webpack_require__(64).EventEmitter);
 
 	Parser.prototype._updatePosition = function(initialOffset){
 		if(this.endIndex === null){
@@ -7099,15 +7366,15 @@
 
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Tokenizer;
 
-	var decodeCodePoint = __webpack_require__(56),
-	    entityMap = __webpack_require__(58),
-	    legacyMap = __webpack_require__(59),
-	    xmlMap    = __webpack_require__(60),
+	var decodeCodePoint = __webpack_require__(58),
+	    entityMap = __webpack_require__(60),
+	    legacyMap = __webpack_require__(61),
+	    xmlMap    = __webpack_require__(62),
 
 	    i = 0,
 
@@ -8011,10 +8278,10 @@
 
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var decodeMap = __webpack_require__(57);
+	var decodeMap = __webpack_require__(59);
 
 	module.exports = decodeCodePoint;
 
@@ -8043,7 +8310,7 @@
 
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8078,7 +8345,7 @@
 	};
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10210,7 +10477,7 @@
 	};
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10323,7 +10590,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 62 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10335,7 +10602,7 @@
 	};
 
 /***/ },
-/* 61 */
+/* 63 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -10364,7 +10631,7 @@
 
 
 /***/ },
-/* 62 */
+/* 64 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -10672,14 +10939,14 @@
 
 
 /***/ },
-/* 63 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ElementType = __webpack_require__(64);
+	var ElementType = __webpack_require__(66);
 
 	var re_whitespace = /\s+/g;
-	var NodePrototype = __webpack_require__(65);
-	var ElementPrototype = __webpack_require__(66);
+	var NodePrototype = __webpack_require__(67);
+	var ElementPrototype = __webpack_require__(68);
 
 	function DomHandler(callback, options, elementCB){
 		if(typeof callback === "object"){
@@ -10860,7 +11127,7 @@
 
 
 /***/ },
-/* 64 */
+/* 66 */
 /***/ function(module, exports) {
 
 	//Types of elements found in the DOM
@@ -10881,7 +11148,7 @@
 
 
 /***/ },
-/* 65 */
+/* 67 */
 /***/ function(module, exports) {
 
 	// This object will be used as the prototype for Nodes when creating a
@@ -10931,11 +11198,11 @@
 
 
 /***/ },
-/* 66 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// DOM-Level-1-compliant structure
-	var NodePrototype = __webpack_require__(65);
+	var NodePrototype = __webpack_require__(67);
 	var ElementPrototype = module.exports = Object.create(NodePrototype);
 
 	var domLvl1 = {
@@ -10957,10 +11224,10 @@
 
 
 /***/ },
-/* 67 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var index = __webpack_require__(53),
+	var index = __webpack_require__(55),
 	    DomHandler = index.DomHandler,
 	    DomUtils = index.DomUtils;
 
@@ -10969,7 +11236,7 @@
 		this.init(callback, options);
 	}
 
-	__webpack_require__(61)(FeedHandler, DomHandler);
+	__webpack_require__(63)(FeedHandler, DomHandler);
 
 	FeedHandler.prototype.init = DomHandler;
 
@@ -11058,18 +11325,18 @@
 
 
 /***/ },
-/* 68 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Stream;
 
-	var Parser = __webpack_require__(69);
+	var Parser = __webpack_require__(71);
 
 	function Stream(options){
 		Parser.call(this, new Cbs(this), options);
 	}
 
-	__webpack_require__(61)(Stream, Parser);
+	__webpack_require__(63)(Stream, Parser);
 
 	Stream.prototype.readable = true;
 
@@ -11077,7 +11344,7 @@
 		this.scope = scope;
 	}
 
-	var EVENTS = __webpack_require__(53).EVENTS;
+	var EVENTS = __webpack_require__(55).EVENTS;
 
 	Object.keys(EVENTS).forEach(function(name){
 		if(EVENTS[name] === 0){
@@ -11098,15 +11365,15 @@
 	});
 
 /***/ },
-/* 69 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Stream;
 
-	var Parser = __webpack_require__(54),
-	    WritableStream = __webpack_require__(70).Writable || __webpack_require__(90).Writable,
-	    StringDecoder = __webpack_require__(83).StringDecoder,
-	    Buffer = __webpack_require__(75).Buffer;
+	var Parser = __webpack_require__(56),
+	    WritableStream = __webpack_require__(72).Writable || __webpack_require__(92).Writable,
+	    StringDecoder = __webpack_require__(85).StringDecoder,
+	    Buffer = __webpack_require__(77).Buffer;
 
 	function Stream(cbs, options){
 		var parser = this._parser = new Parser(cbs, options);
@@ -11119,7 +11386,7 @@
 		});
 	}
 
-	__webpack_require__(61)(Stream, WritableStream);
+	__webpack_require__(63)(Stream, WritableStream);
 
 	WritableStream.prototype._write = function(chunk, encoding, cb){
 		if(chunk instanceof Buffer) chunk = this._decoder.write(chunk);
@@ -11128,7 +11395,7 @@
 	};
 
 /***/ },
-/* 70 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -11154,15 +11421,15 @@
 
 	module.exports = Stream;
 
-	var EE = __webpack_require__(62).EventEmitter;
-	var inherits = __webpack_require__(61);
+	var EE = __webpack_require__(64).EventEmitter;
+	var inherits = __webpack_require__(63);
 
 	inherits(Stream, EE);
-	Stream.Readable = __webpack_require__(71);
-	Stream.Writable = __webpack_require__(86);
-	Stream.Duplex = __webpack_require__(87);
-	Stream.Transform = __webpack_require__(88);
-	Stream.PassThrough = __webpack_require__(89);
+	Stream.Readable = __webpack_require__(73);
+	Stream.Writable = __webpack_require__(88);
+	Stream.Duplex = __webpack_require__(89);
+	Stream.Transform = __webpack_require__(90);
+	Stream.PassThrough = __webpack_require__(91);
 
 	// Backwards-compat with node 0.4.x
 	Stream.Stream = Stream;
@@ -11261,24 +11528,24 @@
 
 
 /***/ },
-/* 71 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {exports = module.exports = __webpack_require__(73);
-	exports.Stream = __webpack_require__(70);
+	/* WEBPACK VAR INJECTION */(function(process) {exports = module.exports = __webpack_require__(75);
+	exports.Stream = __webpack_require__(72);
 	exports.Readable = exports;
-	exports.Writable = __webpack_require__(82);
-	exports.Duplex = __webpack_require__(81);
-	exports.Transform = __webpack_require__(84);
-	exports.PassThrough = __webpack_require__(85);
+	exports.Writable = __webpack_require__(84);
+	exports.Duplex = __webpack_require__(83);
+	exports.Transform = __webpack_require__(86);
+	exports.PassThrough = __webpack_require__(87);
 	if (!process.browser && process.env.READABLE_STREAM === 'disable') {
-	  module.exports = __webpack_require__(70);
+	  module.exports = __webpack_require__(72);
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74)))
 
 /***/ },
-/* 72 */
+/* 74 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -11464,7 +11731,7 @@
 
 
 /***/ },
-/* 73 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -11491,17 +11758,17 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(74);
+	var isArray = __webpack_require__(76);
 	/*</replacement>*/
 
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(75).Buffer;
+	var Buffer = __webpack_require__(77).Buffer;
 	/*</replacement>*/
 
 	Readable.ReadableState = ReadableState;
 
-	var EE = __webpack_require__(62).EventEmitter;
+	var EE = __webpack_require__(64).EventEmitter;
 
 	/*<replacement>*/
 	if (!EE.listenerCount) EE.listenerCount = function(emitter, type) {
@@ -11509,18 +11776,18 @@
 	};
 	/*</replacement>*/
 
-	var Stream = __webpack_require__(70);
+	var Stream = __webpack_require__(72);
 
 	/*<replacement>*/
-	var util = __webpack_require__(79);
-	util.inherits = __webpack_require__(61);
+	var util = __webpack_require__(81);
+	util.inherits = __webpack_require__(63);
 	/*</replacement>*/
 
 	var StringDecoder;
 
 
 	/*<replacement>*/
-	var debug = __webpack_require__(80);
+	var debug = __webpack_require__(82);
 	if (debug && debug.debuglog) {
 	  debug = debug.debuglog('stream');
 	} else {
@@ -11532,7 +11799,7 @@
 	util.inherits(Readable, Stream);
 
 	function ReadableState(options, stream) {
-	  var Duplex = __webpack_require__(81);
+	  var Duplex = __webpack_require__(83);
 
 	  options = options || {};
 
@@ -11593,14 +11860,14 @@
 	  this.encoding = null;
 	  if (options.encoding) {
 	    if (!StringDecoder)
-	      StringDecoder = __webpack_require__(83).StringDecoder;
+	      StringDecoder = __webpack_require__(85).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
 	}
 
 	function Readable(options) {
-	  var Duplex = __webpack_require__(81);
+	  var Duplex = __webpack_require__(83);
 
 	  if (!(this instanceof Readable))
 	    return new Readable(options);
@@ -11703,7 +11970,7 @@
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function(enc) {
 	  if (!StringDecoder)
-	    StringDecoder = __webpack_require__(83).StringDecoder;
+	    StringDecoder = __webpack_require__(85).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	  return this;
@@ -12419,10 +12686,10 @@
 	  return -1;
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74)))
 
 /***/ },
-/* 74 */
+/* 76 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -12431,7 +12698,7 @@
 
 
 /***/ },
-/* 75 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -12444,9 +12711,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(76)
-	var ieee754 = __webpack_require__(77)
-	var isArray = __webpack_require__(78)
+	var base64 = __webpack_require__(78)
+	var ieee754 = __webpack_require__(79)
+	var isArray = __webpack_require__(80)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -14224,10 +14491,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(75).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(77).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 76 */
+/* 78 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -14347,7 +14614,7 @@
 
 
 /***/ },
-/* 77 */
+/* 79 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -14437,7 +14704,7 @@
 
 
 /***/ },
-/* 78 */
+/* 80 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -14448,7 +14715,7 @@
 
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {// Copyright Joyent, Inc. and other Node contributors.
@@ -14559,16 +14826,16 @@
 	  return Object.prototype.toString.call(o);
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(75).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(77).Buffer))
 
 /***/ },
-/* 80 */
+/* 82 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 81 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -14609,12 +14876,12 @@
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(79);
-	util.inherits = __webpack_require__(61);
+	var util = __webpack_require__(81);
+	util.inherits = __webpack_require__(63);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(73);
-	var Writable = __webpack_require__(82);
+	var Readable = __webpack_require__(75);
+	var Writable = __webpack_require__(84);
 
 	util.inherits(Duplex, Readable);
 
@@ -14661,10 +14928,10 @@
 	  }
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74)))
 
 /***/ },
-/* 82 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -14695,18 +14962,18 @@
 	module.exports = Writable;
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(75).Buffer;
+	var Buffer = __webpack_require__(77).Buffer;
 	/*</replacement>*/
 
 	Writable.WritableState = WritableState;
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(79);
-	util.inherits = __webpack_require__(61);
+	var util = __webpack_require__(81);
+	util.inherits = __webpack_require__(63);
 	/*</replacement>*/
 
-	var Stream = __webpack_require__(70);
+	var Stream = __webpack_require__(72);
 
 	util.inherits(Writable, Stream);
 
@@ -14717,7 +14984,7 @@
 	}
 
 	function WritableState(options, stream) {
-	  var Duplex = __webpack_require__(81);
+	  var Duplex = __webpack_require__(83);
 
 	  options = options || {};
 
@@ -14805,7 +15072,7 @@
 	}
 
 	function Writable(options) {
-	  var Duplex = __webpack_require__(81);
+	  var Duplex = __webpack_require__(83);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -15145,10 +15412,10 @@
 	  state.ended = true;
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74)))
 
 /***/ },
-/* 83 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -15172,7 +15439,7 @@
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var Buffer = __webpack_require__(75).Buffer;
+	var Buffer = __webpack_require__(77).Buffer;
 
 	var isBufferEncoding = Buffer.isEncoding
 	  || function(encoding) {
@@ -15375,7 +15642,7 @@
 
 
 /***/ },
-/* 84 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -15444,11 +15711,11 @@
 
 	module.exports = Transform;
 
-	var Duplex = __webpack_require__(81);
+	var Duplex = __webpack_require__(83);
 
 	/*<replacement>*/
-	var util = __webpack_require__(79);
-	util.inherits = __webpack_require__(61);
+	var util = __webpack_require__(81);
+	util.inherits = __webpack_require__(63);
 	/*</replacement>*/
 
 	util.inherits(Transform, Duplex);
@@ -15590,7 +15857,7 @@
 
 
 /***/ },
-/* 85 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -15620,11 +15887,11 @@
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(84);
+	var Transform = __webpack_require__(86);
 
 	/*<replacement>*/
-	var util = __webpack_require__(79);
-	util.inherits = __webpack_require__(61);
+	var util = __webpack_require__(81);
+	util.inherits = __webpack_require__(63);
 	/*</replacement>*/
 
 	util.inherits(PassThrough, Transform);
@@ -15642,20 +15909,6 @@
 
 
 /***/ },
-/* 86 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(82)
-
-
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(81)
-
-
-/***/ },
 /* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -15666,17 +15919,31 @@
 /* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(85)
+	module.exports = __webpack_require__(83)
 
 
 /***/ },
 /* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(86)
+
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(87)
+
+
+/***/ },
+/* 92 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = ProxyHandler;
@@ -15685,7 +15952,7 @@
 		this._cbs = cbs || {};
 	}
 
-	var EVENTS = __webpack_require__(53).EVENTS;
+	var EVENTS = __webpack_require__(55).EVENTS;
 	Object.keys(EVENTS).forEach(function(name){
 		if(EVENTS[name] === 0){
 			name = "on" + name;
@@ -15708,18 +15975,18 @@
 	});
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var DomUtils = module.exports;
 
 	[
-		__webpack_require__(93),
-		__webpack_require__(99),
-		__webpack_require__(100),
+		__webpack_require__(95),
 		__webpack_require__(101),
 		__webpack_require__(102),
-		__webpack_require__(103)
+		__webpack_require__(103),
+		__webpack_require__(104),
+		__webpack_require__(105)
 	].forEach(function(ext){
 		Object.keys(ext).forEach(function(key){
 			DomUtils[key] = ext[key].bind(DomUtils);
@@ -15728,11 +15995,11 @@
 
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ElementType = __webpack_require__(64),
-	    getOuterHTML = __webpack_require__(94),
+	var ElementType = __webpack_require__(66),
+	    getOuterHTML = __webpack_require__(96),
 	    isTag = ElementType.isTag;
 
 	module.exports = {
@@ -15756,14 +16023,14 @@
 
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
 	  Module dependencies
 	*/
-	var ElementType = __webpack_require__(95);
-	var entities = __webpack_require__(96);
+	var ElementType = __webpack_require__(97);
+	var entities = __webpack_require__(98);
 
 	/*
 	  Boolean Attributes
@@ -15940,7 +16207,7 @@
 
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports) {
 
 	//Types of elements found in the DOM
@@ -15959,11 +16226,11 @@
 	};
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var encode = __webpack_require__(97),
-	    decode = __webpack_require__(98);
+	var encode = __webpack_require__(99),
+	    decode = __webpack_require__(100);
 
 	exports.decode = function(data, level){
 		return (!level || level <= 0 ? decode.XML : decode.HTML)(data);
@@ -15998,15 +16265,15 @@
 
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inverseXML = getInverseObj(__webpack_require__(60)),
+	var inverseXML = getInverseObj(__webpack_require__(62)),
 	    xmlReplacer = getInverseReplacer(inverseXML);
 
 	exports.XML = getInverse(inverseXML, xmlReplacer);
 
-	var inverseHTML = getInverseObj(__webpack_require__(58)),
+	var inverseHTML = getInverseObj(__webpack_require__(60)),
 	    htmlReplacer = getInverseReplacer(inverseHTML);
 
 	exports.HTML = getInverse(inverseHTML, htmlReplacer);
@@ -16077,13 +16344,13 @@
 
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var entityMap = __webpack_require__(58),
-	    legacyMap = __webpack_require__(59),
-	    xmlMap    = __webpack_require__(60),
-	    decodeCodePoint = __webpack_require__(56);
+	var entityMap = __webpack_require__(60),
+	    legacyMap = __webpack_require__(61),
+	    xmlMap    = __webpack_require__(62),
+	    decodeCodePoint = __webpack_require__(58);
 
 	var decodeXMLStrict  = getStrictDecoder(xmlMap),
 	    decodeHTMLStrict = getStrictDecoder(entityMap);
@@ -16154,7 +16421,7 @@
 	};
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports) {
 
 	var getChildren = exports.getChildren = function(elem){
@@ -16184,7 +16451,7 @@
 
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports) {
 
 	exports.removeElement = function(elem){
@@ -16267,10 +16534,10 @@
 
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isTag = __webpack_require__(64).isTag;
+	var isTag = __webpack_require__(66).isTag;
 
 	module.exports = {
 		filter: filter,
@@ -16367,10 +16634,10 @@
 
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ElementType = __webpack_require__(64);
+	var ElementType = __webpack_require__(66);
 	var isTag = exports.isTag = ElementType.isTag;
 
 	exports.testElement = function(options, element){
@@ -16460,7 +16727,7 @@
 
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports) {
 
 	// removeSubsets
@@ -16607,7 +16874,7 @@
 
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = CollectingHandler;
@@ -16617,7 +16884,7 @@
 		this.events = [];
 	}
 
-	var EVENTS = __webpack_require__(53).EVENTS;
+	var EVENTS = __webpack_require__(55).EVENTS;
 	Object.keys(EVENTS).forEach(function(name){
 		if(EVENTS[name] === 0){
 			name = "on" + name;
