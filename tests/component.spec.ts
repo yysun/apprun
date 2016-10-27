@@ -59,4 +59,22 @@ describe('Component', () => {
     expect(view_spy2).toHaveBeenCalledTimes(1);
   });
 
+  it('should trigger state changed event with default event name', () => {
+    const spy = jasmine.createSpy('spy');
+    app.on('state_changed', state => { spy(state); });
+    const component = new Component(document.body, model, view, update, {event:true});
+    expect(spy).toHaveBeenCalledWith('x');
+    app.run('hi', 'abc');
+    expect(spy).toHaveBeenCalledWith('abc');
+  });
+
+  it('should trigger state changed event with custom event name', () => {
+    const spy = jasmine.createSpy('spy');
+    app.on('changed', state => { spy(state); });
+    const component = new Component(document.body, model, view, update, {event:{name:'changed'}});
+    expect(spy).toHaveBeenCalledWith('x');
+    app.run('hi', 'ab');
+    expect(spy).toHaveBeenCalledWith('ab');
+  });
+
 })

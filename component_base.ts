@@ -10,6 +10,7 @@ export default class ComponentBase {
   private _history = [];
   private _history_idx = -1;
   private enable_history;
+  private state_changed: string;
 
   get State() {
     return this.state;
@@ -30,6 +31,9 @@ export default class ComponentBase {
     if (this.enable_history) {
       this._history = [...this._history, state];
       this._history_idx = this._history.length - 1;
+    }
+    if (this.state_changed) {
+      app.run(this.state_changed, this.state);
     }
   }
 
@@ -62,6 +66,8 @@ export default class ComponentBase {
         }
       });
     }
+    this.state_changed = options.event && (options.event.name || 'state_changed');
+
     this.view = view;
     this.add_actions(update);
     this.push_state(state);
