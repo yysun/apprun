@@ -8,7 +8,7 @@ import VText = require('virtual-dom/vnode/vtext');
 import createElement = require('virtual-dom/create-element');
 import virtualize = require('vdom-virtualize');
 
-export default function updateElement(element, vtree) {
+export function updateElement(element, vtree) {
   console.assert(!!element);
   if (element.firstChild) {
     const prev = element.firstChild.vtree || virtualize(element.firstChild);
@@ -19,6 +19,13 @@ export default function updateElement(element, vtree) {
     element.appendChild(node);
   }
   element.firstChild.vtree = vtree;
+}
+
+export function updateElementVtree(element) {
+  console.assert(!!element);
+  if (element.firstChild) {
+    element.firstChild.vtree = virtualize(element.firstChild);
+  }
 }
 
 import app from '../app';

@@ -15,7 +15,7 @@ const convertHTMLWithKey = convertHTML.bind(null, {
   }
 });
 
-export default function updateElement(element, html) {
+export function updateElement(element, html) {
   console.assert(!!element);
   const vtree = (typeof html === 'string') ? convertHTMLWithKey(html) : html;
   if (element.firstChild) {
@@ -27,6 +27,13 @@ export default function updateElement(element, html) {
     element.appendChild(node);
   }
   element.firstChild.vtree = vtree;
+}
+
+export function updateElementVtree(element) {
+  console.assert(!!element);
+  if (element.firstChild) {
+    element.firstChild.vtree = virtualize(element.firstChild);
+  }
 }
 
 import app from './app';
