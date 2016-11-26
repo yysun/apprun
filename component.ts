@@ -2,7 +2,7 @@ import app from './app';
 import { updateElement, updateElementVtree } from './vdom';
 import ComponentBase from './component_base'
 
-export default class Component extends ComponentBase{
+export default class Component extends ComponentBase {
 
   protected set_state(state) {
     this.state = state;

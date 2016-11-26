@@ -4,6 +4,8 @@ export class App {
   public start;
   public h;
   public createElement;
+  public use;
+  public router;
 
   constructor() {
     this._events = {};
