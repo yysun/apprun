@@ -34,4 +34,17 @@ describe('vdom-jsx', () => {
     expect(element.firstChild.textContent).toEqual('xxx');
   });
 
+  it('should render custom element', () => {
+
+    const CustomElement = ({val}) => <div>{val}</div>;
+    const view = _ => <CustomElement val= {_} />;
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    app.start(element, model, view, update);
+
+    app.run('hi', 'xxxxx');
+    expect(element.firstChild.textContent).toEqual('xxxxx');
+
+  });
+
 });
