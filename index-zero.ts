@@ -3,6 +3,7 @@ import router from './router';
 import Component from './component';
 
 export default app;
+export { Component };
 
 export type Model = any;
 export type View = (model: Model) => string;
