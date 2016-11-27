@@ -29,5 +29,7 @@ export function updateElementVtree(element) {
 }
 
 import app from '../app';
-app.h = (el, props, ...children) => h(el, props, children);
+app.h = (el, props, ...children) => (typeof el === 'string') ?
+    h(el, props, children) : el(props, children);
+
 app.createElement = app.h;
