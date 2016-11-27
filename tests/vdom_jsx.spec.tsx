@@ -1,5 +1,5 @@
 import { } from 'jasmine';
-import app from '../apprun-jsx/index';
+import app from '../index-jsx';
 
 const model = 'x';
 const view = _ => <div>{_}</div>;

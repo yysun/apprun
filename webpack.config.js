@@ -1,8 +1,9 @@
 module.exports = {
   entry: {
     'apprun': './index.ts',
-    'apprun-jsx':  './apprun-jsx/index.ts',
-    'apprun-zero': './apprun-zero/index.ts',
+    'apprun-zero': './index-zero.ts',
+    'apprun-jsx':  './index-jsx.ts',
+    'apprun-html': './index.ts',
   },
   output: {
     path: 'dist',

@@ -1,6 +1,6 @@
 import app from './app';
 import router from './router';
-import { updateElement, updateElementVtree } from './vdom';
+import { updateElement, updateElementVtree } from './vdom-jsx';
 import ComponentBase from './component_base';
 
 export class Component extends ComponentBase {
@@ -16,8 +16,7 @@ export class Component extends ComponentBase {
       if (html) updateElement(this.element, html);
     }
   }
-};
-
+}
 
 export default app;
 

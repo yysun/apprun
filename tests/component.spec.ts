@@ -1,6 +1,6 @@
 import { } from 'jasmine';
-import app from '../apprun-zero/index';
-import Component from '../apprun-zero/component';
+import app from '../index-zero';
+import Component from '../component';
 
 const model = 'x';
 const view = _ => '';

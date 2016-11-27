@@ -198,7 +198,7 @@
 	        options._t = setTimeout(function () {
 	            clearTimeout(options._t);
 	            if (options.debug)
-	                console.debug(("run-delay " + options.delay + ":") + name, args);
+	                console.debug("run-delay " + options.delay + ":" + name, args);
 	            fn.apply(_this, args);
 	        }, options.delay);
 	    };

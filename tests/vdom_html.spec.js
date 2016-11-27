@@ -45,9 +45,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(4);
+	var index_1 = __webpack_require__(107);
 	var model = 'y';
-	var view = function (_) { return ("<div>" + _ + "</div>"); };
+	var view = function (_) { return "<div>" + _ + "</div>"; };
 	var update = {
 	    hi: function (_, val) { return val; }
 	};
@@ -123,7 +123,7 @@
 	        options._t = setTimeout(function () {
 	            clearTimeout(options._t);
 	            if (options.debug)
-	                console.debug(("run-delay " + options.delay + ":") + name, args);
+	                console.debug("run-delay " + options.delay + ":" + name, args);
 	            fn.apply(_this, args);
 	        }, options.delay);
 	    };
@@ -137,34 +137,43 @@
 
 /***/ },
 /* 2 */,
-/* 3 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var app_1 = __webpack_require__(1);
+	var route = function (url) {
+	    if (url && url.indexOf('/') > 0) {
+	        var ss = url.split('/');
+	        app_1.default.run(ss[0], ss[1]);
+	    }
+	    else {
+	        app_1.default.run(url);
+	    }
+	};
+	exports.router = function (element, components, home) {
+	    if (home === void 0) { home = '/'; }
+	    components.forEach(function (c) { return c(element); });
+	    window.onpopstate = function (e) {
+	        element.removeChild(element.firstElementChild);
+	        route(location.hash || home);
+	    };
+	    route(location.hash || home);
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = exports.router;
+
+
+/***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var app_1 = __webpack_require__(1);
-	var component_1 = __webpack_require__(5);
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = app_1.default;
-	app_1.default.start = function (element, model, view, update, options) {
-	    return new component_1.default(element, model, view, update, options);
-	};
-	if (typeof window === 'object') {
-	    window['app'] = app_1.default;
-	}
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var app_1 = __webpack_require__(1);
-	var vdom_1 = __webpack_require__(6);
-	var Component = (function () {
-	    function Component(element, state, view, update, options) {
-	        var _this = this;
+	var ComponentBase = (function () {
+	    function ComponentBase(element, state, view, update, options) {
 	        if (update === void 0) { update = {}; }
+	        var _this = this;
 	        this.element = element;
 	        this.state = state;
 	        this.view = view;
@@ -193,37 +202,34 @@
 	                }
 	            });
 	        }
+	        this.state_changed = options.event && (options.event.name || 'state_changed');
 	        this.view = view;
 	        this.add_actions(update);
 	        this.push_state(state);
 	    }
-	    Object.defineProperty(Component.prototype, "State", {
+	    Object.defineProperty(ComponentBase.prototype, "State", {
 	        get: function () {
 	            return this.state;
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    Component.prototype.set_state = function (state) {
+	    ComponentBase.prototype.set_state = function (state) {
 	        this.state = state;
-	        if (state && state.view && typeof state.view === 'function') {
-	            state.view(this.state);
-	            state.view = undefined;
-	        }
-	        else if (this.view) {
-	            var html = this.view(this.state);
-	            if (html)
-	                vdom_1.default(this.element, html);
-	        }
+	        if (this.view)
+	            this.view(this.state);
 	    };
-	    Component.prototype.push_state = function (state) {
+	    ComponentBase.prototype.push_state = function (state) {
 	        this.set_state(state);
 	        if (this.enable_history) {
 	            this._history = this._history.concat([state]);
 	            this._history_idx = this._history.length - 1;
 	        }
+	        if (this.state_changed) {
+	            app_1.default.run(this.state_changed, this.state);
+	        }
 	    };
-	    Component.prototype.add_actions = function (actions) {
+	    ComponentBase.prototype.add_actions = function (actions) {
 	        var _this = this;
 	        Object.keys(actions).forEach(function (action) {
 	            app_1.default.on(action, function () {
@@ -235,14 +241,15 @@
 	            });
 	        });
 	    };
-	    return Component;
+	    return ComponentBase;
 	}());
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Component;
+	exports.default = ComponentBase;
 	;
 
 
 /***/ },
+/* 5 */,
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -276,8 +283,14 @@
 	    }
 	    element.firstChild.vtree = vtree;
 	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = updateElement;
+	exports.updateElement = updateElement;
+	function updateElementVtree(element) {
+	    console.assert(!!element);
+	    if (element.firstChild) {
+	        element.firstChild.vtree = virtualize(element.firstChild);
+	    }
+	}
+	exports.updateElementVtree = updateElementVtree;
 	var app_1 = __webpack_require__(1);
 	app_1.default.h = function (el, props) {
 	    var children = [];
@@ -16932,6 +16945,57 @@
 			}
 		}
 	};
+
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var app_1 = __webpack_require__(1);
+	var router_1 = __webpack_require__(3);
+	var vdom_1 = __webpack_require__(6);
+	var component_base_1 = __webpack_require__(4);
+	var Component = (function (_super) {
+	    __extends(Component, _super);
+	    function Component() {
+	        return _super.apply(this, arguments) || this;
+	    }
+	    Component.prototype.set_state = function (state) {
+	        this.state = state;
+	        if (state && state.view && typeof state.view === 'function') {
+	            state.view(this.state);
+	            state.view = undefined;
+	            if (this.element.firstChild)
+	                vdom_1.updateElementVtree(this.element);
+	        }
+	        else if (this.view) {
+	            var html = this.view(this.state);
+	            if (html)
+	                vdom_1.updateElement(this.element, html);
+	        }
+	    };
+	    return Component;
+	}(component_base_1.default));
+	exports.Component = Component;
+	;
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = app_1.default;
+	app_1.default.start = function (element, model, view, update, options) {
+	    return new Component(element, model, view, update, options);
+	};
+	app_1.default.router = function (element, components, home) {
+	    if (home === void 0) { home = '/'; }
+	    return router_1.default(element, components, home);
+	};
+	if (typeof window === 'object') {
+	    window['app'] = app_1.default;
+	}
 
 
 /***/ }
