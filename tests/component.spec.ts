@@ -1,6 +1,6 @@
 import { } from 'jasmine';
-import app from '../index-zero';
-import Component from '../component';
+import app, { Component } from '../index-zero';
+// import Component from '../component';
 
 const model = 'x';
 const view = _ => '';
