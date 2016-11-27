@@ -1,6 +1,6 @@
 import app from './app';
 import router from './router';
-import Component from './component_base';
+import Component from './component';
 
 export default app;
 

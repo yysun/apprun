@@ -1,21 +1,15 @@
 import app from './app';
 import router from './router';
 import { updateElement, updateElementVtree } from './vdom-jsx';
-import ComponentBase from './component_base';
+import ComponentBase from './component';
 
 export class Component extends ComponentBase {
 
-  protected set_state(state) {
-    this.state = state;
-    if (state && state.view && typeof state.view === 'function') {
-      state.view(this.state);
-      state.view = undefined;
-      if (this.element.firstChild) updateElementVtree(this.element);
-    } else if (this.view) {
-      const html = this.view(this.state);
-      if (html) updateElement(this.element, html);
-    }
+  protected initVdom() {
+    this.updateElement =  updateElement.bind(this);
+    this.updateElementVtree = updateElementVtree(this);
   }
+
 }
 
 export default app;
