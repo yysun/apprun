@@ -1,4 +1,4 @@
-/// <reference path="virtual-dom.d.ts" />
+/// <reference path="./virtual-dom.d.ts" />
 
 import h = require('virtual-dom/h');
 import patch = require('virtual-dom/patch');
@@ -37,5 +37,7 @@ export function updateElementVtree(element) {
 }
 
 import app from './app';
-app.h = (el, props, ...children) => h(el, props, children);
+app.h = (el, props, ...children) => (typeof el === 'string') ?
+    h(el, props, children) : el(props, children);
+
 app.createElement = app.h;
