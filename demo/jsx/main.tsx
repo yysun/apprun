@@ -1,4 +1,4 @@
-import app from '../../apprun-jsx/index';
+import app from '../../index-jsx';
 
 var model = 'world';
 
