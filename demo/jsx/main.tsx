@@ -1,10 +1,12 @@
 import app from '../../apprun-jsx/index';
 
-var model = 'hello world';
+var model = 'world';
+
+const Hello = ({name}) => <div>Hello: {name}</div>;
 
 const view = (val) => {
   return <div>
-    <div>{val}</div>
+    <Hello name={val}/>
     <input value={val} oninput={function() { app.run('render', this.value)}}/>
   </div>
 };
