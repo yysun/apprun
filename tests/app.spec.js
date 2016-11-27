@@ -66,7 +66,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 0:
 /***/ function(module, exports) {
 
 "use strict";
@@ -130,7 +130,7 @@ exports.default = app;
 
 "use strict";
 "use strict";
-var app_1 = __webpack_require__(1);
+var app_1 = __webpack_require__(0);
 describe('app events', function () {
     var app;
     beforeEach(function () { return app = new app_1.App(); });

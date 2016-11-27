@@ -66,7 +66,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 0:
 /***/ function(module, exports) {
 
 "use strict";
@@ -125,90 +125,12 @@ exports.default = app;
 
 /***/ },
 
-/***/ 115:
+/***/ 11:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
-var index_zero_1 = __webpack_require__(27);
-var model = 'x';
-var view = function (_) { return ''; };
-var update = {
-    hi: function (_, val) { return val; }
-};
-describe('Component', function () {
-    it('should trigger update', function () {
-        spyOn(update, 'hi');
-        var component = new index_zero_1.Component(document.body, model, view, update);
-        index_zero_1.default.run('hi', 'xx');
-        expect(update.hi).toHaveBeenCalledWith('x', 'xx');
-    });
-    it('should trigger view', function () {
-        var view = jasmine.createSpy('view');
-        var component = new index_zero_1.Component(document.body, model, view, update);
-        expect(view).toHaveBeenCalledWith('x');
-        index_zero_1.default.run('hi', 'xx');
-        expect(view).toHaveBeenCalledWith('xx');
-    });
-    it('should track history', function () {
-        var view = jasmine.createSpy('view');
-        var component = new index_zero_1.Component(document.body, model, view, update, { history: true });
-        index_zero_1.default.run('hi', 'xx');
-        index_zero_1.default.run('hi', 'xxx');
-        index_zero_1.default.run('history-prev');
-        index_zero_1.default.run('history-next');
-        expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
-    });
-    it('should track history with custom event name', function () {
-        var view = jasmine.createSpy('view');
-        var component = new index_zero_1.Component(document.body, model, view, update, { history: { prev: 'prev', next: 'next' } });
-        index_zero_1.default.run('hi', 'xx');
-        index_zero_1.default.run('hi', 'xxx');
-        index_zero_1.default.run('prev');
-        index_zero_1.default.run('next');
-        expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
-    });
-    it('should overwrite view', function () {
-        var view_spy = jasmine.createSpy('view');
-        var view2 = function (_) { };
-        var view_spy2 = jasmine.createSpy('view2');
-        update['hi2'] = function (_) {
-            return {
-                view: view_spy2
-            };
-        };
-        var component = new index_zero_1.Component(document.body, {}, view_spy, update);
-        index_zero_1.default.run('hi2', {});
-        expect(view_spy).toHaveBeenCalledTimes(1);
-        expect(view_spy2).toHaveBeenCalledTimes(1);
-    });
-    it('should trigger state changed event with default event name', function () {
-        var spy = jasmine.createSpy('spy');
-        index_zero_1.default.on('state_changed', function (state) { spy(state); });
-        var component = new index_zero_1.Component(document.body, model, view, update, { event: true });
-        expect(spy).toHaveBeenCalledWith('x');
-        index_zero_1.default.run('hi', 'abc');
-        expect(spy).toHaveBeenCalledWith('abc');
-    });
-    it('should trigger state changed event with custom event name', function () {
-        var spy = jasmine.createSpy('spy');
-        index_zero_1.default.on('changed', function (state) { spy(state); });
-        var component = new index_zero_1.Component(document.body, model, view, update, { event: { name: 'changed' } });
-        expect(spy).toHaveBeenCalledWith('x');
-        index_zero_1.default.run('hi', 'ab');
-        expect(spy).toHaveBeenCalledWith('ab');
-    });
-});
-
-
-/***/ },
-
-/***/ 12:
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var app_1 = __webpack_require__(1);
+var app_1 = __webpack_require__(0);
 var ComponentBase = (function () {
     function ComponentBase(element, state, view, update, options) {
         if (update === void 0) { update = {}; }
@@ -301,14 +223,93 @@ exports.default = ComponentBase;
 
 /***/ },
 
-/***/ 27:
+/***/ 115:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
-var app_1 = __webpack_require__(1);
-var router_1 = __webpack_require__(40);
-var component_1 = __webpack_require__(12);
+var index_zero_1 = __webpack_require__(15);
+// import Component from '../component';
+var model = 'x';
+var view = function (_) { return ''; };
+var update = {
+    hi: function (_, val) { return val; }
+};
+describe('Component', function () {
+    it('should trigger update', function () {
+        spyOn(update, 'hi');
+        var component = new index_zero_1.Component(document.body, model, view, update);
+        index_zero_1.default.run('hi', 'xx');
+        expect(update.hi).toHaveBeenCalledWith('x', 'xx');
+    });
+    it('should trigger view', function () {
+        var view = jasmine.createSpy('view');
+        var component = new index_zero_1.Component(document.body, model, view, update);
+        expect(view).toHaveBeenCalledWith('x');
+        index_zero_1.default.run('hi', 'xx');
+        expect(view).toHaveBeenCalledWith('xx');
+    });
+    it('should track history', function () {
+        var view = jasmine.createSpy('view');
+        var component = new index_zero_1.Component(document.body, model, view, update, { history: true });
+        index_zero_1.default.run('hi', 'xx');
+        index_zero_1.default.run('hi', 'xxx');
+        index_zero_1.default.run('history-prev');
+        index_zero_1.default.run('history-next');
+        expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
+    });
+    it('should track history with custom event name', function () {
+        var view = jasmine.createSpy('view');
+        var component = new index_zero_1.Component(document.body, model, view, update, { history: { prev: 'prev', next: 'next' } });
+        index_zero_1.default.run('hi', 'xx');
+        index_zero_1.default.run('hi', 'xxx');
+        index_zero_1.default.run('prev');
+        index_zero_1.default.run('next');
+        expect(view.calls.allArgs()).toEqual([['x'], ['xx'], ['xxx'], ['xx'], ['xxx']]);
+    });
+    it('should overwrite view', function () {
+        var view_spy = jasmine.createSpy('view');
+        var view2 = function (_) { };
+        var view_spy2 = jasmine.createSpy('view2');
+        update['hi2'] = function (_) {
+            return {
+                view: view_spy2
+            };
+        };
+        var component = new index_zero_1.Component(document.body, {}, view_spy, update);
+        index_zero_1.default.run('hi2', {});
+        expect(view_spy).toHaveBeenCalledTimes(1);
+        expect(view_spy2).toHaveBeenCalledTimes(1);
+    });
+    it('should trigger state changed event with default event name', function () {
+        var spy = jasmine.createSpy('spy');
+        index_zero_1.default.on('state_changed', function (state) { spy(state); });
+        var component = new index_zero_1.Component(document.body, model, view, update, { event: true });
+        expect(spy).toHaveBeenCalledWith('x');
+        index_zero_1.default.run('hi', 'abc');
+        expect(spy).toHaveBeenCalledWith('abc');
+    });
+    it('should trigger state changed event with custom event name', function () {
+        var spy = jasmine.createSpy('spy');
+        index_zero_1.default.on('changed', function (state) { spy(state); });
+        var component = new index_zero_1.Component(document.body, model, view, update, { event: { name: 'changed' } });
+        expect(spy).toHaveBeenCalledWith('x');
+        index_zero_1.default.run('hi', 'ab');
+        expect(spy).toHaveBeenCalledWith('ab');
+    });
+});
+
+
+/***/ },
+
+/***/ 15:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var app_1 = __webpack_require__(0);
+var router_1 = __webpack_require__(22);
+var component_1 = __webpack_require__(11);
 exports.Component = component_1.default;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = app_1.default;
@@ -326,12 +327,12 @@ if (typeof window === 'object') {
 
 /***/ },
 
-/***/ 40:
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
-var app_1 = __webpack_require__(1);
+var app_1 = __webpack_require__(0);
 var route = function (url) {
     if (url && url.indexOf('/') > 0) {
         var ss = url.split('/');
