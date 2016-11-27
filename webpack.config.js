@@ -1,7 +1,7 @@
 module.exports = {
   entry: {
     'apprun': './index.ts',
-    'apprun-zero': './index-zero.ts',
+    'apprun-zero':  './index-zero.ts',
     'apprun-jsx':  './index-jsx.ts',
     'apprun-html': './index.ts',
   },
@@ -10,10 +10,10 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
   },
   module: {
-    loaders: [
+    rules: [
       { test: /\.tsx?$/, loader: 'ts-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
