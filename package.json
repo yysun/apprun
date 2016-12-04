@@ -3,7 +3,7 @@
   "version": "0.5.1",
   "description": "",
   "main": "dist/apprun.js",
-  "typings": "index.ts",
+  "typings": "dist/apprun.d.ts",
   "scripts": {
     "build": "webpack -p",
     "build:dev": "webpack -w",
