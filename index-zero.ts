@@ -1,5 +1,4 @@
 import app from './app';
-import router from './router';
 import Component from './component';
 
 export default app;
@@ -13,9 +12,18 @@ export type Update = { [name: string]: Action };
 app.start = (element: HTMLElement, model: Model, view: View, update: Update, options?) =>
   new Component(element, model, view, update, options);
 
-app.router = (element: HTMLElement, components: Array<Component>, home: string = '/') =>
-  router(element, components, home);
+const route = (url) => {
+  if (url && url.indexOf('/') > 0) {
+    const ss = url.split('/');
+    app.run(ss[0], ss[1]);
+  } else {
+    app.run(url);
+  }
+}
 
 if (typeof window === 'object') {
   window['app'] = app;
+  window.onpopstate = e => {
+    route(location.hash || '/');
+  }
 }

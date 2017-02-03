@@ -1,5 +1,4 @@
 import app from './index-zero';
-import router from './router';
 import { updateElement, updateElementVtree } from './vdom';
 import ComponentBase from './component';
 

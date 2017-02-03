@@ -8,7 +8,7 @@
     "build": "webpack -p",
     "build:dev": "webpack -w",
     "build:test": "webpack --config tests/webpack.config.js",
-    "test": "karma start --single-run"
+    "test": "npm run build:test && karma start --single-run"
   },
   "keywords": [
     "JavaScript",
