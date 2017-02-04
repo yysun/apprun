@@ -33,16 +33,18 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 
-/******/ 	// identity function for calling harmory imports with the correct context
+/******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
 
-/******/ 	// define getter function for harmory exports
+/******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		Object.defineProperty(exports, name, {
-/******/ 			configurable: false,
-/******/ 			enumerable: true,
-/******/ 			get: getter
-/******/ 		});
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
 /******/ 	};
 
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -61,16 +63,16 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 115);
+/******/ 	return __webpack_require__(__webpack_require__.s = 114);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
-/***/ function(module, exports) {
+/***/ 1:
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
+
 var App = (function () {
     function App() {
         this._events = {};
@@ -123,14 +125,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = app;
 
 
-/***/ },
+/***/ }),
 
 /***/ 11:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
-var app_1 = __webpack_require__(0);
+
+var app_1 = __webpack_require__(1);
 var ComponentBase = (function () {
     function ComponentBase(element, state, view, update, options) {
         if (update === void 0) { update = {}; }
@@ -208,7 +210,7 @@ var ComponentBase = (function () {
             app_1.default.on(action, function () {
                 var p = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
-                    p[_i - 0] = arguments[_i];
+                    p[_i] = arguments[_i];
                 }
                 _this.push_state(actions[action].apply(actions, [_this.State].concat(p)));
             });
@@ -221,13 +223,13 @@ exports.default = ComponentBase;
 ;
 
 
-/***/ },
+/***/ }),
 
-/***/ 115:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 114:
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
+
 var index_zero_1 = __webpack_require__(15);
 // import Component from '../component';
 var model = 'x';
@@ -300,15 +302,14 @@ describe('Component', function () {
 });
 
 
-/***/ },
+/***/ }),
 
 /***/ 15:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
-var app_1 = __webpack_require__(0);
-var router_1 = __webpack_require__(22);
+
+var app_1 = __webpack_require__(1);
 var component_1 = __webpack_require__(11);
 exports.Component = component_1.default;
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -316,23 +317,6 @@ exports.default = app_1.default;
 app_1.default.start = function (element, model, view, update, options) {
     return new component_1.default(element, model, view, update, options);
 };
-app_1.default.router = function (element, components, home) {
-    if (home === void 0) { home = '/'; }
-    return router_1.default(element, components, home);
-};
-if (typeof window === 'object') {
-    window['app'] = app_1.default;
-}
-
-
-/***/ },
-
-/***/ 22:
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var app_1 = __webpack_require__(0);
 var route = function (url) {
     if (url && url.indexOf('/') > 0) {
         var ss = url.split('/');
@@ -342,19 +326,14 @@ var route = function (url) {
         app_1.default.run(url);
     }
 };
-exports.router = function (element, components, home) {
-    if (home === void 0) { home = '/'; }
-    components.forEach(function (c) { return c(element); });
+if (typeof window === 'object') {
+    window['app'] = app_1.default;
     window.onpopstate = function (e) {
-        element.removeChild(element.firstElementChild);
-        route(location.hash || home);
+        route(location.hash || '/');
     };
-    route(location.hash || home);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = exports.router;
+}
 
 
-/***/ }
+/***/ })
 
 /******/ });

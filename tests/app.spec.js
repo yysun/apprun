@@ -33,16 +33,18 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 
-/******/ 	// identity function for calling harmory imports with the correct context
+/******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
 
-/******/ 	// define getter function for harmory exports
+/******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		Object.defineProperty(exports, name, {
-/******/ 			configurable: false,
-/******/ 			enumerable: true,
-/******/ 			get: getter
-/******/ 		});
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
 /******/ 	};
 
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -61,16 +63,16 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 114);
+/******/ 	return __webpack_require__(__webpack_require__.s = 113);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
-/***/ function(module, exports) {
+/***/ 1:
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
+
 var App = (function () {
     function App() {
         this._events = {};
@@ -123,14 +125,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = app;
 
 
-/***/ },
+/***/ }),
 
-/***/ 114:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 113:
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
-var app_1 = __webpack_require__(0);
+
+var app_1 = __webpack_require__(1);
 describe('app events', function () {
     var app;
     beforeEach(function () { return app = new app_1.App(); });
@@ -238,6 +240,6 @@ describe('app events', function () {
 });
 
 
-/***/ }
+/***/ })
 
 /******/ });
