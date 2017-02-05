@@ -141,36 +141,34 @@ const view = (val) => {
 };
 ```
 
-## Conclusion
+There are three editions for different view strategy.
 
-The steps to make an application are
+* apprun-zero.js: 1K, use your own preferred DOM virtualization technology, such as React
+* apprun-jsx.js: 4K, support virtual-hyperScript, jsx/tsx
+* apprun.js: 64K, support virtual-hyperScript, jsx/tsx and HTML template string
 
-* Create a model that can be a number, an array or an object
-* Create a update object that has functions to re-create the model
-* Create a view that generates HTML string / JSX / hyperScript based on the model
-* Start the app in an element - app.start
-* Trigger the update - app.run
+*Note*: The JSX view is the reommanded way, due to the reasons described by Facebook React team:
+[Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals)
 
-That's all. You can find examples that are made this way in the demo folder,
-[this project](https://github.com/yysun/apprun-examples), or try it online:
+## TypeScript
+
+AppRun exposes a global object named app that is accessible by JavaScript and TypScript directly
+as weel as being compiled/bundled with your code using webpack.
+
+## Examples
+
+You run some examples in the demo folder by run
+```
+npm run build:demo
+live-server demo
+```
+or try it online:
 
 * [Single counter](https://jsfiddle.net/ap1kgyeb/)
 * [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
 
-## Three Editions
+or check out another example project, [apprun-examples](https://github.com/yysun/apprun-examples).
 
-AppRun converts HTML generated from the view function to [virtual DOM](https://github.com/Matt-Esch/virtual-dom) by default.
-In case you want to use other technology, e.g. React, hyperScript and JSX, there two smaller size editions of js files.
-
-* apprun-zero.js: 1K, write view function with your preferred DOM virtualization technology, such as React
-* apprun-jsx.js: 4K, write view function using virtual-hyperScript or jsx/tsx
-* apprun.js: 64K, full edition, write view function in hyperScript, jsx and plain HTML
-
-
-## TypeScript
-
-AppRun exposes a global object named app that is accessible by JavaScript and TypScript directly.
-It can also be compiled/bundled with your TypeScript file using webpack.
 
 Have fun and send pull requests.
 

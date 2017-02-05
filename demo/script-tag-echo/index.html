@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>my app</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="../styles.css">
+  <script src="../apprun.js"></script>
 </head>
 <body>
   <div id="my-app"></div>
   <input oninput="app.run('render', this.value)"/>
 
-  <script src="apprun.js"></script>
   <script>
     var model = 'hello world';
     var view = function (val) {
