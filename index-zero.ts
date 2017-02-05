@@ -5,7 +5,7 @@ export default app;
 export { Component };
 
 export type Model = any;
-export type View = (model: Model) => string;
+export type View = (model: Model) => string | Function;
 export type Action = (model: Model, ...p) => Model;
 export type Update = { [name: string]: Action };
 

@@ -1,7 +1,7 @@
 import app from './app';
 
 type Model = any;
-type View = (model: Model) => string;
+type View = (model: Model) => string | Function;
 type Action = (model: Model, ...p) => Model;
 type Update = { [name: string]: Action };
 
@@ -47,7 +47,7 @@ export default class ComponentBase {
 
   constructor(protected element: HTMLElement,
     protected state: any,
-    protected view: (any) => string,
+    protected view: (any) => string | Function,
     update: Update = {},
     options?) {
 

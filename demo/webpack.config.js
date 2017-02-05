@@ -1,7 +1,7 @@
 module.exports = {
   entry: {
     'apprun': './index.ts',
-    'app': './demo/main.tsx',
+    'app': './demo/main.ts',
     'jsx/app': './demo/jsx/main.tsx',
     'hyperscript/app': './demo/hyperscript/main.ts',
     'html-multiple-counters/app':'./demo/html-multiple-counters/main.ts'
