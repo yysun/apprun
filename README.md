@@ -1,13 +1,16 @@
 # AppRun
 
-AppRun is a library to help implementing the
-[elm](http://elm-lang.org/)/[Redux](http://redux.js.org/) model-view-update architecture in plain JavaScript
-or TypeScript code.
+AppRun is a lightweight library for implementing the [elm](http://elm-lang.org/)/[Redux](http://redux.js.org/)
+model-view-update architecture using JavaScript or TypeScript.
+It supports writing views in JSX / TSX or HTML string. The views
+are rendered through [virtual DOM](https://github.com/Matt-Esch/virtual-dom).
+At core, it is based on the event pubsub pattern, where _app.run_ publishes events and _app.on_ subscribes to the events.
+Finally, _app.start_ bootstraps the application.
 
 ## An Example
 
 The 15 lines of code below is a simple counter. Two functions from AppRun
-(app.run and app.start) are used to make it elm architecture.
+(_app.run_ and _app.start_) are used to make it model-view-update architecture.
 ```
 /// <reference path="apprun.d.ts" />
 const model = 0;
@@ -31,13 +34,13 @@ app.start(element, model, view, update);
 
 ## Basic Concepts
 
-The [elm architecture](https://guide.elm-lang.org/architecture/) has three parts.
+The model-view-update architecture has three parts.
 
 * Model — the state of your application
-* Update — a way to update your state
-* View — a way to view your state as HTML
+* Update — a function to update your state
+* View — a function to display your state as HTML
 
-app.start ties the three parts together to an element on page. That's the architecture.
+_app.start_ ties the three parts together to an element on page. That's the architecture. More details below.
 
 ## The Model
 
@@ -71,7 +74,7 @@ const update = {
 ```
 ## Run Update
 
-app.run is the function to run the update.
+_app.run_ is the function to run the update.
 ```
 app.run('INCREASE');
 ```
@@ -93,14 +96,12 @@ $('#inc').on('click', () => app.run('INCREASE'));
 
 Once the update re-creates model, AppRun passes the new model into the view function.
 The view function generates HTML using the model. AppRun parses the HTML string into
-virtual dom. It then calculates the differences against the web page element and r
-enders the changes.
+virtual dom. It then calculates the differences against the web page element and renders the changes.
 
 ```
 const view = (model) => `<div>${model}</div>`;
 ```
-ES2015 string interpolation made it very easy to construct HTML string. Even
-creating a list is straight forward.
+ES2015 string interpolation can made it easy to construct HTML string to form a list.
 ```
 const view = (numbers) => {
   return numbers.reduce(prev, curr) {
@@ -109,11 +110,30 @@ const view = (numbers) => {
 }
 ```
 
-# HyperScript and JSX View
+# JSX / TSX View
 
-AppRun supports [HyperScript](https://github.com/dominictarr/hyperscript).
+Although HTML View is easy to understand and useful for trying out ideas, the JSX / TSX view is
+recommended. The reasons are the same as described by Facebook React team:
+[Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals)
+
+AppRun supports JSX / TSX views.
+
+```
+/* @jsx h */
+const h = app.h;
+const view = (val) => {
+  return <div>
+    <div>{val}</div>
+    <input value={val}
+      oninput={function() { app.run('render', this.value)}}/>
+  </div>
+};
+```
+
+AppRun also supports [HyperScript](https://github.com/dominictarr/hyperscript).
 It converts HyperScript to [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md)
 internally to work with [virtual DOM](https://github.com/Matt-Esch/virtual-dom).
+If you are a hyperscript fan, you will like this option.
 
 ```
 const h = app.h;
@@ -127,38 +147,27 @@ const view = (val) => {
   );
 };
 ```
-The internal conversion from HyperScript to virtual-hyperscript make AppRun
-compatible with Babel and TypeScript (TSX).
-```
-/* @jsx h */
-const h = app.h;
-const view = (val) => {
-  return <div>
-    <div>{val}</div>
-    <input value={val}
-      oninput={function() { app.run('render', this.value)}}/>
-  </div>
-};
-```
 
-There are three editions for different view strategy.
+## JavaScript and TypeScript
+
+AppRun exposes a global object named _app_ that is accessible by JavaScript and TypScript directly.
+AppRun can also be compiled/bundled with your code too. Use it in one of three ways:
+
+* Included apprun.js in a script tag and use _app_ from JavaScript
+* Included apprun.js in a script tag and use _app_ from TypeScript (by referencing to apprun.d.ts)
+* Compile/bundle using webpack
+
+ Depends on your view strategy, there are also three editions to use:
 
 * apprun-zero.js: 1K, use your own preferred DOM virtualization technology, such as React
-* apprun-jsx.js: 4K, support virtual-hyperScript, jsx/tsx
-* apprun.js: 64K, support virtual-hyperScript, jsx/tsx and HTML template string
-
-*Note*: The JSX view is the reommanded way, due to the reasons described by Facebook React team:
-[Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals)
-
-## TypeScript
-
-AppRun exposes a global object named app that is accessible by JavaScript and TypScript directly
-as weel as being compiled/bundled with your code using webpack.
+* apprun-jsx.js: 8K, support virtual-hyperScript, jsx/tsx
+* apprun.js: 70K, support virtual-hyperScript, jsx/tsx and HTML template string
 
 ## Examples
 
-You run some examples in the demo folder by run
+You can find some examples in the _demo_ folder by:
 ```
+npm install live-server -g
 npm run build:demo
 live-server demo
 ```
@@ -167,8 +176,7 @@ or try it online:
 * [Single counter](https://jsfiddle.net/ap1kgyeb/)
 * [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
 
-or check out another example project, [apprun-examples](https://github.com/yysun/apprun-examples).
-
+The unit tests in the _tests_ folder can be served as the functional specifications.
 
 Have fun and send pull requests.
 
