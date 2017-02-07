@@ -2,7 +2,7 @@ import app from '../../index-jsx';
 
 var model = {};
 
-const view = (state) => {
+const view = (model) => {
   return <div>
 
   </div>
