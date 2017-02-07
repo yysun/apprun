@@ -1,4 +1,4 @@
-import app, { Component } from '../../index-jsx';
+import app from '../../index-jsx';
 
 var model = 'world';
 
