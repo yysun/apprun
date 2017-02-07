@@ -1,0 +1,15 @@
+import app from '../../index-jsx';
+
+var model = {};
+
+const view = (state) => {
+  return <div>
+
+  </div>
+}
+
+const update = {
+  '#todo': model => model,
+}
+
+export default (element) => app.start(element, model, view, update);
