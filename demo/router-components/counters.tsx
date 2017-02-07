@@ -1,4 +1,4 @@
-import app, { Component } from '../../index-jsx';
+import app from '../../index-jsx';
 
 const model = [];
 
@@ -20,7 +20,7 @@ const view = (state) => {
       <button onclick={() => app.run("history-prev")}> &lt;&lt; </button>
       <button onclick={() => app.run("history-next")}> &gt;&gt; </button>
       <button onclick={() => app.run("add-counter")}>add counter</button>
-      <button onclick={() => app.run("remove-counter", state.length-1)} disabled={state.length <= 0}>remove counter</button>  
+      <button onclick={() => app.run("remove-counter", state.length-1)} disabled={state.length <= 0}>remove counter</button>
     </div>
     <br/>
     <CounterList counters={state} />
@@ -46,4 +46,4 @@ const update = {
   ]
 };
 
-export default (element) => new Component(element, model, view, update, {history: true});
+export default (element) => app.start(element, model, view, update, {history: true});
