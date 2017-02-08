@@ -167,9 +167,8 @@ AppRun can also be compiled/bundled with your code too. Use it in one of three w
 
 You can find some examples in the _demo_ folder by:
 ```
-npm install live-server -g
 npm run build:demo
-live-server demo
+npm start
 ```
 or try it online:
 

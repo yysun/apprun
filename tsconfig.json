@@ -1,12 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-    "module": "commonjs",
-    "jsx": "react",
-    "reactNamespace": "app"
-  },
-  "include": [
-    "./*.ts"
-  ]
-
+		"jsx": "react",
+		"reactNamespace": "app"
+	}
 }
