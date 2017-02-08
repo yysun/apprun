@@ -47,7 +47,7 @@ export default class ComponentBase {
 
   constructor(protected element: HTMLElement,
     protected state: any,
-    protected view: (any) => string | Function,
+    protected view: View,
     update: Update = {},
     options?) {
 

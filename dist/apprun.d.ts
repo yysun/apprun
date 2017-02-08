@@ -1,5 +1,5 @@
 declare type Model = any;
-declare type View = (model: Model) => string;
+declare type View = (model: Model) => string | Function;
 declare type Action = (model: Model, ...p: any[]) => Model;
 declare type Update = {
     [name: string]: Action;
