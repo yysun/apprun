@@ -12,6 +12,8 @@ declare interface IModel {
   todos: Array<ITodo>;
 }
 
+const ENTER = 13
+
 const model = {
   filter: 0,
   todos: [],
@@ -48,16 +50,16 @@ const view = (model) => {
       }
     </ul>
     <div>
-      <input id='new-todo' placeholder='add todo' onkeyup={e => { if (e.keyCode === 13) add()} }/>
-      <button onclick={()=>add()}>Add</button>
+      <input id='new-todo' placeholder='add todo' onkeyup={e => add(e.keyCode)} />
+      <button onclick={e=>add(ENTER)}>Add</button>
       <button onclick={()=>app.run('clear')}>Clear</button>
     </div>
   </div>
 }
 
-const add = () => {
-  const input = (document.getElementById('new-todo') as HTMLInputElement);
-  if (input.value) {
+const add = (keyCode) => {
+  const input = document.getElementById('new-todo') as HTMLInputElement;
+  if (keyCode === ENTER && input.value) { 
     app.run('add', input.value);
     input.value = '';
   }

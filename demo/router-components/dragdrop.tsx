@@ -1,5 +1,7 @@
 import app from '../../index-jsx';
 
+const NOOP = () => {}
+
 const model = {
   dragging: false,
   position: { x: 100, y: 100 },
@@ -37,7 +39,7 @@ const update = {
   }),
   move: (model, e) => {
     if (!model.dragging) return { ...model,
-      view: ()=>{} // this is tells app not to call view function
+      view: NOOP // this is tells app not to call view function
     };
     const start = {x: e.pageX, y: e.pageY}
     const position = {
