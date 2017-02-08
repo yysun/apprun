@@ -1,5 +1,5 @@
 .DS_Store
 node_modules
 *.log
-tests*/*.js
-demo*/*.js
+tests**/*.js
+demo**/*.js
