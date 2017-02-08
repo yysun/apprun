@@ -87,9 +87,13 @@ Or in JavaScript:
 document.getElementById('inc').addEventListener('click',
   () => app.run('INCREASE'));
 ```
-Or with jQuery:
+Or with JSX:
 ```
-$('#inc').on('click', () => app.run('INCREASE'));
+<button onclick={()=>app.run("INCREASE")}>+1</button>
+```
+Or even with jQuery:
+```
+$('#inc').on('click', ()=>app.run('INCREASE'));
 ```
 
 ## HTML View
@@ -119,15 +123,18 @@ recommended. The reasons are the same as described by Facebook React team:
 AppRun supports JSX / TSX views.
 
 ```
-/* @jsx h */
-const h = app.h;
-const view = (val) => {
-  return <div>
-    <div>{val}</div>
-    <input value={val}
-      oninput={function() { app.run('render', this.value)}}/>
-  </div>
-};
+const Todo = ({todo, idx}) => <li>
+  {todo.value}
+</li>
+
+const view = (model) => <div>
+  <h1>Todo</h1>
+  <ul> {
+    model.todos.map((todo, idx) => <Todo todo={todo} idx={idx} />)
+  }
+  </ul>
+</div>
+
 ```
 
 AppRun also supports [HyperScript](https://github.com/dominictarr/hyperscript).
@@ -151,13 +158,13 @@ const view = (val) => {
 ## JavaScript and TypeScript
 
 AppRun exposes a global object named _app_ that is accessible by JavaScript and TypScript directly.
-AppRun can also be compiled/bundled with your code too. Use it in one of three ways:
+AppRun can also be compiled/bundled with your code too. So use it in one of three ways:
 
 * Included apprun.js in a script tag and use _app_ from JavaScript
 * Included apprun.js in a script tag and use _app_ from TypeScript (by referencing to apprun.d.ts)
 * Compile/bundle using webpack
 
- Depends on your view strategy, there are also three editions to use:
+Also depends on your view strategy, there are also three editions to use:
 
 * apprun-zero.js: 1K, use your own preferred DOM virtualization technology, such as React
 * apprun-jsx.js: 8K, support virtual-hyperScript, jsx/tsx
@@ -165,9 +172,8 @@ AppRun can also be compiled/bundled with your code too. Use it in one of three w
 
 ## Examples
 
-You can find some examples in the _demo_ folder by:
+You can run the demo app in the _demo_ folder by:
 ```
-npm run build:demo
 npm start
 ```
 or try it online:
