@@ -14,11 +14,10 @@ declare interface IModel {
 
 const ENTER = 13
 
-const model = {
+const model: IModel = {
   filter: 0,
-  todos: [],
-  input: ''
-};
+  todos: []
+}
 
 const Todo = ({todo, idx}) => (<li onclick={()=>app.run('toggle', idx)}
   style = {{
@@ -36,10 +35,12 @@ const view = (model) => {
   })
   return <div>
     <h1>Todo</h1>
-    <span>Show:</span>
-    <span> <a style={styles(0)} onclick={()=>app.run('filter', 0)}>All</a></span> |
-    <span> <a style={styles(1)} onclick={()=>app.run('filter', 1)}>Todo</a></span> |
-    <span> <a style={styles(2)} onclick={()=>app.run('filter', 2)}>Done</a></span>
+    <div>
+      <span>Show:</span>
+      <span> <a style={styles(0)} onclick={()=>app.run('filter', 0)}>All</a></span> |
+      <span> <a style={styles(1)} onclick={()=>app.run('filter', 1)}>Todo</a></span> |
+      <span> <a style={styles(2)} onclick={()=>app.run('filter', 2)}>Done</a></span>
+    </div>
     <ul>
       {
         model.todos
@@ -53,13 +54,17 @@ const view = (model) => {
       <input id='new-todo' placeholder='add todo' onkeyup={e => add(e.keyCode)} />
       <button onclick={e=>add(ENTER)}>Add</button>
       <button onclick={()=>app.run('clear')}>Clear</button>
+    </div><br/>
+    <div>
+      <button onclick={() => app.run("todo-undo")}> Undo </button>
+      <button onclick={() => app.run("todo-redo")}> Redo </button>
     </div>
   </div>
 }
 
 const add = (keyCode) => {
   const input = document.getElementById('new-todo') as HTMLInputElement;
-  if (keyCode === ENTER && input.value) { 
+  if (keyCode === ENTER && input.value) {
     app.run('add', input.value);
     input.value = '';
   }
@@ -81,4 +86,5 @@ const update = {
   clear: (model) => ({...model, todos:[] })
 }
 
-export default (element) => app.start(element, model, view, update);
+export default (element) => app.start(element, model, view, update,
+  {history:{prev:'todo-undo', next:'todo-redo'}});
