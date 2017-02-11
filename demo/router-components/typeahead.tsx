@@ -1,6 +1,7 @@
 import app from '../../index-jsx'
 
 const model = {
+  $id: '_1',
   input: '',
   selectIdx: -1,
   options: []
@@ -8,12 +9,12 @@ const model = {
 
 const view = (model) => <div className='typeahead'>
   <input value={model.input} 
-    oninput={e=>app.run('input', e)} 
-    onkeyup={e=>app.run('keyup', e)}/>
+    oninput={e=>app.run(`input${model.$id}`, e)} 
+    onkeyup={e=>app.run(`keyup${model.$id}`, e)}/>
   <ul className='options'>{
     model.options.map((option, idx)=><li
       className={(idx === model.selectIdx) ? 'selected': ''} 
-      onclick={()=>app.run('select', option)}>{option}
+      onclick={()=>app.run(`select${model.$id}`, option)}>{option}
     </li>)
   }
   </ul>
@@ -35,12 +36,12 @@ const selected = (model, option) => {
 
 const update = {
   '#typeahead': (model) => model,
-  'input': (model, e) => ({ ...model, 
+  [`input${model.$id}`]: (model, e) => ({ ...model, 
     input: e.target.value,
     selectIdx: -1,
     options: getOptions(e.target.value)
   }),
-  'keyup': (model, e) => {
+  [`keyup${model.$id}`]: (model, e) => {
     switch(e.keyCode) {
       case 38:
         return select(model, model.selectIdx - 1);
@@ -52,15 +53,12 @@ const update = {
         return model;
     }
   },
-  'select':(model, option) => selected(model, option)
+  [`select${model.$id}`]:(model, option) => selected(model, option)
 }
 
 const getOptions = text => text ?
   [1, 2, 3, 4, 5].map(n=>text + n) : []
 
 app.on('selected', (text) => { console.log(text) });
-
-export const Typeahead = ({model}) => view(model)
-export const TypeaheadUpdate = update 
 
 export default (element) => app.start(element, model, view, update);
