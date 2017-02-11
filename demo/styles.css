@@ -1,15 +1,14 @@
 /*html,body{height:100%;margin:20px;overflow:hidden;font-family:"Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";font-size:12px}*/
 
-.typeahead {
+/*.typeahead {
   width: 200px;
-}
+}*/
 
 .typeahead ul, .typeahead li {
   list-style-type: none;
   list-style-position:inside;
   margin: 0;
   padding: 0;
-  width: 100%;
 }
 
 .typeahead input {
@@ -32,6 +31,11 @@
   border: 1px solid #eeeeee;
   padding: 5px 0;
 }
+
+.multi-selection input {
+  width: 200px;
+}
+
 .multi-selection .selections {
   display: inline;
   padding: 10px 0;

@@ -1,7 +1,7 @@
 import app from '../../index-jsx'
 
 const model = {
-  $id: '_1',
+  $id: '',
   input: '',
   selectIdx: -1,
   options: []
@@ -34,14 +34,14 @@ const selected = (model, option) => {
   return {...model, input: option, options: []};
 }
 
-const update = {
+const update = ($id) => ({
   '#typeahead': (model) => model,
-  [`input${model.$id}`]: (model, e) => ({ ...model, 
+  [`input${$id}`]: (model, e) => ({ ...model, 
     input: e.target.value,
     selectIdx: -1,
     options: getOptions(e.target.value)
   }),
-  [`keyup${model.$id}`]: (model, e) => {
+  [`keyup${$id}`]: (model, e) => {
     switch(e.keyCode) {
       case 38:
         return select(model, model.selectIdx - 1);
@@ -53,12 +53,12 @@ const update = {
         return model;
     }
   },
-  [`select${model.$id}`]:(model, option) => selected(model, option)
-}
+  [`select${$id}`]:(model, option) => selected(model, option)
+})
 
 const getOptions = text => text ?
   [1, 2, 3, 4, 5].map(n=>text + n) : []
 
 app.on('selected', (text) => { console.log(text) });
 
-export default (element) => app.start(element, model, view, update);
+export default (element, $id = '_') => app.start(element, {...model, $id}, view, update($id));
