@@ -1,1 +1,49 @@
-html,body{height:100%;margin:20px;overflow:hidden;font-family:"Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";font-size:12px}
+/*html,body{height:100%;margin:20px;overflow:hidden;font-family:"Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";font-size:12px}*/
+
+.typeahead {
+  width: 200px;
+}
+
+.typeahead ul, .typeahead li {
+  list-style-type: none;
+  list-style-position:inside;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.typeahead input {
+  width: 100%;
+}
+
+.typeahead .options li {
+  padding: 4px;
+}
+
+.typeahead .options li:hover {
+  background-color: #eeeeee;
+}
+
+.typeahead .options li.selected {
+  background-color: #ffffee;
+}
+
+.multi-selection div:first-child {
+  border: 1px solid #eeeeee;
+  padding: 5px 0;
+}
+.multi-selection .selections {
+  display: inline;
+  padding: 10px 0;
+}
+.multi-selection .selections li {
+  display: inline;
+  margin-right: 5px;
+  padding: 5px 10px; 
+  border: 1px solid #eeeeee; 
+}
+
+.multi-selection .selections i {
+  margin-left: 10px;
+  cursor: pointer;
+}
