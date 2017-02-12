@@ -72,6 +72,12 @@ const update = {
   DECREASE: (model) => model - 1
 }
 ```
+```
+const update = (id) => ({
+  [`INCREASE_${id}`]: (model) => model + 1,
+  [`DECREASE_${id}`]: (model) => model - 1
+})
+```
 ## Run Update
 
 _app.run_ is the function to run the update.
