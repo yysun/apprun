@@ -1,44 +1,34 @@
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/debounceTime';
+
 export class App {
 
-  private _events: Object;
+  private subjects = {}
   public start;
   public h;
   public createElement;
 
   constructor() {
-    this._events = {};
   }
 
-  on(name: string, fn: (...args) => void, options: any = {}) {
+  on(name: string, fn: Function, options: any = {}) {
     if (options.debug) console.debug('on: ' + name);
-    this._events[name] = this._events[name] || [];
-    this._events[name].push({ fn: fn, options: options });
-  }
-
-  run(name: string, ...args) {
-    const subscribers = this._events[name];
-    console.assert(!!subscribers, 'No subscriber for event: ' + name);
-    if (subscribers) this._events[name] = subscribers.filter((sub) => {
-      let {fn, options} = sub;
-      if (options.delay) {
-        this.delay(name, fn, args, options);
-      } else {
-        if (options.debug) console.debug('run: ' + name, args);
-        fn.apply(this, args);
-      }
-      return !sub.options.once;
+    this.subjects[name] || (this.subjects[name] = new Subject);
+    let subject = this.subjects[name] as Observable<{}>;
+    if (options.delay) subject = subject.debounceTime(options.delay);
+    if (options.once) subject = subject.first();
+    return subject.subscribe((args) => {
+      if (options.debug) console.debug('run: ' + name);
+      fn.apply(this, args);
     });
   }
 
-  private delay(name, fn, args, options) {
-    if (options._t) clearTimeout(options._t);
-    options._t = setTimeout(() => {
-      clearTimeout(options._t);
-      if (options.debug) console.debug(`run-delay ${options.delay}:`  + name, args);
-      fn.apply(this, args);
-    }, options.delay);
+  run(name: string, ...args: any[]) {
+    const subject = this.subjects[name];
+    console.assert(!!subject, 'No subscriber for event: ' + name);
+    this.subjects[name].next(args);
   }
 }
-
-let app =  new App();
-export default app;
+export default new App();
