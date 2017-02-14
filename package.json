@@ -3,7 +3,7 @@
   "version": "0.6.3",
   "description": "",
   "main": "dist/apprun.js",
-  "typings": "dist/apprun.d.ts",
+  "types": "dist/apprun.d.ts",
   "scripts": {
     "build": "webpack -p",
     "build:dev": "webpack -w",
@@ -37,6 +37,7 @@
     "virtual-dom": "^2.1.1"
   },
   "devDependencies": {
+    "@types/es6-shim": "^0.31.32",
     "@types/jasmine": "^2.5.35",
     "jasmine": "^2.5.2",
     "json-loader": "^0.5.4",
@@ -45,6 +46,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-webpack": "^2.0.2",
     "live-server": "^1.2.0",
+    "rxjs": "^5.1.1",
     "ts-loader": "^0.8.2",
     "typescript": "^2.2.0",
     "webpack": "^2.2.1"
