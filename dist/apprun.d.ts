@@ -6,7 +6,7 @@ declare type Update = {
 };
 declare class App {
     start: (element: HTMLElement, model: Model, view: View, update: Update, options?) => void;
-    on(name: string, fn: (...args) => void, options?: any): void;
-    run(name: string, ...args): void;
+    on(name: string, fn?: Function, options?: any): any;
+    run(name: string, ...args): any;
 }
 declare let app: App;
