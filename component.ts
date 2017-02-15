@@ -45,6 +45,8 @@ export default class ComponentBase {
     }
   }
 
+  public setState = (state) => this.push_state(state);
+  
   constructor(protected element: HTMLElement,
     protected state: any,
     protected view: View,
