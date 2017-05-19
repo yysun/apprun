@@ -7,26 +7,26 @@ import VNode = require('virtual-dom/vnode/vnode');
 import VText = require('virtual-dom/vnode/vtext');
 import createElement = require('virtual-dom/create-element');
 import virtualize = require('vdom-virtualize');
-import html2vdom = require('html-to-vdom');
-const convertHTML = html2vdom({ VNode, VText });
-const convertHTMLWithKey = convertHTML.bind(null, {
-  getVNodeKey: function (attributes) {
-    return attributes.id;
-  }
-});
+
+import morph = require('morphdom')
 
 export function updateElement(element, html) {
   console.assert(!!element);
-  const vtree = (typeof html === 'string') ? convertHTMLWithKey(html) : html;
-  if (element.firstChild) {
-    const prev = element.firstChild.vtree || virtualize(element.firstChild);
-    const patches = diff(prev, vtree);
-    patch(element.firstChild, patches);
+
+  if (typeof html === 'string') {
+    morph(element, html);
   } else {
-    const node = createElement(vtree);
-    element.appendChild(node);
+    const vtree = html;
+    if (element.firstChild) {
+      const prev = element.firstChild.vtree || virtualize(element.firstChild);
+      const patches = diff(prev, vtree);
+      patch(element.firstChild, patches);
+    } else {
+      const node = createElement(vtree);
+      element.appendChild(node);
+    }
+    element.firstChild.vtree = vtree;
   }
-  element.firstChild.vtree = vtree;
 }
 
 export function updateElementVtree(element) {
@@ -41,3 +41,5 @@ app.h = (el, props, ...children) => (typeof el === 'string') ?
     h(el, props, children) : el(props, children);
 
 app.createElement = app.h;
+
+

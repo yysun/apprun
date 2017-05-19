@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "html-to-vdom": "^0.7.0",
+    "morphdom": "^2.3.2",
     "vdom-virtualize": "^2.0.0",
     "virtual-dom": "^2.1.1"
   },
