@@ -29,13 +29,6 @@ export function updateElement(element, html) {
   }
 }
 
-export function updateElementVtree(element) {
-  console.assert(!!element);
-  if (element.firstChild) {
-    element.firstChild.vtree = virtualize(element.firstChild);
-  }
-}
-
 import app from './app';
 app.h = (el, props, ...children) => (typeof el === 'string') ?
     h(el, props, children) : el(props, children);
