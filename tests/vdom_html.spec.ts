@@ -7,9 +7,6 @@ const update = {
   hi: (_, val) => val
 }
 
-document.body.removeChild(document.body.firstChild);
-app.start(document.body, model, view, update);
-
 describe('vdom-html', () => {
 
   let element;

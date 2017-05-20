@@ -4,8 +4,13 @@ export function updateElement(element, html) {
   console.assert(!!element);
 
   if (typeof html === 'string') {
-    morph(element, html);
+    if (element.firstChild) {
+      morph(element.firstChild, html);
+    } else {
+      element.innerHTML = html;
+    }
   }
+
 }
 
 

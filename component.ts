@@ -31,10 +31,8 @@ export default class ComponentBase {
     //   const html = this.view(this.state);
     //   if (html && this.updateElement) this.updateElement(this.element, html);
     // }
-
-
     const html = this.view(this.state);
-    this.updateElement(this.element, html);
+    if (this.updateElement) this.updateElement(this.element, html);
   }
 
   private push_state(state) {
