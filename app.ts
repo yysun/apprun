@@ -31,8 +31,10 @@ export class App {
   run(name: string, ...args: any[]): Subject<{}> {
     const subject = this.subjects[name];
     console.assert(!!subject, 'No subscriber for event: ' + name);
-    this.subjects[name].next(args);
-    return this.subjects[name] as Subject<{}>;
+    if (subject) {
+      subject.next(args);
+      return subject as Subject<{}>;
+    }
   }
 }
 export default new App();

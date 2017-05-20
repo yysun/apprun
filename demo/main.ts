@@ -1,4 +1,4 @@
-import app from '../index-zero';
+import app, { Router } from '../index';
 import home from './router-components/home';
 import counter from './router-components/counter';
 import counters from './router-components/counters';
@@ -11,14 +11,6 @@ import multi from './router-components/typeahead-multi-selection';
 const element = document.getElementById('my-app');
 [home, counter, counters, echo, dragdrop, todo, typeahead, multi].forEach(c => c(element));
 
-// [1,2,3,4,5].map(i=>{
-//   const id = `_${i}`
-//   const el = document.createElement('div');
-//   document.body.appendChild(el);
-//   typeahead(el, id);
-// })
-
-
-app.run('/');
+new Router();
 
 

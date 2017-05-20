@@ -1,6 +1,9 @@
 import app from './index-zero';
+import Router from './router';
 import { updateElement } from './vdom-html';
 import ComponentBase from './component';
+
+export { Router };
 
 export class Component extends ComponentBase {
   protected initVdom() {
