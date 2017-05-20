@@ -170,11 +170,12 @@ AppRun can also be compiled/bundled with your code too. So use it in one of thre
 * Included apprun.js in a script tag and use _app_ from TypeScript (by referencing to apprun.d.ts)
 * Compile/bundle using webpack
 
-Also depends on your view strategy, there are also three editions to use:
+Also depends on your view strategy, there are also four editions to use:
 
-* apprun-zero.js: 1K, use your own preferred DOM virtualization technology, such as React
-* apprun-jsx.js: 8K, support virtual-hyperScript, jsx/tsx
-* apprun.js: 70K, support virtual-hyperScript, jsx/tsx and HTML template string
+* apprun-zero.js: 5.19K, use your own preferred DOM virtualization technology, such as React
+* apprun-jsx.js: 11.1K, support virtual-hyperScript, jsx/tsx
+* apprun-html.js: 7.05K, support virtual-hyperScript, jsx/tsx and HTML template string
+* apprun.js: 12.7K, support virtual-hyperScript, jsx/tsx and HTML template string
 
 ## Examples
 

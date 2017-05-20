@@ -8,7 +8,4 @@ export class Component extends ComponentBase {
   }
 }
 
-app.start = (element, model, view, update, options) =>
-  new Component(element, model, view, update, options);
-
 export default app;

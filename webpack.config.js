@@ -3,7 +3,7 @@ module.exports = {
     'apprun': './index.ts',
     'apprun-zero':  './index-zero.ts',
     'apprun-jsx':  './index-jsx.ts',
-    'apprun-html': './index.ts',
+    'apprun-html': './index-html.ts',
   },
   output: {
     path: 'dist',
