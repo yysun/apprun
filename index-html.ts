@@ -1,4 +1,4 @@
-import app from './index-zero';
+import app, { Model, View, Update } from './index-zero';
 import Router from './router';
 import { updateElement } from './vdom-html';
 import ComponentBase from './component';
@@ -13,5 +13,5 @@ export class Component extends ComponentBase {
 
 app.start = (element: HTMLElement, model: Model, view: View, update: Update, options?) =>
   new Component(element, model, view, update, options);
-  
+
 export default app;

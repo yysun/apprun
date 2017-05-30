@@ -1,4 +1,4 @@
-import app from './index-zero';
+import app, { Model, View, Update } from './index-zero';
 import Router from './router';
 import { updateElement } from './vdom';
 import ComponentBase from './component';
