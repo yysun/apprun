@@ -1,12 +1,20 @@
+const path = require('path');
+
 module.exports = {
   entry: {
-    'apprun': './index.ts',
-    'apprun-zero':  './index-zero.ts',
-    'apprun-jsx':  './index-jsx.ts',
-    'apprun-html': './index-html.ts',
+    'dist/apprun': './index.ts',
+    'dist/apprun-zero':  './index-zero.ts',
+    'dist/apprun-jsx':  './index-jsx.ts',
+    'dist/apprun-html': './index-html.ts',
+
+    'demo/apprun': './index.ts',
+    'demo/app': './demo/main.ts',
+    'demo/jsx/app': './demo/jsx/main.tsx',
+    'demo/hyperscript/app': './demo/hyperscript/main.ts',
+    'demo/html-multiple-counters/app': './demo/html-multiple-counters/main.ts'
   },
   output: {
-    path: 'dist',
+    // path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
   resolve: {
@@ -17,5 +25,9 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'ts-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'demo'),
+    port: 8080
   }
 }

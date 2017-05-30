@@ -174,7 +174,7 @@ Also depends on your view strategy, there are also four editions to use:
 
 * apprun-zero.js: 5.2K, use your own preferred DOM virtualization technology, such as React
 * apprun-jsx.js: 11.1K, support virtual-hyperScript, jsx/tsx
-* apprun-html.js: 7.1K, support virtual-hyperScript, jsx/tsx and HTML template string
+* apprun-html.js: 7.1K, support HTML template string
 * apprun.js: 12.7K, support virtual-hyperScript, jsx/tsx and HTML template string
 
 ## Examples
