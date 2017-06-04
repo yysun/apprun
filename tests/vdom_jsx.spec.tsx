@@ -7,7 +7,7 @@ const update = {
   hi: (_, val) => val
 }
 
-fdescribe('vdom-jsx', () => {
+describe('vdom-jsx', () => {
 
   let element;
   beforeEach(()=>{

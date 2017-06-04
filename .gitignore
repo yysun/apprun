@@ -3,3 +3,4 @@ node_modules
 *.log
 tests**/*.js
 demo**/*.js
+dist**/*.js

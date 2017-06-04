@@ -7,7 +7,7 @@ type VNode = {
 type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 export const h = (tag: string | Function, props: {}, ...children) => {
-  const ch = children.map(c=>(typeof c === 'function' || typeof c === 'object' && !Array.isArray(c)) ? c: c.toString())
+  const ch = children.map(c=>(typeof c === 'function' || typeof c === 'object') ? c: c.toString())
   if (typeof tag === 'string') return { tag, props, children: ch };
   return tag(props, ch)
 };
@@ -38,7 +38,7 @@ function update(element: Element, node: VNode) {
   for (let i=0; i<len; i++) {
     const child = node.children[i];
     if (typeof child === 'string') {
-      element.childNodes[i].textContent = child;
+      element.textContent = child;
     } else {
       update(element.childNodes[i], child);
     }
@@ -64,7 +64,7 @@ function same(el: Element, node: VNode) {
 
 function create(node: VNode | string) : Text | HTMLElement | SVGSVGElement {
   console.assert(node !== null && node !== undefined);
-  //console.log('create', node, typeof node);
+  // console.log('create', node, typeof node);
 
   if (typeof node === "string") return document.createTextNode(node);
 
