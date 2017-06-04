@@ -1,4 +1,4 @@
-import app, { Router } from '../index';
+import app, { Router } from '../index-jsx';
 import home from './router-components/home';
 import counter from './router-components/counter';
 import counters from './router-components/counters';
