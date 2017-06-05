@@ -31,9 +31,7 @@
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
     "morphdom": "^2.3.2",
-    "rxjs": "^5.4.0",
-    "vdom-virtualize": "^2.0.0",
-    "virtual-dom": "^2.1.1"
+    "rxjs": "^5.4.0"
   },
   "devDependencies": {
     "@types/es6-shim": "^0.31.33",
