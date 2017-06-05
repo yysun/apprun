@@ -9,6 +9,7 @@ type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 export const h = (tag: string | Function, props: {}, ...children) => {
   const ch = children.map(c=>(typeof c === 'function' || typeof c === 'object') ? c: c.toString())
   if (typeof tag === 'string') return { tag, props, children: ch };
+  console.log('h', tag, props, children)
   return tag(props, ch)
 };
 
@@ -53,6 +54,14 @@ function update(element: Element, node: VNode) {
   for (let i=len; i<node.children.length; i++) {
     element.append(create(node.children[i]));
   }
+
+  element.style.cssText = '';
+  element.className = '';
+  for(let p in element) {
+    if(p.indexOf('on') === 0 && element[p])
+      element[p] = null
+  }
+  setProps(element, node.props);
 }
 
 function same(el: Element, node: VNode) {
@@ -72,21 +81,29 @@ function create(node: VNode | string) : Text | HTMLElement | SVGSVGElement {
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag);
 
-    if (node.children) node.children.forEach(child => {
-      element.appendChild(create(child));
-    });
+  setProps(element, node.props);
 
-    if (!(element instanceof Text)) {
-      setProps(element, node.props)
-    }
+  if (node.children) node.children.forEach(child => {
+    element.appendChild(create(child));
+  });
+
   return element
 }
 
 function setProps(element: Element, props: {}) {
-  if (!props) return;
+  console.assert(!!element);
   // console.log('setProps', element, props);
-}
 
-// function updateProps(element: Element, props: {}) {
-//   console.log('updateProps', element, props);
-// }
+  if (!props) return;
+
+  for(let name in props) {
+    const value = props[name];
+    if (name === 'style') {
+      for(let s in value) {
+        element.style[s] = value[s];
+      }
+    } else {
+      element[name] = value;
+    }
+  }
+}
