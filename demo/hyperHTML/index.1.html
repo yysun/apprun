@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>counters</title>
+  <!--<link rel="stylesheet" type="text/css" href="../styles.css">-->
+  <style>
+    html,body{height:100%;margin:20px;overflow:hidden;font-family:"Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";font-size:12px}
+  </style>
+</head>
+<body>
+  <div id="my-app"></div>
+  <script src="hyperhtml.js"></script>
+  <script src="apprun-zero.js"></script>
+  <script>
+
+    const element = document.getElementById('my-app');
+    const render = hyperHTML.bind(element);
+
+    const model = 'hello world';
+    const view = (val) =>
+      render`<div><div>${val}</div>
+          <input value="${val}" oninput="app.run(\'render\', this.value)"/></div>`;
+    
+    window.addEventListener('hashchange', (e) => {
+      app.run('route', location.hash);
+    });
+    var update = {
+      'route': function (_, hash) {
+        return hash.replace('#', '');
+      },
+      'render': function (_, val) {
+        location.hash = '#' + val;
+        return val;
+      }
+    }
+    app.start(element, model, view, update);
+  </script>
+
+</body>
+</html>

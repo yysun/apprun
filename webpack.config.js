@@ -11,6 +11,7 @@ module.exports = {
     'demo/app': './demo/main.ts',
     'demo/jsx/app': './demo/jsx/main.tsx',
     'demo/hyperscript/app': './demo/hyperscript/main.ts',
+    'demo/hyperHTML/app': './demo/hyperHTML/main.ts',
     'demo/html-multiple-counters/app': './demo/html-multiple-counters/main.ts'
   },
   output: {

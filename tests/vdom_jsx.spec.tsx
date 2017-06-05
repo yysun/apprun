@@ -7,7 +7,7 @@ const update = {
   hi: (_, val) => val
 }
 
-describe('vdom-jsx', () => {
+fdescribe('vdom-jsx', () => {
 
   let element;
   beforeEach(()=>{
@@ -44,6 +44,34 @@ describe('vdom-jsx', () => {
 
     app.run('hi', 'xxxxx');
     expect(element.firstChild.textContent).toEqual('xxxxx');
+
+  });
+
+it('should render nested element', () => {
+
+    const CustomElement = ({val}) => <li>{val}</li>;
+    const view = _ => (
+    <ul>
+      <CustomElement val= {_+'1'} />
+      <CustomElement val= {_+'2'} />
+      <CustomElement val= {_+'3'} />
+      <CustomElement val= {_+'4'} />
+    </ul>);
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    app.start(element, '', view, update);
+    const el = element.firstChild as HTMLElement;
+
+    expect(el.children[0].textContent).toEqual('1');
+    expect(el.children[1].textContent).toEqual('2');
+    expect(el.children[2].textContent).toEqual('3');
+    expect(el.children[3].textContent).toEqual('4');
+
+    app.run('hi', 'x');
+    expect(el.children[0].textContent).toEqual('x1');
+    expect(el.children[1].textContent).toEqual('x2');
+    expect(el.children[2].textContent).toEqual('x3');
+    expect(el.children[3].textContent).toEqual('x4');
 
   });
 

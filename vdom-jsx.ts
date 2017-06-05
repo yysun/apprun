@@ -1,6 +1,6 @@
 /// <reference path="./virtual-dom.d.ts" />
 
-import h = require('virtual-dom/h');
+import vdomh = require('virtual-dom/h');
 import patch = require('virtual-dom/patch');
 import diff = require('virtual-dom/diff');
 import VNode = require('virtual-dom/vnode/vnode');
@@ -21,8 +21,5 @@ export function updateElement(element, vtree) {
   element.firstChild.vtree = vtree;
 }
 
-import app from './app';
-app.h = (el, props, ...children) => (typeof el === 'string') ?
-    h(el, props, children) : el(props, children);
-
-app.createElement = app.h;
+export const h = (el, props, ...children) => (typeof el === 'string') ?
+    vdomh(el, props, children) : el(props, children);

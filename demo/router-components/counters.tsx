@@ -2,18 +2,21 @@ import app from '../../index-jsx';
 
 const model = [];
 
+const Counter = ({num, idx}) => (
+  <div>
+    <h1>{num}</h1>
+    <button onclick={() => app.run("-1", idx)}>-1</button>
+    <button onclick={() => app.run("+1", idx)}>+1</button>
+    <button onclick={() => app.run("remove-counter", idx)}>x</button>
+  </div>
+);
+
+const CounterList = ({counters}) => counters.map((num, idx) =>
+  <Counter num={num} idx={idx} />
+);
+
 const view = (state) => {
   console.log(state);
-  const CounterList = ({counters}) => counters.map((num, idx) => {
-    return (
-    <div>
-      <h1>{num}</h1>
-      <button onclick={() => app.run("-1", idx)}>-1</button>
-      <button onclick={() => app.run("+1", idx)}>+1</button>
-      <button onclick={() => app.run("remove-counter", idx)}>x</button>
-    </div>);
-  });
-
   return (
   <div>
     <div>
