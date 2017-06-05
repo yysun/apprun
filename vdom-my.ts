@@ -8,7 +8,13 @@ type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 export const h = (tag: string | Function, props: {}, ...children) => {
   let ch = [];
-  const push = (c) => ch.push((typeof c === 'function' || typeof c === 'object') ? c : c.toString());
+  const push = (c) => {
+    if (!c) {
+      console.log('h?', tag, props, children);
+    } else {
+      ch.push((typeof c === 'function' || typeof c === 'object') ? c : c.toString());
+    }
+  }
   children.forEach(c => {
     if (Array.isArray(c)) {
       c.forEach(i => push(i));
@@ -73,8 +79,8 @@ function update(element: Element, node: VNode) {
 
 function same(el: Element, node: VNode) {
   if (!el || !node) return false;
-  const key1 = el['key'] || el.id || el.nodeName;
-  const key2 = (node.props && (node.props['key'] || node.props['id'])) || node.tag || '';
+  const key1 = `${el['key'] || el.id || el.nodeName}`;
+  const key2 = `${(node.props && (node.props['key'] || node.props['id'])) || node.tag || ''}`;
   return key1.toLowerCase() === key2.toLowerCase();
 }
 
