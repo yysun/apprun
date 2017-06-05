@@ -2,7 +2,7 @@ import app from '../../index-jsx';
 
 var model = 'world';
 
-const Hello = ({name}) => <div>{`Hello: ${name}`}</div>;
+const Hello = ({name}) => <div>Hello: {name}</div>;
 
 const view = (val) => {
   return <div>

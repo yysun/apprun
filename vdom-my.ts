@@ -7,10 +7,17 @@ type VNode = {
 type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 export const h = (tag: string | Function, props: {}, ...children) => {
-  const ch = children.map(c=>(typeof c === 'function' || typeof c === 'object') ? c: c.toString())
+  let ch = [];
+  const push = (c) => ch.push((typeof c === 'function' || typeof c === 'object') ? c : c.toString());
+  children.forEach(c => {
+    if (Array.isArray(c)) {
+      c.forEach(i => push(i));
+    } else {
+      push(c);
+    }
+  });
   if (typeof tag === 'string') return { tag, props, children: ch };
-  console.log('h', tag, props, children)
-  return tag(props, ch)
+  return tag(props, ch);
 };
 
 export const updateElement = render;
@@ -39,7 +46,7 @@ function update(element: Element, node: VNode) {
   for (let i=0; i<len; i++) {
     const child = node.children[i];
     if (typeof child === 'string') {
-      element.textContent = child;
+      element.replaceChild(document.createTextNode(child), element.childNodes[i]);
     } else {
       update(element.childNodes[i], child);
     }
@@ -55,8 +62,8 @@ function update(element: Element, node: VNode) {
     element.append(create(node.children[i]));
   }
 
-  element.style.cssText = '';
-  element.className = '';
+  if (element.style.cssText) element.style.cssText = '';
+  if (element.className) element.className = '';
   for(let p in element) {
     if(p.indexOf('on') === 0 && element[p])
       element[p] = null
@@ -71,7 +78,7 @@ function same(el: Element, node: VNode) {
   return key1.toLowerCase() === key2.toLowerCase();
 }
 
-function create(node: VNode | string) : Text | HTMLElement | SVGSVGElement {
+function create(node: VNode | string) : Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
 
