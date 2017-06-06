@@ -26,6 +26,18 @@ describe('vdom-my', () => {
     expect(element.textContent).toEqual('x');
   });
 
+  it('should create element with number', () => {
+    const element = render(h('div', null, 0));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.textContent).toEqual('0');
+  });
+
+  it('should create element without text', () => {
+    const element = render(h('div', null, ''));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.textContent).toEqual('');
+  });
+
   it('should replace element\s text', () => {
     const element = render(h('div', null, 'x'));
     expect(element.nodeName).toEqual('DIV');

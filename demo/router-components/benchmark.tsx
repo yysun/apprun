@@ -21,6 +21,7 @@ const update = {
 
     run(store) {
         store.run();
+        removeAllRows();
         return store;
     },
 
@@ -32,12 +33,19 @@ const update = {
     remove(store, id) {
         if (id == store.selected) this.unselect(store);
         store.delete(id);
+        document.getElementById(id).remove();
+        store.no_render = true;
         return store;
     },
 
     select(store, id) {
-        this.unselect(store);
+        if (store.selected) {
+            document.getElementById(store.selected).className = '';
+            store.selected = null;
+        }
         store.select(id);
+        document.getElementById(id).className = 'danger';
+        store.no_render = true;
         return store;
     },
 
@@ -48,11 +56,13 @@ const update = {
 
     runlots(store) {
         store.runLots();
+        removeAllRows();
         return store;
     },
 
     clear(store) {
         store.clear();
+        removeAllRows();
         return store;
     },
 
@@ -67,7 +77,13 @@ const update = {
     }
 }
 
+const removeAllRows = () => document.getElementById('main-table').textContent = '';
+
 const view = (model) => {
+    if (model.no_render) {
+      delete model.no_render;
+      return;
+    }
     const rows = model.data.map((curr) => {
         const selected = curr.id == model.selected ? 'danger' : '';
         const id = curr.id;
@@ -94,7 +110,7 @@ const view = (model) => {
         <button type='button' id='clear'>Clear</button>
         <button type='button' id='swaprows'>Swap Rows</button>
     </div>
-
+    <br/>
     <table className="table table-hover table-striped test-data" id="main-table">
         <tbody>{rows}</tbody>
     </table>
@@ -114,7 +130,7 @@ const getId = (elem) => {
 document.body.addEventListener('click', e => {
     const t = e.target as HTMLElement;
     if (!t) return;
-    if (t.tagName === 'BUTTON') {
+    if (t.tagName === 'BUTTON' && t.id) {
         e.preventDefault();
         startMeasure(t.id);
         app.run(t.id);
