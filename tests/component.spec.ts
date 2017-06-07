@@ -77,4 +77,18 @@ describe('Component', () => {
     expect(spy).toHaveBeenCalledWith('ab');
   });
 
+  it('should trigger scoped update', () => {
+    const component = new Component(document.body, model, view, update, { runScope: 'a' });
+    expect(component.State).toEqual('x');
+    app.run('hi', 'xx');
+    expect(component.State).toEqual('x');
+    component.run('hi', 'xx');
+    expect(component.State).toEqual('xx');
+    component.run('hi', 'xxx');
+    expect(component.State).toEqual('xxx');
+    component.run('hi', 'xxxx');
+    expect(component.State).toEqual('xxxx');
+
+  });
+
 })

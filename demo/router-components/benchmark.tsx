@@ -1,5 +1,7 @@
-import app from '../../index-jsx'
+import global, { Component } from '../../index-jsx'
 import Store from './store';
+
+let app;
 
 var startTime;
 var lastMeasure;
@@ -151,4 +153,7 @@ document.body.addEventListener('click', e => {
     }
 });
 
-export default (element) => app.start(element, store, view, update);
+export default (element) => {
+    app = new Component(element, store, view, update, { runScope: 'benchmark' }).app;
+    // global.on('#benchmark', () => app.run('#benchmark'));
+}

@@ -1,4 +1,4 @@
-import app from './app';
+import app, { App } from './app';
 
 type Model = any;
 type View = (model: Model) => string | Function;
@@ -7,6 +7,7 @@ type Update = { [name: string]: Action };
 
 export default class ComponentBase {
 
+  public app;
   protected updateElement;
 
   protected initVdom() {
@@ -16,6 +17,7 @@ export default class ComponentBase {
   private _history_idx = -1;
   private enable_history;
   private state_changed: string;
+  private runScope;
 
   get State() {
     return this.state;
@@ -23,14 +25,6 @@ export default class ComponentBase {
 
   protected set_state(state) {
     this.state = state;
-    // if (state && state.view && typeof state.view === 'function') {
-    //   state.view(this.state);
-    //   state.view = undefined;
-    //   if (this.element.firstChild && this.updateElementVtree) this.updateElementVtree(this.element);
-    // } else if (this.view) {
-    //   const html = this.view(this.state);
-    //   if (html && this.updateElement) this.updateElement(this.element, html);
-    // }
     const html = this.view(this.state);
     if (this.updateElement) this.updateElement(this.element, html);
   }
@@ -47,13 +41,14 @@ export default class ComponentBase {
   }
 
   public setState = (state) => this.push_state(state);
-  
+
   constructor(protected element: HTMLElement,
     protected state: any,
     protected view: View,
     update: Update = {},
     options?) {
 
+    this.app = new App();
     this.initVdom();
 
     console.assert(!!element);
@@ -80,17 +75,28 @@ export default class ComponentBase {
       });
     }
     this.state_changed = options.event && (options.event.name || 'state_changed');
-
+    this.runScope = options.runScope;
     this.view = view;
     this.add_actions(update);
-    this.push_state(state);
+    // don't run immediately if scoped
+    if (!options.runScope) this.push_state(state);
   }
 
   add_actions(actions) {
     Object.keys(actions).forEach(action => {
-      app.on(action, (...p) => {
-        this.push_state(actions[action](this.State, ...p));
-      });
+      if (this.runScope) {
+        this.app.on(action, (...p) => {
+          this.push_state(actions[action](this.State, ...p));        });
+      } else {
+        app.on(action, (...p) => {
+          this.push_state(actions[action](this.State, ...p));
+        });
+      }
     });
   }
+
+  public run(name: string, ...args) {
+    return this.app.run(name, ...args);
+  }
+
 };
