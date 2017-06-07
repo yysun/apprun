@@ -6,6 +6,8 @@ type VNode = {
 
 type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
+const ATTR_PROPS = '_props';
+
 export const h = (tag: string | Function, props: {}, ...children) => {
   let ch = [];
   const push = (c) => {
@@ -61,19 +63,21 @@ function update(element: Element, node: VNode) {
     n--;
   }
 
-  const d = document.createDocumentFragment();
-  for (let i=len; i<node.children.length; i++) {
-    d.appendChild(create(node.children[i]));
+  if (node.children.length) {
+    const d = document.createDocumentFragment();
+    for (let i=len; i<node.children.length; i++) {
+      d.appendChild(create(node.children[i]));
+    }
+    element.appendChild(d);
   }
-  element.appendChild(d);
 
   updateProps(element, node.props);
 }
 
 function same(el: Element, node: VNode) {
   if (!el || !node) return false;
-  const key1 = `${el['key'] || el.id || el.nodeName}`;
-  const key2 = `${(node.props && (node.props['key'] || node.props['id'])) || node.tag || ''}`;
+  const key1 = `${el.nodeName}`;
+  const key2 = `${node.tag || ''}`;
   return key1.toLowerCase() === key2.toLowerCase();
 }
 
@@ -99,7 +103,7 @@ function setProps(element: Element, props: {}) {
   // console.log('setProps', element, props);
 
   if (!props) return;
-  element['_props'] = props;
+  element[ATTR_PROPS] = props;
   for(let name in props) {
     const value = props[name];
     if (name === 'style') {
@@ -123,8 +127,8 @@ function updateProps(element: Element, props: {}) {
   console.assert(!!element);
   // console.log('setProps', element, props);
 
-  props = mergeProps(element['_props'], props);
-  element['_props'] = props;
+  props = mergeProps(element[ATTR_PROPS], props);
+  element[ATTR_PROPS] = props;
   for(let name in props) {
     const value = props[name];
     if (name === 'style') {
