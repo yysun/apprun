@@ -77,7 +77,10 @@ const update = {
     }
 }
 
-const removeAllRows = () => document.getElementById('main-table').textContent = '';
+const removeAllRows = () => {
+    const table = document.getElementById('main-table');
+    if (table) table.textContent = '';
+}
 
 const view = (model) => {
     if (model.no_render) {

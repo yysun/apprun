@@ -100,9 +100,9 @@ function create(node: VNode | string) : Element {
 
 function setProps(element: Element, props: {}) {
   console.assert(!!element);
+  if (!props) return;
   // console.log('setProps', element, props);
 
-  if (!props) return;
   element[ATTR_PROPS] = props;
   for(let name in props) {
     const value = props[name];
@@ -125,7 +125,7 @@ function mergeProps(a:{}, b:{}) :{} {
 
 function updateProps(element: Element, props: {}) {
   console.assert(!!element);
-  // console.log('setProps', element, props);
+  // console.log('updateProps', element, props);
 
   props = mergeProps(element[ATTR_PROPS], props);
   element[ATTR_PROPS] = props;
