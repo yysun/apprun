@@ -128,6 +128,26 @@ describe('vdom-my', () => {
 
     expect(element.firstChild.textContent).toEqual('x');
     expect(element.firstChild.k).toBe('b')
+    expect(element.childNodes.length).toBe(1)
+  });
+
+  it('it should retain element based on key', () => {
+    const element = render(h('div', null, [
+        h('div', {key: 'a'}), 
+        h('div', {key: 'b'}),
+      ]));
+    element.childNodes[0].k = 'a';
+    element.childNodes[1].k = 'b';
+    render(h('div', null, [
+      h('div', {key: 'b'}, 'x'),
+      h('div', {key: 'a'}, 'xx')
+    ]));
+
+    expect(element.childNodes[0].textContent).toEqual('x');
+    expect(element.childNodes[0].k).toBe('b')
+    
+    expect(element.childNodes[1].textContent).toEqual('xx');
+    expect(element.childNodes[1].k).toBe('a')
   });
 
 });
