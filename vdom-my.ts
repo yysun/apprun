@@ -26,7 +26,7 @@ export const h = (tag: string | Function, props: {}, ...children) => {
 
 export const updateElement = render;
 
-function render(element: Element, node: VNode) {
+export function render(element: Element, node: VNode) {
   // console.log('render', element, node);
   if (!node || !element) return;
   if (!element.firstChild) {
@@ -46,29 +46,66 @@ function update(element: Element, node: VNode) {
   }
 
   //console.log('update', element, node);
-  const len = Math.min(element.childNodes.length, node.children.length);
-  for (let i=0; i<len; i++) {
-    const child = node.children[i];
-    if (typeof child === 'string') {
-      if (element.childNodes[i].textContent !== child)
-        element.replaceChild(document.createTextNode(child), element.childNodes[i]);
-    } else {
-      update(element.childNodes[i], child);
+  // const len = Math.min(element.childNodes.length, node.children.length);
+  // for (let i=0; i<len; i++) {
+  //   const child = node.children[i];
+  //   if (typeof child === 'string') {
+  //     if (element.childNodes[i].textContent !== child)
+  //       element.replaceChild(document.createTextNode(child), element.childNodes[i]);
+  //   } else {
+  //     update(element.childNodes[i], child);
+  //   }
+  // }
+
+  // let n = element.childNodes.length;
+  // while (n > len) {
+  //   element.removeChild(element.lastChild);
+  //   n--;
+  // }
+
+  // if (node.children.length) {
+  //   const d = document.createDocumentFragment();
+  //   for (let i=len; i<node.children.length; i++) {
+  //     d.appendChild(create(node.children[i]));
+  //   }
+  //   element.appendChild(d);
+  // }
+  
+  if (node.children.length) {
+    const d = document.createDocumentFragment();
+    for (let i=0; i<node.children.length; i++) {
+      const child = node.children[i];
+
+      if (typeof child === 'string') {
+        d.appendChild(document.createTextNode(child))
+      } else {
+        const key = child.props && child.props['key'];
+
+        // const old = element.querySelector('[key="${key}"]');
+        let old = null;
+
+        if (key) for (let j=0; j<element.children.length; j++) {
+          if (key === element.children[j]['key']) {
+            old = element.children[j];
+            break;            
+          }
+        }
+
+        if (old) {
+          update(old, child);
+          d.appendChild(old);
+        } else {
+          d.appendChild(create(node.children[i]));
+        }
+      }
     }
+    element.insertBefore(d, element.firstChild);
   }
 
   let n = element.childNodes.length;
-  while (n > len) {
+  while (n > node.children.length) {
     element.removeChild(element.lastChild);
     n--;
-  }
-
-  if (node.children.length) {
-    const d = document.createDocumentFragment();
-    for (let i=len; i<node.children.length; i++) {
-      d.appendChild(create(node.children[i]));
-    }
-    element.appendChild(d);
   }
 
   updateProps(element, node.props);

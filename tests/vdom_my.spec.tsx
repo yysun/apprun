@@ -6,7 +6,6 @@ describe('vdom-my', () => {
   let root;
   beforeEach(() => {
     root = document.createElement('div');
-    root.textContent = '';
   });
 
   function render(vnode) {
@@ -38,7 +37,7 @@ describe('vdom-my', () => {
     expect(element.textContent).toEqual('');
   });
 
-  it('should replace element\s text', () => {
+  it('should replace element\'s text', () => {
     const element = render(h('div', null, 'x'));
     expect(element.nodeName).toEqual('DIV');
     expect(element.textContent).toEqual('x');
@@ -115,6 +114,20 @@ describe('vdom-my', () => {
       render(nodes);
       expect(element.textContent).toEqual('Hello: world');
     }
+  });
+
+  it('it should reuse element based on key', () => {
+    const element = render(h('div', null, [
+        h('div', {key: 'a'}), 
+        h('div', {key: 'b'}),
+      ]));
+    element.childNodes[1].k = 'b';
+    render(h('div', null, [
+      h('div', {key: 'b'}, 'x')
+    ]));
+
+    expect(element.firstChild.textContent).toEqual('x');
+    expect(element.firstChild.k).toBe('b')
   });
 
 });
