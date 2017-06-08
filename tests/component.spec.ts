@@ -78,7 +78,7 @@ describe('Component', () => {
   });
 
   it('should trigger scoped update', () => {
-    const component = new Component(document.body, model, view, update, { runScope: 'a' });
+    const component = new Component(document.body, model, view, update, { scope: 'a' });
     expect(component.State).toEqual('x');
     app.run('hi', 'xx');
     expect(component.State).toEqual('x');

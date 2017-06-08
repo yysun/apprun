@@ -3,7 +3,7 @@
 AppRun is a lightweight library for implementing the [elm](http://elm-lang.org/)/[Redux](http://redux.js.org/)
 model-view-update architecture using JavaScript or TypeScript.
 It supports writing views in JSX / TSX or HTML string. The views
-are rendered through [virtual DOM](https://github.com/Matt-Esch/virtual-dom).
+are rendered through virtual DOM.
 At core, it is based on the event pubsub pattern, where _app.run_ publishes events and _app.on_ subscribes to the events.
 Finally, _app.start_ bootstraps the application.
 
@@ -144,8 +144,6 @@ const view = (model) => <div>
 ```
 
 AppRun also supports [HyperScript](https://github.com/dominictarr/hyperscript).
-It converts HyperScript to [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/blob/master/virtual-hyperscript/README.md)
-internally to work with [virtual DOM](https://github.com/Matt-Esch/virtual-dom).
 If you are a hyperscript fan, you will like this option.
 
 ```
@@ -168,14 +166,7 @@ AppRun can also be compiled/bundled with your code too. So use it in one of thre
 
 * Included apprun.js in a script tag and use _app_ from JavaScript
 * Included apprun.js in a script tag and use _app_ from TypeScript (by referencing to apprun.d.ts)
-* Compile/bundle using webpack
-
-Also depends on your view strategy, there are also four editions to use:
-
-* apprun-zero.js: 5.2K, use your own preferred DOM virtualization technology, such as React
-* apprun-jsx.js: 11.1K, support virtual-hyperScript, jsx/tsx
-* apprun-html.js: 7.1K, support HTML template string
-* apprun.js: 12.7K, support virtual-hyperScript, jsx/tsx and HTML template string
+* Compile/bundle using webpack using ES2015 import
 
 ## Examples
 
@@ -189,6 +180,11 @@ or try it online:
 * [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
 
 The unit tests in the _tests_ folder can be served as the functional specifications.
+
+You can run
+```
+npm test
+```
 
 Have fun and send pull requests.
 

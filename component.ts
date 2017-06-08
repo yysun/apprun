@@ -17,7 +17,7 @@ export default class ComponentBase {
   private _history_idx = -1;
   private enable_history;
   private state_changed: string;
-  private runScope;
+  private scope;
 
   get State() {
     return this.state;
@@ -75,16 +75,16 @@ export default class ComponentBase {
       });
     }
     this.state_changed = options.event && (options.event.name || 'state_changed');
-    this.runScope = options.runScope;
+    this.scope = options.scope;
     this.view = view;
     this.add_actions(update);
     // don't run immediately if scoped
-    if (!options.runScope) this.push_state(state);
+    if (!options.scope) this.push_state(state);
   }
 
   add_actions(actions) {
     Object.keys(actions).forEach(action => {
-      if (this.runScope) {
+      if (this.scope) {
         this.app.on(action, (...p) => {
           this.push_state(actions[action](this.State, ...p));        });
       } else {

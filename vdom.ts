@@ -1,5 +1,3 @@
-/// <reference path="./virtual-dom.d.ts" />
-
 import { h, updateElement } from './vdom-my';
 import morph = require('morphdom')
 

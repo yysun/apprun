@@ -1,4 +1,4 @@
-import global, { Component } from '../../index-jsx'
+import apprun from '../../index-jsx'
 import Store from './store';
 
 let app;
@@ -153,7 +153,8 @@ document.body.addEventListener('click', e => {
     }
 });
 
+
 export default (element) => {
-    app = new Component(element, store, view, update, { runScope: 'benchmark' }).app;
-    // global.on('#benchmark', () => app.run('#benchmark'));
+    app = apprun.start(element, store, view, update, { scope: 'benchmark' }).app;
+    apprun.on('#benchmark', () => app.run('#benchmark'));
 }
