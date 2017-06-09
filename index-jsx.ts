@@ -12,8 +12,12 @@ export class Component extends ComponentBase {
   }
 }
 
-app.start = (element: HTMLElement, model: Model, view: View, update: Update, options?) =>
-  new Component(element, model, view, update, options);
+app.start = (element: HTMLElement, model: Model, view: View, update: Update, options:any={}) => {
+  if (typeof options.global_event === 'undefined') options.global_event = true;
+  const component = new Component(element, model, view, update, options);
+  component.start();
+  return component;
+}
 
 app.createElement = app.h = h;
 export default app;

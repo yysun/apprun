@@ -1,4 +1,4 @@
-import apprun from '../../index-jsx'
+import { Component } from '../../index-jsx'
 import Store from './store';
 
 let app;
@@ -19,7 +19,7 @@ var stopMeasure = function() {
 const store = new Store();
 
 const update = {
-    '#benchmark': (store) => store,
+    refresh: (store) => store,
 
     run(store) {
         store.run();
@@ -155,6 +155,6 @@ document.body.addEventListener('click', e => {
 
 
 export default (element) => {
-    app = apprun.start(element, store, view, update, { scope: 'benchmark' }).app;
-    apprun.on('#benchmark', () => app.run('#benchmark'));
+  app = new Component(element, store, view, update).app;
+  window['app'].on('#benchmark', () => app.run('refresh'));
 }

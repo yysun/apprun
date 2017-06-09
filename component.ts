@@ -17,7 +17,7 @@ export default class ComponentBase {
   private _history_idx = -1;
   private enable_history;
   private state_changed: string;
-  private scope;
+  private global_event;
 
   get State() {
     return this.state;
@@ -51,7 +51,7 @@ export default class ComponentBase {
     this.app = new App();
     this.initVdom();
 
-    console.assert(!!element);
+    // console.assert(!!element);
     options = options || {};
     this.enable_history = !!options.history;
     if (this.enable_history) {
@@ -75,18 +75,18 @@ export default class ComponentBase {
       });
     }
     this.state_changed = options.event && (options.event.name || 'state_changed');
-    this.scope = options.scope;
+    this.global_event = options.global_event;
     this.view = view;
     this.add_actions(update);
-    // don't run immediately if scoped
-    if (!options.scope) this.push_state(state);
+    this.state = state;
   }
 
   add_actions(actions) {
     Object.keys(actions).forEach(action => {
-      if (this.scope) {
+      if (!this.global_event) {
         this.app.on(action, (...p) => {
-          this.push_state(actions[action](this.State, ...p));        });
+          this.push_state(actions[action](this.State, ...p));
+        });
       } else {
         app.on(action, (...p) => {
           this.push_state(actions[action](this.State, ...p));
@@ -99,4 +99,7 @@ export default class ComponentBase {
     return this.app.run(name, ...args);
   }
 
+  public start(state?){
+    this.push_state(state || this.state);
+  }
 };

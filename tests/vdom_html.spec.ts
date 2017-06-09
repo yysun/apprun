@@ -12,7 +12,6 @@ describe('vdom-html', () => {
   let element;
   beforeEach(()=>{
     element = document.createElement('div');
-    document.body.appendChild(element);
     app.start(element, model, view, update);
   });
 
