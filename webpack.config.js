@@ -23,8 +23,7 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.tsx?$/, loader: 'ts-loader' }
     ]
   },
   devServer: {

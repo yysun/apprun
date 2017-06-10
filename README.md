@@ -1,189 +1,107 @@
 # AppRun
 
-AppRun is a lightweight library for implementing the [elm](http://elm-lang.org/)/[Redux](http://redux.js.org/)
-model-view-update architecture using JavaScript or TypeScript.
-It supports writing views in JSX / TSX or HTML string. The views
-are rendered through virtual DOM.
-At core, it is based on the event pubsub pattern, where _app.run_ publishes events and _app.on_ subscribes to the events.
-Finally, _app.start_ bootstraps the application.
+AppRun is a lightweight framework for developing applications using the [elm](http://elm-lang.org/) style
+[model-view-update architecture](https://guide.elm-lang.org/architecture/)
 
-## An Example
 
-The 15 lines of code below is a simple counter. Two functions from AppRun
-(_app.run_ and _app.start_) are used to make it model-view-update architecture.
+## Why
+As mainly a business application developer, I wanted a single framework that has everything included and is lightweight.
+
+  * router
+  * state management
+  * virtual dom 
+  * event system 
+  * component   
+
+And allows me to:
+
+  * have as little ceremony code as possible 
+  * avoid having business logic locked down by framework
+  * use with other framework/libraries freely
+
+AppRun is intended to be such a framework.
+
+## Quick Start
+
+To give it a try, include AppRun in your html.
 ```
-/// <reference path="apprun.d.ts" />
-const model = 0;
-
-const view = (model) => {
-  return `<div>
-    <h1>${model}</h1>
-    <button onclick='app.run("-1")'>-1</button>
-    <button onclick='app.run("+1")'>+1</button>
-  </div>`;
-};
-
-const update = {
-  '+1': (model) => model + 1,
-  '-1': (model) => model - 1
-};
-
-const element = document.getElementById('my-app');
-app.start(element, model, view, update);
+<script src="https://unpkg.com/apprun@latest/dist/apprun.js"</script>
 ```
 
-## Basic Concepts
-
-The model-view-update architecture has three parts.
-
-* Model — the state of your application
-* Update — a function to update your state
-* View — a function to display your state as HTML
-
-_app.start_ ties the three parts together to an element on page. That's the architecture. More details below.
-
-## The Model
-
-Model can be any data structure, a number, an array, or an object that reflects
-the state of the application.
-```
-const model = 0;
-```
-
-## Define Update
-
-Update re-creates the model. Update is defined as JavaScript object declaratively.
-```
-const update = {
-  '+1': (model) => model + 1,
-  '-1': (model) => model - 1
-}
-```
-There are a couple of more creative ways to define the update object.
+No other ceremony, you can start write code of model, view and update right away.
 
 ```
-const update = {};
-update['+1'] = (model) => model + 1;
-update['-1'] = (model) => model - 1;
-```
-```
-const update = {
-  INCREASE: (model) => model + 1,
-  DECREASE: (model) => model - 1
-}
-```
-```
-const update = (id) => ({
-  [`INCREASE_${id}`]: (model) => model + 1,
-  [`DECREASE_${id}`]: (model) => model - 1
-})
-```
-## Run Update
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Counter</title>
+</head>
+<body>
+<script src="https://unpkg.com/apprun@latest/dist/apprun.js"</script>
+  <div id="my-app"></div>
+  <script>
+    const model = 0;
 
-_app.run_ is the function to run the update.
-```
-app.run('INCREASE');
-```
-It can be used in HTML markup directly:
-```
-<button id="inc" onclick="app.run('INCREASE')">+1</button>
-```
-Or in JavaScript:
-```
-document.getElementById('inc').addEventListener('click',
-  () => app.run('INCREASE'));
-```
-Or with JSX:
-```
-<button onclick={()=>app.run("INCREASE")}>+1</button>
-```
-Or even with jQuery:
-```
-$('#inc').on('click', ()=>app.run('INCREASE'));
+    const view = (model) => {
+      return `<div>
+        <h1>${model}</h1>
+        <button onclick='app.run("-1")'>-1</button>
+        <button onclick='app.run("+1")'>+1</button>
+      </div>`;
+    };
+    
+    const update = {
+      '+1': (model) => model + 1,
+      '-1': (model) => model - 1
+    };
+    
+    const element = document.getElementById('my-app');
+    app.start(element, model, view, update);
+  </script>
+</body>
+</html>
 ```
 
-## HTML View
+Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/2).
 
-Once the update re-creates model, AppRun passes the new model into the view function.
-The view function generates HTML using the model. AppRun parses the HTML string into
-virtual dom. It then calculates the differences against the web page element and renders the changes.
+## Install
 
+If interested, you can install AppRun from npm and initialize a TypeScript and webpack configured project:
 ```
-const view = (model) => `<div>${model}</div>`;
-```
-ES2015 string interpolation can made it easy to construct HTML string to form a list.
-```
-const view = (numbers) => {
-  return numbers.reduce(prev, curr) {
-    prev + `<li>${curr}</li>`;
-  }, '');
-}
-```
-
-# JSX / TSX View
-
-Although HTML View is easy to understand and useful for trying out ideas, the JSX / TSX view is
-recommended. The reasons are the same as described by Facebook React team:
-[Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals)
-
-AppRun supports JSX / TSX views.
-
-```
-const Todo = ({todo, idx}) => <li>
-  {todo.value}
-</li>
-
-const view = (model) => <div>
-  <h1>Todo</h1>
-  <ul> {
-    model.todos.map((todo, idx) => <Todo todo={todo} idx={idx} />)
-  }
-  </ul>
-</div>
+npm install apprun
+apprun-init
+npm start
 
 ```
 
-AppRun also supports [HyperScript](https://github.com/dominictarr/hyperscript).
-If you are a hyperscript fan, you will like this option.
+## Explore More
 
+To explore more about AppRun, read the following docs.
+
+* [Architecture concept](docs/concept.md)
+* [What makes diferent - Event sub and pub](docs/event-pubsub.md)
+* [JSX vs HTML](docs/jsx-html.md)
+* [Using build/bundle tool](docs/build.md)
+
+
+## Contribute
+
+You can launch the webpack dev-server and the demo app from the _demo_ folder by npm commands:
 ```
-const h = app.h;
-const view = (val) => {
-  return h('div', {},
-    h('div', {}, val),
-    h('input', {
-      value: val,
-      oninput: function() { app.run('render', this.value)}
-    }, null)
-  );
-};
-```
-
-## JavaScript and TypeScript
-
-AppRun exposes a global object named _app_ that is accessible by JavaScript and TypScript directly.
-AppRun can also be compiled/bundled with your code too. So use it in one of three ways:
-
-* Included apprun.js in a script tag and use _app_ from JavaScript
-* Included apprun.js in a script tag and use _app_ from TypeScript (by referencing to apprun.d.ts)
-* Compile/bundle using webpack using ES2015 import
-
-## Examples
-
-You can run the demo app in the _demo_ folder by:
-```
+npm install
 npm start
 ```
-or try it online:
 
-* [Single counter](https://jsfiddle.net/ap1kgyeb/)
-* [Multiple counters](https://jsfiddle.net/ap1kgyeb/1/)
-
-The unit tests in the _tests_ folder can be served as the functional specifications.
-
-You can run
+You can run the unit tests from the _tests_ folder.
 ```
 npm test
+```
+Unit tests can serve as the functional specifications.
+
+Finally, to build optimized js files to dist folder by run:
+```
+npm run build
 ```
 
 Have fun and send pull requests.
@@ -192,4 +110,4 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2016 Yiyi Sun
+Copyright (c) 2015-2017 Yiyi Sun
