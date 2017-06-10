@@ -11,7 +11,7 @@ export function render(element, html) {
       element.innerHTML = html;
     }
   } else {
-    render(element, html);
+    updateElement(element, html);
   }
 }
 
