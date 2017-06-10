@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/apprun.js",
   "types": "dist/apprun.d.ts",
+  "bin": "apprun-init.js",
   "scripts": {
     "build": "webpack -p",
     "test": "karma start",
