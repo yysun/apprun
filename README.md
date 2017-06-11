@@ -70,7 +70,7 @@ Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/2).
 If interested, you can install AppRun from npm and initialize a TypeScript and webpack configured project:
 ```
 npm install apprun
-apprun-init
+apprun
 npm start
 
 ```
@@ -82,7 +82,7 @@ To explore more about AppRun, read the following docs.
 * [Architecture concept](docs/concept.md)
 * [What makes diferent - Event sub and pub](docs/event-pubsub.md)
 * [JSX vs HTML](docs/jsx-html.md)
-* [Using build/bundle tool](docs/build.md)
+* [TypeScript and webpack](docs/build.md)
 
 
 ## Contribute

@@ -61,14 +61,10 @@ Using JSX requires a [build tool](build.md). AppRun includes a cli to initialize
 
 ```
 npm install apprun
-apprun-init
+apprun
 npm start
 ```
-
-It generates files: package.json, tsconfig.json, webpack.config.js, index.html and main.tsx.
-
 Note: on Mac, you might need to run local npm command like:
-
 ```
-$(npm bin)/apprun-init
+$(npm bin)/apprun
 ```

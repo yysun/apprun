@@ -61,7 +61,7 @@ const index = `<!doctype html>
 </html>`;
 
 const main = `import app from './node_modules/apprun/index';
-const model = 'Hello world';
+const model = 'Hello world - AppRun';
 const view = (state) => <h1>{state}</h1>;
 const update = {
 }
@@ -72,6 +72,8 @@ app.start(element, model, view, update);
 if (!fs.existsSync(package_json)) {
   console.log('Initializing package.json');
   execSync('npm init -y');
+} else {
+  console.log('Package.json exists, skipped.');
 }
 
 console.log('Installing packages. This might take a couple minutes.');
@@ -84,6 +86,8 @@ if (!fs.existsSync(tsconfig_json)) {
     tsconfig_json,
     tsconfig
   );
+} else {
+  console.log('tsconfig.json exists, skipped.');
 }
 
 RegExp.prototype.toJSON = RegExp.prototype.toString;
@@ -93,6 +97,8 @@ if (!fs.existsSync(webpack_config_js)) {
     webpack_config_js,
     webpack_config
   );
+} else {
+  console.log('webpack.config.js exists, skipped.');
 }
 
 if (!fs.existsSync(index_html)) {
@@ -101,6 +107,8 @@ if (!fs.existsSync(index_html)) {
     index_html,
     index
   );
+} else {
+  console.log('index.html exists, skipped.');
 }
 
 if (!fs.existsSync(main_tsx)) {
@@ -109,6 +117,8 @@ if (!fs.existsSync(main_tsx)) {
     main_tsx,
     main
   );
+} else {
+  console.log('main.tsx exists, skipped.');
 }
 
 if (!fs.existsSync(git_ignore_file)) {
@@ -117,6 +127,8 @@ if (!fs.existsSync(git_ignore_file)) {
     git_ignore_file,
     git_ignore
   );
+} else {
+  console.log('.gitignore exists, skipped.');
 }
 
 console.log('Adding npm scripts');
