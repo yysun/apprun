@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack -p",
     "test": "karma start",
-    "start": "webpack-dev-server --progress --colors"
+    "start": "webpack-dev-server"
   },
   "keywords": [
     "JavaScript",
