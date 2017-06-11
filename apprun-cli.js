@@ -121,11 +121,11 @@ function init() {
 
 const component_template = `import {Component} from './node_modules/apprun/index';
 let app;
-var model = {};
+var model = '#name';
 
 const view = (state) => {
   return <div>
-
+    <h1>{state}</h1>
   </div>
 }
 
