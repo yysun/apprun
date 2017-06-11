@@ -1,9 +1,6 @@
 import app, { Model, View, Update } from './index-zero';
-import Router from './router';
 import { h, render } from './vdom';
 import ComponentBase from './component';
-
-export { Router };
 
 export class Component extends ComponentBase {
   protected initVdom() {
