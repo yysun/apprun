@@ -61,7 +61,7 @@ Using JSX requires a [build tool](build.md). AppRun includes a cli to initialize
 
 ```
 npm install apprun
-apprun
+apprun --init
 npm start
 ```
 Note: on Mac, you might need to run local npm command like:

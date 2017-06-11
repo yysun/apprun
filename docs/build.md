@@ -11,9 +11,9 @@ AppRun includes a cli to initialize a TypeScript and webpack configured project.
 
 ```
 npm install apprun
-apprun
+apprun --init
 ```
-Note: on Mac, you might need to run local npm command like:
+Note: on Mac, you might need to run local npm command like this:
 
 ```
 $(npm bin)/apprun

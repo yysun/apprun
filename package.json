@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/apprun.js",
   "types": "dist/apprun.d.ts",
-  "bin": "apprun-init.js",
+  "bin": "apprun-cli.js",
   "scripts": {
     "build": "webpack -p",
     "test": "karma start",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@types/es6-shim": "^0.31.33",
     "@types/jasmine": "^2.5.47",
+    "commander": "^2.9.0",
     "jasmine-core": "^2.6.2",
     "json-loader": "^0.5.4",
     "karma": "^1.7.0",

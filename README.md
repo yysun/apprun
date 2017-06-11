@@ -70,7 +70,7 @@ Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/2).
 If interested, you can install AppRun from npm and initialize a TypeScript and webpack configured project:
 ```
 npm install apprun
-apprun
+apprun --init
 npm start
 
 ```
