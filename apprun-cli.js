@@ -43,7 +43,7 @@ const tsconfig = `{
   }
 }`
 
-const git_ignore = 
+const git_ignore =
 `.DS_Store
 node_modules
 *.log
@@ -146,19 +146,21 @@ export default (element) => {
 
 function component(name) {
   const fn = path.resolve(name + '.tsx');
-  write(name + '.tsx', component_template.replace(/\#name/g, name), 
+  write(name + '.tsx', component_template.replace(/\#name/g, name),
     `Creating component ${name}`)
 }
 
 program
- .version('1.0.0')
+ .version('1.0.1')
  .option('-i, --init', 'Initialize AppRun Project')
  .option('-c, --component <file>', 'Generate AppRun component')
  .parse(process.argv);
 
- if (!program.init && !program.component) {
-   program.outputHelp();
- }
+program._name = 'apprun';
 
- if (program.init) init();
- if (program.component) component(program.component);
+if (!program.init && !program.component) {
+  program.outputHelp();
+}
+
+if (program.init) init();
+if (program.component) component(program.component);
