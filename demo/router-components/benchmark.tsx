@@ -1,8 +1,6 @@
 import { Component } from '../../index-jsx'
 import Store from './store';
 
-let app;
-
 var startTime;
 var lastMeasure;
 var startMeasure = function(name) {
@@ -19,7 +17,7 @@ var stopMeasure = function() {
 const store = new Store();
 
 const update = {
-    refresh: (store) => store,
+    '#benchmark': (store) => store,
 
     run(store) {
         store.run();
@@ -153,8 +151,4 @@ document.body.addEventListener('click', e => {
     }
 });
 
-
-export default (element) => {
-  app = new Component(element, store, view, update).app;
-  window['app'].on('#benchmark', () => app.run('refresh'));
-}
+export default (element) => app = new Component(store, view, update).mount(element);

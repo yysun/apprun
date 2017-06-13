@@ -8,9 +8,11 @@ import todo from './router-components/todo';
 import typeahead from './router-components/typeahead';
 // import multi from './router-components/typeahead-multi-selection';
 import benchmark from './router-components/benchmark';
+import hello from './router-components/hello';
 
 const element = document.getElementById('my-app');
-[home, counter, counters, echo, dragdrop, todo, typeahead, benchmark].forEach(c => c(element));
+[home, echo, counter, counters, dragdrop, todo, typeahead, benchmark].forEach(c => c(element));
+// [hello].forEach(c => c(element));
 
 
 

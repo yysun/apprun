@@ -15,6 +15,18 @@ describe('vdom-jsx', () => {
     app.start(element, model, view, update);
   });
 
+  it('created by app.start should trigger view', () => {
+    const model = 'x';
+    const update = {
+      hi: (_, val) => val
+    }
+    const view = jasmine.createSpy('view');
+    const component = app.start(document.body, model, view, update);
+    expect(view).toHaveBeenCalledWith('x');
+    app.run('hi', 'xx');
+    expect(view).toHaveBeenCalledWith('xx');
+  });
+
   it('should create first child element', () => {
     expect(element.firstChild.nodeName).toEqual('DIV');
     expect(element.firstChild.textContent).toEqual('x');

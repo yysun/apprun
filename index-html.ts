@@ -1,18 +1,22 @@
-import app, { Model, View, Update } from './index-zero';
+import app, { Component } from './index-zero';
 import { updateElement } from './vdom-html';
-import ComponentBase from './component';
 
-export class Component extends ComponentBase {
-  protected initVdom() {
-    this.updateElement =  updateElement.bind(this);
+class _Component extends Component {
+  render = updateElement;
+  mount(element, options?) {
+    this.app.createElement = this.app.h = updateElement
+    return super.mount(element, options)
   }
 }
 
+
+app.createElement = app.h = updateElement;
 app.start = (element: HTMLElement, model: Model, view: View, update: Update, options:any={}) => {
   if (typeof options.global_event === 'undefined') options.global_event = true;
-  const component = new Component(element, model, view, update, options);
-  component.start();
+  const component = new _Component(model, view, update);
+  component.mount(element, options);
   return component;
 }
 
 export default app;
+export { _Component as Component };

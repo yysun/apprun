@@ -1,4 +1,4 @@
-import app from '../../index-jsx';
+import { Component } from '../../index-jsx';
 
 enum Filters { all = 0, todo = 1, done = 2 }
 
@@ -86,5 +86,5 @@ const update = {
   clear: (model) => ({...model, todos:[] })
 }
 
-export default (element) => app.start(element, model, view, update,
+export default (element) => app = new Component(model, view, update).mount(element,
   {history:{prev:'todo-undo', next:'todo-redo'}});

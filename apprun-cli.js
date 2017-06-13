@@ -120,8 +120,8 @@ function init() {
 }
 
 const component_template = `import {Component} from './node_modules/apprun/index';
-let app;
-var model = '#name';
+
+const model = '#name';
 
 const view = (state) => {
   return <div>
@@ -130,13 +130,12 @@ const view = (state) => {
 }
 
 const update = {
-  mount: state => state,
+  '##name': state => state,
 }
 
-export default (element) => {
-  app = new Component(element, model, view, update).app;
-  window['app'].on('##name', () => app.run('mount'));
-}
+let app;
+export default (element) =>
+  app = new Component(model, view, update).mount(element);
 
 // to use this component in main.tsx
 // import #name from './#name';

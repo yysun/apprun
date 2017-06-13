@@ -1,7 +1,6 @@
 import { } from 'jasmine';
 import { h, updateElement } from '../vdom-my';
 
-
 describe('vdom-my', () => {
   let root;
   beforeEach(() => {
@@ -118,7 +117,7 @@ describe('vdom-my', () => {
 
   it('it should reuse element based on key', () => {
     const element = render(h('div', null, [
-        h('div', {key: 'a'}), 
+        h('div', {key: 'a'}),
         h('div', {key: 'b'}),
       ]));
     element.childNodes[1].k = 'b';
@@ -133,7 +132,7 @@ describe('vdom-my', () => {
 
   it('it should retain element based on key', () => {
     const element = render(h('div', null, [
-        h('div', {key: 'a'}), 
+        h('div', {key: 'a'}),
         h('div', {key: 'b'}),
       ]));
     element.childNodes[0].k = 'a';
@@ -145,7 +144,7 @@ describe('vdom-my', () => {
 
     expect(element.childNodes[0].textContent).toEqual('x');
     expect(element.childNodes[0].k).toBe('b')
-    
+
     expect(element.childNodes[1].textContent).toEqual('xx');
     expect(element.childNodes[1].k).toBe('a')
   });

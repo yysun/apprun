@@ -1,17 +1,17 @@
+
 import app, { App } from './app';
 
-type Model = any;
-type View = (model: Model) => string | Function;
-type Action = (model: Model, ...p) => Model;
-type Update = { [name: string]: Action };
+export default app
 
-export default class ComponentBase {
+ export class Component {
 
-  public app;
-  protected updateElement;
+  element;
+  state;
+  view;
+  update;
+  render;
 
-  protected initVdom() {
-  }
+  app = new App();
 
   private _history = [];
   private _history_idx = -1;
@@ -19,14 +19,12 @@ export default class ComponentBase {
   private state_changed: string;
   private global_event;
 
-  get State() {
-    return this.state;
-  }
-
   protected set_state(state) {
+
     this.state = state;
+    if (!this.view) return;
     const html = this.view(this.state);
-    if (this.updateElement) this.updateElement(this.element, html);
+    if(this.render) this.render(this.element, html);
   }
 
   private push_state(state) {
@@ -42,20 +40,13 @@ export default class ComponentBase {
 
   public setState = (state) => this.push_state(state);
 
-  constructor(protected element: HTMLElement,
-    protected state: any,
-    protected view: View,
-    update: Update = {},
-    options?) {
+  public mount(element, options?) {
 
-    this.app = new App();
-    this.initVdom();
-
-    // console.assert(!!element);
+    this.element = element;
     options = options || {};
     this.enable_history = !!options.history;
     if (this.enable_history) {
-      app.on(options.history.prev || 'history-prev', () => {
+      this.app.on(options.history.prev || 'history-prev', () => {
         this._history_idx --;
         if (this._history_idx >=0) {
           this.set_state(this._history[this._history_idx]);
@@ -64,7 +55,7 @@ export default class ComponentBase {
           this._history_idx = 0;
         }
       });
-      app.on(options.history.next || 'history-next', () => {
+      this.app.on(options.history.next || 'history-next', () => {
         this._history_idx ++;
         if (this._history_idx < this._history.length) {
           this.set_state(this._history[this._history_idx]);
@@ -76,30 +67,39 @@ export default class ComponentBase {
     }
     this.state_changed = options.event && (options.event.name || 'state_changed');
     this.global_event = options.global_event;
-    this.view = view;
-    this.add_actions(update);
-    this.state = state;
+    this.add_actions();
+    this.push_state(this.state);
+    return this.app;
   }
 
-  add_actions(actions) {
+  is_global_event(name: string): boolean {
+    return name && name.startsWith('#');
+  }
+
+  add_actions() {
+    const actions = this.update;
     Object.keys(actions).forEach(action => {
-      if (!this.global_event) {
+      if (!this.global_event && !this.is_global_event(action)) {
         this.app.on(action, (...p) => {
-          this.push_state(actions[action](this.State, ...p));
+          this.push_state(actions[action](this.state, ...p));
         });
       } else {
         app.on(action, (...p) => {
-          this.push_state(actions[action](this.State, ...p));
+          this.push_state(actions[action](this.state, ...p));
         });
       }
     });
   }
 
   public run(name: string, ...args) {
-    return this.app.run(name, ...args);
+    return this.is_global_event(name) ?
+      app.run(name, ...args):
+      this.app.run(name, ...args);
   }
 
-  public start(state?){
-    this.push_state(state || this.state);
+  constructor(model?, view?, update?) {
+    this.state = model;
+    this.view = view;
+    this.update = update;
   }
-};
+}

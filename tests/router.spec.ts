@@ -1,5 +1,6 @@
 import { } from 'jasmine';
-import app, { Router } from '../index-zero';
+import app from '../index-zero';
+import Router from '../router';
 
 let fired = false;
 app.on('#1', _ => fired = true);
