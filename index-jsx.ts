@@ -1,4 +1,4 @@
-import app, { Component } from './index-zero';
+import app, { Component, Model, View, Update } from './index-zero';
 import { h, render } from './vdom-my';
 
 class _Component extends Component {

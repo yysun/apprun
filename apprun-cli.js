@@ -39,7 +39,7 @@ const tsconfig = `{
     "target": "es5",
     "jsx": "react",
     "reactNamespace": "app",
-    "lib": ["dom", "es2015.promise", "es5"]
+    "lib": ["dom", "es2015", "es5"]
   }
 }`
 
@@ -134,8 +134,11 @@ const update = {
 }
 
 let app;
-export default (element) =>
-  app = new Component(model, view, update).mount(element);
+export default (element) => {
+  const component = new Component(model, view, update);
+  app = component.app;
+  component.mount(element);
+}
 
 // to use this component in main.tsx
 // import #name from './#name';
