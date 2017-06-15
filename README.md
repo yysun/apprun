@@ -9,17 +9,21 @@ As mainly a business application developer, I wanted a single framework that has
 
   * router
   * state management
-  * virtual dom 
-  * event system 
-  * component   
+  * virtual dom
+  * event system
+  * component
 
 And allows me to:
 
-  * have as little ceremony code as possible 
+  * have as little ceremony code as possible
   * avoid having business logic locked down by framework
   * use with other framework/libraries freely
 
 AppRun is intended to be such a framework.
+
+Its use of the [event publication and subscription pattern](docs/event-pubsub.md)
+at the core makes AppRun different to other frameworks.
+
 
 ## Quick Start
 
@@ -50,12 +54,12 @@ No other ceremony, you can start write code of model, view and update right away
         <button onclick='app.run("+1")'>+1</button>
       </div>`;
     };
-    
+
     const update = {
       '+1': (model) => model + 1,
       '-1': (model) => model - 1
     };
-    
+
     const element = document.getElementById('my-app');
     app.start(element, model, view, update);
   </script>
@@ -79,8 +83,9 @@ npm start
 
 To explore more about AppRun, read the following docs.
 
-* [Architecture concept](docs/concept.md)
-* [What makes diferent - Event sub and pub](docs/event-pubsub.md)
+* [Event Pub and Sub](docs/event-pubsub.md)
+* [Model-view-update Architecture](docs/concept.md)
+* [Component](docs/component.md)
 * [JSX vs HTML](docs/jsx-html.md)
 * [TypeScript and webpack](docs/build.md)
 

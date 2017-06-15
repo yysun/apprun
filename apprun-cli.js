@@ -121,8 +121,8 @@ function init() {
 
 const component_template = `import app, {Component} from './node_modules/apprun/index';
 
-export class #nameComponent extends Component {
-  model = '#name';
+export default class #nameComponent extends Component {
+  state = '#name';
 
   view = (state) => {
     return <div>
@@ -134,13 +134,12 @@ export class #nameComponent extends Component {
     '##name': state => state,
   }
 }
-const component = new #nameComponent();
-export default (element) => component.mount(element);
+
 
 // to use this component in main.tsx
 // import #name from './#name';
 // const element = document.getElementById('my-app');
-// #name(element);
+// new #name().mount(element);
 `;
 
 function component(name) {

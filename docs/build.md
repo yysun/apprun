@@ -28,7 +28,7 @@ tsconfig.json
     "target": "es5",
     "jsx": "react",
     "reactNamespace": "app",
-    "lib": ["dom", "es2015.promise", "es5"]
+    "lib": ["dom", "es2015", "es5"]
   }
 }
 ```

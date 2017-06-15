@@ -99,3 +99,6 @@ Once the update has updated the state, AppRun passes the new state into the view
 That's all. _app.start_ function and _app.run_ function are all you need.
 
 Try it online: [Counter](https://jsfiddle.net/ap1kgyeb/2).
+
+Next, you will see how AppRun ties together model, view and update behind scene
+to become [Component](component.md).
