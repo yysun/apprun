@@ -9,7 +9,8 @@ export class App {
   private subjects = {}
 
   public createElement;
-  
+  public render;
+
   public start;
 
   on(name: string, fn?: Function, options?: any) : Observable<{}> | Subscription {

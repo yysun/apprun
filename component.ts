@@ -1,9 +1,5 @@
 
 import app, { App } from './app';
-import { createElement, render } from './vdom';
-
-app.createElement = createElement;
-export default app
 
  export class Component extends App {
 
@@ -19,7 +15,7 @@ export default app
     this.state = state;
     if (!this.view) return;
     const html = this.view(this.state);
-    if (render) render(this.element, html);
+    if (app.render) app.render(this.element, html);
   }
 
   private push_state(state) {
@@ -36,16 +32,15 @@ export default app
   public setState = (state) => this.push_state(state);
 
   constructor(
-    protected state?,
-    protected view?,
-    protected update?,
+    public state?,
+    public view?,
+    public update?,
     protected options?) {
       super();
   }
 
   public mount(element, options: any = {}) {
 
-    this.createElement = app.createElement;
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
 
@@ -82,8 +77,10 @@ export default app
   }
 
   add_actions() {
+    // const actions = Object.assign(this, this.update);
     const actions = this.update;
     Object.keys(actions).forEach(action => {
+      if (typeof actions[action] !== 'function') return;
       if (!this.global_event && !this.is_global_event(action)) {
         this.on(action, (...p) => {
           this.push_state(actions[action](this.state, ...p));
