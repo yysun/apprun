@@ -119,26 +119,23 @@ function init() {
   execSync('git init');
 }
 
-const component_template = `import {Component} from './node_modules/apprun/index';
+const component_template = `import app, {Component} from './node_modules/apprun/index';
 
-const model = '#name';
+export class #nameComponent extends Component {
+  model = '#name';
 
-const view = (state) => {
-  return <div>
-    <h1>{state}</h1>
-  </div>
+  view = (state) => {
+    return <div>
+      <h1>{state}</h1>
+    </div>
+  }
+
+  update = {
+    '##name': state => state,
+  }
 }
-
-const update = {
-  '##name': state => state,
-}
-
-let app;
-export default (element) => {
-  const component = new Component(model, view, update);
-  app = component.app;
-  component.mount(element);
-}
+const component = new #nameComponent();
+export default (element) => component.mount(element);
 
 // to use this component in main.tsx
 // import #name from './#name';

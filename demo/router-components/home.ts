@@ -1,4 +1,4 @@
-import app from '../../index-zero';
+import app from '../../index';
 //import * as $ from "jquery";
 declare var $: any;
 

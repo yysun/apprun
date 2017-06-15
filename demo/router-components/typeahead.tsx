@@ -1,4 +1,4 @@
-import app from '../../index-jsx'
+import app from '../../index'
 
 const model = {
   $id: '',
@@ -8,12 +8,12 @@ const model = {
 }
 
 const view = (model) => <div className='typeahead'>
-  <input value={model.input} 
-    oninput={e=>app.run(`input${model.$id}`, e)} 
+  <input value={model.input}
+    oninput={e=>app.run(`input${model.$id}`, e)}
     onkeyup={e=>app.run(`keyup${model.$id}`, e)}/>
   <ul className='options'>{
     model.options.map((option, idx)=><li
-      className={(idx === model.selectIdx) ? 'selected': ''} 
+      className={(idx === model.selectIdx) ? 'selected': ''}
       onclick={()=>app.run(`select${model.$id}`, option)}>{option}
     </li>)
   }
@@ -36,7 +36,7 @@ const selected = (model, option) => {
 
 const update = ($id) => ({
   '#typeahead': (model) => model,
-  [`input${$id}`]: (model, e) => ({ ...model, 
+  [`input${$id}`]: (model, e) => ({ ...model,
     input: e.target.value,
     selectIdx: -1,
     options: getOptions(e.target.value)

@@ -1,5 +1,5 @@
 import { } from 'jasmine';
-import app from '../index-zero';
+import app from '../index';
 import Router from '../router';
 
 let fired = false;

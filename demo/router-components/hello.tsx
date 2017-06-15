@@ -1,4 +1,4 @@
-import {Component} from '../../index';
+import app, { Component } from '../../index'
 
 const Hello = ({ name }) => <div>Hello: {name}</div>;
 
@@ -8,7 +8,7 @@ class HelloComponent extends Component {
   view = (val) => {
     return <div>
       <Hello name={val} />
-      <input value={val} oninput={function () { app.run('render', this.value) }} />
+      <input value={val} oninput={ (e)=> this.run('render', e.target.value)} />
     </div>
   };
 
@@ -21,4 +21,4 @@ class HelloComponent extends Component {
   }
 }
 
-export default (element) => app = new HelloComponent().mount(element);
+export default (element) => new HelloComponent().mount(element);

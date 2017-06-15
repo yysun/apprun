@@ -1,4 +1,4 @@
-import { Component } from '../../index-jsx'
+import app, { Component } from '../../index'
 import Store from './store';
 
 var startTime;
@@ -136,19 +136,20 @@ document.body.addEventListener('click', e => {
     if (t.tagName === 'BUTTON' && t.id) {
         e.preventDefault();
         startMeasure(t.id);
-        app.run(t.id);
+        component.run(t.id);
         stopMeasure();
     } else if (t.matches('.remove')) {
         e.preventDefault();
         startMeasure('remove');
-        app.run('remove', getId(t));
+        component.run('remove', getId(t));
         stopMeasure();
     } else if (t.matches('.lbl')) {
         e.preventDefault();
         startMeasure('select');
-        app.run('select', getId(t));
+        component.run('select', getId(t));
         stopMeasure();
     }
 });
 
-export default (element) => app = new Component(store, view, update).mount(element);
+let component = new Component(store, view, update);
+export default (element) => component.mount(element);

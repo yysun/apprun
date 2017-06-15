@@ -1,21 +1,22 @@
-import app, { Component, Model, View, Update } from './index-zero';
-import { h, render } from './vdom';
+import app, { Component } from './component';
+import Router from './router';
 
-class _Component extends Component {
-  render = render;
-  mount(element, options?) {
-    this.app.createElement = this.app.h = h
-    return super.mount(element, options)
-  }
-}
+export type Model = any;
+export type View = (model: Model) => string | Function;
+export type Action = (model: Model, ...p) => Model;
+export type Update = { [name: string]: Action };
 
-app.createElement = app.h = h;
-app.start = (element: HTMLElement, model: Model, view: View, update: Update, options:any={}) => {
+app.start = (element: HTMLElement, model: Model, view: View, update: Update, options: any = {}) => {
   if (typeof options.global_event === 'undefined') options.global_event = true;
-  const component = new _Component(model, view, update);
+  const component = new Component(model, view, update);
   component.mount(element, options);
   return component;
 }
 
+if (typeof window === 'object') {
+  window['app'] = app;
+  document.addEventListener("DOMContentLoaded", () => new Router());
+}
+
 export default app;
-export { _Component as Component };
+export { Component };

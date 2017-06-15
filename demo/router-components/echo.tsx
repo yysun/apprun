@@ -1,4 +1,4 @@
-import app from '../../index-jsx';
+import app from '../../index'
 
 var model = 'world';
 

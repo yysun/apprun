@@ -1,4 +1,4 @@
-import app from '../../index-jsx'
+import app from '../../index'
 
 const model = {
   input: '',
@@ -15,13 +15,13 @@ const view = (model) => {
         <i className='icon-delete' onclick={()=>app.run('de-select',idx)}>x</i></li>)
     }
     </ul>
-    <input value={model.input} 
-    oninput={e=>app.run('input', e)} 
+    <input value={model.input}
+    oninput={e=>app.run('input', e)}
     onkeyup={e=>app.run('keyup', e)}/>
   </div>
   <ul className='options'>{
     model.options.map((option, idx)=><li
-      className={(idx === model.selectIdx) ? 'selected': ''} 
+      className={(idx === model.selectIdx) ? 'selected': ''}
       onclick={()=>app.run('select', option)}>{option}
     </li>)
   }
@@ -31,7 +31,7 @@ const view = (model) => {
 
 const update = {
   '#multi-selection': (model) => model,
-  'input': (model, e) => ({ ...model, 
+  'input': (model, e) => ({ ...model,
     input: e.target.value,
     selectIdx: -1,
     options: getOptions(e.target.value)
@@ -66,8 +66,8 @@ const select = (model, idx) => {
   })
 }
 
-const selected = (model, option) => ({...model, 
-  input: '', 
+const selected = (model, option) => ({...model,
+  input: '',
   options: [],
   selected: [...model.selected, option]
 })

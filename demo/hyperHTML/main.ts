@@ -1,4 +1,4 @@
-import app from '../../index-zero';
+import app from '../../index';
 declare var hyperHTML;
 
 const element = document.getElementById('my-app');

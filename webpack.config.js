@@ -3,10 +3,6 @@ const path = require('path');
 module.exports = {
   entry: {
     'dist/apprun': './index.ts',
-    'dist/apprun-zero':  './index-zero.ts',
-    'dist/apprun-jsx':  './index-jsx.ts',
-    'dist/apprun-html': './index-html.ts',
-
     'demo/apprun': './index.ts',
     'demo/app': './demo/main.ts',
     'demo/jsx/app': './demo/jsx/main.tsx',

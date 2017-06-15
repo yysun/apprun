@@ -7,12 +7,10 @@ import 'rxjs/add/operator/debounceTime';
 export class App {
 
   private subjects = {}
-  public start;
-  public h;
-  public createElement;
 
-  constructor() {
-  }
+  public createElement;
+  
+  public start;
 
   on(name: string, fn?: Function, options?: any) : Observable<{}> | Subscription {
     this.subjects[name] || (this.subjects[name] = new Subject);

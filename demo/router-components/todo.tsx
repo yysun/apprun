@@ -1,4 +1,4 @@
-import { Component } from '../../index-jsx';
+import app, { Component } from '../../index'
 
 enum Filters { all = 0, todo = 1, done = 2 }
 
@@ -19,7 +19,7 @@ const model: IModel = {
   todos: []
 }
 
-const Todo = ({todo, idx}) => (<li onclick={()=>app.run('toggle', idx)}
+const Todo = ({todo, idx}) => (<li onclick={()=>component.run('toggle', idx)}
   style = {{
     color: todo.done ? 'green': 'red',
     textDecoration: todo.done ? "line-through" : "none",
@@ -37,9 +37,9 @@ const view = (model) => {
     <h1>Todo</h1>
     <div>
       <span>Show:</span>
-      <span> <a style={styles(0)} onclick={()=>app.run('filter', 0)}>All</a></span> |
-      <span> <a style={styles(1)} onclick={()=>app.run('filter', 1)}>Todo</a></span> |
-      <span> <a style={styles(2)} onclick={()=>app.run('filter', 2)}>Done</a></span>
+      <span> <a style={styles(0)} onclick={()=>component.run('filter', 0)}>All</a></span> |
+      <span> <a style={styles(1)} onclick={()=>component.run('filter', 1)}>Todo</a></span> |
+      <span> <a style={styles(2)} onclick={()=>component.run('filter', 2)}>Done</a></span>
     </div>
     <ul>
       {
@@ -53,11 +53,11 @@ const view = (model) => {
     <div>
       <input id='new-todo' placeholder='add todo' onkeyup={e => add(e.keyCode)} />
       <button onclick={e=>add(ENTER)}>Add</button>
-      <button onclick={()=>app.run('clear')}>Clear</button>
+      <button onclick={()=>component.run('clear')}>Clear</button>
     </div><br/>
     <div>
-      <button onclick={() => app.run("todo-undo")}> Undo </button>
-      <button onclick={() => app.run("todo-redo")}> Redo </button>
+      <button onclick={() => component.run("todo-undo")}> Undo </button>
+      <button onclick={() => component.run("todo-redo")}> Redo </button>
     </div>
   </div>
 }
@@ -65,7 +65,7 @@ const view = (model) => {
 const add = (keyCode) => {
   const input = document.getElementById('new-todo') as HTMLInputElement;
   if (keyCode === ENTER && input.value) {
-    app.run('add', input.value);
+    component.run('add', input.value);
     input.value = '';
   }
 };
@@ -86,5 +86,6 @@ const update = {
   clear: (model) => ({...model, todos:[] })
 }
 
-export default (element) => app = new Component(model, view, update).mount(element,
+let component = new Component(model, view, update);
+export default (element) => component.mount(element,
   {history:{prev:'todo-undo', next:'todo-redo'}});

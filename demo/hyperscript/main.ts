@@ -1,8 +1,8 @@
-import app from '../../index-jsx';
+import app from '../../index'
 
 const model = 'hello world';
 
-const h = app.h;
+const h = app.createElement;
 const view = (val) => {
   return h('div', {},
     h('div', {}, val),

@@ -11,7 +11,7 @@ import benchmark from './router-components/benchmark';
 import hello from './router-components/hello';
 
 const element = document.getElementById('my-app');
-[home, echo, counter, counters, dragdrop, todo, typeahead, benchmark].forEach(c => c(element));
+[home, echo, counter, counters, dragdrop, todo, typeahead, benchmark, hello].forEach(c => c(element));
 // [hello].forEach(c => c(element));
 
 

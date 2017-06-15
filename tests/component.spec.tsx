@@ -33,7 +33,7 @@ describe('Component', ()=> {
   it('should handle local events', ()=> {
     component.mount(document.body);
     spyOn(component, 'view');
-    component.app.run('hi');
+    component.run('hi');
     expect(component.view).toHaveBeenCalled();
   })
 

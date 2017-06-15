@@ -1,7 +1,6 @@
-import { h, updateElement } from './vdom-my';
+import { createElement, updateElement } from './vdom-my';
 import morph = require('morphdom')
 
-export { h };
 export function render(element, html) {
   console.assert(!!element);
   if (typeof html === 'string') {
@@ -14,5 +13,6 @@ export function render(element, html) {
     updateElement(element, html);
   }
 }
+export { createElement };
 
 

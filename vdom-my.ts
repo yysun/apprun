@@ -8,7 +8,7 @@ type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 const ATTR_PROPS = '_props';
 
-export const h = (tag: string | Function, props: {}, ...children) => {
+export const createElement = (tag: string | Function, props: {}, ...children) => {
   let ch = [];
   const push = (c) => {
     ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
@@ -49,7 +49,7 @@ function update(element: Element, node: VNode) {
   }
 
   // console.log('update', element, node);
-  
+
   // non-keyed
 
   // const len = Math.min(element.childNodes.length, node.children.length);
@@ -88,13 +88,7 @@ function update(element: Element, node: VNode) {
     } else {
 
       const key = child.props && child.props['key'];
-      // let old = null;
-      // if (key) for (let j=0; j<element.childNodes.length; j++) {
-      //   if (key === element.childNodes[j]['key']) {
-      //     old = element.childNodes[j];
-      //     break;            
-      //   }
-      // }
+
       const old = key && keyCache[key];
       if (old && old!==element.childNodes[i]) {
         element.insertBefore(old, element.childNodes[i]);
@@ -190,3 +184,4 @@ function updateProps(element: Element, props: {}) {
     }
   }
 }
+export default { createElement, updateElement }
