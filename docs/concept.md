@@ -100,5 +100,43 @@ That's all. _app.start_ function and _app.run_ function are all you need.
 
 Try it online: [Counter](https://jsfiddle.net/ap1kgyeb/2).
 
-Next, you will see how AppRun ties together model, view and update behind scene
-to become [Component](component.md).
+
+## State Management
+
+AppRun event system can link pieces from model-view-update architecture together.
+Given  _model_, _view_ and _update_. AppRun converts each item in the _update_ object to something like:
+
+```
+ // take model as the initial current state
+current_state = model;
+
+// create event handler
+app.on('#test', (...args) => {
+
+  // creates new state
+  const new_state = update['#test](current_state, ...args);
+
+  // creates virtual dom
+  const virtual_dom = view(new_state);
+
+  // update element with virtual dom
+  render(element, virtual_dom);
+
+  // update current state
+  current_state = new_state;
+
+  // save new state into history stack
+  save_state(new_state);
+  
+}
+```
+When AppRun linking  _model_, _view_ and _update_ together, it also manages state history.
+The last two steps in the above process update current state and save the state into 
+a history stack.  Application can retrieve the saved state and render it to
+the element, if the application creates immutable state each time it updates. 
+It is helpful for implementing undo and redo.
+
+Try it online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/3/)
+
+Next, you will see what is [Component](component.md).
+

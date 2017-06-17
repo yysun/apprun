@@ -45,7 +45,7 @@ AppRun also supports [HyperScript](https://github.com/dominictarr/hyperscript).
 If you are a hyperscript fan, you will like this option.
 
 ```
-const h = app.h;
+const h = app.createElement;
 const view = (val) => {
   return h('div', {},
     h('div', {}, val),

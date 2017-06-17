@@ -57,8 +57,7 @@ Now it's up to your application to continue executing.
 
 ## Routing
 
-Interestingly, when connecting the _popstate_ event, a router can translate location hash
-to routing events.
+Interestingly, when connecting the _popstate_ event, a router can translate location hash to routing events.
 ```
 window.addEventListener('popstate', () => route(location.hash));
 function route (hash) {
