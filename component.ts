@@ -29,18 +29,21 @@ import app, { App } from './app';
     }
   }
 
-  public setState = (state) => this.push_state(state);
+  public setState (state){
+    this.push_state(state);
+  }
 
   constructor(
-    public state?,
-    public view?,
-    public update?,
+    protected state?,
+    protected view?,
+    protected update?,
     protected options?) {
-      super();
+    super();
   }
 
   public mount(element, options: any = {}) {
 
+    console.assert(!this.element, 'Component already mounted.')
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
 
@@ -76,20 +79,23 @@ import app, { App } from './app';
     return name && (name.startsWith('#') || name.startsWith('/'));
   }
 
+  add_action(name, action) {
+    if (!action || typeof action !== 'function') return;
+    if (!this.global_event && !this.is_global_event(name)) {
+      this.on(name, (...p) => {
+        this.push_state(action(this.state, ...p));
+      });
+    } else {
+      app.on(name, (...p) => {
+        this.push_state(action(this.state, ...p));
+      });
+    }
+  }
+
   add_actions() {
-    // const actions = Object.assign(this, this.update);
-    const actions = this.update;
+    const actions = Object.assign(this.update || {}, this);
     Object.keys(actions).forEach(action => {
-      if (typeof actions[action] !== 'function') return;
-      if (!this.global_event && !this.is_global_event(action)) {
-        this.on(action, (...p) => {
-          this.push_state(actions[action](this.state, ...p));
-        });
-      } else {
-        app.on(action, (...p) => {
-          this.push_state(actions[action](this.state, ...p));
-        });
-      }
+      this.add_action(action, actions[action]);
     });
   }
 

@@ -6,6 +6,9 @@ let fired = false;
 app.on('#1', _ => fired = true);
 
 describe('router', () => {
+  beforeEach(() => {
+    fired = false;
+  });
 
   it('should not fire if not initialize', () => {
     window.history.pushState({}, null, '#1');

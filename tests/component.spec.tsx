@@ -99,5 +99,23 @@ describe('Component', ()=> {
     expect(spy).toHaveBeenCalledWith('ab');
   });
 
+  it('should convert methods to local events', () => {
+
+    const spy = jasmine.createSpy('spy');
+    class Test extends Component {
+      state = -1;
+      method1 = (...args) => {
+        spy(...args)
+      }
+
+    }
+
+    const t = new Test().mount(document.body);
+    spyOn(t, 'method1');
+    t.run('method1', 0, 1, 2)
+
+    expect(spy).toHaveBeenCalledWith(-1, 0, 1, 2);
+  });
+
 })
 
