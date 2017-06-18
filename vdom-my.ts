@@ -11,7 +11,9 @@ const ATTR_PROPS = '_props';
 export const createElement = (tag: string | Function, props: {}, ...children) => {
   let ch = [];
   const push = (c) => {
-    ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
+    if (c !== null && c !== undefined) {
+      ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
+    }
   }
   children.forEach(c => {
     if (Array.isArray(c)) {
