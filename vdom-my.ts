@@ -160,7 +160,7 @@ function setProps(element: Element, props: {}) {
 
 function mergeProps(a:{}, b:{}) :{} {
   const props = [];
-  if(a) Object.keys(a).forEach(p=>props[p]=null);
+  if(a) Object.keys(a).forEach(p=>props[p]='');
   if(b) Object.keys(b).forEach(p=>props[p]=b[p]);
   return props;
 }
