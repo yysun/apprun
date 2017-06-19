@@ -50,47 +50,14 @@ function update(element: Element, node: VNode) {
     return;
   }
 
-  // console.log('update', element, node);
-
-  // non-keyed
-
-  // const len = Math.min(element.childNodes.length, node.children.length);
-  // for (let i=0; i<len; i++) {
-  //   const child = node.children[i];
-  //   if (typeof child === 'string') {
-  //     if (element.childNodes[i].textContent !== child)
-  //       element.replaceChild(document.createTextNode(child), element.childNodes[i]);
-  //   } else {
-  //     update(element.childNodes[i], child);
-  //   }
-  // }
-
-  // let n = element.childNodes.length;
-  // while (n > len) {
-  //   element.removeChild(element.lastChild);
-  //   n--;
-  // }
-
-  // if (node.children.length) {
-  //   const d = document.createDocumentFragment();
-  //   for (let i=len; i<node.children.length; i++) {
-  //     d.appendChild(create(node.children[i]));
-  //   }
-  //   element.appendChild(d);
-  // }
-
-  // key-ed
-
   const len = Math.min(element.childNodes.length, node.children.length);
   for (let i=0; i<len; i++) {
     const child = node.children[i];
     if (typeof child === 'string') {
       if (element.childNodes[i].textContent !== child)
-        element.replaceChild(document.createTextNode(child), element.childNodes[i]);
+        element.replaceChild(createText(child), element.childNodes[i]);
     } else {
-
       const key = child.props && child.props['key'];
-
       const old = key && keyCache[key];
       if (old && old!==element.childNodes[i]) {
         element.insertBefore(old, element.childNodes[i]);
@@ -124,11 +91,21 @@ function same(el: Element, node: VNode) {
   return key1.toLowerCase() === key2.toLowerCase();
 }
 
-function create(node: VNode | string) : Element {
+function createText(node) {
+  if (node.indexOf('<p>') >= 0) { // ?
+    const div = document.createElement('div');
+    div.insertAdjacentHTML('afterbegin', node)
+    return div;
+  } else {
+    return document.createTextNode(node);
+  }
+}
+
+function create(node: VNode | string): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
 
-  if (typeof node === "string") return document.createTextNode(node);
+  if (typeof node === "string") return createText(node);
 
   const element = (node.tag === "svg")
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
