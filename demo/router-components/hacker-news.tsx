@@ -1,8 +1,43 @@
 import app, { Component } from '../../index';
-import { fetchList, fetchListItems, fetchItem } from './hacker-news-api';
+import Firebase = require('firebase');
+
+Firebase.initializeApp({ databaseURL: 'https://hacker-news.firebaseio.com' });
+const db = Firebase.database().ref('/v0');
+
+export async function fetch(path): Promise<any> {
+  // console.log(path)
+  const ref = db.child(path);
+  return new Promise((resolve, reject) => {
+    ref.once('value', snapshot => resolve(snapshot.val()), reject);
+  })
+}
+
+const page_size = 20;
+export async function fetchList(type): Promise<any> {
+  return fetch(`${type}stories`);
+}
+
+export async function fetchListItems(list, pageno): Promise<any> {
+  list.pageno = pageno;
+  list.pages = Math.ceil(list.items.length / page_size);
+  if (isNaN(list.pageno) || list.pageno < 1) list.pageno = 1;
+  if (list.pageno > list.pages) list.pageno = list.pages;
+  list.items = await Promise.all(list.items.map(async (item, idx) => {
+    return ((Math.floor(idx / page_size) === list.pageno - 1) && (typeof item === 'number')) ?
+      await fetch(`item/${item}`) : item
+  }));
+}
+
+export async function fetchItem(id): Promise<any> {
+  const item = await fetch(`item/${id}`);
+  if (item.kids) item.kids = await Promise.all(item.kids.map(async (item) => {
+    return typeof item === 'number' ?
+      await fetchItem(item) : item
+  }));
+  return item;
+}
 
 const root = '#hacker-news';
-const page_size = 20;
 
 export class HackerNewsComponent extends Component {
 
@@ -12,13 +47,13 @@ export class HackerNewsComponent extends Component {
 
   Comment = ({ comment }) => {
     if (!comment) return;
-    console.log(comment)
+    // console.log(comment)
     return <div>
       <div style={{ 'color': '#aaa', 'margin-top': '30px' }}>
         <span>by {comment.by}</span> |&nbsp;
         <span>{timeAgo(comment.time)}</span>
       </div>
-      <div html='true'>{comment.text}</div>
+      <div>{`_html:${comment.text}`}</div>
       <this.Comments item={comment} />
     </div>
   }
@@ -36,7 +71,7 @@ export class HackerNewsComponent extends Component {
 
   Item = ({ item }) => {
     return <div>
-      <h3><a href={item.url}>{item.title}</a></h3>
+      <h4><a href={item.url}>{item.title}</a></h4>
       <div style={{ 'color': '#aaa' }}>
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
         <span>by {item.by}</span> |&nbsp;
@@ -85,13 +120,6 @@ export class HackerNewsComponent extends Component {
     return state.type === 'item' ? this.viewItem(state) : this.viewList(state);
   }
 
-  viewItem = (state) => {
-    return <div>
-      <this.Item item={state[state.key]} />
-      <this.Comments item={state[state.key]} />
-    </div>
-  }
-
   viewList = (state) => {
     const style = (type) => {
       return { 'font-weight': state.type === type ? 'bold' : 'normal' }
@@ -111,6 +139,14 @@ export class HackerNewsComponent extends Component {
         <this.ListHeader list={list} type={state.type} />
       </div>
       <this.List list={list} />
+    </div>
+  }
+
+
+  viewItem = (state) => {
+    return <div>
+      <this.Item item={state[state.key]} />
+      <this.Comments item={state[state.key]} />
     </div>
   }
 
@@ -140,26 +176,18 @@ export class HackerNewsComponent extends Component {
 
   showItem = async (state, id, pageno?) => {
     id = parseInt(id);
-    // if (!type || !pageno) {
-    //   type = type || state.type || 'top';
-    //   pageno = pageno || (state[type] && state[type].pageno) || 1;
-    //   history.replaceState(null, null, `${root}/${type}/${pageno}`);
-    // }
-
+    if (isNaN(id)) {
+      history.pushState(null, null, `${root}/top/1`);
+      return;
+    }
     const key = 'item/' + id;
     const new_state = { ...this.state, type: 'item', key };
     if (!new_state[key]) {
       console.log(`fetch: ${key}`);
       new_state[key] = await fetchItem(id);
-      // new_state[key].items = await fetchList(key);
     }
-    // await fetchListItems(new_state[key], parseInt(pageno));
     this.setState(new_state); // ?
-    // console.log(new_state);
     return new_state;
-
-
-
   }
 
 }
