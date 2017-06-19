@@ -92,9 +92,9 @@ function same(el: Element, node: VNode) {
 }
 
 function createText(node) {
-  if (node.indexOf('<p>') >= 0) { // ?
+  if (node.indexOf('_html:') === 0) { // ?
     const div = document.createElement('div');
-    div.insertAdjacentHTML('afterbegin', node)
+    div.insertAdjacentHTML('afterbegin', node.substring(6))
     return div;
   } else {
     return document.createTextNode(node);
