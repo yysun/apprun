@@ -11,7 +11,7 @@ import app, { App } from './app';
   private global_event;
 
   protected set_state(state) {
-
+    if (state instanceof Promise) return; // ?
     this.state = state;
     if (!this.view) return;
     const html = this.view(this.state);
