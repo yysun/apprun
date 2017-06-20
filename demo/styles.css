@@ -86,8 +86,16 @@
 
 .hn .comment {
   padding: 5px 10px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid #eeeeee;
 }
 
+.hn .toggle {
+  color: #aaa;
+  padding-bottom: 10px;
+}
+
+.hn .text {
+  padding: 10px 0;
+}
 
 

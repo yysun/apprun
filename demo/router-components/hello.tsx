@@ -15,7 +15,7 @@ class HelloComponent extends Component {
   update = {
     '#hello': (model, pushState) => pushState || model,
     'render': (_, val) => {
-      history.pushState(null, null, '#hello/' + val);
+      //history.pushState(null, null, '#hello/' + val);
       return val;
     }
   }

@@ -53,7 +53,8 @@ export class HackerNewsComponent extends Component {
         <span>by {comment.by}</span> |&nbsp;
         <span>{timeAgo(comment.time)} ago</span>
       </div>
-      <div>{`_html:${comment.text}`}</div>
+      <div className='text'>{`_html:${comment.text}`}</div>
+      {comment.kids ? <div className='toggle'>{pluralize(comment.kids.length, ' comment')}: </div> : ''}
       <this.Comments item={comment} />
     </div>
   }
@@ -73,7 +74,7 @@ export class HackerNewsComponent extends Component {
     return <div>
       <h4><a href={item.url}>{item.title}</a></h4>
       {
-        (item.text) ? <div>{`_html:${item.text}`}</div> : ''
+        (item.text) ? <div className='text'>{`_html:${item.text}`}</div> : ''
       }
       <div className='meta'>
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
