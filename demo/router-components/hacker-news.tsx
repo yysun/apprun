@@ -47,16 +47,16 @@ export class HackerNewsComponent extends Component {
 
   Comment = ({ comment }) => {
     if (!comment) return;
-    // console.log(comment)
-    return <div className='comment'>
+    const num = comment.kids && comment.kids.filter(item => !item.deleted).length;
+    return <li className='comment'>
       <div className='meta'>
         <span>by {comment.by}</span> |&nbsp;
         <span>{timeAgo(comment.time)} ago</span>
       </div>
       <div className='text'>{`_html:${comment.text}`}</div>
-      {comment.kids ? <div className='toggle'>{pluralize(comment.kids.length, ' comment')}: </div> : ''}
+      {num ? <div className='toggle'>{pluralize(num, ' comment')}: </div> : ''}
       <this.Comments item={comment} />
-    </div>
+    </li>
   }
 
   Comments = ({ item }) => {
@@ -71,7 +71,7 @@ export class HackerNewsComponent extends Component {
   }
 
   Item = ({ item }) => {
-    return <div>
+    return <div className='story'>
       <h4><a href={item.url}>{item.title}</a></h4>
       {
         (item.text) ? <div className='text'>{`_html:${item.text}`}</div> : ''
@@ -220,5 +220,12 @@ function timeAgo(time) {
     return pluralize(~~(between / 86400), ' day')
   }
 }
+document.body.addEventListener('click', e => {
+  const t = e.target as HTMLElement;
+  if (t.matches('.toggle')) {
+    t.classList.toggle('closed');
+    t.nextElementSibling.classList.toggle('collapsed');
+  }
+});
 
 export default (element) => new HackerNewsComponent().mount(element);
