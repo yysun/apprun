@@ -4,6 +4,10 @@
   width: 200px;
 }*/
 
+html {
+    overflow-y: scroll;
+}
+
 .typeahead ul, .typeahead li {
   list-style-type: none;
   list-style-position:inside;
@@ -85,6 +89,10 @@
 
 .hn .meta a {
   color: #096;
+}
+
+.hn .story .meta {
+  margin-bottom: 10px
 }
 
 .hn .comment {

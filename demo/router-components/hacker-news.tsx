@@ -71,6 +71,7 @@ export class HackerNewsComponent extends Component {
   }
 
   Item = ({ item }) => {
+    const num = item.kids && item.kids.filter(items => !item.deleted).length;
     return <div className='story'>
       <h4><a href={item.url}>{item.title}</a></h4>
       {
@@ -80,8 +81,10 @@ export class HackerNewsComponent extends Component {
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
         <span>by {item.by}</span> |&nbsp;
         <span>{timeAgo(item.time)} ago</span> |&nbsp;
-        <span>{pluralize(item.descendants, ' comment')}</span>
+        <span>{pluralize(item.descendants, ' comment')} (total)</span>
       </div>
+      {num ? <div className='toggle'>{pluralize(num, ' comment')}: </div> : ''}
+      <this.Comments item={item} />
     </div>
   }
 
@@ -157,7 +160,6 @@ export class HackerNewsComponent extends Component {
         <a href={`${root}/job`}>Jobs</a>
       </div>
       <this.Item item={state[state.key]} />
-      <this.Comments item={state[state.key]} />
     </div>
   }
 
