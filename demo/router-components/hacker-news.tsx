@@ -48,10 +48,10 @@ export class HackerNewsComponent extends Component {
   Comment = ({ comment }) => {
     if (!comment) return;
     // console.log(comment)
-    return <div>
-      <div style={{ 'color': '#aaa', 'margin-top': '30px' }}>
+    return <div className='comment'>
+      <div className='meta'>
         <span>by {comment.by}</span> |&nbsp;
-        <span>{timeAgo(comment.time)}</span>
+        <span>{timeAgo(comment.time)} ago</span>
       </div>
       <div>{`_html:${comment.text}`}</div>
       <this.Comments item={comment} />
@@ -61,7 +61,7 @@ export class HackerNewsComponent extends Component {
   Comments = ({ item }) => {
     const list = item.kids;
     if (!list) return;
-    return <ul style={{ 'list-style': 'none', 'margin-left': '-20px' }}>
+    return <ul>
       {
         list.filter(item => !item.deleted)
           .map(item => <this.Comment comment={item} />)
@@ -75,22 +75,22 @@ export class HackerNewsComponent extends Component {
       {
         (item.text) ? <div>{`_html:${item.text}`}</div> : ''
       }
-      <div style={{ 'color': '#aaa' }}>
+      <div className='meta'>
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
         <span>by {item.by}</span> |&nbsp;
-        <span>{timeAgo(item.time)}</span> |&nbsp;
-        <span><a href={`${root}/item/${item.id}`} >{pluralize(item.descendants, ' comment')}</a></span>
+        <span>{timeAgo(item.time)} ago</span> |&nbsp;
+        <span>{pluralize(item.descendants, ' comment')}</span>
       </div>
     </div>
   }
 
   ListItem = ({ item, idx }) => {
-    return <li style={{ 'padding': '5px 0' }}>
-      <div>{idx}. <a href={item.url}>{item.title}</a></div>
-      <div style={{ 'color': '#aaa' }}>
-        <span>{pluralize(item.score, ' point')}</span> |&nbsp;
+    return <li>
+      <div className={'score'}>{item.score}</div>
+      <div><a href={item.url}>{item.title}</a></div>
+      <div className='meta'>
         <span>by {item.by}</span> |&nbsp;
-        <span>{timeAgo(item.time)}</span> |&nbsp;
+        <span>{timeAgo(item.time)} ago</span> |&nbsp;
         <span><a href={`${root}/item/${item.id}`} >{pluralize(item.descendants, ' comment')}</a></span>
       </div>
     </li>
@@ -98,7 +98,7 @@ export class HackerNewsComponent extends Component {
 
   List = ({ list }) => {
     if (!list) return;
-    return <ul style={{ 'list-style': 'none', 'margin-left': '-40px'}}>
+    return <ul className='story-list'>
       {
         list.items.filter((_, i) => Math.floor(i / page_size) === list.pageno - 1)
           .map(item => <this.ListItem item={item} idx={list.items.indexOf(item) + 1} />)
@@ -127,7 +127,7 @@ export class HackerNewsComponent extends Component {
       return { 'font-weight': state.type === type ? 'bold' : 'normal' }
     }
     const list = state[state.type];
-    return <div style={{'margin-top':'-20px'}}>
+    return <div className='hn' style={{'margin-top':'-20px'}}>
       <div style={{ 'display': 'flex', 'align-items': 'baseline' }}>
         <h3 style={{ 'margin-right': '20px' }}>Hacker News</h3>
         <div>
@@ -146,14 +146,14 @@ export class HackerNewsComponent extends Component {
 
 
   viewItem = (state) => {
-    return <div>
+    return <div className='hn'>
       <div>
-          <a href={`${root}/top`}>Top</a> |&nbsp;
-          <a href={`${root}/new`}>New</a> |&nbsp;
-          <a href={`${root}/best`}>Best</a> |&nbsp;
-          <a href={`${root}/show`}>Show</a> |&nbsp;
-          <a href={`${root}/ask`}>Ask</a> |&nbsp;
-          <a href={`${root}/job`}>Jobs</a>
+        <a href={`${root}/top`}>Top</a> |&nbsp;
+        <a href={`${root}/new`}>New</a> |&nbsp;
+        <a href={`${root}/best`}>Best</a> |&nbsp;
+        <a href={`${root}/show`}>Show</a> |&nbsp;
+        <a href={`${root}/ask`}>Ask</a> |&nbsp;
+        <a href={`${root}/job`}>Jobs</a>
       </div>
       <this.Item item={state[state.key]} />
       <this.Comments item={state[state.key]} />

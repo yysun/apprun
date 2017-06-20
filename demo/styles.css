@@ -43,11 +43,51 @@
 .multi-selection .selections li {
   display: inline;
   margin-right: 5px;
-  padding: 5px 10px; 
-  border: 1px solid #eeeeee; 
+  padding: 5px 10px;
+  border: 1px solid #eeeeee;
 }
 
 .multi-selection .selections i {
   margin-left: 10px;
   cursor: pointer;
 }
+
+.hn ul {
+  list-style: none;
+  margin-left: -30px;
+}
+
+.hn .story-list {
+  list-style: none;
+  margin-left: -40px
+}
+
+.hn .story-list li {
+  padding: 10px 0;
+}
+
+.hn .score {
+  color: #666;
+  font-size: 1.1em;
+  font-weight: 700;
+  width: 60px;
+  text-align: center;
+  float:left;
+  padding-top: 10px;
+}
+
+.hn .meta {
+  color: #aaa;
+}
+
+.hn .meta a {
+  color: #096;
+}
+
+.hn .comment {
+  padding: 5px 10px;
+  border-left: 1px solid #eee;
+}
+
+
+
