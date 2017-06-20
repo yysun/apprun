@@ -72,6 +72,9 @@ export class HackerNewsComponent extends Component {
   Item = ({ item }) => {
     return <div>
       <h4><a href={item.url}>{item.title}</a></h4>
+      {
+        (item.text) ? <div>{`_html:${item.text}`}</div> : ''
+      }
       <div style={{ 'color': '#aaa' }}>
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
         <span>by {item.by}</span> |&nbsp;
@@ -116,7 +119,6 @@ export class HackerNewsComponent extends Component {
   }
 
   view = (state) => {
-    if (state instanceof Promise) return; // ?
     return state.type === 'item' ? this.viewItem(state) : this.viewList(state);
   }
 
@@ -125,7 +127,7 @@ export class HackerNewsComponent extends Component {
       return { 'font-weight': state.type === type ? 'bold' : 'normal' }
     }
     const list = state[state.type];
-    return <div>
+    return <div style={{'margin-top':'-20px'}}>
       <div style={{ 'display': 'flex', 'align-items': 'baseline' }}>
         <h3 style={{ 'margin-right': '20px' }}>Hacker News</h3>
         <div>
@@ -145,15 +147,26 @@ export class HackerNewsComponent extends Component {
 
   viewItem = (state) => {
     return <div>
+      <div>
+          <a href={`${root}/top`}>Top</a> |&nbsp;
+          <a href={`${root}/new`}>New</a> |&nbsp;
+          <a href={`${root}/best`}>Best</a> |&nbsp;
+          <a href={`${root}/show`}>Show</a> |&nbsp;
+          <a href={`${root}/ask`}>Ask</a> |&nbsp;
+          <a href={`${root}/job`}>Jobs</a>
+      </div>
       <this.Item item={state[state.key]} />
       <this.Comments item={state[state.key]} />
     </div>
   }
 
   update = {
-    '#hacker-news': async (state, type, ...args) => type === 'item' ?
-      this.showItem(state, args[0], args[1]) :
-      this.showList(state, type, args[0])
+    '#hacker-news': async (state, type, ...args) => {
+      type = type || state.type
+      return type === 'item' ?
+        this.showItem(state, args[0]) :
+        this.showList(state, type, args[0])
+    }
   }
 
   showList = async (state, type?, pageno?) => {
@@ -162,7 +175,7 @@ export class HackerNewsComponent extends Component {
       pageno = pageno || (state[type] && state[type].pageno) || 1;
       history.replaceState(null, null, `${root}/${type}/${pageno}`);
     }
-    const new_state = { ...this.state, type };
+    const new_state = { ...state, type };
     if (!new_state[type]) {
       console.log(`fetch: ${type}`);
       new_state[type] = {}
@@ -174,14 +187,13 @@ export class HackerNewsComponent extends Component {
     return new_state;
   }
 
-  showItem = async (state, id, pageno?) => {
-    id = parseInt(id);
-    if (isNaN(id)) {
-      history.pushState(null, null, `${root}/top/1`);
-      return;
+  showItem = async (state, id) => {
+    if (!id || isNaN(parseInt(id))) {
+      id = state.key;
+      history.replaceState(null, null, `${root}/item/${id}`);
     }
-    const key = 'item/' + id;
-    const new_state = { ...this.state, type: 'item', key };
+    const key = `${id}`;
+    const new_state = { ...state, type: 'item', key };
     if (!new_state[key]) {
       console.log(`fetch: ${key}`);
       new_state[key] = await fetchItem(id);
