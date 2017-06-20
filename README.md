@@ -20,10 +20,12 @@ And allows me to:
   * avoid having business logic locked down by framework
   * use with other framework/libraries freely
 
-AppRun is intended to be such a framework.
+AppRun is intended to be such a framework. Its use of the [event publication and subscription pattern](docs/event-pubsub.md) makes AppRun elegant and different to other frameworks.
 
-Its use of the [event publication and subscription pattern](docs/event-pubsub.md)
-at the core makes AppRun different to other frameworks.
+In the [Demo App](https://yysun.github.io/apprun/) built with AppRun,
+
+* The [Todo](https://yysun.github.io/apprun/#todo) component was written 90 in lines.
+* The [Hacker News](https://yysun.github.io/apprun/#hacker-news) component was written in 210 line.
 
 
 ## Quick Start

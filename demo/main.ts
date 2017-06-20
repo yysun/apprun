@@ -11,6 +11,3 @@ import hacker_news from './router-components/hacker-news';
 
 const element = document.getElementById('my-app');
 [home, hello, counter, counters, dragdrop, todo, typeahead, benchmark, hacker_news].forEach(c => c(element));
-
-
-

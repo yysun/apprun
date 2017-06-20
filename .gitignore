@@ -4,3 +4,4 @@ node_modules
 tests**/*.js
 demo**/*.js
 dist**/*.js
+!demo/app.js
