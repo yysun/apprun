@@ -1,12 +1,12 @@
 # AppRun
 
-AppRun is a lightweight framework for developing applications using the [elm](http://elm-lang.org/) style
+AppRun is a lightweight library for developing applications using the [elm](http://elm-lang.org/) style
 [model-view-update architecture](https://guide.elm-lang.org/architecture/)
 based on the [event publication and subscription pattern](docs/event-pubsub.md)
 
 
 ## Why
-As mainly a business application developer, I wanted a single framework that has everything included and is lightweight.
+As mainly a business application developer, I wanted a library that has everything included and is lightweight.
 
   * router
   * state management
@@ -17,15 +17,15 @@ As mainly a business application developer, I wanted a single framework that has
 And allows me to:
 
   * have as little ceremony code as possible
-  * avoid having business logic locked down by framework
+  * avoid having business logic locked down by framework/library
   * use with other framework/libraries freely
 
-AppRun is intended to be such a framework. Its use of the [event publication and subscription pattern](docs/event-pubsub.md) makes AppRun elegant and different to other frameworks.
+AppRun is intended to be such a library. Its use of the [event publication and subscription pattern](docs/event-pubsub.md) makes AppRun elegant and different to other frameworks/libraries.
 
 In the [Demo App](https://yysun.github.io/apprun/) built with AppRun,
 
 * The [Todo](https://yysun.github.io/apprun/#todo) component was written 90 in lines.
-* The [Hacker News](https://yysun.github.io/apprun/#hacker-news) component was written in 210 line.
+* The [Hacker News](https://yysun.github.io/apprun/#hacker-news) component was written in 230 line.
 
 
 ## Quick Start
