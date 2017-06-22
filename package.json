@@ -36,7 +36,6 @@
     "rxjs": "^5.4.0"
   },
   "devDependencies": {
-    "@types/es6-shim": "^0.31.33",
     "@types/jasmine": "^2.5.47",
     "firebase": "^4.1.2",
     "jasmine-core": "^2.6.2",
