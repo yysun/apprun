@@ -5,7 +5,6 @@ Firebase.initializeApp({ databaseURL: 'https://hacker-news.firebaseio.com' });
 const db = Firebase.database().ref('/v0');
 
 export async function fetch(path): Promise<any> {
-  // console.log(path)
   const ref = db.child(path);
   return new Promise((resolve, reject) => {
     ref.once('value', snapshot => resolve(snapshot.val()), reject);
@@ -47,14 +46,12 @@ export class HackerNewsComponent extends Component {
 
   Comment = ({ comment }) => {
     if (!comment) return;
-    const num = comment.kids && comment.kids.filter(item => !item.deleted).length;
     return <li className='comment'>
       <div className='meta'>
         <span>by {comment.by}</span> |&nbsp;
         <span>{timeAgo(comment.time)} ago</span>
       </div>
       <div className='text'>{`_html:${comment.text}`}</div>
-      {num ? <div className='toggle'>{pluralize(num, ' comment')}: </div> : ''}
       <this.Comments item={comment} />
     </li>
   }
@@ -62,48 +59,47 @@ export class HackerNewsComponent extends Component {
   Comments = ({ item }) => {
     const list = item.kids;
     if (!list) return;
-    return <ul>
-      {
+    const num = item.kids && item.kids.filter(items => !item.deleted).length;
+    return <div>
+      {num && <div className='toggle'>{pluralize(num, ' comment')} </div>}
+      <ul> {
         list.filter(item => !item.deleted)
           .map(item => <this.Comment comment={item} />)
       }
-    </ul>;
+      </ul>
+    </div>;
   }
 
   Item = ({ item }) => {
-    const num = item.kids && item.kids.filter(items => !item.deleted).length;
     return <div className='story'>
       <h4><a href={item.url}>{item.title}</a></h4>
-      {
-        (item.text) ? <div className='text'>{`_html:${item.text}`}</div> : ''
-      }
+      { (item.text) && <div className='text'>{`_html:${item.text}`}</div>  }
       <div className='meta'>
         <span>{pluralize(item.score, ' point')}</span> |&nbsp;
         <span>by {item.by}</span> |&nbsp;
         <span>{timeAgo(item.time)} ago</span> |&nbsp;
-        <span>{pluralize(item.descendants, ' comment')} (total)</span>
+        <span>{pluralize(item.descendants, ' comment')} (in total)  |&nbsp;</span>
+        <span><a onclick={() => history.back()}>back</a></span>
       </div>
-      {num ? <div className='toggle'>{pluralize(num, ' comment')}: </div> : ''}
-      <this.Comments item={item} />
     </div>
   }
 
   ListItem = ({ item, idx }) => {
+    const item_link = `${root}/item/${item.id}`;
     return <li>
       <div className={'score'}>{item.score}</div>
-      <div><a href={item.url}>{item.title}</a></div>
+      <div><a href={item.url || item_link}>{item.title}</a></div>
       <div className='meta'>
         <span>by {item.by}</span> |&nbsp;
         <span>{timeAgo(item.time)} ago</span> |&nbsp;
-        <span><a href={`${root}/item/${item.id}`} >{pluralize(item.descendants, ' comment')}</a></span>
+        <span><a href={`${item_link}`} >{pluralize(item.descendants, ' comment')}</a></span>
       </div>
     </li>
   }
 
   List = ({ list }) => {
     if (!list) return;
-    return <ul className='story-list'>
-      {
+    return <ul className='story-list'> {
         list.items.filter((_, i) => Math.floor(i / page_size) === list.pageno - 1)
           .map(item => <this.ListItem item={item} idx={list.items.indexOf(item) + 1} />)
       }
@@ -131,9 +127,9 @@ export class HackerNewsComponent extends Component {
       return { 'font-weight': state.type === type ? 'bold' : 'normal' }
     }
     const list = state[state.type];
-    return <div className='hn' style={{'margin-top':'-20px'}}>
-      <div style={{ 'display': 'flex', 'align-items': 'baseline' }}>
-        <h3 style={{ 'margin-right': '20px' }}>Hacker News</h3>
+    return <div className='hn'>
+      <div className='list-header'>
+        <h3>Hacker News</h3>
         <div>
           <a style={style('top')} href={`${root}/top`}>Top</a> |&nbsp;
           <a style={style('new')} href={`${root}/new`}>New</a> |&nbsp;
@@ -148,18 +144,21 @@ export class HackerNewsComponent extends Component {
     </div>
   }
 
-
   viewItem = (state) => {
+    const item = state[state.key];
     return <div className='hn'>
-      <div>
+      <div className='item-header'>
         <a href={`${root}/top`}>Top</a> |&nbsp;
         <a href={`${root}/new`}>New</a> |&nbsp;
         <a href={`${root}/best`}>Best</a> |&nbsp;
         <a href={`${root}/show`}>Show</a> |&nbsp;
         <a href={`${root}/ask`}>Ask</a> |&nbsp;
         <a href={`${root}/job`}>Jobs</a>
+        <this.Item item={item} />
       </div>
-      <this.Item item={state[state.key]} />
+      <div className='comment-list'>
+        <this.Comments item={item} />
+      </div>
     </div>
   }
 
@@ -186,7 +185,6 @@ export class HackerNewsComponent extends Component {
     }
     await fetchListItems(new_state[type], parseInt(pageno));
     this.setState(new_state); // ?
-    // console.log(new_state);
     return new_state;
   }
 
@@ -226,7 +224,7 @@ document.body.addEventListener('click', e => {
   const t = e.target as HTMLElement;
   if (t.matches('.toggle')) {
     t.classList.toggle('closed');
-    t.nextElementSibling.classList.toggle('collapsed');
+    t.nextElementSibling && t.nextElementSibling.classList.toggle('collapsed');
   }
 });
 

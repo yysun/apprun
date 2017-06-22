@@ -61,9 +61,33 @@ html {
   margin-left: -30px;
 }
 
+.hn .list-header {
+  display: flex;
+  align-items: baseline;
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  top: 45px;
+  width: 100%;
+}
+
+.hn .list-header h3 {
+  margin-right:20px;
+}
+
+.hn .item-header {
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  top: 50px;
+  width: 100%;
+  padding-top: 15px;
+}
+
 .hn .story-list {
   list-style: none;
-  margin-left: -40px
+  margin-left: -50px;
+  padding-top: 20px;
 }
 
 .hn .story {
@@ -89,10 +113,15 @@ html {
 
 .hn .meta a {
   color: #096;
+  cursor: pointer;
 }
 
 .hn .story .meta {
   margin-bottom: 10px
+}
+
+.hn .comment-list {
+  padding-top: 80px
 }
 
 .hn .comment {
@@ -123,7 +152,7 @@ html {
 }
 
 .hn .toggle.closed:after{
-  content: ' (collapsed)'
+  content: ' (...)'
 }
 
 
