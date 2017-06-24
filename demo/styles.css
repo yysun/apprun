@@ -102,6 +102,7 @@ html {
   font-size: 1.1em;
   font-weight: 700;
   width: 60px;
+  height: 60px;
   text-align: center;
   float:left;
   padding-top: 10px;
@@ -139,7 +140,7 @@ html {
   cursor: pointer;
 }
 
-.collapsed {
+.hn .collapsed {
   display: none;
 }
 
