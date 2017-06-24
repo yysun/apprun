@@ -111,7 +111,7 @@ export class HackerNewsComponent extends Component {
     const style = (enable: boolean) => enable ?
       { cursor: 'pointer' } :
       { 'pointer-events': 'none' };
-    return <div style={{ 'margin-left': '50px' }}>
+    return <div style={{ 'padding-left': '250px' }}>
       <span>{list.pageno} / {list.pages} ({list.items.length})</span>
       &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno - 1}`} style={style(list.pageno > 1)}>&lt;&lt;</a>
       &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno + 1}`} style={style(list.pageno < list.pages)}>&gt;&gt;</a>
@@ -128,9 +128,8 @@ export class HackerNewsComponent extends Component {
     }
     const list = state[state.type];
     return <div className='hn'>
-      <div className='list-header'>
-        <h3>Hacker News</h3>
-        <div>
+      <div className='item-header'>
+        <div style={{ 'float': 'left' }}>
           <a style={style('top')} href={`${root}/top`}>Top</a> |&nbsp;
           <a style={style('new')} href={`${root}/new`}>New</a> |&nbsp;
           <a style={style('best')} href={`${root}/best`}>Best</a> |&nbsp;
