@@ -29,7 +29,7 @@ export async function fetchListItems(list, pageno): Promise<any> {
 
 export async function fetchItem(id): Promise<any> {
   const item = await fetch(`item/${id}`);
-  if (item.kids) item.kids = await Promise.all(item.kids.map(async (item) => {
+  if (item && item.kids) item.kids = await Promise.all(item.kids.map(async (item) => {
     return typeof item === 'number' ?
       await fetchItem(item) : item
   }));
@@ -44,6 +44,8 @@ export class HackerNewsComponent extends Component {
     type: 'top',
   };
 
+  Loading = () => <div className='loading'>Loading ... </div>;
+
   Comment = ({ comment }) => {
     if (!comment) return;
     return <li className='comment'>
@@ -57,10 +59,10 @@ export class HackerNewsComponent extends Component {
   }
 
   Comments = ({ item }) => {
+    if (!item || !item.kids) return;
     const list = item.kids;
-    if (!list) return;
-    const num = item.kids && item.kids.filter(items => !item.deleted).length;
-    return <div>
+    const num = item.kids && item.kids.filter(items => !item.deleted && !item.dead).length;
+    return <div className='comment-list'>
       {num && <div className='toggle'>{pluralize(num, ' comment')} </div>}
       <ul> {
         list.filter(item => !item.deleted)
@@ -71,6 +73,7 @@ export class HackerNewsComponent extends Component {
   }
 
   Item = ({ item }) => {
+    if (!item) return;
     return <div className='story'>
       <h4><a href={item.url}>{item.title}</a></h4>
       { (item.text) && <div className='text'>{`_html:${item.text}`}</div>  }
@@ -85,6 +88,7 @@ export class HackerNewsComponent extends Component {
   }
 
   ListItem = ({ item, idx }) => {
+    if (!item) return;
     const item_link = `${root}/item/${item.id}`;
     return <li>
       <div className={'score'}>{item.score}</div>
@@ -119,16 +123,23 @@ export class HackerNewsComponent extends Component {
   }
 
   view = (state) => {
-    return state.type === 'item' ? this.viewItem(state) : this.viewList(state);
-  }
-
-  viewList = (state) => {
-    const style = (type) => {
-      return { 'font-weight': state.type === type ? 'bold' : 'normal' }
+    let extra, more
+    if (state instanceof Promise) {
+      extra = <this.Loading />
+    } else if (state.type === 'item') {
+      const item = state[state.key];
+      extra = <this.Item item={item} />
+      more = <this.Comments item={item} />
+    } else {
+      const list = state[state.type];
+      extra = <this.ListHeader list={list} type={state.type} />
+      more = <this.List list={list} />
     }
-    const list = state[state.type];
+    const style = (mtype) => {
+      return { 'font-weight': mtype === state.type ? 'bold' : 'normal' }
+    }
     return <div className='hn'>
-      <div className='item-header'>
+      <div className='header'>
         <div style={{ 'float': 'left' }}>
           <a style={style('top')} href={`${root}/top`}>Top</a> |&nbsp;
           <a style={style('new')} href={`${root}/new`}>New</a> |&nbsp;
@@ -137,27 +148,9 @@ export class HackerNewsComponent extends Component {
           <a style={style('ask')} href={`${root}/ask`}>Ask</a> |&nbsp;
           <a style={style('job')} href={`${root}/job`}>Jobs</a>
         </div>
-        <this.ListHeader list={list} type={state.type} />
+        {extra}
       </div>
-      <this.List list={list} />
-    </div>
-  }
-
-  viewItem = (state) => {
-    const item = state[state.key];
-    return <div className='hn'>
-      <div className='item-header'>
-        <a href={`${root}/top`}>Top</a> |&nbsp;
-        <a href={`${root}/new`}>New</a> |&nbsp;
-        <a href={`${root}/best`}>Best</a> |&nbsp;
-        <a href={`${root}/show`}>Show</a> |&nbsp;
-        <a href={`${root}/ask`}>Ask</a> |&nbsp;
-        <a href={`${root}/job`}>Jobs</a>
-        <this.Item item={item} />
-      </div>
-      <div className='comment-list'>
-        <this.Comments item={item} />
-      </div>
+      {more}
     </div>
   }
 
@@ -194,10 +187,9 @@ export class HackerNewsComponent extends Component {
     }
     const key = `${id}`;
     const new_state = { ...state, type: 'item', key };
-    if (!new_state[key]) {
-      console.log(`fetch: ${key}`);
-      new_state[key] = await fetchItem(id);
-    }
+    // if (!new_state[key]) {}
+    console.log(`fetch: ${key}`);
+    new_state[key] = await fetchItem(id);
     this.setState(new_state); // ?
     return new_state;
   }
@@ -219,6 +211,7 @@ function timeAgo(time) {
     return pluralize(~~(between / 86400), ' day')
   }
 }
+
 document.body.addEventListener('click', e => {
   const t = e.target as HTMLElement;
   if (t.matches('.toggle')) {

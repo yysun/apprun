@@ -70,10 +70,15 @@ html {
   padding: 15px 0;
 }
 
+.hn .story {
+  clear: left;
+  padding-top: 2px;
+}
+
 .hn .story-list {
   list-style: none;
   margin-left: -50px;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .hn .story-list li {
@@ -98,10 +103,6 @@ html {
 .hn .meta a {
   color: #096;
   cursor: pointer;
-}
-
-.hn .comment-list {
-  padding-top: 80px
 }
 
 .hn .comment {
@@ -135,4 +136,6 @@ html {
   content: ' (...)'
 }
 
-
+.hn .loading {
+  padding-top: 20px;
+}
