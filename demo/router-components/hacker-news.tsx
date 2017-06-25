@@ -58,9 +58,9 @@ export class HackerNewsComponent extends Component {
     if (!item || !item.kids) return;
     const list = item.kids;
     const num = item.kids && item.kids.filter(items => !item.deleted && !item.dead).length;
-    return <div className='comment-list'>
+    return <div>
       {num && <div className='toggle'>{pluralize(num, ' comment')} </div>}
-      <ul> {
+      <ul className='comment-list'> {
         list.filter(item => !item.deleted)
           .map(item => <this.Comment comment={item} />)
       }
@@ -99,11 +99,15 @@ export class HackerNewsComponent extends Component {
 
   List = ({ list }) => {
     if (!list) return;
-    return <ul className='story-list'> {
+    return <div>
+      <ul className='story-list'> {
         list.items.filter((_, i) => i>=list.min && i<list.max)
           .map(item => <this.ListItem item={item} idx={list.items.indexOf(item) + 1} />)
       }
-    </ul>;
+      </ul>
+      {list.items && list.max < list.items.length &&
+        <div className='more'><a onclick={() => this.run('more')}>More ...</a></div>}
+    </div>;
   }
 
   ListHeader = ({ list, type }) => {
@@ -112,16 +116,17 @@ export class HackerNewsComponent extends Component {
       { cursor: 'pointer' } :
       { 'pointer-events': 'none' };
     return <div style={{ 'padding-left': '250px' }}>
-      <span>{list.min} / {list.max} ({list.items.length})</span>
-      &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno - 1}`} style={style(list.pageno > 1)}>&lt;&lt;</a>
-      &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno + 1}`} style={style(list.pageno < list.pages)}>&gt;&gt;</a>
+      <span>{list.min + 1} - {list.max} ({list.items.length})</span>
+      {/*&nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno - 1}`} style={style(list.pageno > 1)}>&lt;&lt;</a>
+      &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno + 1}`} style={style(list.pageno < list.pages)}>&gt;&gt;</a>*/}
     </div>
   }
 
   view = (state) => {
     let extra, more
     if (state instanceof Promise) {
-      extra = <this.Loading />
+      // extra = <this.Loading />
+      return
     } else if (state.type === 'item') {
       const item = state[state.key];
       extra = <this.Item item={item} />
@@ -134,7 +139,7 @@ export class HackerNewsComponent extends Component {
     const style = (mtype) => {
       return { 'font-weight': mtype === state.type ? 'bold' : 'normal' }
     }
-    return <div className='hn'>
+    return <div className={`hn ${state.type}`}>
       <div className='header'>
         <div style={{ 'float': 'left' }}>
           <a style={style('top')} href={`${root}/top`}>Top</a> |&nbsp;
@@ -146,7 +151,9 @@ export class HackerNewsComponent extends Component {
         </div>
         {extra}
       </div>
-      {more}
+      <div className='list'>
+        {more}
+      </div>
     </div>
   }
 
@@ -156,6 +163,15 @@ export class HackerNewsComponent extends Component {
       return type === 'item' ?
         this.showItem(state, args[0]) :
         this.showList(state, type, args[0])
+    },
+    'more': async (state) => {
+      const list = state[state.type];
+      if (list && list.items) {
+        list.max = Math.min(list.max + 20, list.items.length)
+        await fetchListItems(state[state.type]);
+      }
+      this.setState(state); // ?
+      return state;
     }
   }
 
@@ -163,21 +179,23 @@ export class HackerNewsComponent extends Component {
     if (!type || !pageno) {
       type = type || state.type || 'top';
       pageno = pageno || (state[type] && state[type].pageno) || 1;
-      history.replaceState(null, null, `${root}/${type}/${pageno}`);
+      history.replaceState(null, null, `${root}/${type}`);
     }
     const new_state = { ...state, type };
     if (!new_state[type]) {
       console.log(`fetch: ${type}`);
       new_state[type] = {
-        items: await fetchList(type)
+        items: await fetchList(type),
+        min: 0,
+        max: page_size
       }
     }
 
     pageno = parseInt(pageno) || 1;
     new_state[type] = {
       ...new_state[type],
-      min: (pageno - 1) * page_size + 1,
-      max: pageno * page_size,
+      // min: (pageno - 1) * page_size,
+      // max: pageno * page_size,
       pageno,
       pages: Math.ceil(new_state[type].items.length / page_size)
     }
@@ -194,9 +212,10 @@ export class HackerNewsComponent extends Component {
     }
     const key = `${id}`;
     const new_state = { ...state, type: 'item', key };
-    // if (!new_state[key]) {}
-    console.log(`fetch: ${key}`);
-    new_state[key] = await fetchItem(id);
+    if (!new_state[key]) {
+      console.log(`fetch: ${key}`);
+      new_state[key] = await fetchItem(id);
+    }
     this.setState(new_state); // ?
     return new_state;
   }

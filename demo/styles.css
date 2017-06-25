@@ -105,6 +105,10 @@ html {
   cursor: pointer;
 }
 
+.hn.item .list {
+  padding-top: 80px
+}
+
 .hn .comment {
   padding: 5px 10px;
   border-left: 1px solid #eeeeee;
@@ -138,4 +142,9 @@ html {
 
 .hn .loading {
   padding-top: 20px;
+}
+
+.hn .more a {
+  cursor: pointer;
+  padding-bottom: 150px;
 }
