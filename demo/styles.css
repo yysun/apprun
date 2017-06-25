@@ -61,27 +61,13 @@ html {
   margin-left: -30px;
 }
 
-.hn .list-header {
-  display: flex;
-  align-items: baseline;
-  position: fixed;
-  background-color: white;
-  z-index: 1;
-  top: 45px;
-  width: 100%;
-}
-
-.hn .list-header h3 {
-  margin-right:20px;
-}
-
-.hn .item-header {
+.hn .header {
   position: fixed;
   background-color: white;
   z-index: 1;
   top: 50px;
   width: 100%;
-  padding-top: 15px;
+  padding: 15px 0;
 }
 
 .hn .story-list {
@@ -90,9 +76,6 @@ html {
   padding-top: 20px;
 }
 
-.hn .story {
-  margin-bottom: 10px;
-}
 .hn .story-list li {
   padding: 10px 0;
 }
@@ -115,10 +98,6 @@ html {
 .hn .meta a {
   color: #096;
   cursor: pointer;
-}
-
-.hn .story .meta {
-  margin-bottom: 10px
 }
 
 .hn .comment-list {
