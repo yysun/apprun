@@ -16,13 +16,9 @@ export async function fetchList(type): Promise<any> {
   return fetch(`${type}stories`);
 }
 
-export async function fetchListItems(list, pageno): Promise<any> {
-  list.pageno = pageno;
-  list.pages = Math.ceil(list.items.length / page_size);
-  if (isNaN(list.pageno) || list.pageno < 1) list.pageno = 1;
-  if (list.pageno > list.pages) list.pageno = list.pages;
+export async function fetchListItems(list): Promise<any> {
   list.items = await Promise.all(list.items.map(async (item, idx) => {
-    return ((Math.floor(idx / page_size) === list.pageno - 1) && (typeof item === 'number')) ?
+    return (idx >= list.min && idx< list.max && (typeof item === 'number')) ?
       await fetch(`item/${item}`) : item
   }));
 }
@@ -104,7 +100,7 @@ export class HackerNewsComponent extends Component {
   List = ({ list }) => {
     if (!list) return;
     return <ul className='story-list'> {
-        list.items.filter((_, i) => Math.floor(i / page_size) === list.pageno - 1)
+        list.items.filter((_, i) => i>=list.min && i<list.max)
           .map(item => <this.ListItem item={item} idx={list.items.indexOf(item) + 1} />)
       }
     </ul>;
@@ -116,7 +112,7 @@ export class HackerNewsComponent extends Component {
       { cursor: 'pointer' } :
       { 'pointer-events': 'none' };
     return <div style={{ 'padding-left': '250px' }}>
-      <span>{list.pageno} / {list.pages} ({list.items.length})</span>
+      <span>{list.min} / {list.max} ({list.items.length})</span>
       &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno - 1}`} style={style(list.pageno > 1)}>&lt;&lt;</a>
       &nbsp;&nbsp;<a href={`${root}/${type}/${list.pageno + 1}`} style={style(list.pageno < list.pages)}>&gt;&gt;</a>
     </div>
@@ -172,10 +168,21 @@ export class HackerNewsComponent extends Component {
     const new_state = { ...state, type };
     if (!new_state[type]) {
       console.log(`fetch: ${type}`);
-      new_state[type] = {}
-      new_state[type].items = await fetchList(type);
+      new_state[type] = {
+        items: await fetchList(type)
+      }
     }
-    await fetchListItems(new_state[type], parseInt(pageno));
+
+    pageno = parseInt(pageno) || 1;
+    new_state[type] = {
+      ...new_state[type],
+      min: (pageno - 1) * page_size + 1,
+      max: pageno * page_size,
+      pageno,
+      pages: Math.ceil(new_state[type].items.length / page_size)
+    }
+
+    await fetchListItems(new_state[type]);
     this.setState(new_state); // ?
     return new_state;
   }
