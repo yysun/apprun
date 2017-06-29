@@ -10,6 +10,7 @@ const webpack_config_js = path.resolve('./webpack.config.js');
 const git_ignore_file = path.resolve('./.gitignore');
 const index_html = path.resolve('./index.html');
 const main_tsx = path.resolve('./main.tsx');
+const readme_md = path.resolve('./README.md');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
@@ -61,13 +62,19 @@ const index = `<!doctype html>
 </body>
 </html>`;
 
-const main = `import app from './node_modules/apprun/index';
+const main = `import app from 'apprun';
 const model = 'Hello world - AppRun';
 const view = (state) => <h1>{state}</h1>;
 const update = {
 }
 const element = document.getElementById('my-app');
 app.start(element, model, view, update);
+`;
+
+const readme = `##
+
+* Use _npm start_ to start the dev server
+* Use _npm run build_ to build for production 
 `;
 
 function write(file_name, text, title = 'Creating') {
@@ -93,20 +100,22 @@ function init() {
   }
 
   console.log('Installing packages. This might take a couple minutes.');
-  execSync('npm install webpack webpack-dev-server ts-loader typescript --save-dev');
-  execSync('npm install apprun --save');
+  // execSync('npm install webpack webpack-dev-server ts-loader typescript --save-dev');
+  // execSync('npm install apprun --save');
 
   write(tsconfig_json, tsconfig);
   write(webpack_config_js, webpack_config)
   write(index_html, index);
   write(main_tsx, main);
+  write(readme_md, readme);
 
   console.log('Adding npm scripts');
   const package_info = require(package_json);
-  if (!package_info.scripts || ! package_info.scripts['start']) {
+  if (!package_info.scripts) package_info["scripts"] = {}
+  if (!package_info.scripts['start']) {
     package_info["scripts"]["start"] = 'webpack-dev-server';
   }
-  if (!package_info.scripts || ! package_info.scripts['build']) {
+  if (!package_info.scripts['build']) {
     package_info["scripts"]["build"] = 'webpack -p';
   }
   fs.writeFileSync(
