@@ -100,7 +100,6 @@ function init() {
   write(webpack_config_js, webpack_config)
   write(index_html, index);
   write(main_tsx, main);
-  write(git_ignore_file, git_ignore);
 
   console.log('Adding npm scripts');
   const package_info = require(package_json);
@@ -114,12 +113,15 @@ function init() {
     package_json,
     JSON.stringify(package_info, null, 2)
   );
-
-  console.log('Initializing git');
-  execSync('git init');
 }
 
-const component_template = `import app, {Component} from './node_modules/apprun/index';
+function git_init() {
+  console.log('Initializing git');
+  execSync('git init');
+  write(git_ignore_file, git_ignore);
+}
+
+const component_template = `import app, {Component} from 'apprun';
 
 export default class #nameComponent extends Component {
   state = '#name';
@@ -149,9 +151,10 @@ function component(name) {
 }
 
 program
- .version('1.0.1')
+ .version('1.1.0')
  .option('-i, --init', 'Initialize AppRun Project')
  .option('-c, --component <file>', 'Generate AppRun component')
+ .option('-g, --git', 'Initialize git repository')
  .parse(process.argv);
 
 program._name = 'apprun';
@@ -162,3 +165,5 @@ if (!program.init && !program.component) {
 
 if (program.init) init();
 if (program.component) component(program.component);
+
+if (program.git) git_init();
