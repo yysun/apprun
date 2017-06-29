@@ -11,8 +11,9 @@ module.exports = {
     'demo/html-multiple-counters/app': './demo/html-multiple-counters/main.ts'
   },
   output: {
-    // path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: '[name].js',
+    library: 'apprun',
+    libraryTarget: 'umd'
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
