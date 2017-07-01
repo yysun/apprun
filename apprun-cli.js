@@ -74,7 +74,7 @@ app.start(element, model, view, update);
 const readme = `##
 
 * Use _npm start_ to start the dev server
-* Use _npm run build_ to build for production 
+* Use _npm run build_ to build for production
 `;
 
 function write(file_name, text, title = 'Creating') {
@@ -100,8 +100,8 @@ function init() {
   }
 
   console.log('Installing packages. This might take a couple minutes.');
-  // execSync('npm install webpack webpack-dev-server ts-loader typescript --save-dev');
-  // execSync('npm install apprun --save');
+  execSync('npm install webpack webpack-dev-server ts-loader typescript --save-dev');
+  execSync('npm install apprun --save');
 
   write(tsconfig_json, tsconfig);
   write(webpack_config_js, webpack_config)
@@ -160,7 +160,7 @@ function component(name) {
 }
 
 program
- .version('1.1.0')
+ .version('1.1.1')
  .option('-i, --init', 'Initialize AppRun Project')
  .option('-c, --component <file>', 'Generate AppRun component')
  .option('-g, --git', 'Initialize git repository')
