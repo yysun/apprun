@@ -22,10 +22,10 @@ And allows me to:
 
 AppRun is intended to be such a library. Its use of the [event publication and subscription pattern](docs/event-pubsub.md) makes AppRun elegant and different to other frameworks/libraries.
 
-In the [Demo App](https://yysun.github.io/apprun/) built with AppRun,
+In the [Demo App](https://yysun.github.io/apprun-examples/) built with AppRun,
 
-* The [Todo](https://yysun.github.io/apprun/#todo) component was written 90 in lines.
-* The [Hacker News](https://yysun.github.io/apprun/#hacker-news) component was written in 230 line.
+* The [Todo](https://yysun.github.io/apprun-examples/#todo) component was written 90 in lines.
+* The [Hacker News](https://yysun.github.io/apprun-examples/#hacker-news) component was written in 230 line.
 
 
 ## Quick Start
@@ -86,6 +86,7 @@ npm start
 
 To explore more about AppRun, read the following docs.
 
+* [Introduction](docs/README.md)
 * [Event Pub and Sub](docs/event-pubsub.md)
 * [Model-view-update Architecture](docs/concept.md)
 * [Component](docs/component.md)

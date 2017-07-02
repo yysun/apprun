@@ -3,8 +3,8 @@
 In the [model-view-update architecture](https://guide.elm-lang.org/architecture/), there are three separated parts in an application.
 
 * Model — the state of your application
-* Update — a function to update your state
-* View — a function to display your state as HTML
+* Update — a set of functions to update the state
+* View — a function to display the state as HTML
 
 The 15 lines of code below is a simple counter in model-view-update architecture.
 

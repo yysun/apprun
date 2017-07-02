@@ -10,12 +10,12 @@ fire events each other without knowing who will be handling the events.
 AppRun is a event system that provides two important functions : _app.run_ and _app.on_. _app.run_ fires events.
 _app.on_ handles events. E.g. :
 
-Module A provides an event handler _print_:
+Module A subscribes to an event _print_:
 ```
 import app from 'apprun';
 export () => app.on('print', e => console.log(e));
 ```
-Module B fires the event _print_:
+Module B publishes the event _print_:
 ```
 import app from 'apprun';
 export () => app.run('print', {});
@@ -27,8 +27,8 @@ import b from './B';
 a();
 b();
 ```
-Module A and Module B only have to know the event system, not other modules, so they are only dependent
-on the event system, not other modules. Therefore modules are decoupled.
+Module A and Module B only have to know the event system, not other modules, so they are 
+only dependent on the event system, not other modules. Therefore modules are decoupled.
 Thus makes it easier to modify, extend and swap modules.
 
 
