@@ -32,8 +32,7 @@
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
     "commander": "^2.9.0",
-    "morphdom": "^2.3.2",
-    "rxjs": "^5.4.0"
+    "npm": "^5.0.4"
   },
   "devDependencies": {
     "@types/jasmine": "^2.5.47",
@@ -43,6 +42,8 @@
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-jasmine": "^1.0.2",
+    "morphdom": "^2.3.2",
+    "rxjs": "^5.4.0",
     "karma-webpack": "^2.0.3",
     "ts-loader": "^0.8.2",
     "typescript": "^2.3.3",
