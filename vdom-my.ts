@@ -106,6 +106,7 @@ function create(node: VNode | string): Element {
   // console.log('create', node, typeof node);
 
   if (typeof node === "string") return createText(node);
+  if (!node.tag) return createText(JSON.stringify(node));
 
   const element = (node.tag === "svg")
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)

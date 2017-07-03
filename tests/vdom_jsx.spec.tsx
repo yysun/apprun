@@ -86,4 +86,13 @@ it('should render nested element', () => {
 
   });
 
+  it('should render JSON', () => {
+    const view = _ => <div>{_}</div>;
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    app.start(element, { name: 'x' }, view, update);
+    expect(element.textContent).toEqual('{"name":"x"}');
+
+  });
+  
 });
