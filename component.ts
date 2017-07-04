@@ -10,16 +10,13 @@ import app, { App } from './app';
   private state_changed: string;
   private global_event;
 
-  protected set_state(state) {
-    // if (state instanceof Promise) return; // ?
-    this.state = state;
+  private render_state(state) {
     if (!this.view) return;
-    const html = this.view(this.state);
+    const html = this.view(state);
     if (app.render) app.render(this.element, html);
   }
 
-  private push_state(state) {
-    this.set_state(state);
+  private push_to_history(state) {
     if (this.enable_history) {
       this._history = [...this._history, state];
       this._history_idx = this._history.length - 1;
@@ -29,6 +26,29 @@ import app, { App } from './app';
     }
   }
 
+  protected set_state(state) {
+    this.state = state;
+    this.render_state(state);
+  }
+
+  private push_state(state) {
+    const me = this;
+    if (state instanceof Promise) {
+      // state will be rendered, but not saved
+      this.render_state(state);
+      // state will be saved when promise is resolved
+      state.then(s => {
+        me.set_state(s);
+        me.push_to_history(s);
+      }).catch((err) => {
+        console.error(err);
+        throw err;
+      })
+    } else {
+      me.set_state(state);
+      me.push_to_history(state);
+    }
+  }
   public setState (state){
     this.push_state(state);
   }

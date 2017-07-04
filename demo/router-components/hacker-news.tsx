@@ -170,7 +170,7 @@ export class HackerNewsComponent extends Component {
         list.max = Math.min(list.max + 20, list.items.length)
         await fetchListItems(state[state.type]);
       }
-      this.setState(state); // ?
+      // this.setState(state); // ?
       return state;
     }
   }
@@ -201,7 +201,7 @@ export class HackerNewsComponent extends Component {
     }
 
     await fetchListItems(new_state[type]);
-    this.setState(new_state); // ?
+    // this.setState(new_state); // ?
     return new_state;
   }
 
@@ -216,7 +216,7 @@ export class HackerNewsComponent extends Component {
       console.log(`fetch: ${key}`);
       new_state[key] = await fetchItem(id);
     }
-    this.setState(new_state); // ?
+    // this.setState(new_state); // ?
     return new_state;
   }
 

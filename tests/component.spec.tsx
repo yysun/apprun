@@ -100,22 +100,45 @@ describe('Component', ()=> {
   });
 
   it('should convert methods to local events', () => {
-
     const spy = jasmine.createSpy('spy');
     class Test extends Component {
       state = -1;
       method1 = (...args) => {
         spy(...args)
       }
-
     }
-
     const t = new Test().mount(document.body);
     spyOn(t, 'method1');
     t.run('method1', 0, 1, 2)
-
     expect(spy).toHaveBeenCalledWith(-1, 0, 1, 2);
   });
+
+  fit('should handle async update', (done) => {
+    const fn = async () => new Promise((resolve, reject) => {
+      window.setTimeout(() => {
+        resolve('xx');
+      }, 100);
+    });
+    const spy = jasmine.createSpy('spy');
+    class Test extends Component {
+      state = -1;
+      method1 = async (...args) => {
+        const v = await fn();
+        return v;
+      }
+      view = state => spy(state);
+    }
+    const t = new Test().mount(null);
+    t.run('method1')
+    window.setTimeout(() => {
+      const callArgs = spy.calls.allArgs();
+      expect(callArgs[0][0]).toBe(-1);
+      expect(callArgs[1][0] instanceof Promise).toBeTruthy();
+      expect(callArgs[2][0]).toBe('xx');
+      done()
+    }, 200);
+  });
+
 
 })
 
