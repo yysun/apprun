@@ -160,7 +160,7 @@ function component(name) {
 }
 
 program
- .version('1.1.1')
+ .version('1.2.0')
  .option('-i, --init', 'Initialize AppRun Project')
  .option('-c, --component <file>', 'Generate AppRun component')
  .option('-g, --git', 'Initialize git repository')
@@ -168,11 +168,10 @@ program
 
 program._name = 'apprun';
 
-if (!program.init && !program.component) {
+if (!program.init && !program.component && !program.git) {
   program.outputHelp();
 }
 
 if (program.init) init();
 if (program.component) component(program.component);
-
 if (program.git) git_init();
