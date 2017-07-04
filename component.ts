@@ -32,21 +32,20 @@ import app, { App } from './app';
   }
 
   private push_state(state) {
-    const me = this;
     if (state instanceof Promise) {
       // state will be rendered, but not saved
       this.render_state(state);
       // state will be saved when promise is resolved
       state.then(s => {
-        me.set_state(s);
-        me.push_to_history(s);
+        this.set_state(s);
+        this.push_to_history(s);
       }).catch((err) => {
         console.error(err);
         throw err;
       })
     } else {
-      me.set_state(state);
-      me.push_to_history(state);
+      this.set_state(state);
+      this.push_to_history(state);
     }
   }
   public setState (state){

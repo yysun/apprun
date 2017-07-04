@@ -113,7 +113,7 @@ describe('Component', ()=> {
     expect(spy).toHaveBeenCalledWith(-1, 0, 1, 2);
   });
 
-  fit('should handle async update', (done) => {
+  it('should handle async update', (done) => {
     const fn = async () => new Promise((resolve, reject) => {
       window.setTimeout(() => {
         resolve('xx');
