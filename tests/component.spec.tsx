@@ -128,7 +128,7 @@ describe('Component', ()=> {
       }
       view = state => spy(state);
     }
-    const t = new Test().mount(null);
+    const t = new Test().start();
     t.run('method1')
     window.setTimeout(() => {
       const callArgs = spy.calls.allArgs();

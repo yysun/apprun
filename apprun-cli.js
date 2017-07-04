@@ -150,7 +150,7 @@ export default class #nameComponent extends Component {
 // to use this component in main.tsx
 // import #name from './#name';
 // const element = document.getElementById('my-app');
-// new #name().mount(element);
+// new #name().start(element);
 `;
 
 function component(name) {
@@ -160,7 +160,7 @@ function component(name) {
 }
 
 program
- .version('1.2.0')
+ .version('1.3.0')
  .option('-i, --init', 'Initialize AppRun Project')
  .option('-c, --component <file>', 'Generate AppRun component')
  .option('-g, --git', 'Initialize git repository')

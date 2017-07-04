@@ -125,4 +125,5 @@ import app, { App } from './app';
       super.run(name, ...args);
   }
 
+  start = (element?) => this.mount(element)
 }
