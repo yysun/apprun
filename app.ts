@@ -18,11 +18,11 @@ export class App {
     let subject = this.subjects[name] as Observable<{}>;
     if (!fn) return subject;
     options = options || {};
-    if (options.debug) console.debug('on: ' + name);
+    if (options.debug) console.log('on: ' + name);
     if (options.delay) subject = subject.debounceTime(options.delay);
     if (options.once) subject = subject.first();
     return subject.subscribe((args) => {
-      if (options.debug) console.debug('run: ' + name);
+      if (options.debug) console.log('run: ' + name, args);
       fn.apply(this, args);
     });
   }
