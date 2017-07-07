@@ -139,6 +139,56 @@ describe('Component', ()=> {
     }, 200);
   });
 
+  it('should support tuple in update', () => {
+    let i = 0;
+    class Test extends Component {
+      state = -1;
 
-})
+      update = {
+        'method1': [ _ => i++, { once: true } ],
+      }
+    }
+
+    const t = new Test().start();
+    t.run('method1');
+    t.run('method1');
+    t.run('method1');
+
+    expect(i).toEqual(1);
+  });
+
+  it('should support async tuple in update', (done) => {
+    let i = 0;
+    const fn = async () => new Promise<string>((resolve) => {
+      window.setTimeout(() => {
+        resolve('xx');
+      }, 100);
+    });
+
+    class Test extends Component {
+      state = -1;
+
+      update = {
+        'method1': [ async _ => {
+          const t = await fn();
+          i++
+        }, 
+        { once: true } ],
+      }
+    }
+
+    const t = new Test().start();
+    t.run('method1');
+    t.run('method1');
+    t.run('method1');
+
+    window.setTimeout(() => {
+      expect(i).toBe(1);
+      done();
+    }, 500)
+  });
+
+
+});
+
 

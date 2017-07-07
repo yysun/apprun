@@ -98,23 +98,28 @@ import app, { App } from './app';
     return name && (name.startsWith('#') || name.startsWith('/'));
   }
 
-  add_action(name, action) {
+  add_action(name, action, options?) {
     if (!action || typeof action !== 'function') return;
     if (!this.global_event && !this.is_global_event(name)) {
       this.on(name, (...p) => {
         this.push_state(action(this.state, ...p));
-      });
+      }, options);
     } else {
       app.on(name, (...p) => {
         this.push_state(action(this.state, ...p));
-      });
+      }, options);
     }
   }
 
   add_actions() {
     const actions = Object.assign(this.update || {}, this);
-    Object.keys(actions).forEach(action => {
-      this.add_action(action, actions[action]);
+    Object.keys(actions).forEach(name => {
+      const action = actions[name];
+      if (typeof action === 'function') {
+        this.add_action(name, action);
+      } else if (Array.isArray(action) && typeof action[0] === 'function') {
+        this.add_action(name, action[0], action[1]);
+      }
     });
   }
 
@@ -124,5 +129,5 @@ import app, { App } from './app';
       super.run(name, ...args);
   }
 
-  start = (element?) => this.mount(element)
+  start = (element?, options?) => this.mount(element, options);
 }
