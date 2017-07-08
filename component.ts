@@ -90,6 +90,7 @@ import app, { App } from './app';
     this.state_changed = options.event && (options.event.name || 'state_changed');
     this.global_event = options.global_event;
     this.add_actions();
+    if (this.state === undefined) this.state = this['model'];
     this.push_state(this.state);
     return this;
   }
