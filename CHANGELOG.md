@@ -1,8 +1,9 @@
 # Change Log
 
-## 1.3 (WIP)
+## 1.3
 
 * Support tuple in update for setting event options
+* Use _model_ property as initial state, if _state_ property is undefined
 
 ## 1.2
 
