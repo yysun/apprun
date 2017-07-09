@@ -62,7 +62,7 @@ import app, { App } from './app';
 
   public mount(element, options: any = {}) {
 
-    console.assert(!!this.element, 'Component already mounted.')
+    console.assert(!this.element, 'Component already mounted.')
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
 
