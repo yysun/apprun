@@ -23,7 +23,8 @@ declare module 'apprun' {
   export class Component extends App {
     constructor(state?: Model, view?: View, update?: Update, options?: {});
     setState(state: any): void;
-    mount(element: HTMLElement, options?:{}): void;
+    mount(element: HTMLElement, options?: {}): void;
+    create(element: HTMLElement, options?:{}): void;
   }
 
   export const app: App
