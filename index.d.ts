@@ -24,7 +24,7 @@ declare module 'apprun' {
     constructor(state?: Model, view?: View, update?: Update, options?: {});
     setState(state: any): void;
     mount(element: HTMLElement, options?: {}): void;
-    create(element: HTMLElement, options?:{}): void;
+    start(element?: HTMLElement, options?:{}): void;
   }
 
   export const app: App
