@@ -5,7 +5,7 @@ const ROUTER_EVENT = '//';
 export default class Router {
 
   route(url: string) {
-    if (!url) url = '/';
+    if (!url) url = '#';
     if (url.indexOf('/') > 0) {
       const [name, ...rest] = url.split('/');
       app.run(name, ...rest);
