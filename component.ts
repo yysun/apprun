@@ -91,7 +91,11 @@ import app, { App } from './app';
     this.global_event = options.global_event;
     this.add_actions();
     if (this.state === undefined) this.state = this['model'];
+    if (options.hidden) {
+      this.push_to_history(this.state);
+    } else {
     this.push_state(this.state);
+    }  
     return this;
   }
 

@@ -31,6 +31,14 @@ describe('Component', ()=> {
     expect(component.view).toHaveBeenCalled();
   })
 
+  it('should not trigger view when mounted hidden', () => {
+    spyOn(component, 'view');
+    component.mount(document.body, {hidden: true});
+    expect(component.element).toBe(document.body);
+    expect(component.view).not.toHaveBeenCalled();
+  })
+
+
   it('should handle local events', ()=> {
     component.mount(document.body);
     spyOn(component, 'view');
@@ -187,7 +195,6 @@ describe('Component', ()=> {
       done();
     }, 500)
   });
-
 
 });
 
