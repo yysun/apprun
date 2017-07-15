@@ -17,6 +17,7 @@ export default class Router {
   }
 
   constructor() {
+    app.on('route', e => this.route(location.hash));
     window.onpopstate = e => this.route(location.hash);
     this.route(location.hash);
   }
