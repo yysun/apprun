@@ -126,6 +126,11 @@ import app, { App } from './app';
         this.add_action(name, action);
       } else if (Array.isArray(action) && typeof action[0] === 'function') {
         this.add_action(name, action[0], action[1]);
+        if (action[2] && Array.isArray(action[2])) {
+          action[2].forEach(a => {
+            typeof a ==='string' && this.add_action(a, action[0], action[1]);
+          });
+        }
       }
     });
   }

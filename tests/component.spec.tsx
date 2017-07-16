@@ -196,6 +196,24 @@ describe('Component', ()=> {
     }, 500)
   });
 
+
+  it('should support update alias', () => {
+    let i = 0;
+    class Test extends Component {
+      state = -1;
+      update = {
+        'method1': [_ => ++i, {}, ['m1', 'm2', '#m3']]
+      }
+    }
+    const t = new Test().start();
+    t.run('method1');
+    t.run('m1');
+    t.run('m2');
+    app.run('#m3');
+
+    expect(i).toBe(4);
+  });
+
 });
 
 
