@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.4
+
+* Support update name alias
+* Support mount to element id
+* Make _mount_ just mount, _start_ mount and render initial state
+* Publish the _route_ event from app
+
 ## 1.3
 
 * Support tuple in update for setting event options
