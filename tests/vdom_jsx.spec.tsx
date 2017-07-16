@@ -1,10 +1,18 @@
 import { } from 'jasmine';
-import app from '../index';
+import app, { Component } from '../index';
 
 const model = 'x';
 const view = _ => <div>{_}</div>;
 const update = {
   hi: (_, val) => val
+}
+
+class TestComponent extends Component {
+  state = 'x';
+  view = (state) => <div>{state}</div>
+  update = {
+    '#hi': (state, v) => v
+  }
 }
 
 describe('vdom-jsx', () => {
@@ -17,9 +25,6 @@ describe('vdom-jsx', () => {
 
   it('created by app.start should trigger view', () => {
     const model = 'x';
-    const update = {
-      hi: (_, val) => val
-    }
     const view = jasmine.createSpy('view');
     const component = app.start(document.body, model, view, update);
     expect(view).toHaveBeenCalledWith('x');
@@ -46,20 +51,16 @@ describe('vdom-jsx', () => {
   });
 
   it('should render custom element', () => {
-
     const CustomElement = ({val}) => <div>{val}</div>;
     const view = _ => <CustomElement val= {_} />;
     const element = document.createElement('div');
     document.body.appendChild(element);
     app.start(element, model, view, update);
-
     app.run('hi', 'xxxxx');
     expect(element.firstChild.textContent).toEqual('xxxxx');
-
   });
 
-it('should render nested element', () => {
-
+  it('should render nested element', () => {
     const CustomElement = ({val}) => <li>{val}</li>;
     const view = _ => (
     <ul>
@@ -92,6 +93,39 @@ it('should render nested element', () => {
     document.body.appendChild(element);
     app.start(element, { name: 'x' }, view, update);
     expect(element.textContent).toEqual('{"name":"x"}');
+  });
+
+  it('should allow element to be string', () => {
+    const element = document.createElement('div');
+    element.id = 'main';
+    document.body.appendChild(element);
+    new TestComponent().mount('main');
+    expect(element.textContent).toEqual('x');
+  });
+
+  const test = new TestComponent().start('test');
+  const Test = () => test.render();
+
+  class TestComponent2 extends Component {
+    state = '';
+    view = (state) => {
+      return <div id='test'>
+        <Test />
+      </div>
+    }
+    update = {
+      '#hi2': (state, v) => test.setState(v)
+    }
+  }
+
+  it('should render component', () => {
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    new TestComponent2().start(element);
+    app.run('#hi2', 'xxxxx');
+    expect(element.textContent).toEqual('xxxxx');
+    app.run('#hi', 'xxxx');
+    expect(element.textContent).toEqual('xxxx');
 
   });
   

@@ -13,7 +13,9 @@ import app, { App } from './app';
   private render_state(state) {
     if (!this.view) return;
     const html = this.view(state);
-    if (app.render) app.render(this.element, html);
+    const el = (typeof this.element === 'string') ?
+      document.getElementById(this.element) : this.element;
+    if (el && app.render) app.render(el, html);
   }
 
   private push_to_history(state) {
@@ -60,7 +62,7 @@ import app, { App } from './app';
     super();
   }
 
-  public mount(element, options: any = {}) {
+  public mount(element = null, options: any = {}) {
 
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = Object.assign(this.options || {}, options);
@@ -94,7 +96,7 @@ import app, { App } from './app';
     if (options.hidden) {
       this.push_to_history(this.state);
     } else {
-    this.push_state(this.state);
+      this.push_state(this.state);
     }  
     return this;
   }
@@ -135,4 +137,5 @@ import app, { App } from './app';
   }
 
   start = (element?, options?) => this.mount(element, options);
+  render = () => this.view(this.state);
 }
