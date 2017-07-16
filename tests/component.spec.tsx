@@ -95,9 +95,24 @@ describe('Component', ()=> {
     expect(component.view).toHaveBeenCalledWith('xxx');
   });
 
+  it('should track history with global custom event name', () => {
+    spyOn(component, 'view');
+    component.start(document.body, { history: { prev: 'prev', next: 'next' }, global_event: true });
+    expect(component.view).toHaveBeenCalledWith('x');
+    app.run('hi', 'xx');
+    expect(component.view).toHaveBeenCalledWith('xx');
+    app.run('hi', 'xxx');
+    expect(component.view).toHaveBeenCalledWith('xxx');
+    app.run('prev');
+    expect(component.view).toHaveBeenCalledWith('xx');
+    app.run('next');
+    expect(component.view).toHaveBeenCalledWith('xxx');
+  });
+
+
   it('should trigger state changed event to global with default event name', () => {
     const spy = jasmine.createSpy('spy');
-    app.on('state_changed', state => { spy(state); });
+    component.on('state_changed', state => { spy(state); });
     component.mount(document.body, { event: true });
     expect(spy).toHaveBeenCalledWith('x');
     component.run('hi', 'abc');
@@ -106,7 +121,7 @@ describe('Component', ()=> {
 
   it('should trigger state changed event to global with custom event name', () => {
     const spy = jasmine.createSpy('spy');
-    app.on('changed', state => { spy(state); });
+    component.on('changed', state => { spy(state); });
     component.mount(document.body, { event: { name: 'changed' } });
     expect(spy).toHaveBeenCalledWith('x');
     component.run('hi', 'ab');

@@ -24,7 +24,11 @@ import app, { App } from './app';
       this._history_idx = this._history.length - 1;
     }
     if (this.state_changed) {
-      app.run(this.state_changed, this.state);
+      if (this.global_event) {
+        app.run(this.state_changed, this.state);
+      } else {
+        this.run(this.state_changed, this.state);
+      }  
     }
   }
 
@@ -68,9 +72,12 @@ import app, { App } from './app';
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
 
+    this.state_changed = options.event && (options.event.name || 'state_changed');
+    this.global_event = options.global_event;
     this.enable_history = !!options.history;
+    
     if (this.enable_history) {
-      this.on(options.history.prev || 'history-prev', () => {
+      const prev = () => {
         this._history_idx --;
         if (this._history_idx >=0) {
           this.set_state(this._history[this._history_idx]);
@@ -78,8 +85,9 @@ import app, { App } from './app';
         else {
           this._history_idx = 0;
         }
-      });
-      this.on(options.history.next || 'history-next', () => {
+      };
+
+      const next = () => {
         this._history_idx ++;
         if (this._history_idx < this._history.length) {
           this.set_state(this._history[this._history_idx]);
@@ -87,10 +95,15 @@ import app, { App } from './app';
         else {
           this._history_idx = this._history.length - 1;
         }
-      });
+      };
+      if (this.global_event) {
+        app.on(options.history.prev || 'history-prev', prev)
+        app.on(options.history.next || 'history-next', next)
+      } else {
+        this.on(options.history.prev || 'history-prev', prev)
+        this.on(options.history.next || 'history-next', next)
+      }
     }
-    this.state_changed = options.event && (options.event.name || 'state_changed');
-    this.global_event = options.global_event;
     this.add_actions();
     if (this.state === undefined) this.state = this['model'];
     if (options.render) {
