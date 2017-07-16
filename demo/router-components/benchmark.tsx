@@ -49,7 +49,7 @@ const update = {
         return store;
     },
 
-    update(store) {
+    updaterow(store) {
         store.update();
         return store;
     },
@@ -67,14 +67,10 @@ const update = {
     },
 
     swaprows(store) {
-        this.unselect(store);
         store.swapRows();
         return store;
     },
 
-    unselect(store) {
-        store.selected = null;
-    }
 }
 
 const removeAllRows = () => {
@@ -109,7 +105,7 @@ const view = (model) => {
         <button type='button' id='run'>Create 1,000 rows</button>
         <button type='button' id='runlots'>Create 10,000 rows</button>
         <button type='button' id='add'>Append 1,000 rows</button>
-        <button type='button' id='update'>Update every 10th row</button>
+        <button type='button' id='updaterow'>Update every 10th row</button>
         <button type='button' id='clear'>Clear</button>
         <button type='button' id='swaprows'>Swap Rows</button>
     </div>
