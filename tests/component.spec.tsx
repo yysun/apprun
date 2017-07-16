@@ -24,20 +24,26 @@ describe('Component', ()=> {
     expect(component.view).not.toHaveBeenCalled();
   })
 
-  it('should trigger view when mounted', ()=> {
+  it('should trigger view when mounted with render option', ()=> {
     spyOn(component, 'view');
-    component.mount(document.body);
+    component.mount(document.body, { render: true });
     expect(component.element).toBe(document.body);
     expect(component.view).toHaveBeenCalled();
   })
 
-  it('should not trigger view when mounted hidden', () => {
+  it('should not trigger view when mounted', () => {
     spyOn(component, 'view');
-    component.mount(document.body, {hidden: true});
+    component.mount(document.body);
     expect(component.element).toBe(document.body);
     expect(component.view).not.toHaveBeenCalled();
   })
 
+  it('should trigger view when started', () => {
+    spyOn(component, 'view');
+    component.start(document.body);
+    expect(component.element).toBe(document.body);
+    expect(component.view).toHaveBeenCalled();
+  })  
 
   it('should handle local events', ()=> {
     component.mount(document.body);
@@ -63,7 +69,7 @@ describe('Component', ()=> {
 
   it('should track history', () => {
     spyOn(component, 'view');
-    component.mount(document.body, { history: true });
+    component.start(document.body, { history: true });
     expect(component.view).toHaveBeenCalledWith('x');
     component.run('hi', 'xx');
     expect(component.view).toHaveBeenCalledWith('xx');
@@ -77,7 +83,7 @@ describe('Component', ()=> {
 
   it('should track history with custom event name', () => {
     spyOn(component, 'view');
-    component.mount(document.body, { history: { prev: 'prev', next: 'next' } });
+    component.start(document.body, { history: { prev: 'prev', next: 'next' } });
     expect(component.view).toHaveBeenCalledWith('x');
     component.run('hi', 'xx');
     expect(component.view).toHaveBeenCalledWith('xx');

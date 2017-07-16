@@ -93,10 +93,10 @@ import app, { App } from './app';
     this.global_event = options.global_event;
     this.add_actions();
     if (this.state === undefined) this.state = this['model'];
-    if (options.hidden) {
-      this.push_to_history(this.state);
-    } else {
+    if (options.render) {
       this.push_state(this.state);
+    } else {
+      this.push_to_history(this.state);
     }  
     return this;
   }
@@ -141,6 +141,10 @@ import app, { App } from './app';
       super.run(name, ...args);
   }
 
-  start = (element?, options?) => this.mount(element, options);
+  start = (element = null, options: any = {}): Component => {
+    if (typeof options.startRun === 'undefined') options.render = true;
+    return this.mount(element, options);
+  }
+   
   render = () => this.view(this.state);
 }

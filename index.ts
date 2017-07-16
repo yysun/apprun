@@ -16,7 +16,7 @@ app.on('set_render', render => app.render = render);
 app.start = (element: HTMLElement, model: Model, view: View, update: Update, options: any = {}) => {
   if (typeof options.global_event === 'undefined') options.global_event = true;
   const component = new Component(model, view, update);
-  component.mount(element, options);
+  component.start(element, options);
   return component;
 }
 

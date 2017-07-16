@@ -99,7 +99,7 @@ describe('vdom-jsx', () => {
     const element = document.createElement('div');
     element.id = 'main';
     document.body.appendChild(element);
-    new TestComponent().mount('main');
+    new TestComponent().start('main');
     expect(element.textContent).toEqual('x');
   });
 
