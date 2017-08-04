@@ -23,18 +23,12 @@ import app, { App } from './app';
       this._history = [...this._history, state];
       this._history_idx = this._history.length - 1;
     }
-    if (this.state_changed) {
-      if (this.global_event) {
-        app.run(this.state_changed, this.state);
-      } else {
-        this.run(this.state_changed, this.state);
-      }  
-    }
   }
 
   protected set_state(state) {
     this.state = state;
     this.render_state(state);
+    if (this.state_changed) this.run(this.state_changed, this.state);
   }
 
   private push_state(state) {

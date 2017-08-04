@@ -15,7 +15,6 @@ describe('Component', ()=> {
   let component;
   beforeEach(() => {
     component = new TestComponent();
-
   });
 
   it('should allow element to be undefined', ()=> {
@@ -110,38 +109,56 @@ describe('Component', ()=> {
   });
 
 
-  it('should trigger state changed event to global with default event name', () => {
+  it('should trigger state changed event with default event name', () => {
     const spy = jasmine.createSpy('spy');
     component.on('state_changed', state => { spy(state); });
-    component.mount(document.body, { event: true });
+    component.start(document.body, { event: true });
     expect(spy).toHaveBeenCalledWith('x');
     component.run('hi', 'abc');
     expect(spy).toHaveBeenCalledWith('abc');
   });
 
-  it('should trigger state changed event to global with custom event name', () => {
+  it('should not trigger state changed event when mount', () => {
+    const spy = jasmine.createSpy('spy');
+    component.mount(document.body, { event: true })
+      .on('state_changed', state => { spy(state); });
+    expect(spy).not.toHaveBeenCalledWith('x');
+    component.run('hi', 'abc');
+    expect(spy).toHaveBeenCalledWith('abc');
+  });
+
+  
+  it('should trigger state changed global event with default event name', () => {
+    const spy = jasmine.createSpy('spy');
+    app.on('#state_changed', state => { spy(state); });
+    component.start(document.body, { event: { name: '#state_changed' } });
+    expect(spy).toHaveBeenCalledWith('x');
+    component.run('hi', 'abc');
+    expect(spy).toHaveBeenCalledWith('abc');
+  });
+
+
+  it('should trigger state changed event with custom event name', () => {
     const spy = jasmine.createSpy('spy');
     component.on('changed', state => { spy(state); });
-    component.mount(document.body, { event: { name: 'changed' } });
+    component.start(document.body, { event: { name: 'changed' } });
     expect(spy).toHaveBeenCalledWith('x');
     component.run('hi', 'ab');
     expect(spy).toHaveBeenCalledWith('ab');
   });
 
   it('should convert methods to local events', () => {
-    const spy = jasmine.createSpy('spy');
+    let i = 0;
     class Test extends Component {
       state = -1;
-      method1 = (...args) => {
-        spy(...args)
-      }
     }
-    const t = new Test().mount(document.body);
-    spyOn(t, 'method1');
-    t.run('method1', 0, 1, 2)
-    expect(spy).toHaveBeenCalledWith(-1, 0, 1, 2);
+    const t = new Test().mount(document.body, { event: true });
+      t.on('state_changed', state => i = 1);
+    t.start()
+    expect(i).toBe(1)
   });
 
+  
   it('should handle async update', (done) => {
     const fn = async () => new Promise((resolve, reject) => {
       window.setTimeout(() => {
