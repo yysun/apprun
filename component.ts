@@ -142,16 +142,22 @@ import app, { App } from './app';
     });
   }
 
+  start = (element = null, options: any = {}): Component => {
+    if (typeof options.startRun === 'undefined') options.render = true;
+    return this.mount(element, options);
+  }
+  
+  render = () => this.view(this.state); 
+
   public run(name: string, ...args) {
     return this.is_global_event(name) ?
       app.run(name, ...args) :
       super.run(name, ...args);
   }
 
-  start = (element = null, options: any = {}): Component => {
-    if (typeof options.startRun === 'undefined') options.render = true;
-    return this.mount(element, options);
+  public updateState (object) {
+    const state = Object.assign(this.state, object);
+    this.setState(state);
   }
-   
-  render = () => this.view(this.state);
+ 
 }
