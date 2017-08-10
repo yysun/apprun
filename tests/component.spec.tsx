@@ -281,6 +281,11 @@ describe('Component', ()=> {
     expect(i).toBe(8);
   });
 
+  it('should save/attach component to element', () => {
+    component.start(document.body);
+    expect(document.body['_component']).toBe(component);
+  })
+
 });
 
 

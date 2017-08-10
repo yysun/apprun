@@ -16,7 +16,9 @@ import app, { App } from './app';
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
     if (el && app.render) app.render(el, html);
+    if (el) el['_component'] = this;
   }
+
 
   private push_to_history(state) {
     if (this.enable_history) {

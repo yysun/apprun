@@ -122,7 +122,11 @@ describe('vdom-jsx', () => {
       </div>
     }
     update = {
-      // '#hi2': (state, v) => test.setState(v)
+      '#hi2': (state, v) => {
+        const c = document.getElementById('test')['_component'];
+        c.run('#hi', v);
+        return state;
+      }
     }
   }
 
@@ -130,12 +134,11 @@ describe('vdom-jsx', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
     new TestComponent2().start(element);
-    // app.run('#hi2', 'xxxxx');
-    // expect(element.textContent).toEqual('xxxxx');
     expect(element.textContent).toEqual('x');
     app.run('#hi', 'xxxx');
     expect(element.textContent).toEqual('xxxx');
-
+    app.run('#hi2', 'xxxxx');
+    expect(element.textContent).toEqual('xxxxx');
   });
 
 });
