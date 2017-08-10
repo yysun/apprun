@@ -103,30 +103,39 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('x');
   });
 
-  const test = new TestComponent().start('test');
-  const Test = () => test.render();
+  const cache = {}
+  // const test = new TestComponent().start('test');
+  const Test = (state) => {
+    const id = state && state.id || 'test';
+    if (!cache[id]) cache[id] = new TestComponent().start(id);
+    return <div id={id}>
+      {cache[id].render()}
+    </div>
+  }
+
 
   class TestComponent2 extends Component {
     state = '';
     view = (state) => {
-      return <div id='test'>
+      return <div>
         <Test />
       </div>
     }
     update = {
-      '#hi2': (state, v) => test.setState(v)
+      // '#hi2': (state, v) => test.setState(v)
     }
   }
 
-  it('should render component', () => {
+  it('should render stateful component', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
     new TestComponent2().start(element);
-    app.run('#hi2', 'xxxxx');
-    expect(element.textContent).toEqual('xxxxx');
+    // app.run('#hi2', 'xxxxx');
+    // expect(element.textContent).toEqual('xxxxx');
+    expect(element.textContent).toEqual('x');
     app.run('#hi', 'xxxx');
     expect(element.textContent).toEqual('xxxx');
 
   });
-  
+
 });

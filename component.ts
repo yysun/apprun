@@ -69,7 +69,7 @@ import app, { App } from './app';
     this.state_changed = options.event && (options.event.name || 'state_changed');
     this.global_event = options.global_event;
     this.enable_history = !!options.history;
-    
+
     if (this.enable_history) {
       const prev = () => {
         this._history_idx --;
@@ -104,7 +104,7 @@ import app, { App } from './app';
       this.push_state(this.state);
     } else {
       this.push_to_history(this.state);
-    }  
+    }
     return this;
   }
 
@@ -112,31 +112,56 @@ import app, { App } from './app';
     return name && (name.startsWith('#') || name.startsWith('/'));
   }
 
-  add_action(name, action, options?) {
+  add_action(name, action, options?, fn?) {
     if (!action || typeof action !== 'function') return;
-    if (!this.global_event && !this.is_global_event(name)) {
-      this.on(name, (...p) => {
-        this.push_state(action(this.state, ...p));
-      }, options);
+
+    if (typeof fn === 'function') {
+      if (!this.global_event && !this.is_global_event(name)) {
+        this.on(name, (...p) => {
+          this.push_state(action(this.state, ...p));
+          fn(this.state);
+        }, options);
+      } else {
+        app.on(name, (...p) => {
+          this.push_state(action(this.state, ...p));
+          fn(this.state);
+        }, options);
+      }
     } else {
-      app.on(name, (...p) => {
-        this.push_state(action(this.state, ...p));
-      }, options);
+      if (!this.global_event && !this.is_global_event(name)) {
+        this.on(name, (...p) => {
+          this.push_state(action(this.state, ...p));
+        }, options);
+      } else {
+        app.on(name, (...p) => {
+          this.push_state(action(this.state, ...p));
+
+        }, options);
+      }
+
     }
   }
 
   add_actions() {
     const actions = Object.assign(this.update || {}, this);
+    const all = {};
     Object.keys(actions).forEach(name => {
       const action = actions[name];
+      if (typeof action === 'function' || Array.isArray(action)) {
+        name.split(',').forEach(n => all[n.trim()] = action)
+      }
+    })
+
+    Object.keys(all).forEach(name => {
+      const action = all[name];
       if (typeof action === 'function') {
         this.add_action(name, action);
       } else if (Array.isArray(action) && typeof action[0] === 'function') {
-        this.add_action(name, action[0], action[1]);
-        if (action[2] && Array.isArray(action[2])) {
-          action[2].forEach(a => {
-            typeof a ==='string' && this.add_action(a, action[0], action[1]);
-          });
+
+        if (typeof action[1] === 'function') {
+          this.add_action(name, action[0], {}, action[1]);
+        } else {
+          this.add_action(name, action[0], action[1], action[2]);
         }
       }
     });
@@ -146,8 +171,8 @@ import app, { App } from './app';
     if (typeof options.startRun === 'undefined') options.render = true;
     return this.mount(element, options);
   }
-  
-  render = () => this.view(this.state); 
+
+  render = () => this.view(this.state);
 
   public run(name: string, ...args) {
     return this.is_global_event(name) ?
@@ -159,5 +184,5 @@ import app, { App } from './app';
     const state = Object.assign(this.state, object);
     this.setState(state);
   }
- 
+
 }

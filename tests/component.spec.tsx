@@ -42,7 +42,7 @@ describe('Component', ()=> {
     component.start(document.body);
     expect(component.element).toBe(document.body);
     expect(component.view).toHaveBeenCalled();
-  })  
+  })
 
   it('should handle local events', ()=> {
     component.mount(document.body);
@@ -127,7 +127,7 @@ describe('Component', ()=> {
     expect(spy).toHaveBeenCalledWith('abc');
   });
 
-  
+
   it('should trigger state changed global event with default event name', () => {
     const spy = jasmine.createSpy('spy');
     app.on('#state_changed', state => { spy(state); });
@@ -158,7 +158,7 @@ describe('Component', ()=> {
     expect(i).toBe(1)
   });
 
-  
+
   it('should handle async update', (done) => {
     const fn = async () => new Promise((resolve, reject) => {
       window.setTimeout(() => {
@@ -218,7 +218,7 @@ describe('Component', ()=> {
         'method1': [ async _ => {
           const t = await fn();
           i++
-        }, 
+        },
         { once: true } ],
       }
     }
@@ -234,13 +234,12 @@ describe('Component', ()=> {
     }, 500)
   });
 
-
   it('should support update alias', () => {
     let i = 0;
     class Test extends Component {
       state = -1;
       update = {
-        'method1': [_ => ++i, {}, ['m1', 'm2', '#m3']]
+        'method1, m1, m2, #m3': [_ => ++i, {}]
       }
     }
     const t = new Test().start();
@@ -250,6 +249,36 @@ describe('Component', ()=> {
     app.run('#m3');
 
     expect(i).toBe(4);
+  });
+
+  it('should support call back', () => {
+    let i = 0;
+    class Test extends Component {
+      state = -1;
+      update = {
+        'method1': [_ => ++i, _ => ++i]
+      }
+    }
+    const t = new Test().start();
+    t.run('method1');
+    expect(i).toBe(2);
+  });
+
+  it('should support call back, alias and options', () => {
+    let i = 0;
+    class Test extends Component {
+      state = -1;
+      update = {
+        'method1, m1, m2, #m3': [_ => ++i, {}, _ => ++i]
+      }
+    }
+    const t = new Test().start();
+    t.run('method1');
+    t.run('m1');
+    t.run('m2');
+    app.run('#m3');
+
+    expect(i).toBe(8);
   });
 
 });
