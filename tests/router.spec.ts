@@ -10,14 +10,14 @@ describe('router', () => {
     expect(fn).not.toHaveBeenCalled();
   });
 
-  it('should fire events if initialized', () => {
+  it('should not fire events if initialized', () => {
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
     app.on('#', fn1);
     app.on('//', fn2);
     new Router();
-    expect(fn1).toHaveBeenCalledWith();
-    expect(fn2).toHaveBeenCalledWith('#');
+    expect(fn1).not.toHaveBeenCalledWith();
+    expect(fn2).not.toHaveBeenCalledWith('#');
   });
 
   it('should fire events if location hash changes', (done) => {
