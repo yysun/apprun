@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.5
+
+* Support stateful component
+* Allow callback function in update tuple
+* Attach component to element
+* Add updateState function to update state properties
+
 ## 1.4
 
 * Support update name alias
@@ -35,7 +42,7 @@
 
 * Added component scoped events
 
-## 0.9 
+## 0.9
 
 * Developed own virtual dom
 * Added JS framework performance demo
@@ -48,7 +55,7 @@
 ## 0.6
 
 * Added router
- 
+
 ......
 
 ## 0.1 - 0.5

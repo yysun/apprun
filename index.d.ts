@@ -7,7 +7,7 @@ declare module 'apprun' {
   };
 
   export type Element = HTMLElement | string;
-  
+
   export type VNode = {
     tag: string,
     props: {},
@@ -27,6 +27,7 @@ declare module 'apprun' {
     setState(state: any): void;
     mount(element?: Element, options?: {}): Component;
     start(element?: Element, options?: {}): Component;
+    updateState(object: any): void;
   }
 
   export const app: App
