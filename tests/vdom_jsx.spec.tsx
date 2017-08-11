@@ -103,35 +103,22 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('x');
   });
 
-  const cache = {}
-  // const test = new TestComponent().start('test');
-  const Test = (state) => {
-    const id = state && state.id || 'test';
-    if (!cache[id]) cache[id] = new TestComponent().mount(id);
-    return <div id={id}>
-      {cache[id].render()}
-    </div>
-  }
-
-  const TestTag = (props) => createComponent(TestComponent, props)
-
-  class TestComponent2 extends Component {
-    state = '';
-    view = (state) => {
-      return <div>
-        <TestTag />
-      </div>
-    }
-    update = {
-      '#hi2': (state, v) => {
-        const c = document.getElementById('test')['_component'];
-        c.run('#hi', v);
-        return state;
+  it('should render stateful component with id', () => {
+    class TestComponent2 extends Component {
+      view = (state) => {
+        return <div>
+          <TestComponent id='test' />
+        </div>
+      }
+      update = {
+        '#hi2': (state, v) => {
+          const c = document.getElementById('test')['_component'];
+          c.run('#hi', v);
+          return state;
+        }
       }
     }
-  }
 
-  it('should render stateful component', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
     new TestComponent2().start(element);
@@ -142,31 +129,26 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('xxxxx');
   });
 
-  class TestComponent3 extends Component {
-    state = '';
-    view = (state) => {
-      return <div>
-        <TestComponent id='test3'/>
-      </div>
-    }
-    update = {
-      '#hi3': (state, v) => {
-        const c = document.getElementById('test3')['_component'];
-        c.run('#hi', v);
-        return state;
+  it('should generate id for stateful component', () => {
+
+    class TestComponent3 extends Component {
+      view = (state) => {
+        return <div>
+          <TestComponent />
+          <TestComponent />
+          <TestComponent />
+        </div>
       }
     }
-  }
 
-  fit('should render stateful component automatically', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
     new TestComponent3().start(element);
-    expect(element.textContent).toEqual('x');
-    app.run('#hi', 'xxxx');
-    expect(element.textContent).toEqual('xxxx');
-    app.run('#hi3', 'xxxxx');
-    expect
-  })
+    expect(document.getElementById('_TestComponent_1')['_component']).not.toBeNull();
+    expect(document.getElementById('_TestComponent_2')['_component']).not.toBeNull();
+    expect(document.getElementById('_TestComponent_3')['_component']).not.toBeNull();
+    expect(element.textContent).toEqual('xxx');
+  });
+
 
 })

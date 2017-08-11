@@ -25,18 +25,22 @@ export const createElement = (tag: string | Function, props: {}, ...children) =>
     }
   });
   if (typeof tag === 'string') return { tag, props, children: ch };
-  // else if (typeof tag === 'function' && tag.prototype && tag.prototype.render)
-  //   return (props)=>createComponent(tag, props);
+  else if (Object.getPrototypeOf(tag).name === 'Component') {
+    const id = props && props['id'] || `_${tag.name}_${++idx}`;
+    return createComponent(tag, id);
+  }
   else
     return tag(props, ch);
 };
 
+let idx = 0;
 const keyCache = {};
 
 export const updateElement = render;
 
 export function render(element: Element, node: VNode) {
   // console.log('render', element, node);
+  idx = 0;
 
   if (!node || !element) return;
   if (!element.firstChild) {
