@@ -1,5 +1,5 @@
 import { } from 'jasmine';
-import app, { Component } from '../index';
+import app, { Component, createComponent } from '../index';
 
 const model = 'x';
 const view = _ => <div>{_}</div>;
@@ -18,7 +18,7 @@ class TestComponent extends Component {
 describe('vdom-jsx', () => {
 
   let element;
-  beforeEach(()=>{
+  beforeEach(() => {
     element = document.createElement('div');
     app.start(element, model, view, update);
   });
@@ -51,8 +51,8 @@ describe('vdom-jsx', () => {
   });
 
   it('should render custom element', () => {
-    const CustomElement = ({val}) => <div>{val}</div>;
-    const view = _ => <CustomElement val= {_} />;
+    const CustomElement = ({ val }) => <div>{val}</div>;
+    const view = _ => <CustomElement val={_} />;
     const element = document.createElement('div');
     document.body.appendChild(element);
     app.start(element, model, view, update);
@@ -61,14 +61,14 @@ describe('vdom-jsx', () => {
   });
 
   it('should render nested element', () => {
-    const CustomElement = ({val}) => <li>{val}</li>;
+    const CustomElement = ({ val }) => <li>{val}</li>;
     const view = _ => (
-    <ul>
-      <CustomElement val= {_+'1'} />
-      <CustomElement val= {_+'2'} />
-      <CustomElement val= {_+'3'} />
-      <CustomElement val= {_+'4'} />
-    </ul>);
+      <ul>
+        <CustomElement val={_ + '1'} />
+        <CustomElement val={_ + '2'} />
+        <CustomElement val={_ + '3'} />
+        <CustomElement val={_ + '4'} />
+      </ul>);
     const element = document.createElement('div');
     document.body.appendChild(element);
     app.start(element, '', view, update);
@@ -107,18 +107,19 @@ describe('vdom-jsx', () => {
   // const test = new TestComponent().start('test');
   const Test = (state) => {
     const id = state && state.id || 'test';
-    if (!cache[id]) cache[id] = new TestComponent().start(id);
+    if (!cache[id]) cache[id] = new TestComponent().mount(id);
     return <div id={id}>
       {cache[id].render()}
     </div>
   }
 
+  const TestTag = (props) => createComponent(TestComponent, props)
 
   class TestComponent2 extends Component {
     state = '';
     view = (state) => {
       return <div>
-        <Test />
+        <TestTag />
       </div>
     }
     update = {
@@ -141,4 +142,31 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('xxxxx');
   });
 
-});
+  class TestComponent3 extends Component {
+    state = '';
+    view = (state) => {
+      return <div>
+        <TestComponent id='test3'/>
+      </div>
+    }
+    update = {
+      '#hi3': (state, v) => {
+        const c = document.getElementById('test3')['_component'];
+        c.run('#hi', v);
+        return state;
+      }
+    }
+  }
+
+  fit('should render stateful component automatically', () => {
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    new TestComponent3().start(element);
+    expect(element.textContent).toEqual('x');
+    app.run('#hi', 'xxxx');
+    expect(element.textContent).toEqual('xxxx');
+    app.run('#hi3', 'xxxxx');
+    expect
+  })
+
+})

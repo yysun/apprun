@@ -1,3 +1,5 @@
+import createComponent from './createComponent';
+
 type VNode = {
   tag: string,
   props: {},
@@ -23,7 +25,10 @@ export const createElement = (tag: string | Function, props: {}, ...children) =>
     }
   });
   if (typeof tag === 'string') return { tag, props, children: ch };
-  return tag(props, ch);
+  // else if (typeof tag === 'function' && tag.prototype && tag.prototype.render)
+  //   return (props)=>createComponent(tag, props);
+  else
+    return tag(props, ch);
 };
 
 const keyCache = {};

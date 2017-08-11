@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 
- export class Component extends App {
+export class Component extends App {
 
   element;
   private _history = [];
