@@ -15,7 +15,7 @@ declare module 'apprun' {
   }
 
   export class App {
-    start(element: HTMLElement, model: Model, view: View, update: Update, options?: any): void;
+    start(element: Element, model: Model, view: View, update: Update, options?: any): void;
     on(name: string, fn: (...args) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
 
