@@ -16,8 +16,8 @@ describe('router', () => {
     app.on('#', fn1);
     app.on('//', fn2);
     new Router();
-    expect(fn1).not.toHaveBeenCalledWith();
-    expect(fn2).not.toHaveBeenCalledWith('#');
+    expect(fn1).toHaveBeenCalledWith();
+    expect(fn2).toHaveBeenCalledWith('#');
   });
 
   it('should fire events if location hash changes', (done) => {
