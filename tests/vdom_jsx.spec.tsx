@@ -150,5 +150,37 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('xxx');
   });
 
+  it('should pass props to the constructor of stateful component', () => {
+
+    let nn;
+    class TestComponent4 extends Component {
+      view = (state) => {
+        return <div>
+          <TestComponent />
+          <TestComponent />
+          <TestComponent />
+        </div>
+      }
+
+      constructor({ n }) {
+        super();
+        nn = n
+      }
+    }
+
+    class TestComponent5 extends Component {
+      view = (state) => {
+        return <div>
+          <TestComponent4 n='6'/>
+        </div>
+      }
+    }
+    
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    new TestComponent5().start(element);
+    expect(nn).toEqual('6');
+  });
+
 
 })

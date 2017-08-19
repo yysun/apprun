@@ -27,7 +27,7 @@ export const createElement = (tag: string | Function, props: {}, ...children) =>
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (Object.getPrototypeOf(tag).name) {
     const id = props && props['id'] || `_${tag.name}_${++idx}`;
-    return createComponent(tag, id);
+    return createComponent(tag, id, props);
   }
   else
     return tag(props, ch);
