@@ -145,7 +145,7 @@ export class Component extends App {
       super.run(name, ...args);
   }
 
-  public on(name: string, fn?: Function, options?: any) {
+  public on(name: string, fn: (...args) => void, options?: any) {
     return this.global_event || this.is_global_event(name) ?
       app.on(name, fn, options) :
       super.on(name, fn, options);

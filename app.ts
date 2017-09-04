@@ -1,39 +1,44 @@
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/debounceTime';
-
 export class App {
 
-  private subjects = {}
+  private _events: Object;
 
+  public start;
   public createElement;
   public render;
 
-  public start;
+  constructor() {
+    this._events = {};
+  }
 
-  on(name: string, fn?: Function, options?: any) : Observable<{}> | Subscription {
-    this.subjects[name] || (this.subjects[name] = new Subject);
-    let subject = this.subjects[name] as Observable<{}>;
-    if (!fn) return subject;
-    options = options || {};
+  on(name: string, fn: (...args) => void, options: any = {}) {
     if (options.debug) console.log('on: ' + name);
-    if (options.delay) subject = subject.debounceTime(options.delay);
-    if (options.once) subject = subject.first();
-    return subject.subscribe((args) => {
-      if (options.debug) console.log('run: ' + name, args);
-      fn.apply(this, args);
+    this._events[name] = this._events[name] || [];
+    this._events[name].push({ fn: fn, options: options });
+  }
+
+  run(name: string, ...args) {
+    const subscribers = this._events[name];
+    console.assert(!!subscribers, 'No subscriber for event: ' + name);
+    if (subscribers) this._events[name] = subscribers.filter((sub) => {
+      let { fn, options } = sub;
+      if (options.delay) {
+        this.delay(name, fn, args, options);
+      } else {
+        if (options.debug) console.log('run: ' + name, args);
+        fn.apply(this, args);
+      }
+      return !sub.options.once;
     });
   }
 
-  run(name: string, ...args: any[]): Subject<{}> {
-    const subject = this.subjects[name];
-    console.assert(!!subject, 'No subscriber for event: ' + name);
-    if (subject) {
-      subject.next(args);
-      return subject as Subject<{}>;
-    }
+  private delay(name, fn, args, options) {
+    if (options._t) clearTimeout(options._t);
+    options._t = setTimeout(() => {
+      clearTimeout(options._t);
+      if (options.debug) console.log(`run-delay ${options.delay}:` + name, args);
+      fn.apply(this, args);
+    }, options.delay);
   }
 }
+
 export default new App();
