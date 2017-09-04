@@ -57,6 +57,10 @@ AppRun applications are built using components, like React. Each component has a
 * The [Hacker News](https://yysun.github.io/apprun-hn) example was written in 230 line.
 * The [RealWorld/Conduit](https://github.com/yysun/realworld-starter-kit) -- working in progress.
 
+## Video Tutorials
+
+* [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
+* [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
 
 ## Install
 
