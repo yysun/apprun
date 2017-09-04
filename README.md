@@ -1,38 +1,14 @@
 # AppRun
 
-AppRun is a lightweight library for developing applications using the [elm](http://elm-lang.org/) style
+AppRun is a 3K library for developing applications using the [elm](http://elm-lang.org/) style
 [model-view-update architecture](https://guide.elm-lang.org/architecture/)
-based on the [event publication and subscription pattern](docs/event-pubsub.md)
-
-
-## Why
-As mainly a business application developer, I wanted a library that has everything included and is lightweight.
-
-  * router
-  * state management
-  * virtual dom
-  * event system
-  * component
-
-And allows me to:
-
-  * have as little ceremony code as possible
-  * avoid having business logic locked down by framework/library
-  * use with other framework/libraries freely
-
-AppRun is intended to be such a library. Its use of the [event publication and subscription pattern](docs/event-pubsub.md) makes AppRun elegant and different to other frameworks/libraries.
-
-In the [Demo App](https://yysun.github.io/apprun-examples/) built with AppRun,
-
-* The [Todo](https://yysun.github.io/apprun-examples/#todo) component was written 90 in lines.
-* The [Hacker News](https://yysun.github.io/apprun-examples/#hacker-news) component was written in 230 line.
-
+based on the [event publication and subscription pattern](docs/event-pubsub.md).
 
 ## Quick Start
 
 To give it a try, include AppRun in your html.
 ```
-<script src="https://unpkg.com/apprun@latest/dist/apprun.js"</script>
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"</script>
 ```
 
 No other ceremony, you can start write code of model, view and update right away.
@@ -45,7 +21,7 @@ No other ceremony, you can start write code of model, view and update right away
   <title>Counter</title>
 </head>
 <body>
-<script src="https://unpkg.com/apprun@latest/dist/apprun.js"</script>
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"</script>
   <div id="my-app"></div>
   <script>
     const model = 0;
@@ -63,20 +39,30 @@ No other ceremony, you can start write code of model, view and update right away
       '-1': (model) => model - 1
     };
 
-    const element = document.getElementById('my-app');
+    const element = document.getElementById();
     app.start(element, model, view, update);
   </script>
 </body>
 </html>
 ```
 
-Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/2).
+Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb).
+
+The counter example above implements the model-view-update architecture at application level. AppRun makes the model-view-update architecture into components.
+
+AppRun applications are built using components, like React. Each component has a model-view-update architecture that manages component states. Components communicate each other through events. Run the following examples and checkout their source code for more details.
+
+* The [Demo App](https://yysun.github.io/apprun-examples/) is a SPA built with 8 components.
+* The [Todo](https://yysun.github.io/apprun-examples/#todo) component was written 90 in lines.
+* The [Hacker News](https://yysun.github.io/apprun-hn) example was written in 230 line.
+* The [RealWorld/Conduit](https://github.com/yysun/realworld-starter-kit) -- working in progress.
+
 
 ## Install
 
-If interested, you can install AppRun from npm and initialize a TypeScript and webpack configured project:
+If you are interested moving forward, you can install AppRun CLI and initialize a TypeScript and webpack configured project:
 ```
-npm install apprun
+npm install apprun -g
 apprun --init
 npm start
 
@@ -84,7 +70,7 @@ npm start
 
 ## Explore More
 
-To explore more about AppRun, read the following docs.
+AppRun provides everything you need to build a modern application frontend. To explore more about AppRun, read the following docs.
 
 * [Introduction](docs/README.md)
 * [Event Pub and Sub](docs/event-pubsub.md)
@@ -92,6 +78,7 @@ To explore more about AppRun, read the following docs.
 * [Component](docs/component.md)
 * [JSX vs HTML](docs/jsx-html.md)
 * [TypeScript and webpack](docs/build.md)
+
 
 
 ## Contribute

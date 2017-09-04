@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.6
+
+* Move HTML view support to apprun-html.js
+* Remove rxjs
+
 ## 1.5
 
 * Support stateful component

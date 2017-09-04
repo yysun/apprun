@@ -102,7 +102,7 @@ app.start(element, model, view, update);
 
 Try it online: [Simple Counter](https://jsfiddle.net/ap1kgyeb/2).
 
-To summarize abov, the two functions from AppRun (_app.run_ and _app.start_) are all you need to make
+To summarize above, the two functions from AppRun (_app.run_ and _app.start_) are all you need to make
 an application of model-view-update architecture.
 
 ## State Management
