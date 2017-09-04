@@ -265,7 +265,21 @@ describe('Component', ()=> {
     t.run('method1');
     expect(i).toBe(2);
   });
-
+  
+  it('should support options', () => {
+    class Test extends Component {
+      view = (state) => state
+      update = {
+        'method1': [(state, val) => val, {render:false}]
+      }
+    }
+    const t = new Test();
+    t.start(document.body);    
+    spyOn(t, 'view');    
+    t.run('method1', 'x');
+    expect(t.view).not.toHaveBeenCalled();
+  })
+    
   it('should support call back, alias and options', () => {
     let i = 0;
     class Test extends Component {
