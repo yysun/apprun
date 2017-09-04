@@ -147,16 +147,16 @@ describe('Component', ()=> {
     expect(spy).toHaveBeenCalledWith('ab');
   });
 
-  it('should convert methods to local events', () => {
-    let i = 0;
-    class Test extends Component {
-      state = -1;
-    }
-    const t = new Test().mount(document.body, { event: true });
-      t.on('state_changed', state => i = 1);
-    t.start()
-    expect(i).toBe(1)
-  });
+  // xit('should convert methods to local events', () => {
+  //   let i = 0;
+  //   class Test extends Component {
+  //     state = -1;
+  //   }
+  //   const t = new Test().mount(document.body, { event: true });
+  //     t.on('state_changed', state => i = 1);
+  //   t.start()
+  //   expect(i).toBe(1)
+  // });
 
 
   it('should handle async update', (done) => {
@@ -168,11 +168,13 @@ describe('Component', ()=> {
     const spy = jasmine.createSpy('spy');
     class Test extends Component {
       state = -1;
-      method1 = async (...args) => {
-        const v = await fn();
-        return v;
-      }
       view = state => spy(state);
+      update = {
+        method1: async (...args) => {
+          const v = await fn();
+          return v;
+        }
+      }
     }
     const t = new Test().start();
     t.run('method1')

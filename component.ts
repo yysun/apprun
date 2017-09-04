@@ -108,7 +108,7 @@ export class Component extends App {
   }
 
   add_actions() {
-    const actions = Object.assign(this.update || {}, this);
+    const actions = this.update || {};
     const all = {};
     Object.keys(actions).forEach(name => {
       const action = actions[name];
