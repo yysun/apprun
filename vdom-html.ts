@@ -1,17 +1,17 @@
+import { createElement, updateElement } from './vdom-my';
 import morph = require('morphdom')
 
-export function updateElement(element, html) {
+export function render(element, html) {
   console.assert(!!element);
-
   if (typeof html === 'string') {
     if (element.firstChild) {
       morph(element.firstChild, html);
     } else {
       element.innerHTML = html;
     }
+  } else {
+    updateElement(element, html);
   }
-
 }
-
-
+export { createElement };
 

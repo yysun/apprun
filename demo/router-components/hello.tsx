@@ -25,7 +25,7 @@ class HelloComponent extends Component {
   model = 'world'; // model can be used as initial state
 
   view = (val) => {
-    app.run('set_createElement', createElement(this));
+    app.createElement = createElement(this);
     const ret = <div>
       <Hello name={val} />
       Delayed event: <input value={val} oninput={e=>this.run('input', e)} /><br />
@@ -34,17 +34,15 @@ class HelloComponent extends Component {
       Set target: <input value={val} oninput={this} /><br />
       Set target and name: <input value={val} oninput={[this, 'input']} />
     </div>
-    app.run('set_createElement', h);
+    app.createElement = h;
     return ret;
   };
 
   update = {
     '#hello': (model, pushState) => pushState || model,
     'input': [(_, e) => e.target.value, {delay: 1000, debug: true}],
-    // 'oninput': (_, e) => e.target.value
+    'oninput': (_, e) => e.target.value
   }
-  
-  oninput = (_, e) => e.target.value // will be converted to update functions
 }
 
 export default (element) => new HelloComponent().mount(element);
