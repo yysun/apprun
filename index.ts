@@ -11,10 +11,10 @@ export type Update = { [name: string]: Action };
 app.createElement = createElement;
 app.render = render;
 
-app.start = (element: HTMLElement | string, model: Model, view: View, update: Update, options: any = {}) => {
-  if (typeof options.global_event === 'undefined') options.global_event = true;
+app.start = (element: HTMLElement | string, model: Model, view: View, update: Update, options?: { history }) => {
+  const opts = Object.assign(options || {}, { render: true, global_event: true} )
   const component = new Component(model, view, update);
-  component.start(element, options);
+  component.mount(element, opts);
   return component;
 }
 

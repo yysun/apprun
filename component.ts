@@ -9,6 +9,7 @@ export class Component extends App {
   private enable_history;
   private state_changed: string;
   private global_event;
+  protected rendered;
 
   private renderState(state) {
     if (!this.view) return;
@@ -19,26 +20,27 @@ export class Component extends App {
     if (el) el['_component'] = this;
   }
 
-  public setState(state, render = true, history = false) {
-    
+  public setState(state, options: {render:boolean, history:boolean, callback?}) {
     if (state instanceof Promise) {
       // state will be rendered, but not saved
-      if (render) this.renderState(state);
+      if (options.render !== false) this.renderState(state);
       // state will be saved when promise is resolved
       state.then(s => {
-        this.setState(s, render, history)
+        this.setState(s, options)
       }).catch(err => {
         console.error(err);
         throw err;
       })
     } else {
       this.state = state;
-      if (render) this.renderState(state);
-      if (history && this.enable_history) {
+      if (options.render !== false) this.renderState(state);
+      if (options.history !== false && this.enable_history) {
         this._history = [...this._history, state];
         this._history_idx = this._history.length - 1;
       }
-      if (this.state_changed) this.run(this.state_changed, this.state);
+      if (typeof options.callback === 'function') options.callback(this.state);  
+      // if (this.state_changed) this.run(this.state_changed, this.state);
+      if (this.rendered) (this.rendered(this.state));
     }
   }
 
@@ -50,13 +52,13 @@ export class Component extends App {
     super();
   }
 
-  public mount(element = null, options: any = {}) {
+  public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
 
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
 
-    this.state_changed = options.event && (options.event.name || 'state_changed');
+    // this.state_changed = options.event && (options.event.name || 'state_changed');
     this.global_event = options.global_event;
     this.enable_history = !!options.history;
 
@@ -64,7 +66,7 @@ export class Component extends App {
       const prev = () => {
         this._history_idx --;
         if (this._history_idx >=0) {
-          this.setState(this._history[this._history_idx], true);
+          this.setState(this._history[this._history_idx], { render: true, history: false });
         }
         else {
           this._history_idx = 0;
@@ -74,7 +76,7 @@ export class Component extends App {
       const next = () => {
         this._history_idx ++;
         if (this._history_idx < this._history.length) {
-          this.setState(this._history[this._history_idx], true);
+          this.setState(this._history[this._history_idx], { render: true, history: false });
         }
         else {
           this._history_idx = this._history.length - 1;
@@ -84,11 +86,11 @@ export class Component extends App {
       this.on(options.history.next || 'history-next', next)
     }
     this.add_actions();
-    if (this.state === undefined) this.state = this['model'];
+    if (this.state === undefined) this.state = this['model'] || {};
     if (options.render) {
-      this.setState(this.state, true, true);
+      this.setState(this.state, { render: true, history: true });
     } else {
-      this.setState(this.state, false, true);
+      this.setState(this.state, { render: false, history: true });
     }
     return this;
   }
@@ -97,13 +99,14 @@ export class Component extends App {
     return name && (name.startsWith('#') || name.startsWith('/'));
   }
 
-  add_action(name, action, options: any = {}, fn?) {
+  add_action(name, action, options: any = {}) {
     if (!action || typeof action !== 'function') return;
     this.on(name, (...p) => {
-      this.setState(action(this.state, ...p),
-        options.render !== false,
-        options.history !== false);
-      if (typeof fn === 'function') fn(this.state);
+      const newState = action(this.state, ...p);
+      if (newState == null) {
+      } else {
+        this.setState(newState, options)        
+      }
     }, options);
   }
 
@@ -121,20 +124,14 @@ export class Component extends App {
       const action = all[name];
       if (typeof action === 'function') {
         this.add_action(name, action);
-      } else if (Array.isArray(action) && typeof action[0] === 'function') {
-
-        if (typeof action[1] === 'function') {
-          this.add_action(name, action[0], {}, action[1]);
-        } else {
-          this.add_action(name, action[0], action[1], action[2]);
-        }
+      } else if (Array.isArray(action)) {
+        this.add_action(name, action[0], action[1]);
       }
     });
   }
 
-  start = (element = null, options: any = {}): Component => {
-    if (typeof options.startRun === 'undefined') options.render = true;
-    return this.mount(element, options);
+  start = (element = null): Component => {
+    return this.mount(element, { render: true });
   }
 
   render = () => this.view(this.state);
@@ -151,9 +148,9 @@ export class Component extends App {
       super.on(name, fn, options);
   }
 
-  public updateState (object) {
+  public updateState (object, options) {
     const state = Object.assign(this.state, object);
-    this.setState(state);
+    this.setState(state, options);
   }
 
 }

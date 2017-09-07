@@ -44,10 +44,20 @@ describe('Component', ()=> {
     expect(component.view).toHaveBeenCalled();
   })
 
+  it('should not trigger when update returns null or undefined', () => {
+    component.mount(document.body);    
+    spyOn(component, 'view');
+    component.start(document.body);
+    component.run('hi');
+    expect(component.view).toHaveBeenCalled();
+    component.run('hi', null);
+    expect(component.view).toHaveBeenCalled();
+  })
+  
   it('should handle local events', ()=> {
     component.mount(document.body);
     spyOn(component, 'view');
-    component.run('hi');
+    component.run('hi', '');
     expect(component.view).toHaveBeenCalled();
   })
 
@@ -61,7 +71,7 @@ describe('Component', ()=> {
   it('should handle global events', ()=> {
     component.mount(document.body);
     spyOn(component, 'view');
-    app.run('#hi');
+    app.run('#hi', '');
     expect(component.view).toHaveBeenCalled();
   })
 
@@ -96,7 +106,7 @@ describe('Component', ()=> {
 
   it('should track history with global custom event name', () => {
     spyOn(component, 'view');
-    component.start(document.body, { history: { prev: 'prev', next: 'next' }, global_event: true });
+    component.mount(document.body, { render: true, history: { prev: 'prev', next: 'next' }, global_event: true });
     expect(component.view).toHaveBeenCalledWith('x');
     app.run('hi', 'xx');
     expect(component.view).toHaveBeenCalledWith('xx');
@@ -108,44 +118,53 @@ describe('Component', ()=> {
     expect(component.view).toHaveBeenCalledWith('xxx');
   });
 
-
-  it('should trigger state changed event with default event name', () => {
+  it('should call rendered function', () => {
     const spy = jasmine.createSpy('spy');
-    component.on('state_changed', state => { spy(state); });
+    component.rendered = state => spy(state);
     component.start(document.body, { event: true });
     expect(spy).toHaveBeenCalledWith('x');
     component.run('hi', 'abc');
     expect(spy).toHaveBeenCalledWith('abc');
   });
 
-  it('should not trigger state changed event when mount', () => {
-    const spy = jasmine.createSpy('spy');
-    component.mount(document.body, { event: true })
-      .on('state_changed', state => { spy(state); });
-    expect(spy).not.toHaveBeenCalledWith('x');
-    component.run('hi', 'abc');
-    expect(spy).toHaveBeenCalledWith('abc');
-  });
+
+  // xit('should trigger state changed event with default event name', () => {
+  //   const spy = jasmine.createSpy('spy');
+  //   component.on('state_changed', state => { spy(state); });
+  //   component.start(document.body, { event: true });
+  //   expect(spy).toHaveBeenCalledWith('x');
+  //   component.run('hi', 'abc');
+  //   expect(spy).toHaveBeenCalledWith('abc');
+  // });
+
+  // xit('should not trigger state changed event when mount', () => {
+  //   const spy = jasmine.createSpy('spy');
+  //   component.mount(document.body, { event: true })
+  //     .on('state_changed', state => { spy(state); });
+  //   expect(spy).not.toHaveBeenCalledWith('x');
+  //   component.run('hi', 'abc');
+  //   expect(spy).toHaveBeenCalledWith('abc');
+  // });
 
 
-  it('should trigger state changed global event with default event name', () => {
-    const spy = jasmine.createSpy('spy');
-    app.on('#state_changed', state => { spy(state); });
-    component.start(document.body, { event: { name: '#state_changed' } });
-    expect(spy).toHaveBeenCalledWith('x');
-    component.run('hi', 'abc');
-    expect(spy).toHaveBeenCalledWith('abc');
-  });
+  // xit('should trigger state changed global event with default event name', () => {
+  //   const spy = jasmine.createSpy('spy');
+  //   app.on('#state_changed', state => { spy(state); });
+  //   component.start(document.body, { event: { name: '#state_changed' } });
+  //   expect(spy).toHaveBeenCalledWith('x');
+  //   component.run('hi', 'abc');
+  //   expect(spy).toHaveBeenCalledWith('abc');
+  // });
 
 
-  it('should trigger state changed event with custom event name', () => {
-    const spy = jasmine.createSpy('spy');
-    component.on('changed', state => { spy(state); });
-    component.start(document.body, { event: { name: 'changed' } });
-    expect(spy).toHaveBeenCalledWith('x');
-    component.run('hi', 'ab');
-    expect(spy).toHaveBeenCalledWith('ab');
-  });
+  // xit('should trigger state changed event with custom event name', () => {
+  //   const spy = jasmine.createSpy('spy');
+  //   component.on('changed', state => { spy(state); });
+  //   component.start(document.body, { event: { name: 'changed' } });
+  //   expect(spy).toHaveBeenCalledWith('x');
+  //   component.run('hi', 'ab');
+  //   expect(spy).toHaveBeenCalledWith('ab');
+  // });
 
   // xit('should convert methods to local events', () => {
   //   let i = 0;
@@ -258,7 +277,7 @@ describe('Component', ()=> {
     class Test extends Component {
       state = -1;
       update = {
-        'method1': [_ => ++i, _ => ++i]
+        'method1': [_ => ++i, { callback: _ => ++i }]
       }
     }
     const t = new Test().start();
@@ -285,7 +304,7 @@ describe('Component', ()=> {
     class Test extends Component {
       state = -1;
       update = {
-        'method1, m1, m2, #m3': [_ => ++i, {}, _ => ++i]
+        'method1, m1, m2, #m3': [_ => ++i, { callback: _ => ++i }]
       }
     }
     const t = new Test().start();
