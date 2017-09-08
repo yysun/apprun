@@ -4,9 +4,18 @@ class TestComponent extends Component {
 
   state = 'x';
   view = (state) => state
+  
   update = {
     'hi': (state, value) => value,
-    '#hi': (state, value) => value
+    '#hi': (state, value) => value,
+    'hiNull': (state, value) => null,
+    'hiAsync': async (state, value) => {
+      return new Promise(resolve => {
+        resolve(value);
+      })
+    },
+    'hiAsyncNull': async (state, value) => {
+    }  
   }
 }
 
@@ -45,13 +54,23 @@ describe('Component', ()=> {
   })
 
   it('should not trigger when update returns null or undefined', () => {
-    component.mount(document.body);    
-    spyOn(component, 'view');
-    component.start(document.body);
-    component.run('hi');
-    expect(component.view).toHaveBeenCalled();
+    component.mount(document.body);
+    spyOn(component, 'view');    
     component.run('hi', null);
-    expect(component.view).toHaveBeenCalled();
+    expect(component.view).not.toHaveBeenCalled();
+    component.run('hiNull');
+    expect(component.view).not.toHaveBeenCalled();    
+  })
+
+  it('should not trigger when update returns null or undefined with async', () => {
+    component.mount(document.body);
+    spyOn(component, 'view');
+    component.run('hiAsync', null);
+    expect(component.view).not.toHaveBeenCalledWith(); //Promise
+    expect(component.state).not.toBeNull();
+    component.run('hiAsyncNull');
+    expect(component.view).not.toHaveBeenCalledWith(); //Promise
+    expect(component.state).not.toBeNull();
   })
   
   it('should handle local events', ()=> {

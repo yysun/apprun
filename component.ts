@@ -7,7 +7,6 @@ export class Component extends App {
   private _history = [];
   private _history_idx = -1;
   private enable_history;
-  private state_changed: string;
   private global_event;
   protected rendered;
 
@@ -32,6 +31,7 @@ export class Component extends App {
         throw err;
       })
     } else {
+      if (state == null) return;
       this.state = state;
       if (options.render !== false) this.renderState(state);
       if (options.history !== false && this.enable_history) {
@@ -39,7 +39,6 @@ export class Component extends App {
         this._history_idx = this._history.length - 1;
       }
       if (typeof options.callback === 'function') options.callback(this.state);
-      // if (this.state_changed) this.run(this.state_changed, this.state);
       if (this.rendered) (this.rendered(this.state));
     }
   }
@@ -57,8 +56,6 @@ export class Component extends App {
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = Object.assign(this.options || {}, options);
     this.element = element;
-
-    // this.state_changed = options.event && (options.event.name || 'state_changed');
     this.global_event = options.global_event;
     this.enable_history = !!options.history;
 
@@ -103,10 +100,7 @@ export class Component extends App {
     if (!action || typeof action !== 'function') return;
     this.on(name, (...p) => {
       const newState = action(this.state, ...p);
-      if (newState == null) {
-      } else {
         this.setState(newState, options)
-      }
     }, options);
   }
 
