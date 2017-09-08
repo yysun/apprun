@@ -159,19 +159,75 @@ function component(name) {
     `Creating component ${name}`)
 }
 
+
+const karma_config = `var webpackConfig = require('./webpack.config');
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ["jasmine"],
+    files: [
+      { pattern: "tests/*.spec.*" }
+    ],
+    exclude: [
+    ],
+    preprocessors: {
+      'tests/*.spec.*': ['webpack'],
+    },
+    webpack: webpackConfig,
+    reporters: ["progress"],
+    colors: true,
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
+    browsers: ['Chrome'],
+    mime: {
+      'text/x-typescript': ['ts', 'tsx']
+    }
+  })
+}`
+
+function karma_init() {
+  console.log('Installing karma');
+  execSync('npm i @types/jasmine jasmine-core karma karma-chrome-launcher karma-jasmine karma-webpack --save-dev');
+  write('karma.conf.js', karma_config);
+}
+
+const test_template = `import app from 'apprun'
+import #name from './#name';
+
+describe('component', () => {
+  it('should update state', (done) => {
+    app.run('route', '##name');
+    setTimeout(() => {
+      expect(#name.state).toBe('#name');
+      done();
+    })
+  })
+})
+`
+function karma_test(name) {
+  const fn = path.resolve(name + '.spec.ts');
+  write(fn, test_template.replace(/\#name/g, name),
+    `Creating component spec ${name}`)
+}
+
 program
- .version('1.3.0')
- .option('-i, --init', 'Initialize AppRun Project')
- .option('-c, --component <file>', 'Generate AppRun component')
- .option('-g, --git', 'Initialize git repository')
+  .version('1.7.0')
+  .option('-i, --init', 'Initialize AppRun Project')
+  .option('-c, --component <file>', 'Generate AppRun component')
+  .option('-g, --git', 'Initialize git repository')
+  .option('-k, --karma', 'Install karma') 
+  .option('-t, --test <file>', 'Generate component spec')  
  .parse(process.argv);
 
 program._name = 'apprun';
 
-if (!program.init && !program.component && !program.git) {
+if (!program.init && !program.component && !program.git &&
+    !program.karma && !program.test) {
   program.outputHelp();
 }
 
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
+if (program.karma) karma_init();
+if (program.test) karma_test(program.test);
