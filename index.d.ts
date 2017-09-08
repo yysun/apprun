@@ -24,6 +24,7 @@ declare module 'apprun' {
   }
   export class Component extends App {
     constructor(state?: Model, view?: View, update?: Update);
+    state: any;
     setState(state: any, options: { render: boolean, history: boolean, callback?}): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
     start(element?: Element): Component;
