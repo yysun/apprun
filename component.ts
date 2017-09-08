@@ -38,7 +38,7 @@ export class Component extends App {
         this._history = [...this._history, state];
         this._history_idx = this._history.length - 1;
       }
-      if (typeof options.callback === 'function') options.callback(this.state);  
+      if (typeof options.callback === 'function') options.callback(this.state);
       // if (this.state_changed) this.run(this.state_changed, this.state);
       if (this.rendered) (this.rendered(this.state));
     }
@@ -105,7 +105,7 @@ export class Component extends App {
       const newState = action(this.state, ...p);
       if (newState == null) {
       } else {
-        this.setState(newState, options)        
+        this.setState(newState, options)
       }
     }, options);
   }
@@ -146,11 +146,6 @@ export class Component extends App {
     return this.global_event || this.is_global_event(name) ?
       app.on(name, fn, options) :
       super.on(name, fn, options);
-  }
-
-  public updateState (object, options) {
-    const state = Object.assign(this.state, object);
-    this.setState(state, options);
   }
 
 }

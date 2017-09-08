@@ -27,7 +27,6 @@ declare module 'apprun' {
     setState(state: any, options: { render: boolean, history: boolean, callback?}): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
     start(element?: Element): Component;
-    updateState(object: any, options?: { render: boolean, history: boolean, callback?}): void;
   }
 
   export const app: App
