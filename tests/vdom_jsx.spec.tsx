@@ -1,4 +1,3 @@
-import { } from 'jasmine';
 import app, { Component } from '../index';
 
 const model = 'x';
@@ -175,7 +174,7 @@ describe('vdom-jsx', () => {
         </div>
       }
     }
-    
+
     const element = document.createElement('div');
     document.body.appendChild(element);
     new TestComponent5().start(element);

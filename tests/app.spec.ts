@@ -1,5 +1,4 @@
 import {App} from '../app';
-import {} from 'jasmine';
 
 describe('app events', () => {
 

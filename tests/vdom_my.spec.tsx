@@ -1,4 +1,3 @@
-import { } from 'jasmine';
 import { createElement, updateElement } from '../vdom-my';
 
 describe('vdom-my', () => {

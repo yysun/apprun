@@ -1,4 +1,3 @@
-import { } from 'jasmine';
 import app from '../app';
 import Router from '../router';
 

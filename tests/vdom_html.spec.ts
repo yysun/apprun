@@ -1,4 +1,3 @@
-import { } from 'jasmine';
 import app from '../index-html';
 
 const model = 'y';
