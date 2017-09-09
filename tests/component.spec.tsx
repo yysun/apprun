@@ -4,7 +4,7 @@ class TestComponent extends Component {
 
   state = 'x';
   view = (state) => state
-  
+
   update = {
     'hi': (state, value) => value,
     '#hi': (state, value) => value,
@@ -15,7 +15,7 @@ class TestComponent extends Component {
       })
     },
     'hiAsyncNull': async (state, value) => {
-    }  
+    }
   }
 }
 
@@ -55,11 +55,11 @@ describe('Component', ()=> {
 
   it('should not trigger when update returns null or undefined', () => {
     component.mount(document.body);
-    spyOn(component, 'view');    
+    spyOn(component, 'view');
     component.run('hi', null);
     expect(component.view).not.toHaveBeenCalled();
     component.run('hiNull');
-    expect(component.view).not.toHaveBeenCalled();    
+    expect(component.view).not.toHaveBeenCalled();
   })
 
   it('should not trigger when update returns null or undefined with async', () => {
@@ -72,7 +72,7 @@ describe('Component', ()=> {
     expect(component.view).not.toHaveBeenCalledWith(); //Promise
     expect(component.state).not.toBeNull();
   })
-  
+
   it('should handle local events', ()=> {
     component.mount(document.body);
     spyOn(component, 'view');
@@ -219,8 +219,7 @@ describe('Component', ()=> {
     window.setTimeout(() => {
       const callArgs = spy.calls.allArgs();
       expect(callArgs[0][0]).toBe(-1);
-      expect(callArgs[1][0] instanceof Promise).toBeTruthy();
-      expect(callArgs[2][0]).toBe('xx');
+      expect(callArgs[1][0]).toBe('xx');
       done()
     }, 200);
   });
@@ -303,7 +302,7 @@ describe('Component', ()=> {
     t.run('method1');
     expect(i).toBe(2);
   });
-  
+
   it('should support options', () => {
     class Test extends Component {
       view = (state) => state
@@ -312,12 +311,12 @@ describe('Component', ()=> {
       }
     }
     const t = new Test();
-    t.start(document.body);    
-    spyOn(t, 'view');    
+    t.start(document.body);
+    spyOn(t, 'view');
     t.run('method1', 'x');
     expect(t.view).not.toHaveBeenCalled();
   })
-    
+
   it('should support call back, alias and options', () => {
     let i = 0;
     class Test extends Component {

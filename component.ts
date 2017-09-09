@@ -21,9 +21,8 @@ export class Component extends App {
 
   public setState(state, options: {render:boolean, history:boolean, callback?}) {
     if (state instanceof Promise) {
-      // state will be rendered, but not saved
-      if (options.render !== false) this.renderState(state);
-      // state will be saved when promise is resolved
+      // Promise will not be saved nor rendered saved
+      // state will be saved and rendered when promise is resolved
       state.then(s => {
         this.setState(s, options)
       }).catch(err => {
