@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7
+
+* Add decorator (on and update) for subscribing to event
+* Not to save null or undefined state, nor to call view
+* Add CLI options to initialize karma and create test spec
+
 ## 1.6
 
 * Move HTML view support to apprun-html.js

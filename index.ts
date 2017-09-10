@@ -1,7 +1,8 @@
 import app from './app';
+import { createElement, render } from './vdom';
 import { Component } from './component';
 import Router from './router';
-import { createElement, render } from './vdom';
+import { on, update } from './decorator';
 
 export type Model = any;
 export type View = (model: Model) => string | Function;
@@ -24,4 +25,4 @@ if (typeof window === 'object') {
 }
 
 export default app;
-export { Component };
+export { Component, on, update };

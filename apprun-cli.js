@@ -40,7 +40,8 @@ const tsconfig = `{
     "target": "es5",
     "jsx": "react",
     "reactNamespace": "app",
-    "lib": ["dom", "es2015", "es5"]
+    "lib": ["dom", "es2015", "es5"],
+    "experimentalDecorators": true
   }
 }`
 

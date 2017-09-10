@@ -25,11 +25,13 @@ declare module 'apprun' {
   export class Component extends App {
     constructor(state?: Model, view?: View, update?: Update);
     state: any;
-    setState(state: any, options: { render: boolean, history: boolean, callback?}): void;
+    setState(state: any, options?: { render?: boolean, history?: boolean}): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
     start(element?: Element): Component;
   }
 
+  export function on(name: string, options?: { render?: boolean, history?: boolean }): void;
+  export function update(name: string, options?: { render?: boolean, history?: boolean}): void;
   export const app: App
   export default app;
 }

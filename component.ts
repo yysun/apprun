@@ -1,6 +1,6 @@
 
 import app, { App } from './app';
-
+import 'reflect-metadata';
 export class Component extends App {
 
   element;
@@ -105,6 +105,12 @@ export class Component extends App {
 
   add_actions() {
     const actions = this.update || {};
+    Reflect.getMetadataKeys(this).forEach(key => {
+      if (key.startsWith('apprun-update:')) {
+        const meta = Reflect.getMetadata(key, this)
+        actions[meta.name] = meta.action || this[meta.key]
+      }
+    })
     const all = {};
     Object.keys(actions).forEach(name => {
       const action = actions[name];

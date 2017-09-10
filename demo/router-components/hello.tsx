@@ -1,4 +1,4 @@
-import app, { Component } from '../../index'
+import app, { Component, on } from '../../index'
 
 let h = app.createElement;
 const createElement = (component) => (tag, props, ...children) => {
@@ -32,7 +32,7 @@ class HelloComponent extends Component {
       Default event: <input value={val} oninput /><br />
       Named event: <input value={val} oninput='oninput' /><br />
       Set target: <input value={val} oninput={this} /><br />
-      Set target and name: <input value={val} oninput={[this, 'input']} />
+      Set target and name: <input value={val} oninput={[this, 'oninput']} />
     </div>
     app.createElement = h;
     return ret;
@@ -41,8 +41,11 @@ class HelloComponent extends Component {
   update = {
     '#hello': (model, pushState) => pushState || model,
     'input': [(_, e) => e.target.value, {delay: 1000, debug: true}],
-    'oninput': (_, e) => e.target.value
+    //'oninput': (_, e) => e.target.value
   }
+
+  @on('oninput')
+  oninput = (_, e) => e.target.value // will be converted to update functions
 }
 
 export default (element) => new HelloComponent().mount(element);
