@@ -43,7 +43,6 @@
     "karma-jasmine": "^1.0.2",
     "karma-webpack": "^2.0.4",
     "morphdom": "^2.3.2",
-    "reflect-metadata": "^0.1.10",
     "ts-loader": "^2.3.6",
     "typescript": "^2.5.2",
     "webpack": "^3.0.0",

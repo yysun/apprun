@@ -1,6 +1,6 @@
 
 import app, { App } from './app';
-import 'reflect-metadata';
+import { Reflect } from './decorator'
 export class Component extends App {
 
   element;
