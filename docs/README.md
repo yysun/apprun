@@ -100,7 +100,7 @@ const element = document.getElementById('my-app');
 app.start(element, model, view, update);
 ```
 
-Try it online: [Simple Counter](https://jsfiddle.net/ap1kgyeb/2).
+Try it online: [Simple Counter](https://jsfiddle.net/ap1kgyeb/4).
 
 To summarize above, the two functions from AppRun (_app.run_ and _app.start_) are all you need to make
 an application of model-view-update architecture.
@@ -114,7 +114,7 @@ It also maintains a state history. The application can have the time travel / un
 * Make Update create immutable state
 * Enable AppRun state history
 
-Try it online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/3/)
+Try it online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/6)
 
 ## Virtual DOM
 

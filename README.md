@@ -1,9 +1,11 @@
 # AppRun
 
+![logo](logo.png)
+
 AppRun is a 3K library for developing applications using the [elm](http://elm-lang.org/) style
 [model-view-update architecture](https://guide.elm-lang.org/architecture/)
-based on the [event publication and subscription pattern](docs/event-pubsub.md).
-
+and the [event publication and subscription](docs/event-pubsub.md).
+.
 ## Quick Start
 
 To give it a try, include AppRun in your html.
@@ -46,21 +48,26 @@ No other ceremony, you can start write code of model, view and update right away
 </html>
 ```
 
-Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb).
+Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
-The counter example above implements the model-view-update architecture at application level. AppRun makes the model-view-update architecture into components.
+The counter example above implements the model-view-update architecture at application level. AppRun applications can also be built using components. Each component has a model-view-update architecture that manages component state. Components communicate each other through events. Run the following examples and checkout their source code for more details.
 
-AppRun applications are built using components, like React. Each component has a model-view-update architecture that manages component states. Components communicate each other through events. Run the following examples and checkout their source code for more details.
-
-* The [Demo App](https://yysun.github.io/apprun-examples/) is a SPA built with 8 components.
-* The [Todo](https://yysun.github.io/apprun-examples/#todo) component was written 90 in lines.
-* The [Hacker News](https://yysun.github.io/apprun-hn) example was written in 230 line.
-* The [RealWorld/Conduit](https://github.com/yysun/realworld-starter-kit) -- working in progress.
+* [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
+* [Todo](https://yysun.github.io/apprun-examples/#todo) component in 90 lines
+* [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 line
+* [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) 
 
 ## Video Tutorials
 
 * [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
 * [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
+
+## Articles
+
+* [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
+* [Dynamic Components Using TypeScript 2.4](https://medium.com/@yiyisun/dynamic-components-using-typescript-2-4-de109be6d135)
+* [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
+* [Deep Dive into AppRun Events]()
 
 ## Install
 

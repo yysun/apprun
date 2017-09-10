@@ -98,7 +98,7 @@ Once the update has updated the state, AppRun passes the new state into the view
 
 That's all. _app.start_ function and _app.run_ function are all you need.
 
-Try it online: [Counter](https://jsfiddle.net/ap1kgyeb/2).
+Try it online: [Counter](https://jsfiddle.net/ap1kgyeb/4).
 
 
 ## State Management
@@ -136,7 +136,7 @@ a history stack.  Application can retrieve the saved state and render it to
 the element, if the application creates immutable state each time it updates. 
 It is helpful for implementing undo and redo.
 
-Try it online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/3/)
+Try it online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/6/)
 
 Next, you will see what is [Component](component.md).
 
