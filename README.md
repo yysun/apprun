@@ -23,7 +23,7 @@ No other ceremony, you can start write code of model, view and update right away
   <title>Counter</title>
 </head>
 <body>
-<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"</script>
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
   <div id="my-app"></div>
   <script>
     const model = 0;
@@ -41,8 +41,7 @@ No other ceremony, you can start write code of model, view and update right away
       '-1': (model) => model - 1
     };
 
-    const element = document.getElementById();
-    app.start(element, model, view, update);
+    app.start('my-app', model, view, update);
   </script>
 </body>
 </html>
@@ -55,7 +54,7 @@ The counter example above implements the model-view-update architecture at appli
 * [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
 * [Todo](https://yysun.github.io/apprun-examples/#todo) component in 90 lines
 * [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 line
-* [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) 
+* [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld)
 
 ## Video Tutorials
 
