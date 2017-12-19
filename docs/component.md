@@ -32,7 +32,7 @@ export class HelloComponent extends Component {
 }
 ```
 
-In the example above, _this.run_ fires a local event. _this.run_ fires a global event.
+In the example above, _this.run_ fires a local event. _app.run_ fires a global event.
 
 ## Routing Event
 
