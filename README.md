@@ -10,10 +10,10 @@ and the [event publication and subscription](docs/event-pubsub.md).
 
 To give it a try, include AppRun in your html.
 ```
-<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"</script>
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
 ```
 
-No other ceremony, you can start write code of model, view and update right away.
+No other ceremony, you can start writing your model, view and update code right away.
 
 ```
 <!doctype html>
@@ -49,10 +49,10 @@ No other ceremony, you can start write code of model, view and update right away
 
 Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
-The counter example above implements the model-view-update architecture at application level. AppRun applications can also be built using components. Each component has a model-view-update architecture that manages component state. Components communicate each other through events. Run the following examples and checkout their source code for more details.
+The counter example above implements the model-view-update architecture at the application level. AppRun applications can also be built using components. Each component has a model-view-update architecture that manages component state. Components communicate with each other through events. Run the following examples and checkout their source code for more details.
 
 * [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
-* [Todo](https://yysun.github.io/apprun-examples/#todo) component in 90 lines
+* [Todo](https://yysun.github.io/apprun-examples/#todo) - component in 90 lines
 * [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 line
 * [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld)
 
@@ -70,7 +70,7 @@ The counter example above implements the model-view-update architecture at appli
 
 ## Install
 
-If you are interested moving forward, you can install AppRun CLI and initialize a TypeScript and webpack configured project:
+If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
 ```
 npm install apprun -g
 apprun --init
@@ -93,7 +93,7 @@ AppRun provides everything you need to build a modern application frontend. To e
 
 ## Contribute
 
-You can launch the webpack dev-server and the demo app from the _demo_ folder by npm commands:
+You can launch the webpack dev-server and the demo app from the _demo_ folder with the following npm commands:
 ```
 npm install
 npm start
@@ -103,9 +103,9 @@ You can run the unit tests from the _tests_ folder.
 ```
 npm test
 ```
-Unit tests can serve as the functional specifications.
+Unit tests can serve as functional specifications.
 
-Finally, to build optimized js files to dist folder by run:
+Finally, to build optimized js files to the dist folder, just run:
 ```
 npm run build
 ```
