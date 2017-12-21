@@ -63,8 +63,11 @@ function update(element: Element, node: VNode) {
   for (let i=0; i<len; i++) {
     const child = node.children[i];
     if (typeof child === 'string') {
-      if (element.childNodes[i].textContent !== child)
+      if (child === '') {
+        element.removeChild(element.childNodes[i]);
+      } else if (element.childNodes[i].textContent !== child) {
         element.replaceChild(createText(child), element.childNodes[i]);
+      }
     } else {
       const key = child.props && child.props['key'];
       const old = key && keyCache[key];
