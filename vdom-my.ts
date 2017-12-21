@@ -13,7 +13,7 @@ const ATTR_PROPS = '_props';
 export const createElement = (tag: string | Function, props: {}, ...children) => {
   let ch = [];
   const push = (c) => {
-    if (c !== null && c !== undefined) {
+    if (c !== null && c !== undefined && c !== '') {
       ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
     }
   }
@@ -63,9 +63,7 @@ function update(element: Element, node: VNode) {
   for (let i=0; i<len; i++) {
     const child = node.children[i];
     if (typeof child === 'string') {
-      if (child === '') {
-        element.removeChild(element.childNodes[i]);
-      } else if (element.childNodes[i].textContent !== child) {
+      if (element.childNodes[i].textContent !== child) {
         element.replaceChild(createText(child), element.childNodes[i]);
       }
     } else {

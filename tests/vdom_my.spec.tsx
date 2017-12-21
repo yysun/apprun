@@ -152,14 +152,25 @@ describe('vdom-my', () => {
   it('it should remove element', () => {
     const element = render(createElement('div', null, 
       createElement('input', null),
+      createElement('input', null),
       createElement('input', null)
     ));
-    expect(element.childNodes.length).toBe(2)    
+    expect(element.childNodes.length).toBe(3)    
     
     render(createElement('div', null, 
-      createElement('input', null), ''
+      createElement('input', null),
+      null,
+      createElement('input', null),
     ));
-    expect(element.childNodes.length).toBe(1)
+    expect(element.childNodes.length).toBe(2)
+
+    render(createElement('div', null,
+      createElement('input', null),
+      '',
+      createElement('input', null),
+    ));
+    expect(element.childNodes.length).toBe(2)
+    
   });
 
 });
