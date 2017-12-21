@@ -1,6 +1,6 @@
 {
   "name": "apprun",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "",
   "main": "dist/apprun.js",
   "types": "index.d.ts",
