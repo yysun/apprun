@@ -2,8 +2,9 @@
 // Generated on Tue Oct 18 2016 08:29:11 GMT-0400 (EDT)
 var webpackConfig = require('./webpack.config');
 
-module.exports = function(config) {
-  config.set({
+module.exports = function (config) {
+  
+  var configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -50,8 +51,21 @@ module.exports = function(config) {
     browsers: ['Chrome'],
 
     mime: {
-      'text/x-typescript': ['ts','tsx']
-    }
+      'text/x-typescript': ['ts', 'tsx']
+    },
 
-  })
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    }
+  };
+
+  if (process.env.TRAVIS) {
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+  
+  config.set(configuration);
+
 }
