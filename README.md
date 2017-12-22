@@ -1,11 +1,11 @@
-# AppRun
+# AppRun [![Build Status](https://travis-ci.org/yysun/apprun.svg?branch=master)](https://travis-ci.org/yysun/apprun)
 
 ![logo](logo.png)
 
 AppRun is a 3K library for developing applications using the [elm](http://elm-lang.org/) style
 [model-view-update architecture](https://guide.elm-lang.org/architecture/)
 and the [event publication and subscription](docs/event-pubsub.md).
-.
+
 ## Quick Start
 
 To give it a try, include AppRun in your html.
@@ -47,14 +47,19 @@ No other ceremony, you can start writing your model, view and update code right 
 </html>
 ```
 
-Or try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
+The example code above is a counter application that has implemented the model-view-update architecture. 
 
-The counter example above implements the model-view-update architecture at the application level. AppRun applications can also be built using components. Each component has a model-view-update architecture that manages component state. Components communicate with each other through events. Run the following examples and checkout their source code for more details.
+Try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
-* [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
-* [Todo](https://yysun.github.io/apprun-examples/#todo) - component in 90 lines
-* [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 line
+Larger applications can be built using components where each component has a model-view-update architecture. 
+
+Run and checkout the source code of following examples for more details.
+
 * [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld)
+* [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 lines
+* [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
+* [Todo w/ undo and redo ](https://yysun.github.io/apprun-examples/#todo) - in 90 lines
+
 
 ## Video Tutorials
 
@@ -64,9 +69,10 @@ The counter example above implements the model-view-update architecture at the a
 ## Articles
 
 * [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
-* [Dynamic Components Using TypeScript 2.4](https://medium.com/@yiyisun/dynamic-components-using-typescript-2-4-de109be6d135)
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
 * [Deep Dive into AppRun Events]()
+* [Dynamic Components Using TypeScript 2.4](https://medium.com/@yiyisun/dynamic-components-using-typescript-2-4-de109be6d135)
+* [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c)
 
 ## Install
 
