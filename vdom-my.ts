@@ -64,13 +64,19 @@ function update(element: Element, node: VNode) {
     const child = node.children[i];
     if (typeof child === 'string') {
       if (element.childNodes[i].textContent !== child) {
-        element.replaceChild(createText(child), element.childNodes[i]);
+        if (element.childNodes[i].nodeType === 3) {
+          element.childNodes[i].textContent = child
+        } else {
+          element.replaceChild(createText(child), element.childNodes[i]);
+        }
       }
     } else {
       const key = child.props && child.props['key'];
-      const old = key && keyCache[key];
-      if (old && old!==element.childNodes[i]) {
-        element.insertBefore(old, element.childNodes[i]);
+      if (key && element.childNodes[i].key !== key) {
+        const old = key && keyCache[key];
+        if (old) {
+          element.insertBefore(old, element.childNodes[i]);
+        }
       }
       update(element.childNodes[i], child);
     }
@@ -122,30 +128,11 @@ function create(node: VNode | string): Element {
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag);
 
-  setProps(element, node.props);
+  updateProps(element, node.props);
 
   if (node.children) node.children.forEach(child => element.appendChild(create(child)));
 
   return element
-}
-
-function setProps(element: Element, props: {}) {
-  console.assert(!!element);
-  if (!props) return;
-  // console.log('setProps', element, props);
-
-  element[ATTR_PROPS] = props;
-  for(let name in props) {
-    const value = props[name];
-    if (name === 'style') {
-      for (let s in value) {
-        element.style[s] = value[s];
-      }
-    } else {
-      element[name] = value;
-      if (name === 'key' && value) keyCache[value] = element;
-    }
-  }
 }
 
 function mergeProps(a:{}, b:{}) :{} {
@@ -159,10 +146,13 @@ function updateProps(element: Element, props: {}) {
   console.assert(!!element);
   // console.log('updateProps', element, props);
 
+  const cached = element[ATTR_PROPS] || {};
   props = mergeProps(element[ATTR_PROPS], props);
   element[ATTR_PROPS] = props;
-  for(let name in props) {
+  for (let name in props) {
     const value = props[name];
+    if (cached[name] === value) continue;
+    // console.log('updateProps', name, value);
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
       for (let s in value) {
@@ -174,4 +164,5 @@ function updateProps(element: Element, props: {}) {
     }
   }
 }
+
 export default { createElement, updateElement }
