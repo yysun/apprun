@@ -75,7 +75,6 @@ describe('vdom-my', () => {
   });
 
   it('it should reset and apply new style', () => {
-
     let element = render(createElement('div', null, 'x'));
     expect(element.nodeName).toEqual('DIV');
     expect(element.textContent).toEqual('x');
@@ -84,6 +83,20 @@ describe('vdom-my', () => {
     render(createElement("div", { style: { top: '50px' } }));
     expect(element.style.top).toEqual('50px');
     expect(element.style.left).toEqual('');
+  });
+
+  it('it should reset class and style', () => {
+    let element = render(createElement('div', {
+      className: 'a',
+      style: { left: '5px' }
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.textContent).toEqual('x');
+    expect(element.style.left).toEqual('5px');
+    render(createElement("div", null));
+    expect(element.style.left).toEqual('');
+    expect(element.className).toEqual('');
   });
 
   it('it should flatten children', () => {
@@ -150,14 +163,14 @@ describe('vdom-my', () => {
 
 
   it('it should remove element', () => {
-    const element = render(createElement('div', null, 
+    const element = render(createElement('div', null,
       createElement('input', null),
       createElement('input', null),
       createElement('input', null)
     ));
-    expect(element.childNodes.length).toBe(3)    
-    
-    render(createElement('div', null, 
+    expect(element.childNodes.length).toBe(3)
+
+    render(createElement('div', null,
       createElement('input', null),
       null,
       createElement('input', null),
@@ -170,7 +183,7 @@ describe('vdom-my', () => {
       createElement('input', null),
     ));
     expect(element.childNodes.length).toBe(2)
-    
+
   });
 
 });
