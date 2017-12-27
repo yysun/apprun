@@ -77,7 +77,7 @@ const view = (model) => {
     const rows = model.data.map((curr) => {
         const selected = curr.id == model.selected ? 'danger' : '';
         const id = curr.id;
-        return <tr className={selected} id={id}>
+        return <tr className={selected} id={id} key={id}>
             <td className="col-md-1">{id}</td>
             <td className="col-md-4">
                 <a className="lbl">{curr.label}</a>

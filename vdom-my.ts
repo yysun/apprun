@@ -50,6 +50,13 @@ export function render(element: Element, node: VNode) {
   }
 }
 
+function same(el: Element, node: VNode) {
+  // if (!el || !node) return false;
+  const key1 = el.nodeName;
+  const key2 = `${node.tag || ''}`;
+  return key1 === key2.toUpperCase();
+}
+
 function update(element: Element, node: VNode) {
   console.assert(!!element);
   //console.log('update', element, node);
@@ -62,20 +69,22 @@ function update(element: Element, node: VNode) {
   const len = Math.min(element.childNodes.length, node.children.length);
   for (let i=0; i<len; i++) {
     const child = node.children[i];
+    const el = element.childNodes[i];
     if (typeof child === 'string') {
-      if (element.childNodes[i].textContent !== child) {
-        if (element.childNodes[i].nodeType === 3) {
-          element.childNodes[i].textContent = child
+      if (el.textContent !== child) {
+        if (el.nodeType === 3) {
+          el.textContent = child
         } else {
-          element.replaceChild(createText(child), element.childNodes[i]);
+          element.replaceChild(createText(child), el);
         }
       }
     } else {
       const key = child.props && child.props['key'];
-      if (key && element.childNodes[i].key !== key) {
+      if (key && el.key !== key) {
         const old = key && keyCache[key];
         if (old) {
-          element.insertBefore(old, element.childNodes[i]);
+          element.replaceChild(old, el);
+          element.appendChild(el);
         }
       }
       update(element.childNodes[i], child);
@@ -88,7 +97,7 @@ function update(element: Element, node: VNode) {
     n--;
   }
 
-  if (node.children.length) {
+  if (node.children.length > len) {
     const d = document.createDocumentFragment();
     for (let i=len; i<node.children.length; i++) {
       d.appendChild(create(node.children[i]));
@@ -98,13 +107,6 @@ function update(element: Element, node: VNode) {
 
   updateProps(element, node.props);
 
-}
-
-function same(el: Element, node: VNode) {
-  if (!el || !node) return false;
-  const key1 = `${el.nodeName}`;
-  const key2 = `${node.tag || ''}`;
-  return key1.toLowerCase() === key2.toLowerCase();
 }
 
 function createText(node) {
