@@ -21,7 +21,6 @@ const update = {
 
     run(store) {
         store.run();
-        removeAllRows();
         return store;
     },
 
@@ -56,26 +55,18 @@ const update = {
 
     runlots(store) {
         store.runLots();
-        removeAllRows();
         return store;
     },
 
     clear(store) {
         store.clear();
-        removeAllRows();
         return store;
     },
 
     swaprows(store) {
         store.swapRows();
         return store;
-    },
-
-}
-
-const removeAllRows = () => {
-    const table = document.getElementById('main-table');
-    if (table) table.textContent = '';
+    }
 }
 
 const view = (model) => {

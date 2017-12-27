@@ -27,7 +27,6 @@ export default class Store {
     delete(id) {
         // const idx = this.data.findIndex(d => d.id==id);
         this.data = this.data.filter((e,i) => e.id!=id);
-        return this;
     }
     run() {
         this.data = this.buildData();
@@ -63,11 +62,10 @@ export default class Store {
         this.selected = null;
     }
     swapRows() {
-        if(this.data.length > 10) {
-            var a = this.data[4];
-            this.data[4] = this.data[9];
-            this.data[9] = a;
+        if (this.data.length > 998) {
+            var a = this.data[1];
+            this.data[1] = this.data[998];
+            this.data[998] = a;
         }
     }
-
 }
