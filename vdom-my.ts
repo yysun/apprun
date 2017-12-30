@@ -138,7 +138,7 @@ function create(node: VNode | string): Element {
 }
 
 function mergeProps(a:{}, b:{}) :{} {
-  const props = [];
+  const props = {};
   if(a) Object.keys(a).forEach(p=>props[p]='');
   if(b) Object.keys(b).forEach(p=>props[p]=b[p]);
   return props;
@@ -149,7 +149,7 @@ function updateProps(element: Element, props: {}) {
   // console.log('updateProps', element, props);
 
   const cached = element[ATTR_PROPS] || {};
-  props = mergeProps(element[ATTR_PROPS], props);
+  props = mergeProps(cached, props);
   element[ATTR_PROPS] = props;
   for (let name in props) {
     const value = props[name];
