@@ -80,14 +80,22 @@ function update(element: Element, node: VNode) {
       }
     } else {
       const key = child.props && child.props['key'];
-      if (key && el.key !== key) {
-        const old = key && keyCache[key];
-        if (old) {
-          element.replaceChild(old, el);
-          element.appendChild(el);
+      if (key) {
+        if (el.key === key) {
+          update(element.childNodes[i], child);
+        } else {
+          const old = key && keyCache[key];
+          if (old) {
+            element.replaceChild(old, el);
+            element.appendChild(el);
+            update(element.childNodes[i], child);
+          } else {
+            element.replaceChild(create(node), el);
+          }
         }
+      } else {
+        update(element.childNodes[i], child);
       }
-      update(element.childNodes[i], child);
     }
   }
 
