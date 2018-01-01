@@ -67,7 +67,7 @@ function update(element: Element, node: VNode) {
   }
 
   const len = Math.min(element.childNodes.length, node.children.length);
-  for (let i=0; i<len; i++) {
+  for (let i = 0; i < len; i++) {
     const child = node.children[i];
     const el = element.childNodes[i];
     if (typeof child === 'string') {
@@ -90,7 +90,8 @@ function update(element: Element, node: VNode) {
             element.appendChild(el);
             update(element.childNodes[i], child);
           } else {
-            element.replaceChild(create(node), el);
+            element.appendChild(create(node), el);
+            update(element.childNodes[i], child);
           }
         }
       } else {
@@ -107,7 +108,7 @@ function update(element: Element, node: VNode) {
 
   if (node.children.length > len) {
     const d = document.createDocumentFragment();
-    for (let i=len; i<node.children.length; i++) {
+    for (let i = len; i < node.children.length; i++) {
       d.appendChild(create(node.children[i]));
     }
     element.appendChild(d);
@@ -135,8 +136,8 @@ function create(node: VNode | string): Element {
   if (!node.tag) return createText(JSON.stringify(node));
 
   const element = (node.tag === "svg")
-        ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
-        : document.createElement(node.tag);
+    ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
+    : document.createElement(node.tag);
 
   updateProps(element, node.props);
 
@@ -145,10 +146,10 @@ function create(node: VNode | string): Element {
   return element
 }
 
-function mergeProps(a:{}, b:{}) :{} {
+function mergeProps(a: {}, b: {}): {} {
   const props = {};
-  if(a) Object.keys(a).forEach(p=>props[p]='');
-  if(b) Object.keys(b).forEach(p=>props[p]=b[p]);
+  if (a) Object.keys(a).forEach(p => props[p] = '');
+  if (b) Object.keys(b).forEach(p => props[p] = b[p]);
   return props;
 }
 
