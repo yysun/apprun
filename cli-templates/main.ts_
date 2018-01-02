@@ -1,0 +1,15 @@
+import app from 'apprun';
+app.on('//', _ => { });
+app.on('#', _ => { });
+
+const model = 'Hello world - AppRun !';
+
+const view = (state) => <div>
+  <h1>{state}</h1>
+</div>;
+
+const update = {
+
+}
+
+app.start('my-app', model, view, update);

@@ -1,0 +1,12 @@
+import app from 'apprun'
+import #name from './#name';
+
+describe('component', () => {
+  it('should update state', (done) => {
+    app.run('route', '##name');
+    setTimeout(() => {
+      expect(#name.state).toBe('#name');
+      done();
+    })
+  })
+})
