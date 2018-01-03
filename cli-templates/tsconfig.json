@@ -4,6 +4,7 @@
     "jsx": "react",
     "reactNamespace": "app",
     "lib": ["dom", "es2015", "es5"],
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "sourceMap": true
   }
 }
