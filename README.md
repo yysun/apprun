@@ -2,8 +2,8 @@
 
 ![logo](logo.png)
 
-AppRun is a 3K library for developing applications using the [elm](http://elm-lang.org/) style
-[model-view-update architecture](https://guide.elm-lang.org/architecture/)
+AppRun is a 3K library for building applications using the [elm](https://guide.elm-lang.org/architecture) style
+[model-view-update architecture](docs/concept.md)
 and the [event publication and subscription](docs/event-pubsub.md).
 
 ## Quick Start
@@ -47,19 +47,42 @@ No other ceremony, you can start writing your model, view and update code right 
 </html>
 ```
 
-The example code above is a counter application that has implemented the model-view-update architecture. 
+The example code above is a counter application that has implemented the model-view-update architecture.
 
 Try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
-Larger applications can be built using components where each component has a model-view-update architecture. 
+Larger applications can be built using components where each component has a model-view-update architecture.
 
-Run and checkout the source code of following examples for more details.
+e.g.
 
-* [RealWorld Example App](https://github.com/yysun/realworld-starter-kit) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld)
-* [Hacker News](https://yysun.github.io/apprun-hn) - hacker news reader in 230 lines
-* [AppRun Demo App](https://yysun.github.io/apprun-examples/) - a SPA that has 8 components
-* [Todo w/ undo and redo ](https://yysun.github.io/apprun-examples/#todo) - in 90 lines
+* [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
+* [Hacker News](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
+* [AppRun Demo App](https://github.com/yysun/apprun-examples) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun-examples/blob/master/router-components/todo.tsx) (90 lines)
 
+Applications built with AppRun have less line of code, smaller js file and better performance. See a comparision from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
+
+AppRun has also joined the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project. You can see its [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries.
+
+## Install
+
+If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
+```
+npm install apprun -g
+apprun --init --spa
+npm start
+
+```
+
+## Explore More
+
+To explore more about AppRun, read the following.
+
+* [Introduction](docs/README.md)
+* [Event Pub and Sub](docs/event-pubsub.md)
+* [Model-view-update Architecture](docs/concept.md)
+* [Component](docs/component.md)
+* [JSX vs HTML](docs/jsx-html.md)
+* [Use TypeScript and webpack](docs/build.md)
 
 ## Video Tutorials
 
@@ -72,29 +95,6 @@ Run and checkout the source code of following examples for more details.
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
 * [Deep Dive into AppRun Events]()
 * [Dynamic Components Using TypeScript 2.4](https://medium.com/@yiyisun/dynamic-components-using-typescript-2-4-de109be6d135)
-* [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c)
-
-## Install
-
-If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
-```
-npm install apprun -g
-apprun --init
-npm start
-
-```
-
-## Explore More
-
-AppRun provides everything you need to build a modern application frontend. To explore more about AppRun, read the following docs.
-
-* [Introduction](docs/README.md)
-* [Event Pub and Sub](docs/event-pubsub.md)
-* [Model-view-update Architecture](docs/concept.md)
-* [Component](docs/component.md)
-* [JSX vs HTML](docs/jsx-html.md)
-* [TypeScript and webpack](docs/build.md)
-
 
 
 ## Contribute
@@ -122,4 +122,4 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2017 Yiyi Sun
+Copyright (c) 2015-2018 Yiyi Sun

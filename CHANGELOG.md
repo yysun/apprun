@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8
+
+* Decorator converts method name and property name to action name
+* Optimized Virtual DOM algorithm
+* Add CLI options to generate SPA boilerplate
+
 ## 1.7
 
 * Add decorator (on and update) for subscribing to event
