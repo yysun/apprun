@@ -108,7 +108,7 @@ program
   .option('-g, --git', 'Initialize git repository')
   .option('-k, --karma', 'Install karma')
   .option('-t, --test <file>', 'Generate component spec')
-  .option('-s, --spa', 'Generate SPA')
+  .option('-s, --spa', 'Generate SPA app')
   .parse(process.argv);
 
 program._name = 'apprun';
@@ -124,3 +124,5 @@ if (program.git) git_init();
 if (program.karma) karma_init();
 if (program.test) karma_test(program.test);
 if (program.spa) spa();
+
+console.log('\nAll done. Please run `npm start` and then navigate to http://localhost:8080 in a browser.');
