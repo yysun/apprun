@@ -16,6 +16,9 @@ const readme_md = path.resolve('./README.md');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
+let show_start = false;
+let show_test = false;
+
 function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
 }
@@ -65,6 +68,7 @@ function init() {
     package_json,
     JSON.stringify(package_info, null, 2)
   );
+  show_start = true;
 }
 
 function git_init() {
@@ -77,20 +81,23 @@ function component(name) {
   const fn = path.resolve(name + '.tsx');
   const component_template = read('component.ts_');
   write(name + '.tsx', component_template.replace(/\#name/g, name),
-    `Creating component ${name}`)
+    `Creating component ${name}`);
+  show_start = true;
 }
 
 function karma_init() {
   console.log('Installing karma');
   execSync('npm i @types/jasmine jasmine-core karma karma-chrome-launcher karma-jasmine karma-webpack --save-dev');
   write('karma.conf.js', read('karma.conf.js'));
+  show_test = true;
 }
 
 function karma_test(name) {
   const fn = path.resolve(name + '.spec.ts');
-  const test_template = read('test.ts_');
+  const test_template = read('spec.ts_');
   write(fn, test_template.replace(/\#name/g, name),
-    `Creating component spec ${name}`)
+    `Creating component spec ${name}`);
+  show_test = true;
 }
 
 function spa() {
@@ -99,6 +106,7 @@ function spa() {
   component('Home');
   component('About');
   component('Contact');
+  show_start = true;
 }
 
 program
@@ -116,6 +124,7 @@ program._name = 'apprun';
 if (!program.init && !program.component && !program.git &&
   !program.karma && !program.test && !program.spa) {
   program.outputHelp();
+  process.exit()
 }
 
 if (program.init) init();
@@ -125,4 +134,6 @@ if (program.karma) karma_init();
 if (program.test) karma_test(program.test);
 if (program.spa) spa();
 
-console.log('\nAll done. Please run `npm start` and then navigate to http://localhost:8080 in a browser.');
+console.log('\r');
+if (show_start) console.log('All done. You can run `npm start` and then navigate to http://localhost:8080 in a browser.');
+//if (show_test) console.log('All done. You can run `npm test`.');

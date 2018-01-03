@@ -3,9 +3,10 @@ import #name from './#name';
 
 describe('component', () => {
   it('should update state', (done) => {
+    const component = new #name();
     app.run('route', '##name');
     setTimeout(() => {
-      expect(#name.state).toBe('#name');
+      expect(component.state).toBe('#name');
       done();
     })
   })
