@@ -77,12 +77,13 @@ npm start
 
 To explore more about AppRun, read the following.
 
-* [Introduction](docs/README.md)
-* [Event Pub and Sub](docs/event-pubsub.md)
-* [Model-view-update Architecture](docs/concept.md)
-* [Component](docs/component.md)
-* [JSX vs HTML](docs/jsx-html.md)
-* [Use TypeScript and webpack](docs/build.md)
+* [Architecture](https://yysun.github.io/apprun/#/?id=architecture)
+* [Event Pub and Sub](https://yysun.github.io/apprun/#/?id=event-pubsubs)
+* [State Management](https://yysun.github.io/apprun/#/?id=state-management)
+* [Virtual DOM](https://yysun.github.io/apprun/#/?id=virtual-dom)
+* [Component](https://yysun.github.io/apprun/#/?id=component)
+* [Routing](https://yysun.github.io/apprun/#/?id=routing)
+* [CLI](https://yysun.github.io/apprun/#/?id=cli)
 
 ## Video Tutorials
 
@@ -93,7 +94,7 @@ To explore more about AppRun, read the following.
 
 * [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
-* [Deep Dive into AppRun Events]()
+* [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
 * [Dynamic Components Using TypeScript 2.4](https://medium.com/@yiyisun/dynamic-components-using-typescript-2-4-de109be6d135)
 
 

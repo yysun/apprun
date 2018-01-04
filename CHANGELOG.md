@@ -4,6 +4,7 @@
 
 * Decorator converts method name and property name to action name
 * Optimized Virtual DOM algorithm
+* Enabled source map
 * Add CLI options to generate SPA boilerplate
 
 ## 1.7
