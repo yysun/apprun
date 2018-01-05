@@ -1,4 +1,4 @@
-import app from '../index-html';
+import app from '../src/index-html';
 
 const model = 'y';
 const view = _ => `<div>${_}</div>`;

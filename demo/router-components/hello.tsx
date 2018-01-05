@@ -1,4 +1,4 @@
-import app, { Component, on } from '../../index'
+import app, { Component, on } from '../../src/index'
 
 let h = app.createElement;
 const createElement = (component) => (tag, props, ...children) => {
@@ -10,11 +10,11 @@ const createElement = (component) => (tag, props, ...children) => {
       } else if (typeof event === 'string') {
         props[key] = e => component.run(event, e)
       } else if (event instanceof Component) {
-        props[key] = e => event.run(key, e)            
+        props[key] = e => event.run(key, e)
       } else if (Array.isArray(event)) {
         props[key] = e => event[0].run(event[1] || key, e)
       }
-    } 
+    }
   });
   return h(tag, props, ...children)
 }

@@ -1,4 +1,4 @@
-import { createElement, updateElement } from '../vdom-my';
+import { createElement, updateElement } from '../src/vdom-my';
 
 describe('vdom-my', () => {
   let root;

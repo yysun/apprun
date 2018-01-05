@@ -1,4 +1,4 @@
-import app, { Component } from '../../index'
+import app, { Component } from '../../src/index'
 
 enum Filters { all = 0, todo = 1, done = 2 }
 

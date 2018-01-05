@@ -1,5 +1,5 @@
-import app from '../app';
-import { Component } from '../component';
+import app from '../src/app';
+import { Component } from '../src/component';
 class TestComponent extends Component {
 
   state = 'x';

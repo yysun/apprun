@@ -1,5 +1,5 @@
-import app from '../app';
-import Router from '../router';
+import app from '../src/app';
+import Router from '../src/router';
 
 describe('router', () => {
 

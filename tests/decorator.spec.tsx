@@ -1,7 +1,7 @@
-import app, { Component, on, update } from '../index';
+import app, { Component, on, update } from '../src/index';
 
 describe('Update decorator', () => {
-  
+
   it('should convert class method to action using @update', () => {
     class TestComponent extends Component {
       view = state => state
@@ -38,7 +38,7 @@ describe('Update decorator', () => {
 
       @on()
       f1 = (state, val) => val
-      
+
       @on('hi2, #hi2')
       f2 = (state, val) => val
     }
@@ -56,6 +56,6 @@ describe('Update decorator', () => {
     app.run('#hi2', 'xxxx')
     expect(spy).toHaveBeenCalledWith('xxxx')
 
-  })  
+  })
 
-}) 
+})

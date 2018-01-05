@@ -1,4 +1,4 @@
-import app from '../index';
+import app from '../src/index';
 
 import home from './router-components/home';
 import counter from './router-components/counter';
