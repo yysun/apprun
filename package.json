@@ -3,7 +3,7 @@
   "version": "1.8.1",
   "description": "",
   "main": "dist/apprun.js",
-  "types": "index.d.ts",
+  "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
   "scripts": {
     "build": "webpack -p",
