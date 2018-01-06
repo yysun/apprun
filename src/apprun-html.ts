@@ -1,4 +1,4 @@
-import app, { Component } from './index'
+import app, { Component } from './apprun'
 import { createElement, render } from './vdom-html';
 
 app.createElement = createElement;

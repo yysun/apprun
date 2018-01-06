@@ -1,4 +1,4 @@
-import app, { Component, on, update } from '../src/index';
+import app, { Component, on, update } from '../src/apprun';
 
 describe('Update decorator', () => {
 

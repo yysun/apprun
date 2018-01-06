@@ -1,4 +1,4 @@
-import app from '../../src/index-html';
+import app from '../../src/apprun-html';
 
 const model = [];
 

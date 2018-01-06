@@ -1,4 +1,4 @@
-import app, { Component } from '../../src/index'
+import app, { Component } from '../../src/apprun'
 import Store from './store';
 
 var startTime;

@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    'dist/apprun': './src/index.ts',
-    'dist/apprun-html': './src/index-html.ts',
+    'dist/apprun': './src/apprun.ts',
+    'dist/apprun-html': './src/apprun-html.ts',
     'demo/app': './demo/main.ts',
     'demo/html-multiple-counters/app': './demo/html-multiple-counters/main.ts'
   },

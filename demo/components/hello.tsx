@@ -1,4 +1,4 @@
-import app, { Component, on } from '../../src/index'
+import app, { Component, on } from '../../src/apprun'
 
 let h = app.createElement;
 const createElement = (component) => (tag, props, ...children) => {

@@ -1,4 +1,4 @@
-import app, { Component } from '../../src/index';
+import app, { Component } from '../../src/apprun';
 import Firebase = require('firebase');
 
 Firebase.initializeApp({ databaseURL: 'https://hacker-news.firebaseio.com' });

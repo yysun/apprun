@@ -1,4 +1,4 @@
-import app, { Component } from '../src/index';
+import app, { Component } from '../src/apprun';
 
 const model = 'x';
 const view = _ => <div>{_}</div>;

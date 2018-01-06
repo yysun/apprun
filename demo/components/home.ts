@@ -1,4 +1,4 @@
-import app from '../../src/index';
+import app from '../../src/apprun';
 //import * as $ from "jquery";
 declare var $: any;
 
