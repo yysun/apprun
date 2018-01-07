@@ -82,6 +82,7 @@ function component(name) {
   const component_template = read('component.ts_');
   write(name + '.tsx', component_template.replace(/\#name/g, name),
     `Creating component ${name}`);
+  component_spec(name);
   show_start = true;
 }
 
@@ -92,7 +93,39 @@ function karma_init() {
   show_test = true;
 }
 
-function karma_test(name) {
+function jest_init() {
+  console.log('Installing jest');
+  execSync('npm i @types/jest jest ts-jest --save-dev');
+
+  const jest_config = {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "mapCoverage": true
+  }
+
+  const package_info = require(package_json) || {};
+  package_info["jest"] = jest_config
+
+  package_info["scripts"]["test"] = 'jest --watch';
+  fs.writeFileSync(
+    package_json,
+    JSON.stringify(package_info, null, 2)
+  );
+
+  show_test = true;
+}
+
+function component_spec(name) {
   const fn = path.resolve(name + '.spec.ts');
   const test_template = read('spec.ts_');
   write(fn, test_template.replace(/\#name/g, name),
@@ -110,10 +143,11 @@ function spa() {
 }
 
 program
-  .version('1.8.0')
+  .version('1.8.2')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
+  .option('-j, --jest', 'Install jest')
   .option('-k, --karma', 'Install karma')
   .option('-t, --test <file>', 'Generate component spec')
   .option('-s, --spa', 'Generate SPA app')
@@ -121,7 +155,7 @@ program
 
 program._name = 'apprun';
 
-if (!program.init && !program.component && !program.git &&
+if (!program.init && !program.component && !program.git && !program.jest &&
   !program.karma && !program.test && !program.spa) {
   program.outputHelp();
   process.exit()
@@ -130,8 +164,9 @@ if (!program.init && !program.component && !program.git &&
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
+if (program.jest) jest_init();
 if (program.karma) karma_init();
-if (program.test) karma_test(program.test);
+if (program.test) component_spec(program.test);
 if (program.spa) spa();
 
 console.log('\r');

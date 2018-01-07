@@ -2,12 +2,10 @@ import app from 'apprun'
 import #name from './#name';
 
 describe('component', () => {
-  it('should update state', (done) => {
-    const component = new #name();
-    app.run('route', '##name');
-    setTimeout(() => {
-      expect(component.state).toBe('#name');
-      done();
-    })
+  it('should render state upon route event', () => {
+    const element = document.createElement('div');
+    const component = new #name().mount(element);
+    app.run('##name');
+    expect(element.textContent).toBe('#name');
   })
 })
