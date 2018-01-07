@@ -7,7 +7,7 @@
   "bin": "apprun-cli.js",
   "scripts": {
     "build": "webpack -p",
-    "test": "karma start",
+    "test": "jest --watch",
     "jest": "jest",
     "start": "webpack-dev-server"
   },
