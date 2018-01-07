@@ -59,6 +59,7 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "mapCoverage": true
   }
 }
