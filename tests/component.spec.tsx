@@ -1,5 +1,8 @@
 import app from '../src/app';
 import { Component } from '../src/component';
+
+app.on('hi', _ => { })
+
 class TestComponent extends Component {
 
   state = 'x';
@@ -19,20 +22,20 @@ class TestComponent extends Component {
   }
 }
 
-describe('Component', ()=> {
+describe('Component', () => {
 
   let component;
   beforeEach(() => {
     component = new TestComponent();
   });
 
-  it('should allow element to be undefined', ()=> {
+  it('should allow element to be undefined', () => {
     spyOn(component, 'view');
     expect(component.element).toBeUndefined()
     expect(component.view).not.toHaveBeenCalled();
   })
 
-  it('should trigger view when mounted with render option', ()=> {
+  it('should trigger view when mounted with render option', () => {
     spyOn(component, 'view');
     component.mount(document.body, { render: true });
     expect(component.element).toBe(document.body);
@@ -73,21 +76,21 @@ describe('Component', ()=> {
     expect(component.state).not.toBeNull();
   })
 
-  it('should handle local events', ()=> {
+  it('should handle local events', () => {
     component.mount(document.body);
     spyOn(component, 'view');
     component.run('hi', '');
     expect(component.view).toHaveBeenCalled();
   })
 
-  it('should not handle unknown global events', ()=> {
+  it('should not handle unknown global events', () => {
     component.mount(document.body);
     spyOn(component, 'view');
     app.run('hi');
     expect(component.view).not.toHaveBeenCalled();
   })
 
-  it('should handle global events', ()=> {
+  it('should handle global events', () => {
     component.mount(document.body);
     spyOn(component, 'view');
     app.run('#hi', '');
@@ -110,17 +113,29 @@ describe('Component', ()=> {
   });
 
   it('should track history with custom event name', () => {
-    spyOn(component, 'view');
+    // spyOn(component, 'view');
     component.start(document.body, { history: { prev: 'prev', next: 'next' } });
-    expect(component.view).toHaveBeenCalledWith('x');
+    // expect(component.view).toHaveBeenCalledWith('x');
+    // component.run('hi', 'xx');
+    // expect(component.view).toHaveBeenCalledWith('xx');
+    // component.run('hi', 'xxx');
+    // expect(component.view).toHaveBeenCalledWith('xxx');
+    // component.run('prev');
+    // expect(component.view).toHaveBeenCalledWith('xx');
+    // component.run('next');
+    // expect(component.view).toHaveBeenCalledWith('xxx');
+
+
+    expect(component.state).toBe('x');
     component.run('hi', 'xx');
-    expect(component.view).toHaveBeenCalledWith('xx');
+    expect(component.state).toBe('xx');
     component.run('hi', 'xxx');
-    expect(component.view).toHaveBeenCalledWith('xxx');
+    expect(component.state).toBe('xxx');
     component.run('prev');
-    expect(component.view).toHaveBeenCalledWith('xx');
+    expect(component.state).toBe('xx');
     component.run('next');
-    expect(component.view).toHaveBeenCalledWith('xxx');
+    expect(component.state).toBe('xxx');
+
   });
 
   it('should track history with global custom event name', () => {
@@ -230,7 +245,7 @@ describe('Component', ()=> {
       state = -1;
 
       update = {
-        'method1': [ _ => i++, { once: true } ],
+        'method1': [_ => i++, { once: true }],
       }
     }
 
@@ -254,11 +269,11 @@ describe('Component', ()=> {
       state = -1;
 
       update = {
-        'method1': [ async _ => {
+        'method1': [async _ => {
           const t = await fn();
           i++
         },
-        { once: true } ],
+        { once: true }],
       }
     }
 
@@ -307,7 +322,7 @@ describe('Component', ()=> {
     class Test extends Component {
       view = (state) => state
       update = {
-        'method1': [(state, val) => val, {render:false}]
+        'method1': [(state, val) => val, { render: false }]
       }
     }
     const t = new Test();

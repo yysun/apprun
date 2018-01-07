@@ -27,7 +27,7 @@ declare module 'apprun' {
     state: any;
     setState(state: any, options?: { render?: boolean, history?: boolean}): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
-    start(element?: Element): Component;
+    start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
   }
 
   export function on(name: string, options?: { render?: boolean, history?: boolean });

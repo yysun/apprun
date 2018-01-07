@@ -129,8 +129,9 @@ export class Component extends App {
     });
   }
 
-  start = (element = null): Component => {
-    return this.mount(element, { render: true });
+  start = (element = null,
+    options: { render?: boolean, history?, global_event?: boolean }= { render: true }): Component => {
+    return this.mount(element, { ...options, render: true });
   }
 
   render = () => this.view(this.state);
