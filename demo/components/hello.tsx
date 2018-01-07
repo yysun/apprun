@@ -21,7 +21,7 @@ const createElement = (component) => (tag, props, ...children) => {
 
 const Hello = ({ name }) => <div>Hello: {name}</div>;
 
-class HelloComponent extends Component {
+export class HelloComponent extends Component {
   model = 'world'; // model can be used as initial state
 
   view = (val) => {
