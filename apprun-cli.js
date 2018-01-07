@@ -74,7 +74,7 @@ function init() {
 function git_init() {
   console.log('Initializing git');
   execSync('git init');
-  write(git_ignore_file, read('.gitignore'));
+  write(git_ignore_file, read('_gitignore'));
 }
 
 function component(name) {
