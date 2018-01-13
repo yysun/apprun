@@ -1,0 +1,38 @@
+{
+  "AppRun View": {
+    "prefix": "view",
+		"body": ["const ${1:Tag} = ({ ${2:prop} }) => {",
+    	"\treturn <div>",
+      "\t\t$0",
+    	"\t</div>",
+  	"}"
+		],
+    "description": "AppRun view function"
+	},
+
+  "AppRun Update": {
+    "prefix": "@on",
+		"body": ["@on() $1 = (state, ${2:e}) => {",
+			"\treturn { ...state, $2 }",
+			"}"],
+    "description": "AppRun update function"
+  },
+
+  "AppRun Log State": {
+    "prefix": "log",
+    "body": ["console.log(${1:state})"],
+    "description": "Log out put state"
+  },
+
+  "AppRun Global Event": {
+    "prefix": "run",
+    "body": ["{e => ${1|this,app|}.run('$2', e)}"],
+    "description": "AppRun trigger global event"
+  },
+
+  "AppRun Create Event": {
+    "prefix": "app.on",
+    "body": ["app.on('$1', ($2) => {", "\t$3", "})"],
+    "description": "AppRun ceate event"
+  }
+}
