@@ -30,8 +30,8 @@ declare module 'apprun' {
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
   }
 
-  export function on(name: string, options?: { render?: boolean, history?: boolean });
-  export function update(name: string, options?: { render?: boolean, history?: boolean});
+  export function on(name?: string, options?: { render?: boolean, history?: boolean });
+  export function update(name?: string, options?: { render?: boolean, history?: boolean});
   export const app: App
   export default app;
 }
