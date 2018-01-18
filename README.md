@@ -68,7 +68,7 @@ AppRun has also joined the [js-framework-benchmark](https://github.com/krausest/
 If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
 ```
 npm install apprun -g
-apprun --init --spa
+apprun --init --spa --jest
 npm start
 
 ```
