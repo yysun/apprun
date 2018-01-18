@@ -82,7 +82,6 @@ function component(name) {
   const component_template = read('component.ts_');
   write(name + '.tsx', component_template.replace(/\#name/g, name),
     `Creating component ${name}`);
-  component_spec(name);
   show_start = true;
 }
 
