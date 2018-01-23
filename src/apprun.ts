@@ -19,10 +19,15 @@ app.start = (element: HTMLElement | string, model: Model, view: View, update: Up
   return component;
 }
 
+let _app = app;
 if (typeof window === 'object') {
-  window['app'] = app;
-  document.addEventListener("DOMContentLoaded", () => new Router());
+  if (window['app'] && window['app']['start']) {
+    _app = window['app'];
+  } else {
+    window['app'] = _app;
+    document.addEventListener("DOMContentLoaded", () => new Router());
+  }
 }
 
-export default app;
+export default _app;
 export { Component, on, update };
