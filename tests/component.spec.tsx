@@ -1,5 +1,8 @@
 import app from '../src/app';
+import { createElement, render } from '../src/vdom';
 import { Component } from '../src/component';
+app.createElement = createElement;
+app.render = render;
 
 app.on('hi', _ => { })
 
@@ -136,7 +139,7 @@ describe('Component', () => {
     expect(component.state).toBe('xx');
     app.run('next');
     expect(component.state).toBe('xxx');
-    
+
   });
 
   it('should call rendered function', () => {

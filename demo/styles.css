@@ -148,3 +148,17 @@ html {
   cursor: pointer;
   padding-bottom: 150px;
 }
+
+.panel-container {
+  border: 1px solid #eeeeee;
+  height: calc(100vh - 120px);
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+.panel {
+  height: calc(100vh - 180px);
+  min-width: 300px;
+  display: inline-block;
+  float: none;
+  vertical-align: text-top;
+}
