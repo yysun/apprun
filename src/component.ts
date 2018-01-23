@@ -15,8 +15,11 @@ export class Component extends App {
     const html = this.view(state);
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
-    if (el && app.render) app.render(el, html);
     if (el) el['_component'] = this;
+    if (el && app.render) {
+      app.render(el, html);
+      if (this.rendered) (this.rendered(this.state));
+    }
   }
 
   public setState(state, options: {render:boolean, history:boolean, callback?}) {
@@ -38,7 +41,6 @@ export class Component extends App {
         this._history_idx = this._history.length - 1;
       }
       if (typeof options.callback === 'function') options.callback(this.state);
-      if (this.rendered) (this.rendered(this.state));
     }
   }
 
