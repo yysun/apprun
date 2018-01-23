@@ -18,34 +18,98 @@ const createElement = (component) => (tag, props, ...children) => {
   });
   return h(tag, props, ...children)
 }
-
-const Hello = ({ name }) => <div>Hello: {name}</div>;
-
 export class HelloComponent extends Component {
-  model = 'world'; // model can be used as initial state
+  model = 'world';
+  view = state => <div>
+    <h1>Hello: {state}</h1>
+    <input oninput={e => this.run('input', e)} />
+  </div>
 
-  view = (val) => {
+  @on('#hello')
+  hello = state => state
+
+  @on('input')
+  oninput = (_, e) => e.target.value
+}
+
+export class HelloStateComponent extends Component {
+  model = 'world';
+  view = state => <div>
+    <div>Test push state</div>
+    <h1>Hello: {state}</h1>
+    <input oninput={e=>this.run('input', e)}/>
+  </div>
+
+  @on('#hello-pushstate')
+  hello = (state, pushState) => pushState || state
+
+  @on('input')
+  oninput = (_, e) => {
+    history.pushState(null, null, '#hello-pushstate/' + e.target.value);
+    return e.target.value
+  }
+}
+
+export class HelloDelayComponent extends Component {
+  model = 'world';
+  view = state => <div>
+    <div>Test delayed event (1s)</div>
+    <h1>Hello: {state}</h1>
+    <input oninput={e => this.run('input', e)} />
+  </div>
+
+  @on('#hello-delayed')
+  hello = state => state
+
+  update = {
+    'input': [(_, e) => e.target.value, { delay: 1000, debug: true }],
+  }
+}
+
+export class HelloDirectiveComponent extends Component {
+  model = 'world';
+  view = state => {
     app.createElement = createElement(this);
     const ret = <div>
-      <Hello name={val} />
-      Delayed event: <input value={val} oninput={e=>this.run('input', e)} /><br />
-      Default event: <input value={val} oninput /><br />
-      Named event: <input value={val} oninput='oninput' /><br />
-      Set target: <input value={val} oninput={this} /><br />
-      Set target and name: <input value={val} oninput={[this, 'oninput']} />
+      <div>Test directive</div>
+      <h1>Hello: {state}</h1>
+      <table>
+        <tr>
+          <td>Default event:</td>
+          <td>&lt;input oninput /&gt;</td>
+          <td><input value={state} oninput /></td>
+        </tr>
+        <tr>
+          <td>Named event:</td>
+          <td>&lt;input oninput='oninput' /&gt;</td>
+          <td><input value={state} oninput='oninput' /></td>
+        </tr>
+        <tr>
+          <td>Set target:</td>
+          <td>&lt;input oninput={'{this}'} /&gt;</td>
+          <td><input value={state} oninput={this} /></td>
+        </tr>
+        <tr>
+          <td>Set target and name:</td>
+          <td>&lt;input oninput={'{[this, "oninput"]}'} /&gt;</td>
+          <td><input value={state} oninput={[this, 'oninput']} /></td>
+        </tr>
+      </table>
     </div>
     app.createElement = h;
     return ret;
-  };
-
-  update = {
-    '#hello': (model, pushState) => pushState || model,
-    'input': [(_, e) => e.target.value, {delay: 1000, debug: true}],
-    //'oninput': (_, e) => e.target.value
   }
+
+  @on('#hello-directive')
+  hello = state => state
 
   @on('oninput')
   oninput = (_, e) => e.target.value // will be converted to update functions
 }
 
-export default (element) => new HelloComponent().mount(element);
+export default (element) => {
+  new HelloComponent().mount(element);
+  new HelloStateComponent().mount(element);
+  new HelloDelayComponent().mount(element);
+  new HelloDirectiveComponent().mount(element);
+}
