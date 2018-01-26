@@ -282,7 +282,7 @@ Because AppRun can connect web page events to AppRun Event. Handling routing bec
 
 Each component defines its route in an update function. Once the URL is changed to the route the component defined, the update function is triggered and executed. It can avoid a lot of code for registering and matching routes like in the other frameworks and libraries.
 
-The AppRun [demo application](https://yysun.github.io/apprun-examples/) was built to have 8 components that are routed into one element, which makes it a single page application (SPA).
+This demo page a single page application (SPA) that has several components.
 
 ## CLI
 

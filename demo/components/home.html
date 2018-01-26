@@ -186,7 +186,7 @@ const view = (state) =&gt; {
 </code></pre><h2 id="routing">Routing</h2>
 <p>Because AppRun can connect web page events to AppRun Event. Handling routing becomes much easier. AppRun detects the hash changes in URL and calls functions in update by matching the hash. E.g. when URL in the browser address bar becomes <a href="http://..../#Counter">http://..../#Counter</a>, The #Couter update function of the components will be executed.</p>
 <p>Each component defines its route in an update function. Once the URL is changed to the route the component defined, the update function is triggered and executed. It can avoid a lot of code for registering and matching routes like in the other frameworks and libraries.</p>
-<p>The AppRun <a href="https://yysun.github.io/apprun-examples/">demo application</a> was built to have 8 components that are routed into one element, which makes it a single page application (SPA).</p>
+<p>This demo page a single page application (SPA) that has several components.</p>
 <h2 id="cli">CLI</h2>
 <p>AppRun includes a cli. To install AppRun CLI:</p>
 <pre><code>npm install apprun -g
