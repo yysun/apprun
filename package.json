@@ -9,7 +9,8 @@
     "build": "webpack -p",
     "test": "jest --watch",
     "jest": "jest",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build:docs": "marked -i docs/README.md -o demo/components/home.html"
   },
   "keywords": [
     "JavaScript",
@@ -40,6 +41,7 @@
     "jasmine-core": "^2.6.2",
     "jest": "^22.0.4",
     "json-loader": "^0.5.4",
+    "marked": "^0.3.12",
     "morphdom": "^2.3.2",
     "ts-jest": "^22.0.1",
     "ts-loader": "^2.3.6",

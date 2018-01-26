@@ -57,7 +57,7 @@ e.g.
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
-* [AppRun Demo App](https://github.com/yysun/apprun-examples) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun-examples/blob/master/router-components/todo.tsx) (90 lines)
+* [AppRun Demo App](https://github.com/yysun/demo) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
 
 Applications built with AppRun have less line of code, smaller js file and better performance. See a comparision from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
 

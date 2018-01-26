@@ -4,5 +4,4 @@ coverage
 *.log
 *.map
 tests**/*.js
-demo**/*.js
 dist**/*.js
