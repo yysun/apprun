@@ -195,25 +195,6 @@ new Counter().mount(element);
 ```
 
 Notice the update has a '#Counter' function. It is a route. See Routing section below.
-### Update function Decorator
-
-In AppRun, there are two decorators to make the update functions easier to write and read. _@update_ and _@on_. _@update_ is for class functions. _@on_ is for class properties.
-
-```
-    class TestComponent extends Component {
-      view = state => state
-
-      // function decorator
-      @update('hi, #hi')
-      f2(state, val) {
-        return val;
-      }
-
-      // property decorator
-      @on('hi2, #hi2')
-      f2 = (state, val) => val
-    }
-```
 
 ### Pure Function Component
 
@@ -274,6 +255,26 @@ const view = state => {
     new MainComponent().start('my-app');
 ```
 
+### Update function Decorator
+
+In AppRun, there are two decorators to make the update functions easier to write and read in component. _@update_ and _@on_. _@update_ is for class functions. _@on_ is for class properties.
+
+```
+    class TestComponent extends Component {
+      view = state => state
+
+      // function decorator
+      @update('hi, #hi')
+      f2(state, val) {
+        return val;
+      }
+
+      // property decorator
+      @on('hi2, #hi2')
+      f2 = (state, val) => val
+    }
+```
+
 ## Routing
 
 Because AppRun can connect web page events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL and calls update functions by matching the hash. E.g., when URL in the browser address bar becomes http://..../#Counter, The #Couter update function of the component will run.
@@ -293,7 +294,7 @@ AppRun CLI can:
 
 * Initialize a TypeScript and webpack configured project
 * Initialize git repository
-* Add Karam unit test
+* Add Jest unit test
 * Generate component
 * Generate SPA application
 

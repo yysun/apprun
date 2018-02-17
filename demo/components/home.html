@@ -1,45 +1,43 @@
 <h1 id="building-applications-with-apprun">Building Applications with AppRun</h1>
-<p>AppRun is a lightweight library for developing applications using the <a href="http://elm-lang.org/">elm</a> style
-<a href="https://guide.elm-lang.org/architecture/">model-view-update</a> architecture.</p>
+<p>AppRun is a 3K library for building applications using the <a href="https://guide.elm-lang.org/architecture">elm architecture</a> and event publication and subscription.</p>
 <h2 id="architecture">Architecture</h2>
-<p>According to the model-view-update  architecture, there are three separated parts in an application.</p>
+<p>According to the elm architecture, there are three separated parts in an application.</p>
 <ul>
 <li>Model — the data model of your application state</li>
 <li>Update — a set of functions to update the state</li>
 <li>View — a function to display the state as HTML</li>
 </ul>
 <p>The 15 lines of code below is a simple counter application demonstrates the architecture using AppRun.</p>
-<pre><code>const model = 0;
+<pre><code>const state = 0;
 
-const view = (model) =&gt; {
+const view = state =&gt; {
   return `&lt;div&gt;
-    &lt;h1&gt;${model}&lt;/h1&gt;
+    &lt;h1&gt;${state}&lt;/h1&gt;
     &lt;button onclick=&#39;app.run(&quot;-1&quot;)&#39;&gt;-1&lt;/button&gt;
     &lt;button onclick=&#39;app.run(&quot;+1&quot;)&#39;&gt;+1&lt;/button&gt;
   &lt;/div&gt;`;
 };
 
 const update = {
-  &#39;+1&#39;: (model) =&gt; model + 1,
-  &#39;-1&#39;: (model) =&gt; model - 1
+  &#39;+1&#39;: state =&gt; state + 1,
+  &#39;-1&#39;: state =&gt; state - 1
 };
 
-const element = document.getElementById(&#39;my-app&#39;);
-app.start(element, model, view, update);
+app.start(&#39;my-app&#39;, state, view, update);
 </code></pre><h3 id="the-model">The Model</h3>
 <p>The model can be any data structure, a number, an array, or an object that reflects the state of the application. In the counter example, it is a number.</p>
-<pre><code>const model = 0;
+<pre><code>const state = 0;
 </code></pre><h3 id="the-update">The Update</h3>
-<p>The update contains functions that take existing state and create new state.</p>
+<p>The update contains functions that take existing state and create new states.</p>
 <pre><code>const update = {
-  &#39;+1&#39;: (model) =&gt; model + 1,
-  &#39;-1&#39;: (model) =&gt; model - 1
+  &#39;+1&#39;: state =&gt; state + 1,
+  &#39;-1&#39;: state =&gt; state - 1
 }
 </code></pre><h3 id="the-view">The View</h3>
 <p>The view generates HTML based on the state. AppRun parses the HTML string into virtual dom. It then calculates the differences against the web page element and renders the changes.</p>
-<pre><code>const view = (model) =&gt; {
+<pre><code>const view = state =&gt; {
   return `&lt;div&gt;
-    &lt;h1&gt;${model}&lt;/h1&gt;
+    &lt;h1&gt;${state}&lt;/h1&gt;
     &lt;button onclick=&#39;app.run(&quot;-1&quot;)&#39;&gt;-1&lt;/button&gt;
     &lt;button onclick=&#39;app.run(&quot;+1&quot;)&#39;&gt;+1&lt;/button&gt;
   &lt;/div&gt;`;
@@ -57,13 +55,13 @@ app.start(element, model, view, update);
 <pre><code>&lt;button onclick={()=&gt;app.run(&quot;+1&quot;)}&gt;+1&lt;/button&gt;
 </code></pre><p>Or even with jQuery:</p>
 <pre><code>$(&#39;#inc&#39;).on(&#39;click&#39;, ()=&gt;app.run(&#39;+1&#39;));
-</code></pre><p>Finally, <em>app.start</em> function from AppRun ties Model, View and Update together to an element and starts the application.</p>
+</code></pre><p>Finally, <em>app.start</em> function from AppRun ties State, View and Update together to an element and starts the application.</p>
 <pre><code>const element = document.getElementById(&#39;my-app&#39;);
-app.start(element, model, view, update);
-</code></pre><p>To summarize above, the two functions from AppRun (<em>app.run</em> and <em>app.start</em>) are all you need to make an application of model-view-update architecture.</p>
+app.start(element, State, view, update);
+</code></pre><p>To summarize above, the two functions from AppRun (<em>app.run</em> and <em>app.start</em>) are all you need to make an application of elm architecture.</p>
 <p>Try the counter example online: <a href="https://jsfiddle.net/ap1kgyeb/4">Simple Counter</a>.</p>
 <h2 id="event-pubsubs">Event PubSubs</h2>
-<p>At core, AppRun is an event publication and subscription system, which is also known as event emitter. It is a commonly used pattern in JavaScript programming.</p>
+<p>At the core, AppRun is an event publication and subscription system, which is also known as event emitter. It is a commonly used pattern in JavaScript programming.</p>
 <p>AppRun has two important functions: <em>app.run</em> and <em>app.on</em>. <em>app.run</em> fires events.
 <em>app.on</em> handles events. E.g. :</p>
 <p>Module A subscribes to an event <em>print</em>:</p>
@@ -78,13 +76,13 @@ import b from &#39;./B&#39;;
 a();
 b();
 </code></pre><p>Module A and Module B only have to know the event system, not other modules, so they are only dependent on the event system, not other modules. Therefore modules are decoupled. Thus makes it easier to modify, extend and swap modules.</p>
-<p>The biggest benefit of such event system is decoupling. In traditional MVC architecture, the model, view and controller are coupled, which makes it difficult to test and maintain. In result, there are many architecture patterns have been developed in order to solve the coupling problem, such as Model-View-Presenter, Presentation Model and Model-View-ViewModel. AppRun solved the coupling problem by using event publication and subscription. Model, View and Controller/Update don&#39;t know each.</p>
+<p>The most significant benefit of such event system is decoupling. In traditional MVC architecture, the model, view and controller are coupled, which makes it difficult to test and maintain. In result, there are many architecture patterns have been developed to solve the coupling problem, such as Model-View-Presenter, Presentation Model, and Model-View-ViewModel. AppRun solved the coupling problem by using event publication and subscription. Model, View and Controller/Update don&#39;t know each.</p>
 <p>AppRun applications have an event cycle like below:</p>
 <pre><code>Web events =&gt; AppRun Events =&gt; Update =&gt; (new state) =&gt; View =&gt; (HTML)
 </code></pre><p>Behind scene AppRun events trigger update functions; the update functions create new states; AppRun then let view function turn the new state into HTML or virtual DOM. Finally AppRun renders the HTML or virtual DOM to web page element.</p>
 <h2 id="state-management">State Management</h2>
-<p>During the event cycle, AppRun manages application states. It passes current state into the update functions. It takes the new state from the update functions and passes into the view function. Therefore it can maintains the history of all states, which enables the time travel / undo-redo feature.</p>
-<p>In order to leverage the time travel / undo-redo feature, the update functions must make sure current state immutable and always create new state.</p>
+<p>During the event cycle, AppRun manages application states. It passes current state into the update functions. It takes the new state from the update functions and passes into the view function. Therefore it can maintain the history of all states, which enables the time travel / undo-redo feature.</p>
+<p>In leverage the time travel / undo-redo feature, the update functions must make sure current state immutable and always create a new state.</p>
 <p>See the multiple counter example that has undo-redo online: <a href="https://jsfiddle.net/ap1kgyeb/6">Multiple counters</a></p>
 <h2 id="virtual-dom">Virtual DOM</h2>
 <p>When applications get complex, we start to think performance and build system.</p>
@@ -93,19 +91,19 @@ Although HTML string is easy to understand and useful for trying out ideas, it t
 time to parse it into virtual dom at run time, which may cause performance issue.
 It also has some problems that have been documented by the Facebook React team:
 <a href="http://facebook.github.io/jsx/#why-not-template-literals">Why not template literals</a>.</p>
-<p>Using JSX, the JSX compiler compiles the JSX into functions at compile time. The functions creates virtual dom in run time directly without parsing HTML, which gives
+<p>Using JSX, the JSX compiler compiles the JSX into functions at compile time. The View function creates virtual dom in runtime directly without parsing HTML, which gives
 better performance. Therefore, we recommend using JSX in production.</p>
 <p>To compile and build production code, we recommend using TypeScript and webpack. See CLI section below.</p>
 <h2 id="component">Component</h2>
 <p>Another thing to consider when applications get complex is to divide and organize code into components.</p>
-<p>A component in AppRun is a mini model-view-update architecture, which means inside a component, there are model, view and update. Let&#39;s use <em>AppRun CLI</em> to generate a component.</p>
+<p>A component in AppRun is a mini elm architecture, which means inside a component, there are model, view and update. Let&#39;s use <em>AppRun CLI</em> to generate a component.</p>
 <pre><code>apprun -c Counter
 </code></pre><p>It generates a Counter component:</p>
 <pre><code>import app, {Component} from &#39;apprun&#39;;
 
 export default class CounterComponent extends Component {
   state = &#39;Counter&#39;;
-  view = (state) =&gt; {
+  view = state =&gt; {
     return &lt;div&gt;
       &lt;h1&gt;{state}&lt;/h1&gt;
     &lt;/div&gt;
@@ -119,22 +117,7 @@ export default class CounterComponent extends Component {
 const element = document.getElementById(&#39;my-app&#39;);
 new Counter().mount(element);
 </code></pre><p>Notice the update has a &#39;#Counter&#39; function. It is a route. See Routing section below.</p>
-<h3 id="update-function-decorator">Update function Decorator</h3>
-<p>Using the on decorator, the update functions look better. There are two decorators. <em>@update</em> and <em>@on</em>. <em>@update</em> is for class functions. <em>@on</em> is for class properties.</p>
-<pre><code>    class TestComponent extends Component {
-      view = state =&gt; state
-
-      // function decorator
-      @update(&#39;hi, #hi&#39;)
-      f2(state, val) {
-        return val;
-      }
-
-      // property decorator
-      @on(&#39;hi2, #hi2&#39;)
-      f2 = (state, val) =&gt; val
-    }
-</code></pre><h3 id="pure-function-component">Pure Function Component</h3>
+<h3 id="pure-function-component">Pure Function Component</h3>
 <p>Pure Function Component is fully supported. Make sure the function name is capitalized.</p>
 <pre><code>const Counter = ({num, idx}) =&gt; (
   &lt;div&gt;
@@ -149,8 +132,8 @@ const CounterList = ({counters}) =&gt; counters.map((num, idx) =&gt;
   &lt;Counter num={num} idx={idx} /&gt;
 );
 
-const view = (state) =&gt; {
-  console.log(state);
+const view = state =&gt; {
+  console.log(sate);
   return (
   &lt;div&gt;
     &lt;div&gt;
@@ -165,7 +148,7 @@ const view = (state) =&gt; {
 <p>(Working in progress)</p>
 <pre><code>    class TestComponent extends Component {
       state = &#39;&#39;;
-      view = (state) =&gt; &lt;div&gt;{state}&lt;/div&gt;
+      view = state =&gt; &lt;div&gt;{state}&lt;/div&gt;
       update = { }
       constructor({ id }) {
         super();
@@ -173,7 +156,7 @@ const view = (state) =&gt; {
     }
 
     class MainComponent extends Component {
-      view = (state) =&gt; {
+      view = state =&gt; {
         return &lt;div&gt;
           &lt;TestComponent id = &#39;c1&#39; /&gt;
           &lt;TestComponent id = &#39;c2&#39; /&gt;
@@ -183,10 +166,24 @@ const view = (state) =&gt; {
     }
 
     new MainComponent().start(&#39;my-app&#39;);
+</code></pre><h3 id="update-function-decorator">Update function Decorator</h3>
+<p>In AppRun, there are two decorators to make the update functions easier to write and read in component. <em>@update</em> and <em>@on</em>. <em>@update</em> is for class functions. <em>@on</em> is for class properties.</p>
+<pre><code>    class TestComponent extends Component {
+      view = state =&gt; state
+
+      // function decorator
+      @update(&#39;hi, #hi&#39;)
+      f2(state, val) {
+        return val;
+      }
+
+      // property decorator
+      @on(&#39;hi2, #hi2&#39;)
+      f2 = (state, val) =&gt; val
+    }
 </code></pre><h2 id="routing">Routing</h2>
-<p>Because AppRun can connect web page events to AppRun Event. Handling routing becomes much easier. AppRun detects the hash changes in URL and calls functions in update by matching the hash. E.g. when URL in the browser address bar becomes <a href="http://..../#Counter">http://..../#Counter</a>, The #Couter update function of the components will be executed.</p>
-<p>Each component defines its route in an update function. Once the URL is changed to the route the component defined, the update function is triggered and executed. It can avoid a lot of code for registering and matching routes like in the other frameworks and libraries.</p>
-<p>This demo page a single page application (SPA) that has several components.</p>
+<p>Because AppRun can connect web page events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL and calls update functions by matching the hash. E.g., when URL in the browser address bar becomes <a href="http://..../#Counter">http://..../#Counter</a>, The #Couter update function of the component will run.</p>
+<p>Each component defines its route in an update function. The URL changes trigger and run the update function. It can avoid a lot of code for registering and matching routes like in the other frameworks and libraries.</p>
 <h2 id="cli">CLI</h2>
 <p>AppRun includes a cli. To install AppRun CLI:</p>
 <pre><code>npm install apprun -g
@@ -194,7 +191,7 @@ const view = (state) =&gt; {
 <ul>
 <li>Initialize a TypeScript and webpack configured project</li>
 <li>Initialize git repository</li>
-<li>Add Karam unit test</li>
+<li>Add Jest unit test</li>
 <li>Generate component</li>
 <li>Generate SPA application</li>
 </ul>
@@ -205,8 +202,8 @@ const view = (state) =&gt; {
 <p>After the command finishes execution, you can start the application and then navigate to <a href="https://localhost:8080">https://localhost:8080</a> in a browser.</p>
 <pre><code>npm start
 </code></pre><h2 id="performance">Performance</h2>
-<p>AppRun itself is lightweight. It is about 3K gzipped. More important is that applications built with AppRun have less line of code, smaller js file and better performance.
-See a comparision from <a href="https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c">A Real-World Comparison of Front-End Frameworks with Benchmarks</a>.</p>
+<p>AppRun itself is lightweight. It is about 3K gzipped. More important is that applications built with AppRun have less line of code, smaller js file, and better performance.
+See a comparison from <a href="https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c">A Real-World Comparison of Front-End Frameworks with Benchmarks</a>.</p>
 <p>AppRun has also joined the <a href="https://github.com/krausest/js-framework-benchmark">js-framework-benchmark</a> project. You can see its <a href="https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html">performance results</a> compared to other frameworks and libraries.</p>
 <p>AppRun makes your applications clean, precious, declarative and has no ceremony.
-Please give it a try and send pull request.</p>
+Please give it a try and send pull requests.</p>
