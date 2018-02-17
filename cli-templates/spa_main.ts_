@@ -9,26 +9,27 @@ app.on('//', route => {
   item && item.parentElement.classList.add('active');
 })
 
-const view = state => <div>
-  <nav className="navbar navbar-default">
-    <div className="container">
-      <div className="navbar-header">
-        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-          aria-controls="navbar">
-          <span className="sr-only">Toggle navigation</span>
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
-        </button>
-        <a className="navbar-brand" href="/">Project Name</a>
-      </div>
-      <div id="navbar" className="navbar-collapse collapse">
-        <ul className="nav navbar-nav">
-          <li className="active"><a href="#Home">Home</a></li>
-          <li><a href="#About">About</a></li>
-          <li><a href="#Contact">Contact</a></li>
-        </ul>
-      </div>
+const view = state => <div className="container">
+  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <a className="navbar-brand" href="#">Project Name</a>
+    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul className="navbar-nav mr-auto">
+        <li className="nav-item active">
+          <a className="nav-link" href="#Home">Home
+            <span className="sr-only">(current)</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="#About">About</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="#Contact">Contact</a>
+        </li>
+      </ul>
     </div>
   </nav>
   <div className="container" id="my-app"></div>
