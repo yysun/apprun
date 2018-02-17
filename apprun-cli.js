@@ -68,12 +68,17 @@ function init() {
     package_json,
     JSON.stringify(package_info, null, 2)
   );
+  git_init();
   show_start = true;
 }
 
 function git_init() {
-  console.log('Initializing git');
-  execSync('git init');
+  if (!fs.existsSync('.git')) {
+    console.log('Initializing git');
+    execSync('git init');
+  } else {
+    console.log('Skip git init. .git exsits');
+  }
   write(git_ignore_file, read('_gitignore'));
 }
 
@@ -101,14 +106,7 @@ function jest_init() {
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "mapCoverage": true
   }
 
