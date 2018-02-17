@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.9
+
+* Make Component class plain class without inheritance
+* Use Bootstrap 4 for CLI SPA boilerplate
+* Add examples of l10n, authentication, parcel, hot module reload, and server-side rendering
+
 ## 1.8
 
 * Decorator converts method name and property name to action name
@@ -80,5 +86,5 @@
 
 * Event pubsub
 * Used virtual-dom, virtual-dom-html
-* Three verions: zero, jsx and html
+* Three versions: zero, jsx and html
 * Demo apps
