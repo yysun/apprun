@@ -1,7 +1,9 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-export class Component extends App {
+export class Component {
+
+  private _app = new App();
 
   element;
   private _history = [];
@@ -49,7 +51,6 @@ export class Component extends App {
     protected view?,
     protected update?,
     protected options?) {
-    super();
   }
 
   public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
@@ -141,13 +142,13 @@ export class Component extends App {
   public run(name: string, ...args) {
     return this.global_event || this.is_global_event(name) ?
       app.run(name, ...args) :
-      super.run(name, ...args);
+      this._app.run(name, ...args);
   }
 
   public on(name: string, fn: (...args) => void, options?: any) {
     return this.global_event || this.is_global_event(name) ?
       app.on(name, fn, options) :
-      super.on(name, fn, options);
+      this._app.on(name, fn, options);
   }
 
 }
