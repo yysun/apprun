@@ -2,8 +2,12 @@
 
 ![logo](logo.png)
 
-AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture) and event publication and subscription.
+AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture) and the event pub-sub (event emitter).
 
+Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
+
+
+AppRun has good performance. You can see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project,.
 ## Quick Start
 
 To give it a try, include AppRun in your html.
@@ -11,7 +15,7 @@ To give it a try, include AppRun in your html.
 <script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
 ```
 
-No other ceremony, you can start writing your model, view and update code right away.
+No other ceremony, you can start developing your app right away.
 
 ```
 <!doctype html>
@@ -43,21 +47,42 @@ No other ceremony, you can start writing your model, view and update code right 
 ```
 
 The example code above is a counter application that has implemented the elm architecture.
+
 Try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
-AppRun is different to Elm, or other Elm inspired frameworks and libraries that AppRun uses the [Event Pub and Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) to connect user interactions, web events and server-side events to the architecture.
 
-AppRun also support [Component](https://yysun.github.io/apprun/docs/#/?id=component). Each component has a elm architecture. Complex applications can be built using components.
+## Architecture Concept
 
-e.g.
+There are three separated parts in the elm architecture.
+
+* Model — the data model of your application state
+* Update — a set of functions to update the state
+* View — a function to display the state as HTML
+
+
+AppRun is different to Elm, or other Elm inspired frameworks and libraries that AppRun uses the [Event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and has an event cycle like below:
+
+```
+Web events => AppRun Events => Update => State => View => HTML
+```
+
+Using events makes it very easy to handle user interaction, routing and even server-side events. Events also make your code modules decoupled and easy to test.
+
+In addition, AppRun allows you to build applications using [Component](https://yysun.github.io/apprun/docs/#/?id=component). Each component has a elm architecture. It is very suitable for Single Page Applications (SPA).
+
+## Examples
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
-* [AppRun Demo App](https://github.com/yysun/demo) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
+* [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
 
-Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
+* [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
+* [AppRun Multilingual Example](https://github.com/yysun/apprun-multilingual)
+* [AppRun Firebase Authentication](https://github.com/yysun/apprun-firebase-authentication)
+* [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
+* [AppRun Hot Module Reload with Webpack](https://github.com/yysun/apprun-hot-module-reload)
+* [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
 
-AppRun has also joined the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project. You can see its [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries.
 
 ## Install
 
@@ -91,15 +116,6 @@ To explore more about AppRun, read the following.
 * [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
 * [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
-
-## More Examples and Boilerplates
-
-* [AppRun Server=Side Rendering](https://github.com/yysun/apprun-ssr)
-* [AppRun Multilingual Example](https://github.com/yysun/apprun-multilingual)
-* [AppRun Firebase Authentication](https://github.com/yysun/apprun-firebase-authentication)
-* [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
-* [AppRun Hot Module Reload with Webpack](https://github.com/yysun/apprun-hot-module-reload)
-* [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
 
 ## Contribute
 
