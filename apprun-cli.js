@@ -140,7 +140,8 @@ function spa() {
 }
 
 program
-  .version('1.8.2')
+  .name('apprun')
+  .version('1.9.0')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
