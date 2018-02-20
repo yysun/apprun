@@ -20,6 +20,7 @@ module.exports = {
     ]
   },
   devServer: {
+    open: true
   },
   devtool: 'source-map'
 }
