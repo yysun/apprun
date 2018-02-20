@@ -2,7 +2,10 @@
 
 ![logo](logo.png)
 
-AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture) and the event pub-sub (event emitter).
+AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture), events, and components.
+
+What makes AppRun different from Elm, or other Elm inspired frameworks and libraries is that AppRun uses the [Event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [Components](https://yysun.github.io/apprun/docs/#/?id=component) that each component has its own elm architecture.
+
 
 Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
 
@@ -59,8 +62,7 @@ There are three separated parts in the elm architecture.
 * Update — a set of functions to update the state
 * View — a function to display the state as HTML
 
-
-AppRun is different to Elm, or other Elm inspired frameworks and libraries that AppRun uses the [Event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and has an event cycle like below:
+AppRun applications have the event cycle like below to drive the architecture:
 
 ```
 Web events => AppRun Events => Update => State => View => HTML
@@ -68,7 +70,7 @@ Web events => AppRun Events => Update => State => View => HTML
 
 Using events makes it very easy to handle user interaction, routing and even server-side events. Events also make your code modules decoupled and easy to test.
 
-In addition, AppRun allows you to build applications using [Component](https://yysun.github.io/apprun/docs/#/?id=component). Each component has a elm architecture. It is very suitable for Single Page Applications (SPA).
+In addition, AppRun allows you to build applications using [Component](https://yysun.github.io/apprun/docs/#/?id=component). Each component has an elm architecture. It is very suitable for Single Page Applications (SPA).
 
 ## Examples
 
