@@ -1,4 +1,4 @@
-# AppRun [![Build Status](https://travis-ci.org/yysun/apprun.svg?branch=master)](https://travis-ci.org/yysun/apprun)
+# AppRun [![Build Status](https://travis-ci.org/yysun/apprun.svg?branch=master)](https://travis-ci.org/yysun/apprun) [![npm](https://img.shields.io/npm/v/apprun.svg)](https://www.npmjs.org/package/apprun)
 
 ![logo](logo.png)
 
