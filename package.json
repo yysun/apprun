@@ -44,10 +44,10 @@
     "marked": "^0.3.12",
     "morphdom": "^2.3.2",
     "ts-jest": "^22.0.1",
-    "ts-loader": "^2.3.6",
-    "typescript": "^2.5.2",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.1"
+    "ts-loader": "^3.5.0",
+    "typescript": "^2.7.2",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "jest": {
     "transform": {
