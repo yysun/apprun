@@ -18,16 +18,19 @@ declare module 'apprun' {
     start(element: Element, model: Model, view: View, update: Update, options?: { history }): void;
     on(name: string, fn: (...args) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
-
+    on(name: string, fn: (...args) => void, options?: any): void;
+    run(name: string, ...args: any[]): void;
     createElement(tag: string | Function, props, ...children): any;
     render(element: HTMLElement, node: VNode): void;
   }
-  export class Component extends App {
+  export class Component {
     constructor(state?: Model, view?: View, update?: Update);
     state: any;
     setState(state: any, options?: { render?: boolean, history?: boolean}): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
+    on(name: string, fn: (...args) => void, options?: any): void;
+    run(name: string, ...args: any[]): void;
   }
 
   export function on(name?: string, options?: { render?: boolean, history?: boolean });
