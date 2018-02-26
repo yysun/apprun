@@ -21,18 +21,18 @@
   "AppRun Log State": {
     "prefix": "log",
     "body": ["console.log(${1:state})"],
-    "description": "Log out put state"
+    "description": "Log state"
   },
 
-  "AppRun Global Event": {
+  "AppRun Publish Event": {
     "prefix": "run",
     "body": ["{e => ${1|this,app|}.run('$2', e)}"],
-    "description": "AppRun trigger global event"
+    "description": "AppRun publish event"
   },
 
-  "AppRun Create Event": {
+  "AppRun Subscribe to Event": {
     "prefix": "app.on",
     "body": ["app.on('$1', ($2) => {", "\t$3", "})"],
-    "description": "AppRun ceate event"
+    "description": "AppRun subscribe to event"
   }
 }
