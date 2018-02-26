@@ -46,7 +46,7 @@ function init() {
   }
 
   console.log('Installing packages. This might take a couple minutes.');
-  execSync('npm install webpack webpack-dev-server ts-loader typescript --save-dev');
+  execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript --save-dev');
   execSync('npm install apprun --save');
 
   write(tsconfig_json, read('tsconfig.json'));
@@ -59,10 +59,10 @@ function init() {
   const package_info = require(package_json);
   if (!package_info.scripts) package_info["scripts"] = {}
   if (!package_info.scripts['start']) {
-    package_info["scripts"]["start"] = 'webpack-dev-server';
+    package_info["scripts"]["start"] = 'webpack-dev-server --mode development';
   }
   if (!package_info.scripts['build']) {
-    package_info["scripts"]["build"] = 'webpack -p';
+    package_info["scripts"]["build"] = 'webpack -p --mode production';
   }
   fs.writeFileSync(
     package_json,
@@ -141,7 +141,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.9.0')
+  .version('1.9.1')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
