@@ -2,9 +2,7 @@ declare module 'apprun' {
   export type Model = any;
   export type View = (state: Model) => string | Function;
   export type Action = (state: Model, ...p: any[]) => Model;
-  export type Update = {
-    [name: string]: Action;
-  };
+  export type Update = { [name: string]: Action | {}[]; };
 
   export type Element = HTMLElement | string;
 

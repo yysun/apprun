@@ -7,7 +7,7 @@ import { on, update } from './decorator';
 export type Model = any;
 export type View = (model: Model) => string | Function;
 export type Action = (model: Model, ...p) => Model;
-export type Update = { [name: string]: Action };
+export type Update = { [name: string]: Action | {}[] };
 
 app.createElement = createElement;
 app.render = render;
