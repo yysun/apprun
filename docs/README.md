@@ -215,7 +215,7 @@ const CounterList = ({counters}) => counters.map((num, idx) =>
 );
 
 const view = state => {
-  console.log(sate);
+  console.log(state);
   return (
   <div>
     <div>
