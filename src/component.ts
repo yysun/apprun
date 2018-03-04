@@ -2,7 +2,7 @@
 import app, { App } from './app';
 import { Reflect } from './decorator'
 export class Component {
-
+  static __isAppRunComponent = true;
   private _app = new App();
 
   element;
