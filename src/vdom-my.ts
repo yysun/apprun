@@ -10,21 +10,27 @@ export type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 const ATTR_PROPS = '_props';
 
-export const createElement = (tag: string | Function, props: {}, ...children) => {
-  let ch = [];
+function collect(children) {
+  const ch = [];
   const push = (c) => {
     if (c !== null && c !== undefined && c !== '') {
       ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
     }
   }
-  children.forEach(c => {
+  children && children.forEach(c => {
     if (Array.isArray(c)) {
       c.forEach(i => push(i));
     } else {
       push(c);
     }
   });
+  return ch;
+}
+
+export function createElement (tag: string | Function, props: {}, ...children) {
+  const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
+  else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
     const id = props && props['id'] || `_${tag.name}_${++idx}`;
     return createComponent(tag, id, props);
@@ -176,4 +182,6 @@ function updateProps(element: Element, props: {}) {
   }
 }
 
-export default { createElement, updateElement }
+export function Fragment(props, ...children) {
+  return collect(children);
+}
