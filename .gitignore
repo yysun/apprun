@@ -2,6 +2,3 @@
 node_modules
 coverage
 *.log
-*.map
-tests**/*.js
-dist**/*.js

@@ -75,7 +75,7 @@ In addition, AppRun allows you to build applications using [Component](https://y
 ## Examples
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
-* [Hacker News](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
+* [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
 * [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
 
 * [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)

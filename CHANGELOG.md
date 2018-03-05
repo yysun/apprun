@@ -2,8 +2,11 @@
 
 ## 1.9
 
+* Support JSX fragments
 * Make Component class plain class without inheritance
 * Use Bootstrap 4 for CLI SPA boilerplate
+* CLI generates webpack 4 configurations
+* CLI targets ES2015
 * Add examples of l10n, authentication, parcel, hot module reload, and server-side rendering
 
 ## 1.8
