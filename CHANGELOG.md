@@ -2,6 +2,7 @@
 
 ## 1.9
 
+* Add generic typed interface IComponent<T>
 * Support JSX fragments
 * Make Component class plain class without inheritance
 * Use Bootstrap 4 for CLI SPA boilerplate
