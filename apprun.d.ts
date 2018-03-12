@@ -1,8 +1,4 @@
 declare module 'apprun' {
-  export type IModel = any;
-  export type IView = (state: IModel) => string | Function | void;
-  export type IAction = (state: IModel, ...p: any[]) => IModel;
-  export type IUpdate = { [name: string]: IAction | {}[] | void; };
 
   export type Element = HTMLElement | string;
 
@@ -13,7 +9,7 @@ declare module 'apprun' {
   }
 
   export class App {
-    start(element: Element, model: IModel, view: IView, update: IUpdate, options?: { history }): void;
+    start<T>(element: Element, model: T, view: View<T>, update: Update<T>, options?: { history }): void;
     on(name: string, fn: (...args) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
     on(name: string, fn: (...args) => void, options?: any): void;
@@ -21,12 +17,12 @@ declare module 'apprun' {
     createElement(tag: string | Function, props, ...children): any;
     render(element: HTMLElement, node: VNode): void;
   }
-  export class Component {
-    constructor(state?: IModel, view?: IView, update?: IUpdate);
-    state: any;
-    setState(state: any, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
-    start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component;
+  export class Component<T> {
+    constructor(state?: T, view?: View<T>, update?: Update<T>);
+    state: T;
+    setState(state: T, options?: { render?: boolean, history?: boolean }): void;
+    mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
+    start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     on(name: string, fn: (...args) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
   }

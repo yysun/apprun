@@ -1,7 +1,11 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-export class Component {
+export type View<T> = (state: T) => string | Function | void;
+export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
+export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
+
+export class Component<T> {
   static __isAppRunComponent = true;
   private _app = new App();
 
@@ -47,9 +51,9 @@ export class Component {
   }
 
   constructor(
-    protected state?,
-    protected view?,
-    protected update?,
+    protected state?: T,
+    protected view?: View<T>,
+    protected update?: Update<T>,
     protected options?) {
   }
 
@@ -133,7 +137,7 @@ export class Component {
   }
 
   start = (element = null,
-    options: { render?: boolean, history?, global_event?: boolean }= { render: true }): Component => {
+    options: { render?: boolean, history?, global_event?: boolean }= { render: true }): Component<T> => {
     return this.mount(element, { ...options, render: true });
   }
 

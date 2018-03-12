@@ -1,4 +1,4 @@
-import app, { View, Action, Update, IComponent, Component, on } from '../src/apprun';
+import app, { View, Action, Update, Component, on } from '../src/apprun';
 
 
 const element = document.createElement('div');
@@ -23,7 +23,7 @@ describe('app', () => {
   })
 
   it('should support typed component', () => {
-    class MyComponent extends Component implements IComponent<State> {
+    class MyComponent extends Component<State> {
 
       state = { msg: 'World' };
 
