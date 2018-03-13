@@ -38,11 +38,11 @@
   "devDependencies": {
     "@types/jasmine": "^2.5.53",
     "jasmine-core": "^2.6.2",
-    "jest": "^22.0.4",
+    "jest": "^22.4.2",
     "json-loader": "^0.5.4",
     "marked": "^0.3.12",
     "morphdom": "^2.3.2",
-    "ts-jest": "^22.0.1",
+    "ts-jest": "^22.4.1",
     "ts-loader": "^3.5.0",
     "typescript": "^2.7.2",
     "webpack": "^3.11.0",
@@ -61,6 +61,10 @@
       "json",
       "node"
     ],
-    "mapCoverage": true
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
   }
 }

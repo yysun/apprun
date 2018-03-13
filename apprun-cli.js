@@ -107,7 +107,11 @@ function jest_init() {
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "mapCoverage": true
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
   }
 
   const package_info = require(package_json) || {};
@@ -141,7 +145,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.9.1')
+  .version('1.9.5')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
