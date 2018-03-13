@@ -6,10 +6,10 @@
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack -p --mode production",
     "test": "jest --watch",
     "jest": "jest",
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --mode development",
     "build:docs": "marked -i docs/README.md -o demo/components/home.html"
   },
   "keywords": [
@@ -43,10 +43,11 @@
     "marked": "^0.3.12",
     "morphdom": "^2.3.2",
     "ts-jest": "^22.4.1",
-    "ts-loader": "^3.5.0",
+    "ts-loader": "^4.0.1",
     "typescript": "^2.7.2",
-    "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.1"
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3.1.1"
   },
   "jest": {
     "transform": {

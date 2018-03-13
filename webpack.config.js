@@ -9,7 +9,8 @@ module.exports = {
   output: {
     filename: '[name].js',
     library: 'apprun',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    path: path.resolve(__dirname)
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
