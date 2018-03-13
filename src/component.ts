@@ -5,7 +5,7 @@ export type View<T> = (state: T) => string | Function | void;
 export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
 export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
-export class Component<T> {
+export class Component<T=any> {
   static __isAppRunComponent = true;
   private _app = new App();
 
@@ -16,7 +16,7 @@ export class Component<T> {
   private global_event;
   protected rendered;
 
-  private renderState(state) {
+  private renderState(state: T) {
     if (!this.view) return;
     const html = this.view(state);
     const el = (typeof this.element === 'string') ?
@@ -28,7 +28,7 @@ export class Component<T> {
     }
   }
 
-  public setState(state, options: {render:boolean, history:boolean, callback?}) {
+  public setState(state: T, options: {render:boolean, history:boolean, callback?}) {
     if (state instanceof Promise) {
       // Promise will not be saved nor rendered saved
       // state will be saved and rendered when promise is resolved
@@ -55,6 +55,11 @@ export class Component<T> {
     protected view?: View<T>,
     protected update?: Update<T>,
     protected options?) {
+  }
+
+  start = (element = null,
+    options: { render?: boolean, history?, global_event?: boolean } = { render: true }): Component<T> => {
+    return this.mount(element, { ...options, render: true });
   }
 
   public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
@@ -102,7 +107,7 @@ export class Component<T> {
     return name && (name.startsWith('#') || name.startsWith('/'));
   }
 
-  add_action(name, action, options: any = {}) {
+  add_action(name: string, action, options: any = {}) {
     if (!action || typeof action !== 'function') return;
     this.on(name, (...p) => {
       const newState = action(this.state, ...p);
@@ -134,11 +139,6 @@ export class Component<T> {
         this.add_action(name, action[0], action[1]);
       }
     });
-  }
-
-  start = (element = null,
-    options: { render?: boolean, history?, global_event?: boolean }= { render: true }): Component<T> => {
-    return this.mount(element, { ...options, render: true });
   }
 
   render = () => this.view(this.state);

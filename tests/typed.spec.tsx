@@ -17,7 +17,7 @@ describe('app', () => {
       '#': (state) => state,
     }
 
-    app.start(element, state, view, update);
+    app.start<State>(element, state, view, update);
     expect(element.textContent).toBe('Hello');
 
   })
