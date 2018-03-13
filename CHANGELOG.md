@@ -2,7 +2,7 @@
 
 ## 1.9
 
-* Add generic typed Component<T>
+* Add generic typed Component<T> and StatelessComponent<T>
 * Support JSX fragments
 * Make Component class plain class without inheritance
 * Use Bootstrap 4 for CLI SPA boilerplate

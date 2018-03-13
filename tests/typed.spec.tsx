@@ -1,4 +1,4 @@
-import app, { View, Action, Update, Component, on } from '../src/apprun';
+import app, { View, Action, Update, Component, StatelessComponent, on, update } from '../src/apprun';
 
 
 const element = document.createElement('div');
@@ -37,11 +37,27 @@ describe('app', () => {
 
       @on('#4')
       route: Action<State> = (state) => state
+
+      @update('#5')
+      route1(state) {
+        return state;
+      }
     }
 
     new MyComponent().start(element);
     expect(element.textContent).toBe('World');
 
+  })
+
+  it('should support typed stateless component', () => {
+    const a = { msg: 'Hello' };
+    const List1: StatelessComponent<typeof a> = (a) => <div>{a.msg}</div>;
+    const List2: StatelessComponent<typeof a> = (a) => '';
+    const List3: StatelessComponent<typeof a> = (a) => { };
+
+    expect(List1(a)).toEqual({ tag: 'div', props: null, children: ['Hello'] });
+    expect(List2(a)).toBe('');
+    expect(List3(a)).toBe(undefined);
   })
 
 })

@@ -9,8 +9,9 @@ declare module 'apprun' {
   export type VNode = {
     tag: string,
     props: {},
-    children: Array<VNode | string>
-  }
+    children: Array<VNode>
+  } | string;
+
 
   export interface IApp {
     start<T>(element: Element, model: T, view: View<T>, update: Update<T>, options?: { history }): void;
@@ -30,8 +31,11 @@ declare module 'apprun' {
     run(name: string, ...args: any[]): void;
   }
 
+  export type StatelessComponent<T={}> = (args: T) => VNode | void;
+
   export function on(name?: string, options?: { render?: boolean, history?: boolean });
   export function update(name?: string, options?: { render?: boolean, history?: boolean });
+
   export const app: IApp
   export default app;
 

@@ -7,8 +7,8 @@ import { on, update } from './decorator';
 export type VNode = {
   tag: string,
   props: {},
-  children: Array<VNode | string>
-}
+  children: Array<VNode>
+} | string;
 
 export interface IApp {
   start<T>(element: Element, model: T, view: View<T>, update: Update<T>, options?: { history }): void;
@@ -38,6 +38,6 @@ if (typeof window === 'object') {
   }
 }
 
-export default _app;
+export type StatelessComponent<T={}> = (args: T) => VNode | void;
 export { Component, View, Action, Update, on, update };
-
+export default _app;
