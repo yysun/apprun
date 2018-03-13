@@ -6,7 +6,7 @@ declare module 'apprun' {
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
   export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
-  export class IComponent<T> {
+  export class IComponent<T=any> {
     readonly state: T;
     view: View<T>;
     update: Update<T>;
@@ -27,7 +27,7 @@ declare module 'apprun' {
     render(element: HTMLElement, node: VNode): void;
   }
 
-  export class Component<T> {
+  export class Component<T=any> {
     constructor(state?: T, view?: View<T>, update?: Update<T>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
