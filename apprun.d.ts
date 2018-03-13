@@ -6,6 +6,12 @@ declare module 'apprun' {
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
   export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
+  export class IComponent<T> {
+    readonly state: T;
+    view: View<T>;
+    update: Update<T>;
+  }
+
   export type VNode = {
     tag: string,
     props: {},
@@ -23,7 +29,7 @@ declare module 'apprun' {
 
   export class Component<T> {
     constructor(state?: T, view?: View<T>, update?: Update<T>);
-    state: T;
+    readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
