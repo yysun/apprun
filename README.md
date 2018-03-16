@@ -14,13 +14,13 @@ AppRun has good performance. You can see the [performance results](https://rawgi
 ## Quick Start
 
 To give it a try, include AppRun in your html.
-```
+```html
 <script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
 ```
 
 No other ceremony, you can start developing your app right away.
 
-```
+```html
 <!doctype html>
 <html>
 <head>
@@ -89,11 +89,10 @@ In addition, AppRun allows you to build applications using [Component](https://y
 ## Install
 
 If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
-```
+```sh
 npm install apprun -g
 apprun --init --spa
 npm start
-
 ```
 
 ## Explore More
@@ -122,19 +121,19 @@ To explore more about AppRun, read the following.
 ## Contribute
 
 You can launch the webpack dev-server and the demo app from the _demo_ folder with the following npm commands:
-```
+```sh
 npm install
 npm start
 ```
 
 You can run the unit tests from the _tests_ folder.
-```
+```sh
 npm test
 ```
 Unit tests can serve as functional specifications.
 
 Finally, to build optimized js files to the dist folder, just run:
-```
+```sh
 npm run build
 ```
 
