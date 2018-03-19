@@ -2,15 +2,21 @@
 
 ![logo](logo.png)
 
-AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture), events, and components.
+AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture), [event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
-What makes AppRun different from Elm, or other Elm inspired frameworks and libraries is that AppRun uses the [Event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [Components](https://yysun.github.io/apprun/docs/#/?id=component) that each component has its own elm architecture.
 
+AppRun is flexible and practical. It gives options. You can choose:
+
+* Which language to use, JavaScript or TypeScript;
+* Apply the Elm architecture globally or use components;
+* View output format to be HTML or Virtual DOM/JSX;
+* Whether to using static types;
+* Whether just include it in a script tag or use it with a build process.
 
 Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
 
 
-AppRun has good performance. You can see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project,.
+AppRun has good performance. You can see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 ## Quick Start
 
 To give it a try, include AppRun in your html.
