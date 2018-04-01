@@ -41,3 +41,5 @@ if (typeof window === 'object') {
 export type StatelessComponent<T={}> = (args: T) => VNode | void;
 export { Component, View, Action, Update, on, update };
 export default _app;
+
+app.on('debug', _ => 0);

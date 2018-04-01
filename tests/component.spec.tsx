@@ -5,6 +5,7 @@ app.createElement = createElement;
 app.render = render;
 
 app.on('hi', _ => { })
+app.on('debug', _ => { });
 
 class TestComponent extends Component {
 

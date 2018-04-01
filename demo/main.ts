@@ -7,6 +7,8 @@ app.on('//', route => {
   item && item.parentElement.classList.add('active');
 })
 
+app.on('debug', p => console.log(p));
+
 import home from './components/home';
 import counter from './components/counter';
 import counters from './components/counters';

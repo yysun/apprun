@@ -19,6 +19,13 @@ export class Component<T=any> {
   private renderState(state: T) {
     if (!this.view) return;
     const html = this.view(state);
+
+    app.run('debug', {
+      component: this,
+      view: state,
+      vdom: html || '[vdom is null - no render]',
+    })
+
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
     if (el) el['_component'] = this;
@@ -28,9 +35,10 @@ export class Component<T=any> {
     }
   }
 
-  public setState(state: T, options: {render:boolean, history:boolean, callback?}) {
+  public setState(state: T, options: { render: boolean, history: boolean, callback?}) {
+
     if (state instanceof Promise) {
-      // Promise will not be saved nor rendered saved
+      // Promise will not be saved or rendered
       // state will be saved and rendered when promise is resolved
       state.then(s => {
         this.setState(s, options)
@@ -111,7 +119,17 @@ export class Component<T=any> {
     if (!action || typeof action !== 'function') return;
     this.on(name, (...p) => {
       const newState = action(this.state, ...p);
-        this.setState(newState, options)
+
+      app.run('debug', {
+        component: this,
+        'event': name,
+        e: p,
+        state: this.state,
+        newState,
+        options
+      })
+
+      this.setState(newState, options)
     }, options);
   }
 
