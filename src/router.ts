@@ -2,6 +2,9 @@ import app from './app';
 
 const ROUTER_EVENT = '//';
 
+app.on('//', _ => { });
+app.on('#', _ => { });
+
 export default class Router {
 
   route(url: string) {
