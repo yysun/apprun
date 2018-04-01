@@ -1,5 +1,6 @@
 import { App } from '../src/app';
 
+
 describe('app events', () => {
 
   let app: App;
@@ -28,12 +29,12 @@ describe('app events', () => {
     expect(hi_called).toBeTruthy();
   });
 
-  it ('should take debug option', () => {
-    spyOn(console, 'log');
-    app.on('hi', (p1, p2, p3, p4) => {}, {debug: true});
-    app.run('hi', 1, 'xx', null, {a: 1});
-    expect(console.log).toHaveBeenCalled();
-  });
+  // it ('should take debug option', () => {
+  //   spyOn(console, 'log');
+  //   app.on('hi', (p1, p2, p3, p4) => {}, {debug: true});
+  //   app.run('hi', 1, 'xx', null, {a: 1});
+  //   expect(console.log).toHaveBeenCalled();
+  // });
 
   it ('should take once option', () => {
     spyOn(console, 'assert');
@@ -56,21 +57,21 @@ describe('app events', () => {
     }, 250);
   });
 
-  it ('should mix delay and debug option', (done) => {
-    spyOn(console, 'log');
-    let i = 0;
-    app.on('hi', () => { i++; }, {debug: true, delay: 200});
-    app.run('hi');
-    app.run('hi');
-    app.run('hi');
-    expect(i).toBe(0);
-    expect(console.log).toHaveBeenCalledTimes(1);
-    setTimeout(() => {
-      expect(i).toBe(1);
-      expect(console.log).toHaveBeenCalledTimes(2);
-      done();
-    }, 250);
-  });
+  // it ('should mix delay and debug option', (done) => {
+  //   spyOn(console, 'log');
+  //   let i = 0;
+  //   app.on('hi', () => { i++; }, {debug: true, delay: 200});
+  //   app.run('hi');
+  //   app.run('hi');
+  //   app.run('hi');
+  //   expect(i).toBe(0);
+  //   expect(console.log).toHaveBeenCalledTimes(1);
+  //   setTimeout(() => {
+  //     expect(i).toBe(1);
+  //     expect(console.log).toHaveBeenCalledTimes(2);
+  //     done();
+  //   }, 250);
+  // });
 
   it ('should mix delay and non-delay events', (done) => {
     let i = 0;

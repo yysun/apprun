@@ -11,7 +11,7 @@ export class App {
   }
 
   on(name: string, fn: (...args) => void, options: any = {}) {
-    if (options.debug) console.log('on: ' + name);
+    // if (options.debug) console.log('on: ' + name);
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn: fn, options: options });
   }
@@ -24,7 +24,7 @@ export class App {
       if (options.delay) {
         this.delay(name, fn, args, options);
       } else {
-        if (options.debug) console.log('run: ' + name, args);
+        // if (options.debug) console.log('run: ' + name, args);
         fn.apply(this, args);
       }
       return !sub.options.once;
@@ -35,7 +35,7 @@ export class App {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
-      if (options.debug) console.log(`run-delay ${options.delay}:` + name, args);
+      // if (options.debug) console.log(`run-delay ${options.delay}:` + name, args);
       fn.apply(this, args);
     }, options.delay);
   }
