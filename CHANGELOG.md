@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.10
+
+* Add debug event, use app.on('debug', p=>console.log(p)) to log state changes
+
 ## 1.9
 
 * Add generic typed Component<T> and StatelessComponent<T>
