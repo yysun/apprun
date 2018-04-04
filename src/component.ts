@@ -22,7 +22,7 @@ export class Component<T=any> {
 
     app.run('debug', {
       component: this,
-      view: state,
+      state,
       vdom: html || '[vdom is null - no render]',
     })
 
