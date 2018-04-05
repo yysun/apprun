@@ -1,22 +1,22 @@
 # AppRun [![Build Status](https://travis-ci.org/yysun/apprun.svg?branch=master)](https://travis-ci.org/yysun/apprun) [![npm](https://img.shields.io/npm/v/apprun.svg)](https://www.npmjs.org/package/apprun)
 
-![logo](logo.png)
 
-AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture), [event Pub-Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a 3K library for building applications using the [Elm architecture](https://guide.elm-lang.org/architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
+AppRun has a tiny API which has just three functions and one component class. It acts like glue to link and drives your application logic. It adds no overhead or ceremony.
+
+Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962).
+
+
+AppRun has good performance. You can see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 AppRun is flexible and practical. It gives options. You can choose:
 
+* Whether just include it in a script tag or use it with a build process.
 * Which language to use, JavaScript or TypeScript;
 * Apply the Elm architecture globally or use components;
 * View output format to be HTML or Virtual DOM/JSX;
 * Whether to using static types;
-* Whether just include it in a script tag or use it with a build process.
-
-Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
-
-
-AppRun has good performance. You can see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 ## Quick Start
 
 To give it a try, include AppRun in your html.
@@ -55,18 +55,18 @@ No other ceremony, you can start developing your app right away.
 </html>
 ```
 
-The example code above is a counter application that has implemented the elm architecture.
+The example code above is a counter application that has implemented the Elm architecture.
 
 Try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
 
 
 ## Architecture Concept
 
-There are three separated parts in the elm architecture.
+There are three separated parts in the Elm architecture.
 
 * Model — the data model of your application state
-* Update — a set of functions to update the state
 * View — a function to display the state as HTML
+* Update — a set of event handlers to update the state
 
 AppRun applications have the event cycle like below to drive the architecture:
 
@@ -74,13 +74,13 @@ AppRun applications have the event cycle like below to drive the architecture:
 Web events => AppRun Events => Update => State => View => HTML
 ```
 
-Using events makes it very easy to handle user interaction, routing and even server-side events. Events also make your code modules decoupled and easy to test.
+Using events makes it very easy to handle user interaction, routing and even server-side events. Events make modules decoupled and easy to test. Using the event pub-sub also solved the component relationship and communication problem that concerns Elm community.
 
-In addition, AppRun allows you to build applications using [Component](https://yysun.github.io/apprun/docs/#/?id=component). Each component has an elm architecture. It is very suitable for Single Page Applications (SPA).
+Each AppRun [Component](https://yysun.github.io/apprun/docs/#/?id=component) has an Elm architecture like a mini-application. It is very suitable for building Single Page Applications (SPA).
 
 ## Examples
 
-* [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
+* [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
 * [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
 
@@ -96,8 +96,7 @@ In addition, AppRun allows you to build applications using [Component](https://y
 
 If you are interested in moving forward, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
 ```sh
-npm install apprun -g
-apprun --init --spa
+npx apprun --init --spa
 npm start
 ```
 
