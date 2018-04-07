@@ -1,4 +1,4 @@
-import app, { Component, on, update } from '../src/apprun';
+import app, { Component, on, update, event } from '../src/apprun';
 
 describe('Update decorator', () => {
 
@@ -11,7 +11,7 @@ describe('Update decorator', () => {
         return val;
       }
 
-      @update('hi, #hi')
+      @event('hi, #hi')
       f2(state, val) {
         return val;
       }
