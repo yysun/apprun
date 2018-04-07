@@ -1,4 +1,4 @@
-# AppRun [![Build Status](https://travis-ci.org/yysun/apprun.svg?branch=master)](https://travis-ci.org/yysun/apprun) [![npm](https://img.shields.io/npm/v/apprun.svg)](https://www.npmjs.org/package/apprun)
+# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
 
 
 AppRun is a 3K library for building applications using the [Elm architecture](https://guide.elm-lang.org/architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
@@ -149,3 +149,16 @@ Have fun and send pull requests.
 MIT
 
 Copyright (c) 2015-2018 Yiyi Sun
+
+
+[travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master
+[travis-url]: https://travis-ci.org/yysun/apprun
+[npm-image]: https://img.shields.io/npm/v/apprun.svg
+[npm-url]: https://npmjs.org/package/apprun
+[license-image]: https://img.shields.io/:license-mit-blue.svg
+[license-url]: LICENSE.md
+[downloads-image]: http://img.shields.io/npm/dm/apprun.svg
+[downloads-url]: https://npmjs.org/package/apprun
+
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social
