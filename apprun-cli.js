@@ -46,7 +46,7 @@ function init() {
   }
 
   console.log('Installing packages. This might take a couple minutes.');
-  execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript --save-dev');
+  execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
   execSync('npm install apprun --save');
 
   write(tsconfig_json, read('tsconfig.json'));
@@ -145,7 +145,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.9.5')
+  .version('1.10.1')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
