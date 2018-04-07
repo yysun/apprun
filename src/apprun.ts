@@ -11,7 +11,8 @@ export type VNode = {
 } | string;
 
 export interface IApp {
-  start<T>(element: Element, model: T, view: View<T>, update: Update<T>, options?: { history }): void;
+  start<T>(element: Element, model: T, view: View<T>, update: Update<T>,
+    options?: { history?, rendered?: (state: T) => void}): Component<T>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   run(name: string, ...args: any[]): void;
   createElement(tag: string | Function, props, ...children): VNode;
@@ -21,9 +22,11 @@ export interface IApp {
 app.createElement = createElement;
 app.render = render;
 
-app.start = <T>(element: HTMLElement | string, model: T, view: View<T>, update: Update<T>, options?: { history }) => {
-  const opts = Object.assign(options || {}, { render: true, global_event: true })
-  const component = new Component(model, view, update);
+app.start = <T>(element: HTMLElement | string, model: T, view: View<T>, update: Update<T>,
+  options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
+  const opts = Object.assign(options || {}, { render: true, global_event: true });
+  const component = new Component<T>(model, view, update);
+  if (options && options.rendered) component.rendered = options.rendered;
   component.mount(element, opts);
   return component;
 };

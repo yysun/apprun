@@ -14,7 +14,7 @@ export class Component<T=any> {
   private _history_idx = -1;
   private enable_history;
   private global_event;
-  protected rendered;
+  public rendered;
 
   private renderState(state: T) {
     if (!this.view) return;
