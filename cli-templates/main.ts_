@@ -1,6 +1,4 @@
 import app from 'apprun';
-app.on('//', _ => { });
-app.on('#', _ => { });
 
 const model = 'Hello world - AppRun !';
 
