@@ -36,7 +36,7 @@ declare module 'apprun' {
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
-    rendered(state: T): void;
+    rendered: (state: T) => void;
   }
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;

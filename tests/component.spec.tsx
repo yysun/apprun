@@ -24,6 +24,7 @@ class TestComponent extends Component {
     'hiAsyncNull': async (state, value) => {
     }
   }
+  rendered = () => { }
 }
 
 describe('Component', () => {
