@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.11
+
+* Support JSX fragments at root level
 ## 1.10
 
 * Add debug event, use app.on('debug', p=>console.log(p)) to log state changes
