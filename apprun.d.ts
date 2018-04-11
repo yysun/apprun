@@ -26,6 +26,7 @@ declare module 'apprun' {
     run(name: string, ...args: any[]): void;
     createElement(tag: string | Function, props, ...children): VNode;
     render(element: HTMLElement, node: VNode): void;
+    Fragment(props, ...children): any[];
   }
 
   export class Component<T=any> {

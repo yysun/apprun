@@ -5,6 +5,7 @@ export class App {
   public start;
   public createElement;
   public render;
+  public Fragment;
 
   constructor() {
     this._events = {};

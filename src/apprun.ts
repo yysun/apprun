@@ -1,5 +1,5 @@
 import app from './app';
-import { createElement, render } from './vdom';
+import { createElement, render, Fragment } from './vdom';
 import { Component, View, Action, Update } from './component';
 import Router from './router';
 import { on, update } from './decorator';
@@ -17,10 +17,12 @@ export interface IApp {
   run(name: string, ...args: any[]): void;
   createElement(tag: string | Function, props, ...children): VNode;
   render(element: HTMLElement, node: VNode): void;
+  Fragment(props, ...children): any[];
 }
 
 app.createElement = createElement;
 app.render = render;
+app.Fragment = Fragment;
 
 app.start = <T>(element: HTMLElement | string, model: T, view: View<T>, update: Update<T>,
   options?: { history?, rendered?: (state: T) => void }) : Component<T> => {

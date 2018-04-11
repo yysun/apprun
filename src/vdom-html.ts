@@ -1,4 +1,4 @@
-import { createElement, updateElement } from './vdom-my';
+import { createElement, updateElement, Fragment } from './vdom-my';
 import morph = require('morphdom')
 
 export function render(element, html) {
@@ -13,5 +13,5 @@ export function render(element, html) {
     updateElement(element, html);
   }
 }
-export { createElement };
+export { createElement, Fragment };
 

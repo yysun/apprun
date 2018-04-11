@@ -44,15 +44,25 @@ const keyCache = {};
 
 export const updateElement = render;
 
-export function render(element: Element, node: VNode) {
+export function render(element: Element, nodes: VNode | VNode[]) {
   // console.log('render', element, node);
   idx = 0;
-
-  if (!node || !element) return;
-  if (!element.firstChild) {
-    element.appendChild(create(node));
+  if (!nodes || !element) return;
+  if (Array.isArray(nodes)) {
+    for (let i = 0; i < nodes.length; i++) {
+      if (!element.children[i]) {
+        element.appendChild(create(nodes[i]));
+      } else {
+        update(element.children[1], nodes[i]);
+      }
+    }
   } else {
-    update(element.firstChild, node);
+    const node = nodes;
+    if (!element.firstChild) {
+      element.appendChild(create(node));
+    } else {
+      update(element.firstChild, node);
+    }
   }
 }
 
@@ -182,6 +192,6 @@ function updateProps(element: Element, props: {}) {
   }
 }
 
-export function Fragment(props, ...children) {
+export function Fragment(props, ...children): any[] {
   return collect(children);
 }
