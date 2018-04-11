@@ -47,6 +47,15 @@ describe('vdom-my', () => {
     expect(Array.isArray(vdom)).toBeTruthy();
     app.render(el, vdom);
     expect(el.childElementCount).toBe(1);
+    expect(el.innerHTML).toBe('<li><a href="#profile">Profile</a></li>');
   })
-
+  it('should work as usual w/o JSX Fragment at root level', () => {
+    const el = document.createElement('div');
+    const view = () => <li><a href="#profile">Profile</a></li>
+    const vdom = view();
+    expect(Array.isArray(vdom)).toBeFalsy();
+    app.render(el, vdom);
+    expect(el.childElementCount).toBe(1);
+    expect(el.innerHTML).toBe('<li><a href="#profile">Profile</a></li>');
+  })
 })
