@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.12
+
+* Support dataset attribute
 ## 1.11
 
 * Support JSX fragments at root level
