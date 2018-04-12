@@ -185,6 +185,9 @@ function updateProps(element: Element, props: {}) {
       for (let s in value) {
         if (element.style[s] !== value[s]) element.style[s] = value[s];
       }
+    } else if (name.startsWith('data-')) {
+      const dname = name.substring(5);
+        if (element.dataset[dname] !== value) element.dataset[dname] = value;
     } else {
       if (element[name] !== value) element[name] = value;
       if (name === 'key' && value) keyCache[value] = element;
