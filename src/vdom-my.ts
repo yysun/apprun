@@ -47,15 +47,9 @@ export const updateElement = render;
 export function render(element: Element, nodes: VNode | VNode[]) {
   // console.log('render', element, node);
   idx = 0;
-  if (!nodes || !element) return;
+  if (nodes==null || !element) return;
   if (Array.isArray(nodes)) {
-    for (let i = 0; i < nodes.length; i++) {
-      if (!element.children[i]) {
-        element.appendChild(create(nodes[i]));
-      } else {
-        update(element.children[1], nodes[i]);
-      }
-    }
+    updateChildren(element, nodes);
   } else {
     const node = nodes;
     if (!element.firstChild) {
@@ -76,15 +70,18 @@ function same(el: Element, node: VNode) {
 function update(element: Element, node: VNode) {
   console.assert(!!element);
   //console.log('update', element, node);
-
   if (!same(element, node)) {
     element.parentNode.replaceChild(create(node), element);
     return;
   }
+  updateChildren(element, node.children);
+  updateProps(element, node.props);
+}
 
-  const len = Math.min(element.childNodes.length, node.children.length);
+function updateChildren(element, children) {
+  const len = Math.min(element.childNodes.length, children.length);
   for (let i = 0; i < len; i++) {
-    const child = node.children[i];
+    const child = children[i];
     const el = element.childNodes[i];
     if (typeof child === 'string') {
       if (el.textContent !== child) {
@@ -106,7 +103,7 @@ function update(element: Element, node: VNode) {
             element.appendChild(el);
             update(element.childNodes[i], child);
           } else {
-            element.appendChild(create(node), el);
+            element.appendChild(create(child), el);
             update(element.childNodes[i], child);
           }
         }
@@ -122,16 +119,13 @@ function update(element: Element, node: VNode) {
     n--;
   }
 
-  if (node.children.length > len) {
+  if (children.length > len) {
     const d = document.createDocumentFragment();
-    for (let i = len; i < node.children.length; i++) {
-      d.appendChild(create(node.children[i]));
+    for (let i = len; i < children.length; i++) {
+      d.appendChild(create(children[i]));
     }
     element.appendChild(d);
   }
-
-  updateProps(element, node.props);
-
 }
 
 function createText(node) {
