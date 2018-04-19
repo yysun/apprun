@@ -58,5 +58,22 @@ describe('vdom-my', () => {
     expect(el.childElementCount).toBe(2);
     expect(el.innerHTML).toBe('<li><a></a></li><li><a></a></li>');
   })
-
+  it('should combine string and tags', () => {
+    const el = document.createElement('div');
+    el.innerHTML = '<h1><h1>';
+    const view = () => <>aaa<div>b</div>{' '}</>
+    const vdom = view();
+    app.render(el, vdom);
+    expect(vdom.length).toBe(3);
+    expect(el.innerHTML).toBe('aaa<div>b</div> ');
+  })
+  it('should combine string and tags', () => {
+    const el = document.createElement('div');
+    el.innerHTML = '<h1><h1>';
+    const view = () => <>{' '} <div>b</div> {' '}</>
+    const vdom = view();
+    app.render(el, vdom);
+    expect(vdom.length).toBe(5);
+    expect(el.innerHTML).toBe('  <div>b</div>  ');
+  })
 })

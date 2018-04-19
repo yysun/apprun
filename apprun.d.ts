@@ -2,29 +2,22 @@ declare module 'apprun' {
 
   export type Element = HTMLElement | string;
 
-  export type View<T> = (state: T) => string | Function | void;
-  export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
-  export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
-
-  export class IComponent<T=any> {
-    readonly state: T;
-    view: View<T>;
-    update: Update<T>;
-  }
-
   export type VNode = {
     tag: string,
     props: {},
-    children: Array<VNode>
-  } | string;
+    children: Array<VNode|string>
+  };
 
+  export type View<T> = (state: T) => string | VNode | VNode[] | void;
+  export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
+  export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
   export interface IApp {
     start<T>(element: Element, model: T, view: View<T>, update: Update<T>,
       options?: { history?, rendered?: (state: T) => void }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
-    createElement(tag: string | Function, props, ...children): VNode;
+    createElement(tag: string | Function, props, ...children): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
     Fragment(props, ...children): any[];
   }

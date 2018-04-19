@@ -1,9 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-export type View<T> = (state: T) => string | Function | void;
-export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
-export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
+import { VNode, View, Update } from './types';
 
 export class Component<T=any> {
   static __isAppRunComponent = true;

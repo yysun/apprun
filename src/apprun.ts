@@ -1,21 +1,16 @@
 import app from './app';
 import { createElement, render, Fragment } from './vdom';
-import { Component, View, Action, Update } from './component';
+import { Component } from './component';
+import { VNode, View, Action, Update } from './types';
 import Router from './router';
 import { on, update } from './decorator';
 
-export type VNode = {
-  tag: string,
-  props: {},
-  children: Array<VNode>
-} | string;
-
 export interface IApp {
-  start<T>(element: Element, model: T, view: View<T>, update: Update<T>,
+  start<T>(element: Element | string, model: T, view: View<T>, update: Update<T>,
     options?: { history?, rendered?: (state: T) => void}): Component<T>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   run(name: string, ...args: any[]): void;
-  createElement(tag: string | Function, props, ...children): VNode;
+  createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
 }
@@ -43,7 +38,7 @@ if (typeof window === 'object') {
   }
 }
 
-export type StatelessComponent<T={}> = (args: T) => VNode | void;
+export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { Component, View, Action, Update, on, update };
 export { update as event };
 export default _app;

@@ -1,11 +1,5 @@
 import createComponent from './createComponent';
-
-export type VNode = {
-  tag: string,
-  props: {},
-  children: Array<VNode | string>
-}
-
+import { VNode } from './types';
 export type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 const ATTR_PROPS = '_props';
