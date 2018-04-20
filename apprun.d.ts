@@ -13,7 +13,7 @@ declare module 'apprun' {
   export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
   export interface IApp {
-    start<T>(element: Element, model: T, view: View<T>, update: Update<T>,
+    start<T>(element?: Element, model?: T, view?: View<T>, update?: Update<T>,
       options?: { history?, rendered?: (state: T) => void }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
