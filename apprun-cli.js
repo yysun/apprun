@@ -69,6 +69,7 @@ function init() {
     JSON.stringify(package_info, null, 2)
   );
   git_init();
+  jest_init();
   show_start = true;
 }
 
@@ -145,7 +146,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.10.1')
+  .version('1.12.1')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
