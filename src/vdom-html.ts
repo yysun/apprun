@@ -1,11 +1,11 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-import morph = require('morphdom')
+import * as morphdom from 'morphdom';
 
 export function render(element, html) {
   console.assert(!!element);
   if (typeof html === 'string') {
     if (element.firstChild) {
-      morph(element.firstChild, html);
+      morphdom(element.firstChild, html);
     } else {
       element.innerHTML = html;
     }

@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es2015",
+		"module": "commonjs",
 		"jsx": "react",
 		"reactNamespace": "app",
 		"lib": ["dom", "es2015", "es5"],
