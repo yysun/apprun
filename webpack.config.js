@@ -4,7 +4,8 @@ module.exports = {
   entry: {
     'dist/apprun': './src/apprun.ts',
     'dist/apprun-html': './src/apprun-html.ts',
-    'demo/app': './demo/main.ts'
+    'demo/app': './demo/main.ts',
+    'demo/wc-app': './demo/wc-app.tsx'
   },
   output: {
     filename: '[name].js',
