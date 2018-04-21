@@ -32,6 +32,8 @@ export class App {
     });
   }
 
+  once(name: string, fn) { this.on(name, fn); }
+
   private delay(name, fn, args, options) {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {

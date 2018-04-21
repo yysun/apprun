@@ -116,4 +116,14 @@ describe('app events', () => {
     expect(console.log).toHaveBeenCalledTimes(2);
     expect(console.assert).toHaveBeenCalled();
   });
+
+
+  it ('should run only once', () => {
+    spyOn(console, 'assert');
+    app.on('hi', (p1, p2, p3, p4) => {}, {once: true});
+    app.run('hi', 1, 'xx', null, {a: 1});
+    app.run('hi', 1, 'xx', null, {a: 1});
+    expect(console.assert).toHaveBeenCalled();
+  });
+
 });
