@@ -46,10 +46,10 @@ export function render(element: Element, nodes: VNode | VNode[]) {
     updateChildren(element, nodes);
   } else {
     const node = nodes;
-    if (!element.firstChild) {
+    if (!element.firstElementChild) {
       element.appendChild(create(node));
     } else {
-      update(element.firstChild, node);
+      update(element.firstElementChild, node);
     }
   }
 }

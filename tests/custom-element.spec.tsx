@@ -1,27 +1,15 @@
-import app from '../src/app';
-import { createElement, render } from '../src/vdom';
-import { Component } from '../src/component';
+import app, { Component, webComponent } from '../src/apprun';
 
-import { toCustomElement } from '../src/web-component';
-
-declare var customElements;
 describe('component', () => {
   it('should be able to export as custom element', () => {
 
-    class C extends HTMLElement {
-      constructor() {
-        super();
-      }
-      connectedCallback() {
-        this.innerHTML = "<div>hello world</div>";
-      }
+    class C extends Component {
     }
-    customElements.define('hello-world', C);
+    const c = webComponent(C);
 
-    const el= document.createElement('hello-world');
-    document.body.appendChild(el);
-
-    // expect(document.firstChild).toBe(el);
+    // customElements.define('my-app',c);
+    // const el= document.createElement('hello-world');
+    // document.body.appendChild(el);
     // expect(el.innerHTML).toBe('<div>hello world</div>');
 
   })

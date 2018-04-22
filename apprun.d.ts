@@ -40,6 +40,7 @@ declare module 'apprun' {
   export function update(name?: string, options?: { render?: boolean, history?: boolean });
   export function event(name?: string, options?: { render?: boolean, history?: boolean });
 
+  export function webComponent(componentClass);
   export const app: IApp
   export default app;
 

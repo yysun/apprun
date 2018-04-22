@@ -4,6 +4,7 @@ import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
 import Router from './router';
 import { on, update } from './decorator';
+import webComponent from './web-component';
 
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
@@ -39,7 +40,7 @@ if (typeof window === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { Component, View, Action, Update, on, update };
+export { Component, View, Action, Update, on, update, webComponent };
 export { update as event };
 export default _app;
 

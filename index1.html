@@ -5,7 +5,10 @@
   <title>apprun - web component</title>
 </head>
 <body>
-  <my-app />
+  <my-app id="1" num="2">
+    <button onclick="app.run('#-1')">-1</button>
+    <button onclick="app.run('#+1')">+1</button>
+  </my-app>
   <script src="demo/wc-app.js"></script>
 </body>
 </html>
