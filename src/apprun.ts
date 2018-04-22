@@ -14,11 +14,13 @@ export interface IApp {
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
+  webComponent(name: string, component: Function): void;
 }
 
 app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
+app.webComponent = webComponent;
 
 app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T>,
   options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
@@ -40,7 +42,7 @@ if (typeof window === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { Component, View, Action, Update, on, update, webComponent };
+export { Component, View, Action, Update, on, update };
 export { update as event };
 export default _app;
 

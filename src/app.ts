@@ -6,6 +6,7 @@ export class App {
   public createElement;
   public render;
   public Fragment;
+  public webComponent;
 
   constructor() {
     this._events = {};
