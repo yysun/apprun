@@ -6,7 +6,7 @@
 </head>
 <body>
   <div id="my-app"></div>
-  <script src="dist/apprun-html.js"></script>
+  <script src="../dist/apprun-html.js"></script>
   <script>
     class Counter extends Component {
       constructor() {
@@ -14,16 +14,16 @@
         this.state = 0;
         this.view = state => `<div>
           <h1>${state}</h1>
-          <button onclick='app.run("#-1")'>-1</button>
-          <button onclick='app.run("#+1")'>+1</button>
+          <button onclick='app.run("-1")'>-1</button>
+          <button onclick='app.run("+1")'>+1</button>
           </div>`;
         this.update = {
-          '#+1': state => state + 1,
-          '#-1': state => state - 1
+          '+1': state => state + 1,
+          '-1': state => state - 1
         };
       }
     }
-    new Counter().start('my-app');
+    new Counter().start('my-app', {global_event: true});
   </script>
 </body>
 </html>

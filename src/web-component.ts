@@ -2,9 +2,9 @@ import { Component } from './component';
 declare var customElements;
 
 export const customElement = (componentClass, options?) => class extends HTMLElement {
-   component;
-   on;
-   run;
+   private component;
+   public on;
+   public run;
   // shadowRoot;
   constructor() {
     super();
@@ -17,7 +17,7 @@ export const customElement = (componentClass, options?) => class extends HTMLEle
       props['children'].forEach(el => el.parentElement.removeChild(el));
     }
     const opts = { global_event: options && options.global_event };
-    this.component = new componentClass(props).start(this, options);
+    this.component = new componentClass(props).start(this, opts);
     this.on = this.component.on.bind(this.component);
     this.run = this.component.run.bind(this.component);
   }
@@ -27,4 +27,3 @@ export const customElement = (componentClass, options?) => class extends HTMLEle
 export default (name: string, componentClass, options?) => {
   customElements && customElements.define(name, customElement(componentClass, options))
 }
-

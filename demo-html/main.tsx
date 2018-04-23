@@ -9,8 +9,8 @@ class MyApp extends Component {
   }
 
   update = {
-    '#-1': (state) => state - 1,
-    '#+1': (state) => state + 1
+    '-1': (state) => state - 1,
+    '+1': (state) => state + 1
   }
 
   children;
