@@ -2,7 +2,9 @@ import { Component } from './component';
 declare var customElements;
 
 export const customElement = (componentClass, options?) => class extends HTMLElement {
-  component;
+   component;
+   on;
+   run;
   // shadowRoot;
   constructor() {
     super();
@@ -16,7 +18,10 @@ export const customElement = (componentClass, options?) => class extends HTMLEle
     }
     const opts = { global_event: options && options.global_event };
     this.component = new componentClass(props).start(this, options);
+    this.on = this.component.on.bind(this.component);
+    this.run = this.component.run.bind(this.component);
   }
+  get state() { return this.component.state; }
 }
 
 export default (name: string, componentClass, options?) => {
