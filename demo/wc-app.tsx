@@ -1,5 +1,5 @@
 
-import app, { Component, webComponent } from '../src/apprun';
+import app, { Component } from '../src/apprun';
 declare var customElements;
 class MyApp extends Component {
   // state = 0/
@@ -28,4 +28,4 @@ class MyApp extends Component {
   }
 }
 
-customElements.define('my-app', webComponent(MyApp)); 
+app.webComponent('my-app', MyApp);
