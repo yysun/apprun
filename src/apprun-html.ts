@@ -8,4 +8,6 @@ app.Fragment = Fragment;
 export default app;
 export { Component, View, Action, Update, on, update };
 
-window['Component'] = Component;
+if (typeof window === 'object') {
+  window['Component'] = Component;
+}

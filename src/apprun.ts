@@ -32,15 +32,14 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
 };
 
 let _app: IApp = app;
-if (typeof window === 'object') {
-  if (window['app'] && window['app']['start']) {
-    _app = window['app'];
-  } else {
-    window['app'] = _app;
-    document.addEventListener("DOMContentLoaded", () => new Router());
-  }
+declare var global;
+const root = global || window;
+if (root['app'] && root['app']['start']) {
+  _app = root['app'];
+} else {
+  root['app'] = _app;
+  if (typeof document === 'object') document.addEventListener("DOMContentLoaded", () => new Router());
 }
-
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { Component, View, Action, Update, on, update };
 export { update as event };

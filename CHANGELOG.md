@@ -1,11 +1,19 @@
 # Change Log
 
+## 2.0 beta
+
+* Make AppRun component web component
+
 ## 1.12
 
 * Support dataset attribute
+* Add app.once function to one-time event subscription
+* Add template engine for express js
+
 ## 1.11
 
 * Support JSX fragments at root level
+
 ## 1.10
 
 * Add debug event, use app.on('debug', p=>console.log(p)) to log state changes

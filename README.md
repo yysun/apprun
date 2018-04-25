@@ -15,7 +15,7 @@ AppRun is flexible and practical. It gives options. You can choose:
 * Whether just include it in a script tag or use it with a build process.
 * Which language to use, JavaScript or TypeScript;
 * Apply the Elm architecture globally or use components;
-* View output format to be HTML or Virtual DOM/JSX;
+* Create view in HTML or Virtual DOM/JSX;
 * Whether to using static types;
 ## Quick Start
 
@@ -57,16 +57,13 @@ No other ceremony, you can start developing your app right away.
 
 The example code above is a counter application that has implemented the Elm architecture.
 
-Try it online: [AppRun - Counter](https://jsfiddle.net/ap1kgyeb/4).
-
-
 ## Architecture Concept
 
 There are three separated parts in the Elm architecture.
 
 * Model — the data model of your application state
-* View — a function to display the state as HTML
-* Update — a set of event handlers to update the state
+* View — a function to display the state as HTML string ot virtual DOM
+* Update — a collection of event handlers to update the state
 
 AppRun applications have the event cycle like below to drive the architecture:
 
@@ -78,7 +75,47 @@ Using events makes it very easy to handle user interaction, routing and even ser
 
 Each AppRun [Component](https://yysun.github.io/apprun/docs/#/?id=component) has an Elm architecture like a mini-application. It is very suitable for building Single Page Applications (SPA).
 
-## Examples
+Coming soon in AppRun 2.0, AppRun components can also be converted into web components. The web components are powered with the Elm architecture and can be programmed using events.
+
+```html
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Counter as web component</title>
+</head>
+<body>
+  <my-app id='counter'></my-app>
+  <script src="https://unpkg.com/apprun@beta/dist/apprun-html.js"></script>
+  <script>
+    class Counter extends Component {
+      constructor() {
+        super();
+        this.state = 0;
+        this.view = state => `<div>
+          <h1>${state}</h1>
+          <button onclick='counter.run("-1")'>-1</button>
+          <button onclick='counter.run("+1")'>+1</button>
+          </div>`;
+        this.update = {
+          '+1': state => state + 1,
+          '-1': state => state - 1
+        };
+      }
+    }
+    app.webComponent('my-app', Counter);
+  </script>
+</body>
+</html>
+```
+
+## Try More Examples Online
+
+* glitch.com - [AppRun Excamples](https://glitch.com/@yysun)
+* stackblitz.com - [AppRun Examples](https://stackblitz.com/@yysun)
+
+
+## Other Github Projectss
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
@@ -90,6 +127,8 @@ Each AppRun [Component](https://yysun.github.io/apprun/docs/#/?id=component) has
 * [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
 * [AppRun Hot Module Reload with Webpack](https://github.com/yysun/apprun-hot-module-reload)
 * [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
+* [AppRun Desktop Application with Electron](https://github.com/yysun/apprun-electron)
+* [AppRun Mobile Application with Framework7](https://github.com/yysun/f7)
 
 
 ## Install
