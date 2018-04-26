@@ -6,7 +6,9 @@ function getProp(prop) {
 }
 
 function toProps(props) {
-  return Object.keys(props).map(name => ` ${name}="${getProp(props[name])}"`).join('');
+  return Object.keys(props)
+    .map(name => ` ${name === 'className' ? 'class' : name}="${getProp(props[name])}"`)
+    .join('');
 }
 
 function toHTML(vdom) {
