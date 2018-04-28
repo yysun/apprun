@@ -28,8 +28,8 @@ function toHTMLArray(nodes) {
 
 function engine(name, options, callback) {
   const fn = require(name).default;
-  const rendered = fn(options.state || options);
-  return options.ssr ?
+  const rendered = fn(options);
+  return global.ssr ?
     callback(null, toHTML(rendered)) :
     callback(null, rendered);
 }
