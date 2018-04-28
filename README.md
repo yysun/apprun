@@ -75,7 +75,7 @@ Using events makes it very easy to handle user interaction, routing and even ser
 
 Each AppRun [Component](https://yysun.github.io/apprun/docs/#/?id=component) has an Elm architecture like a mini-application. It is very suitable for building Single Page Applications (SPA).
 
-Coming soon in AppRun 2.0, AppRun components can also be converted into web components. The web components are powered with the Elm architecture and can be programmed using events.
+AppRun 2.0 beta, AppRun components can also be converted into web components. The web components are powered with the Elm architecture and can be programmed using events.
 
 ```html
 <!doctype html>
