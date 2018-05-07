@@ -166,7 +166,7 @@ function updateProps(element: Element, props: {}) {
   element[ATTR_PROPS] = props;
   for (let name in props) {
     const value = props[name];
-    if (cached[name] === value) continue;
+    // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
