@@ -26,7 +26,8 @@ export default class Store {
     }
     delete(id) {
         // const idx = this.data.findIndex(d => d.id==id);
-        this.data = this.data.filter((e,i) => e.id!=id);
+        this.data = this.data.filter((e, i) => e.id != id);
+        this.selected = null;
     }
     run() {
         this.data = this.buildData();
