@@ -26,7 +26,9 @@ export function createElement (tag: string | Function, props: {}, ...children) {
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    const id = props && props['id'] || `_${tag.name}_${++idx}`;
+    let id = props && props['id']; // || `_${tag.name}_${++idx}`;
+    console.assert(!!id, `Component ${tag.name} is missing an unique id`);
+    if (!id) id = `_${tag.name}_${++idx}`;
     return createComponent(tag, id, props);
   }
   else

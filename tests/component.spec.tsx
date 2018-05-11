@@ -295,6 +295,99 @@ describe('Component', () => {
     expect(document.body['_component']).toBe(component);
   })
 
+  it('should pass props to the constructor of stateful component', () => {
+    class Child extends Component {
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      constructor({ n }) {
+        super();
+        this.state = n
+      }
+    }
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child id="child-1" n='7' />
+        </div>
+      }
+    }
+    const element = document.createElement('div');
+    new Main().start(element);
+    expect(element.textContent).toEqual('7');
+  });
+
+  it('should set props as state of stateful component', () => {
+    class Child extends Component {
+      view = (state) => {
+        return <div>{state.n}</div>
+      }
+    }
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child id="child-2" n='8' />
+        </div>
+      }
+    }
+    const element = document.createElement('div');
+    new Main().start(element);
+    expect(element.textContent).toEqual('8');
+  });
+
+
+  it('should call mounted function of stateful component', () => {
+    class Child2 extends Component {
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      mounted = ({ n }) => {
+        this.state = n
+      }
+    }
+
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child2 id='child-3' n='9' />
+        </div>
+      }
+    }
+
+    const element = document.createElement('div');
+    new Main().start(element);
+    expect(element.textContent).toEqual('9');
+  });
+
+  it('should allow firing event inside the constructor of stateful component', () => {
+    class Child3 extends Component {
+      view = (state) => {
+        return <div>{state.n}</div>
+      }
+      mounted = (n) => {
+        if (n !== this.state) this.run('init-async', n);
+      }
+      update = {
+        'init-async': async (state, value) => {
+          return new Promise(resolve => {
+            resolve(value);
+          })
+        }
+      }
+    }
+
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child3 id='child-4' n='a' />
+        </div>
+      }
+    }
+
+    const element = document.createElement('div');
+    new Main().start(element);
+    expect(element.textContent).toEqual('a');
+  });
 });
 
 
