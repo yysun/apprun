@@ -26,32 +26,27 @@ export function createElement (tag: string | Function, props: {}, ...children) {
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    let id = props && props['id']; // || `_${tag.name}_${++idx}`;
-    console.assert(!!id, `Component ${tag.name} is missing an unique id`);
-    if (!id) id = `_${tag.name}_${++idx}`;
-    return createComponent(tag, id, props);
+    return createComponent(tag, { ...props, children });
   }
   else
     return tag(props, ch);
 };
 
-let idx = 0;
 const keyCache = {};
 
 export const updateElement = render;
 
 export function render(element: Element, nodes: VNode | VNode[]) {
   // console.log('render', element, node);
-  idx = 0;
   if (nodes==null || !element) return;
   if (Array.isArray(nodes)) {
     updateChildren(element, nodes);
   } else {
     const node = nodes;
-    if (!element.firstChild) {
+    if (!element.firstElementChild) {
       element.appendChild(create(node));
     } else {
-      update(element.firstChild, node);
+      update(element.firstElementChild, node);
     }
   }
 }

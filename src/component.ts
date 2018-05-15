@@ -158,8 +158,6 @@ export class Component<T=any> {
     });
   }
 
-  __render = () => this.view(this.state);
-
   public run(name: string, ...args) {
     return this.global_event || this.is_global_event(name) ?
       app.run(name, ...args) :
