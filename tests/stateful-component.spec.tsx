@@ -39,6 +39,26 @@ describe('Stateful Component', () => {
     new Main().start();
   });
 
+  it('should render children', () => {
+    class Child extends Component {
+      view = (state) => <div>
+        {state.children}
+      </div>
+    }
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child>
+            <p>child</p>
+          </Child>
+        </div>
+      }
+    }
+    const element = document.createElement('div');
+    new Main().start(element);
+    expect(element.textContent).toBe('child');
+  });
+
   it('should call mounted function when created', (done) => {
     class Child extends Component {
       view = (state) => {
