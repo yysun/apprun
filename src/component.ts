@@ -13,6 +13,7 @@ export class Component<T=any> {
   private enable_history;
   private global_event;
   public rendered;
+  public mounted;
 
   private renderState(state: T) {
     if (!this.view) return;
@@ -156,8 +157,6 @@ export class Component<T=any> {
       }
     });
   }
-
-  render = () => this.view(this.state);
 
   public run(name: string, ...args) {
     return this.global_event || this.is_global_event(name) ?

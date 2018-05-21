@@ -27,6 +27,11 @@ describe('view engine', () => {
     expect(html).toBe('<div id="1"></div>')
   });
 
+  it('should not convert vnode class HTML', () => {
+    const html = toHTML({ tag: 'div', props: { className: "1" }, children: null });
+    expect(html).toBe('<div class="1"></div>')
+  });
+
   it('should not convert vnode data attr HTML', () => {
     const html = toHTML({ tag: 'div', props: { 'data-a': 'a' }, children: null });
     expect(html).toBe('<div data-a="a"></div>')

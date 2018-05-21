@@ -4,6 +4,10 @@
 
 * Make AppRun component web component
 
+## 1.13
+
+* Add lifecyle method: mounted
+
 ## 1.12
 
 * Support dataset attribute

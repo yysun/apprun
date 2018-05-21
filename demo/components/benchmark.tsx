@@ -30,11 +30,8 @@ const update = {
     },
 
     remove(store, id) {
-        if (id == store.selected) this.unselect(store);
         store.delete(id);
         document.getElementById(id).remove();
-        store.no_render = true;
-        return store;
     },
 
     select(store, id) {
@@ -44,8 +41,6 @@ const update = {
         }
         store.select(id);
         document.getElementById(id).className = 'danger';
-        store.no_render = true;
-        return store;
     },
 
     updaterow(store) {
@@ -70,10 +65,6 @@ const update = {
 }
 
 const view = (model) => {
-    if (model.no_render) {
-      delete model.no_render;
-      return;
-    }
     const rows = model.data.map((curr) => {
         const selected = curr.id == model.selected ? 'danger' : '';
         const id = curr.id;

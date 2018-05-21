@@ -32,6 +32,7 @@ declare module 'apprun' {
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     run(name: string, ...args: any[]): void;
     rendered: (state: T) => void;
+    mounted: (props: any) => void;
   }
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;

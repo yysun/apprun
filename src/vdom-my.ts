@@ -26,21 +26,18 @@ export function createElement (tag: string | Function, props: {}, ...children) {
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    const id = props && props['id'] || `_${tag.name}_${++idx}`;
-    return createComponent(tag, id, props);
+    return createComponent(tag, { ...props, children });
   }
   else
     return tag(props, ch);
 };
 
-let idx = 0;
 const keyCache = {};
 
 export const updateElement = render;
 
 export function render(element: Element, nodes: VNode | VNode[]) {
   // console.log('render', element, node);
-  idx = 0;
   if (nodes==null || !element) return;
   if (Array.isArray(nodes)) {
     updateChildren(element, nodes);
@@ -166,7 +163,7 @@ function updateProps(element: Element, props: {}) {
   element[ATTR_PROPS] = props;
   for (let name in props) {
     const value = props[name];
-    if (cached[name] === value) continue;
+    // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
@@ -176,6 +173,8 @@ function updateProps(element: Element, props: {}) {
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
         if (element.dataset[dname] !== value) element.dataset[dname] = value;
+    } else if (name.startsWith("role") || name.startsWith("aria-")) {
+      if (element.getAttribute(name) !== value) element.setAttribute(name, value)        
     } else {
       if (element[name] !== value) element[name] = value;
       if (name === 'key' && value) keyCache[value] = element;

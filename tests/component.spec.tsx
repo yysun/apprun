@@ -1,8 +1,4 @@
-import app from '../src/app';
-import { createElement, render } from '../src/vdom';
-import { Component } from '../src/component';
-app.createElement = createElement;
-app.render = render;
+import app, { Component } from '../src/apprun';
 
 app.on('hi', _ => { })
 app.on('debug', _ => { });

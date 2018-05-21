@@ -19,4 +19,24 @@ describe('vdom-my', () => {
     app.render(el, view2());
     expect(div.dataset.a).toBe('');
   })
+  it('should attribute - role', () => {
+    const el = document.createElement('div');
+    const view1 = () => <div role='r'></div>
+    const view2 = () => <div></div>
+    app.render(el, view1());
+    const div = el.firstElementChild as HTMLDivElement;
+    expect(div.getAttribute('role')).toBe('r');
+    app.render(el, view2());
+    expect(div.getAttribute('role')).toBe('');
+  })
+  it('should attribute - aria', () => {
+    const el = document.createElement('div');
+    const view1 = () => <div aria-label='al'></div>
+    const view2 = () => <div></div>
+    app.render(el, view1());
+    const div = el.firstElementChild as HTMLDivElement;
+    expect(div.getAttribute('aria-label')).toBe('al');
+    app.render(el, view2());
+    expect(div.getAttribute('aria-label')).toBe('');
+  })
 })
