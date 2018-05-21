@@ -173,6 +173,8 @@ function updateProps(element: Element, props: {}) {
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
         if (element.dataset[dname] !== value) element.dataset[dname] = value;
+    } else if (name.startsWith("role") || name.startsWith("aria-")) {
+      if (element.getAttribute(name) !== value) element.setAttribute(name, value)        
     } else {
       if (element[name] !== value) element[name] = value;
       if (name === 'key' && value) keyCache[value] = element;
