@@ -137,7 +137,7 @@ export class Component<T=any> {
     Reflect.getMetadataKeys(this).forEach(key => {
       if (key.startsWith('apprun-update:')) {
         const meta = Reflect.getMetadata(key, this)
-        actions[meta.name] = meta.action || this[meta.key]
+        actions[meta.name] = [this[meta.key].bind(this), meta.options];
       }
     })
     const all = {};
