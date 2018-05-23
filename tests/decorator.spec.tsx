@@ -58,12 +58,26 @@ describe('Update decorator', () => {
 
   })
 
-  it('should support this in @on', done => {
+  it('should support this in @on with =>', done => {
     class TestComponent extends Component {
       view = state => state
 
       @on('test')
       f1 = (state, val) => {
+        expect(this).not.toBeUndefined();
+        done();
+      }
+    }
+    const test = new TestComponent().mount();
+    test.run('test');
+  })
+
+  it('should support this in @on with function', done => {
+    class TestComponent extends Component {
+      view = state => state
+
+      @on('test')
+      f1 = function (state, val) {
         expect(this).not.toBeUndefined();
         done();
       }
