@@ -1,10 +1,10 @@
 import app from './app';
 
 const cache = {}
-app.on('get-component', o => o.components = cache);
+app.on('get-components', o => o.components = cache);
 export default function (componentClass, props) {
   let id = props && props['id'];
-  if (!id) id = `_${componentClass.name}_${Date.now()}`;
+  if (!id) id = `_${componentClass.name}_${performance.now()}`;
   const component = (id && cache[id]) ? cache[id] :
   (cache[id] = new componentClass(props).mount(id));
   if (component.mounted) setTimeout(() => component.mounted(props), 0);
