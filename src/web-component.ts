@@ -8,7 +8,7 @@ export const customElement = (componentClass, options={}) => class extends HTMLE
   public run;
   constructor() {
     super();
-    const opts = { global_event: true, render: true, shadow: false, ...options };
+    const opts = { render: true, shadow: false, ...options };
     this._shadowRoot = opts.shadow ?
       this.attachShadow({ mode: 'open' }) : this;
     const props = {}
