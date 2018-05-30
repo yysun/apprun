@@ -7,6 +7,7 @@
 ## 1.13
 
 * Add lifecyle method: mounted
+* Add event 'get-components' to retrieve the stateful component cache
 
 ## 1.12
 

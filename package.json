@@ -40,7 +40,7 @@
     "jasmine-core": "^2.99.1",
     "jest": "^22.4.3",
     "json-loader": "^0.5.7",
-    "marked": "^0.3.19",
+    "marked": "^0.4.0",
     "morphdom": "^2.3.2",
     "ts-jest": "^22.4.4",
     "ts-loader": "^4.2.0",
