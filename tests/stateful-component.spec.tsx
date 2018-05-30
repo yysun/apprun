@@ -55,7 +55,7 @@ describe('Stateful Component', () => {
       }
     }
     const element = document.createElement('div');
-    new Main().start(element);
+    app.render(element, <Main />);
     expect(element.textContent).toBe('child');
   });
 
@@ -78,6 +78,28 @@ describe('Stateful Component', () => {
       }
     }
     new Main().start();
+  });
+
+  it('should call rendered function when created', (done) => {
+    class Child extends Component {
+      view = (state) => {
+        return <div>{state.n}</div>
+      }
+      rendered = (state) => {
+        expect(state.n).toBe(0);
+        done()
+      }
+    }
+    class Main extends Component {
+      state = 0
+      view = (state) => {
+        return <div>
+          <Child n={0} />
+        </div>
+      }
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
   });
 
   it('should call mounted function when refreshed', (done) => {
@@ -130,7 +152,7 @@ describe('Stateful Component', () => {
     }
 
     const element = document.createElement('div');
-    new Main().start(element);
+    app.render(element, <Main/>);
     expect(element.textContent).toEqual('a');
   });
 
