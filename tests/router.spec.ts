@@ -33,19 +33,26 @@ describe('router', () => {
     }, 100);
   });
 
-  // it('should fire events if location changes', (done) => {
-  //   new Router();
-  //   const fn1 = jasmine.createSpy('fn1');
-  //   const fn2 = jasmine.createSpy('fn2');
-  //   app.on('/x', fn1);
-  //   app.on('//', fn2);
-  //   // this will fail, because it will make page reload
-  //   document.location.href = '/x';
-  //   setTimeout(() => {
-  //     expect(fn1).toHaveBeenCalledWith();
-  //     expect(fn2).toHaveBeenCalledWith('/x');
-  //     done();
-  //   }, 100);
-  // });
+  it('should route location path', () => {
+    new Router();
+    const fn1 = jasmine.createSpy('fn1');
+    const fn2 = jasmine.createSpy('fn2');
+    app.on('/home', fn1);
+    app.on('//', fn2);
+    app.run('route', '/home');
+    expect(fn1).toHaveBeenCalledWith();
+    expect(fn2).toHaveBeenCalledWith('/home');
+  });
+
+  it('should route location all path', () => {
+    new Router();
+    const fn1 = jasmine.createSpy('fn1');
+    const fn2 = jasmine.createSpy('fn2');
+    app.on('/x', fn1);
+    app.on('//', fn2);
+    app.run('route', '/x/y/z');
+    expect(fn1).toHaveBeenCalledWith('y', 'z');
+    expect(fn2).toHaveBeenCalledWith('/x', 'y', 'z');
+  });
 
 });
