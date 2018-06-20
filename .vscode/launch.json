@@ -10,9 +10,10 @@
     "name": "Launch Jest",
     "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
     "args": [
-      "-i",
-      "${file}"
-    ]
+      "${relativeFile}"
+    ],
+    "console": "integratedTerminal",
+    "internalConsoleOptions": "neverOpen"
   },
   ]
 }
