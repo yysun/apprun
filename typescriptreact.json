@@ -25,7 +25,7 @@
     "body": [
       "import { app, Component } from 'apprun';",
       "",
-      "export default class ${0:MyComponent} extends Component {",
+      "export default class extends Component {",
       "\tstate = {}",
       "",
       "\tview = (state) => {",
