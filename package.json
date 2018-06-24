@@ -38,11 +38,11 @@
   "devDependencies": {
     "@types/jasmine": "^2.8.6",
     "jasmine-core": "^2.99.1",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "json-loader": "^0.5.7",
     "marked": "^0.4.0",
     "morphdom": "^2.3.2",
-    "ts-jest": "^22.4.4",
+    "ts-jest": "^22.4.6",
     "ts-loader": "^4.2.0",
     "typescript": "^2.8.3",
     "webpack": "^4.10.2",
