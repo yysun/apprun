@@ -2,8 +2,8 @@ import app from './app';
 import { createElement, render, Fragment } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
-import Router from './router';
 import { on, update } from './decorator';
+import route from './router';
 
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
@@ -35,7 +35,12 @@ if (root['app'] && root['app']['start']) {
   _app = root['app'];
 } else {
   root['app'] = _app;
-  if (typeof document === 'object') document.addEventListener("DOMContentLoaded", () => new Router());
+  if (typeof document === 'object') {
+    document.addEventListener("DOMContentLoaded", () => {
+      window.onpopstate = () => route(location.hash || location.pathname);
+      route(location.hash);
+    });
+  }
 }
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { Component, View, Action, Update, on, update };

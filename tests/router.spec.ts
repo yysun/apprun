@@ -1,7 +1,11 @@
-import app from '../src/app';
-import Router from '../src/router';
+import app from '../src/apprun';
+import route from '../src/router';
 
 describe('router', () => {
+
+  beforeAll(() => {
+    window.onpopstate = () => route(location.hash || location.pathname);
+  });
 
   it('should not fire event if not initialize', () => {
     const fn = jasmine.createSpy('fn');
@@ -14,13 +18,12 @@ describe('router', () => {
     const fn2 = jasmine.createSpy('fn2');
     app.on('#', fn1);
     app.on('//', fn2);
-    new Router();
+    route('');
     expect(fn1).toHaveBeenCalledWith();
     expect(fn2).toHaveBeenCalledWith('#');
   });
 
   it('should fire events if location hash changes', (done) => {
-    new Router();
     const fn3 = jasmine.createSpy('fn3');
     const fn4 = jasmine.createSpy('fn4');
     app.on('#x', fn3);
@@ -34,7 +37,6 @@ describe('router', () => {
   });
 
   it('should route location path', () => {
-    new Router();
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
     app.on('/home', fn1);
@@ -45,7 +47,6 @@ describe('router', () => {
   });
 
   it('should route location all path', () => {
-    new Router();
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
     app.on('/x', fn1);
