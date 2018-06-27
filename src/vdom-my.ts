@@ -43,10 +43,10 @@ export function render(element: Element, nodes: VNode | VNode[]) {
     updateChildren(element, nodes);
   } else {
     const node = nodes;
-    if (!element.firstElementChild) {
+    if (!element.firstChild) {
       element.appendChild(create(node));
     } else {
-      update(element.firstElementChild, node);
+      update(element.firstChild, node);
     }
   }
 }
@@ -174,7 +174,7 @@ function updateProps(element: Element, props: {}) {
       const dname = name.substring(5);
         if (element.dataset[dname] !== value) element.dataset[dname] = value;
     } else if (name.startsWith("role") || name.startsWith("aria-")) {
-      if (element.getAttribute(name) !== value) element.setAttribute(name, value)        
+      if (element.getAttribute(name) !== value) element.setAttribute(name, value)
     } else {
       if (element[name] !== value) element[name] = value;
       if (name === 'key' && value) keyCache[value] = element;

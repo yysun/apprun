@@ -171,19 +171,25 @@ describe('vdom-my', () => {
     expect(element.childNodes.length).toBe(3)
 
     render(createElement('div', null,
-      createElement('input', null),
+      createElement('img', null),
       null,
-      createElement('input', null),
+      createElement('img', null),
     ));
     expect(element.childNodes.length).toBe(2)
+    expect(element.outerHTML).toBe('<div><img><img></div>');
+  });
+
+  it('it should remove text child', () => {
+    root.innerHTML = "text";
+    const element = root;
 
     render(createElement('div', null,
-      createElement('input', null),
-      '',
-      createElement('input', null),
+      createElement('img', null),
+      null,
+      createElement('img', null),
     ));
-    expect(element.childNodes.length).toBe(2)
-
+    expect(element.childNodes.length).toBe(1)
+    expect(element.outerHTML).toBe('<div><div><img><img></div></div>');
   });
 
 });
