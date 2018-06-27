@@ -7,7 +7,7 @@ app.on('#', _ => { });
 app.on('route', url => route(url));
 
 export default function route(url: string) {
-  if (!url) url = '#';
+  if (!url || url === '/') url = '#';
   if (url.startsWith('#')) {
     const [name, ...rest] = url.split('/');
     app.run(name, ...rest);
