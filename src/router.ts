@@ -3,7 +3,9 @@ import app from './app';
 const ROUTER_EVENT = '//';
 
 app.on('//', _ => { });
-app.on('#', _ => { });
+app.on('/', _ => { });
+app.on('#', _ => app.run('/'));
+
 app.on('route', url => route(url));
 
 export default function route(url: string) {
