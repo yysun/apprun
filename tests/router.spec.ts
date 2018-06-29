@@ -63,7 +63,7 @@ describe('router', () => {
     app.on('/', fn2);
     app.run('route', '/');
     expect(fn1).toHaveBeenCalled();
-    expect(fn2).not.toHaveBeenCalled();
+    expect(fn2).toHaveBeenCalled();
   });
 
 });
