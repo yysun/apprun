@@ -114,7 +114,7 @@ function jest_init() {
       }
     }
   }
-
+  delete require.cache[require.resolve(package_json)];
   const package_info = require(package_json) || {};
   package_info["jest"] = jest_config
 
@@ -146,7 +146,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.12.1')
+  .version('1.12.6')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
