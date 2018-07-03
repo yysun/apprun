@@ -1,5 +1,6 @@
 export class App {
 
+  static __isAppRun = true;
   private _events: Object;
 
   public start;
@@ -45,4 +46,13 @@ export class App {
   }
 }
 
-export default new App();
+let app;
+declare var global;
+const root = global || window;
+if (root['app'] && root['app']['__isAppRun']) {
+  app = root['app'];
+} else {
+  app = new App();
+  root['app'] = app;
+}
+export default app;
