@@ -34,8 +34,8 @@ export class Component<T=any> {
     }
   }
 
-  public setState(state: T, options: { render: boolean, history: boolean, callback?}) {
-
+  public setState(state: T, options: { render: boolean, history: boolean, callback?}
+    = { render: true, history: false}) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
       // state will be saved and rendered when promise is resolved
