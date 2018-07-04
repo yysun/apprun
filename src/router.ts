@@ -3,7 +3,7 @@ import app from './app';
 const ROUTER_EVENT = '//';
 
 export default function route(url: string) {
-  if (!url || url === '/') url = '#';
+  if (!url) url = '#';
   if (url.startsWith('#')) {
     const [name, ...rest] = url.split('/');
     app.run(name, ...rest);

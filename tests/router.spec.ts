@@ -56,13 +56,13 @@ describe('router', () => {
     expect(fn2).toHaveBeenCalledWith('/x', 'y', 'z');
   });
 
-  it('should convert / to #', () => {
+  it('should not convert / to #', () => {
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
     app.on('#', fn1);
     app.on('/', fn2);
     app.run('route', '/');
-    expect(fn1).toHaveBeenCalled();
+    expect(fn1).not.toHaveBeenCalled();
     expect(fn2).toHaveBeenCalled();
   });
 
