@@ -31,12 +31,11 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
 if (!app['route']) {
   app['route'] = route;
   app.on('//', _ => { });
-  app.on('/', _ => { });
-  app.on('#', _ => app.run('/'));
+  app.on('#', _ => { });
   app.on('route', url => route(url));
   if (typeof document === 'object') {
     document.addEventListener("DOMContentLoaded", () => {
-      window.onpopstate = () => route(location.hash || location.pathname);
+      window.onpopstate = () => route(location.hash);
       route(location.hash);
     });
   }
