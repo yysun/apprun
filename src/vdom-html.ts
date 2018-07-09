@@ -4,6 +4,7 @@ import * as morphdom from 'morphdom';
 export function render(element, html) {
   console.assert(!!element);
   if (typeof html === 'string') {
+    html = html.trim();
     if (element.firstChild) {
       morphdom(element.firstChild, html);
     } else {
