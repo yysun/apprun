@@ -153,7 +153,7 @@ describe('Component', () => {
     const fn = async () => new Promise((resolve, reject) => {
       window.setTimeout(() => {
         resolve('xx');
-      }, 100);
+      }, 10);
     });
     const spy = jasmine.createSpy('spy');
     class Test extends Component {
@@ -173,7 +173,7 @@ describe('Component', () => {
       expect(callArgs[0][0]).toBe(-1);
       expect(callArgs[1][0]).toBe('xx');
       done()
-    }, 200);
+    }, 20);
   });
 
   it('should support tuple in update', () => {
@@ -188,8 +188,8 @@ describe('Component', () => {
 
     const t = new Test().start();
     t.run('method1');
-    t.run('method1');
-    t.run('method1');
+    // t.run('method1');
+    // t.run('method1');
 
     expect(i).toEqual(1);
   });
@@ -199,7 +199,7 @@ describe('Component', () => {
     const fn = async () => new Promise<string>((resolve) => {
       window.setTimeout(() => {
         resolve('xx');
-      }, 100);
+      }, 10);
     });
 
     class Test extends Component {
@@ -216,13 +216,13 @@ describe('Component', () => {
 
     const t = new Test().start();
     t.run('method1');
-    t.run('method1');
-    t.run('method1');
+    // t.run('method1');
+    // t.run('method1');
 
     window.setTimeout(() => {
       expect(i).toBe(1);
       done();
-    }, 500)
+    }, 20)
   });
 
   it('should support update alias', () => {
