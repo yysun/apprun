@@ -18,21 +18,25 @@ export class App {
   }
 
   run(name: string, ...args) {
-    const subscribers = this._events[name];
+    let subscribers = this._events[name];
     console.assert(!!subscribers, 'No subscriber for event: ' + name);
-    if (subscribers) this._events[name] = subscribers.filter((sub) => {
-      let { fn, options } = sub;
-      if (options.delay) {
-        this.delay(name, fn, args, options);
-      } else {
-        // if (options.debug) console.log('run: ' + name, args);
-        fn.apply(this, args);
-      }
-      return !sub.options.once;
-    });
+    if (subscribers) {
+      subscribers = subscribers.filter((sub) => {
+        const { fn, options } = sub;
+        if (options.delay) {
+          this.delay(name, fn, args, options);
+        } else {
+          // if (options.debug) console.log('run: ' + name, args);
+          fn.apply(this, args);
+        }
+        return !sub.options.once;
+      });
+      if (subscribers.length) this._events[name] = subscribers;
+      else delete this._events[name]
+    }
   }
 
-  once(name: string, fn) { this.on(name, fn); }
+  once(name: string, fn) { this.on(name, fn, { once: true }); }
 
   private delay(name, fn, args, options) {
     if (options._t) clearTimeout(options._t);
