@@ -12,6 +12,7 @@ function toProps(props) {
 }
 
 function toHTML(vdom) {
+  if (!vdom) return '';
   if (Array.isArray(vdom)) return toHTMLArray(vdom)
   if (vdom.tag) {
     const props = vdom.props ? toProps(vdom.props) : '';
@@ -38,15 +39,16 @@ function clean(obj) {
     }
   }
 }
+
 function engine(name, options, callback) {
   const fn = require(name).default;
   const rendered = fn(options);
   clean(rendered);
-  return global.ssr ?
+  return options.ssr ?
     callback(null, toHTML(rendered)) :
     callback(null, rendered);
 }
 
-module.exports = function(mode) {
-  return mode === 'html' ? toHTML: engine
+module.exports = function (mode) {
+  return mode === 'html' ? toHTML : engine
 }
