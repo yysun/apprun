@@ -1,7 +1,7 @@
 import app from '../src/apprun-html';
 
 const model = 'y';
-const view = _ => `<div>${_}</div>`;
+const view = _ => `\n <div>${_}</div>`;
 const update = {
   hi: (_, val) => val
 }
