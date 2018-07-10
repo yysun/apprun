@@ -36,7 +36,7 @@
     "no-shadowed-variable": true,
     // Empty blocks are almost never needed. Allow the one general exception: empty catch blocks.
     "no-empty": [
-      true,
+      false,
       "allow-empty-catch"
     ],
     // Functions must either be handled directly (e.g. with a catch() handler) or returned to another function.

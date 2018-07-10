@@ -12,9 +12,17 @@ export class App {
   }
 
   on(name: string, fn: (...args) => void, options: any = {}) {
-    // if (options.debug) console.log('on: ' + name);
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn: fn, options: options });
+  }
+
+  off(name: string, fn: (...args) => void) {
+    let subscribers = this._events[name];
+    if (subscribers) {
+      subscribers = subscribers.filter((sub) => sub.fn !== fn);
+      if (subscribers.length) this._events[name] = subscribers;
+      else delete this._events[name]
+    }
   }
 
   run(name: string, ...args) {
@@ -26,7 +34,6 @@ export class App {
         if (options.delay) {
           this.delay(name, fn, args, options);
         } else {
-          // if (options.debug) console.log('run: ' + name, args);
           fn.apply(this, args);
         }
         return !sub.options.once;
@@ -36,13 +43,14 @@ export class App {
     }
   }
 
-  once(name: string, fn) { this.on(name, fn, { once: true }); }
+  once(name: string, fn, options: any = {}) {
+    this.on(name, fn, { ...options, once: true });
+  }
 
   private delay(name, fn, args, options) {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
-      // if (options.debug) console.log(`run-delay ${options.delay}:` + name, args);
       fn.apply(this, args);
     }, options.delay);
   }
