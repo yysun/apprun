@@ -1,6 +1,5 @@
 import { App } from '../src/app';
 
-
 describe('app events', () => {
 
   it('should be able to register(on) and trigger(run)', () => {
@@ -39,6 +38,14 @@ describe('app events', () => {
     app.once('hi1', (p1, p2, p3, p4) => { });
     app.run('hi1', 1, 'xx', null, { a: 1 });
     expect(app['_events']['hi1']).toBeUndefined();
+  });
+
+  it('should allow off', () => {
+    const app = new App();
+    const fn = (a) => {}
+    app.on('hi', fn);
+    app.off('hi', fn);
+    expect(app['_events']['hi']).toBeUndefined();
   });
 
   it('should take delay option', (done) => {

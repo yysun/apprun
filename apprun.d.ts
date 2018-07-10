@@ -17,6 +17,7 @@ declare module 'apprun' {
       options?: { history?, rendered?: (state: T) => void }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
+    off(name: string, fn: (...args: any[]) => void): void;
     run(name: string, ...args: any[]): void;
     createElement(tag: string | Function, props, ...children): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
