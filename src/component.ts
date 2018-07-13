@@ -46,7 +46,8 @@ export class Component<T=any> {
       }).catch(err => {
         console.error(err);
         throw err;
-      })
+      });
+      this.state = state;
     } else {
       if (state == null) return;
       this.state = state;
