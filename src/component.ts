@@ -23,7 +23,9 @@ export class Component<T=any> {
       component: this,
       state,
       vdom: html || '[vdom is null - no render]',
-    })
+    });
+
+    if (typeof document !== 'object') return;
 
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
