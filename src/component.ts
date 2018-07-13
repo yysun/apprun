@@ -6,7 +6,7 @@ import { VNode, View, Update } from './types';
 export class Component<T=any> {
   static __isAppRunComponent = true;
   private _app = new App();
-
+  private _actions = [];
   element;
   private _history = [];
   private _history_idx = -1;
@@ -167,9 +167,18 @@ export class Component<T=any> {
   }
 
   public on(name: string, fn: (...args) => void, options?: any) {
+    this._actions.push({ name, fn });
     return this.global_event || this.is_global_event(name) ?
       app.on(name, fn, options) :
       this._app.on(name, fn, options);
   }
 
+  public unmount() {
+    this._actions.forEach(action => {
+      const { name, fn } = action;
+      this.global_event || this.is_global_event(name) ?
+        app.off(name, fn) :
+        this._app.off(name, fn);
+    });
+  }
 }
