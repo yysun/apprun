@@ -156,4 +156,26 @@ describe('Stateful Component', () => {
     expect(element.textContent).toEqual('a');
   });
 
+  it('should off all events after unmount', () => {
+    class Ch extends Component {
+      update = {
+        '#1': state=> state,
+        '#2': state => state,
+        '1': state=> state,
+        '2': state=> state,
+      }
+    }
+    
+    const component = new Ch().mount();
+    expect(app['_events']['#1'].length).toBe(1);
+    expect(app['_events']['#2'].length).toBe(1);
+    expect(component['_app']['_events']['1'].length).toBe(1);
+    expect(component['_app']['_events']['2'].length).toBe(1);
+    component.unmount();
+    expect(app['_events']['#1']).toBeUndefined();
+    expect(app['_events']['#2']).toBeUndefined();
+    expect(component['_app']['_events']['1']).toBeUndefined();
+    expect(component['_app']['_events']['2']).toBeUndefined();
+
+  });
 });
