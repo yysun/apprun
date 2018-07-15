@@ -20,7 +20,7 @@ export const Reflect = {
 
 export function update(name?: string, options: any = {}) {
   return (target: any, key: string, descriptor: any) => {
-    name = `${key}${name ? ',' + name : ''}`;
+    name = name || key;
     Reflect.defineMetadata(`apprun-update:${name}`,
       { name, key, options }, target);
     return descriptor;
@@ -29,7 +29,7 @@ export function update(name?: string, options: any = {}) {
 
 export function on(name?: string, options: any = {}) {
   return function (target: any, key: string) {
-    name = `${key}${name ? ',' + name : ''}`;
+    name = name || key;
     Reflect.defineMetadata(`apprun-update:${name}`,
         { name, key, options }, target)
   }
