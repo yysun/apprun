@@ -3,6 +3,9 @@ import app, { App } from './app';
 import { Reflect } from './decorator'
 import { VNode, View, Update } from './types';
 
+const componentCache = {};
+app.on('get-components', o => o.components = componentCache);
+
 export class Component<T=any> {
   static __isAppRunComponent = true;
   private _app = new App();
@@ -109,6 +112,9 @@ export class Component<T=any> {
     } else {
       this.setState(this.state, { render: false, history: true });
     }
+
+    componentCache[element] = componentCache[element] || [];
+    componentCache[element].push(this);
     return this;
   }
 

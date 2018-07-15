@@ -1,7 +1,6 @@
 import app from './app';
 
 const cache = {}
-app.on('get-components', o => o.components = cache);
 export default function (componentClass, props) {
   let id = props && props['id'];
   if (!id) id = `_${componentClass.name}_${performance.now()}`;
