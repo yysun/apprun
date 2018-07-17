@@ -64,8 +64,8 @@ describe('Stateful Component', () => {
       view = (state) => {
         return <div>{state.n}</div>
       }
-      mounted = (state) => {
-        expect(state.n).toBe(0);
+      mounted = (props) => {
+        expect(props.n).toBe(0);
         done()
       }
     }
@@ -107,8 +107,8 @@ describe('Stateful Component', () => {
       view = (state) => {
         return <div>{state.n}</div>
       }
-      mounted = (state) => {
-        if (state.n === 1) done();
+      mounted = (props) => {
+        if (props.n === 1) done();
       }
     }
     class Main extends Component {
@@ -126,7 +126,7 @@ describe('Stateful Component', () => {
     component.run('+1');
   });
 
-  it('should allow async event inside the mounted function', () => {
+  it('should allow async event inside the mounted function', (done) => {
     class Child3 extends Component {
       view = (state) => {
         return <div>{state.n}</div>
@@ -135,11 +135,11 @@ describe('Stateful Component', () => {
         if (n !== this.state) this.run('init-async', n);
       }
       update = {
-        'init-async': async (state, value) => {
-          return new Promise(resolve => {
-            resolve(value);
-          })
-        }
+        'init-async': async (state, value) =>
+          new Promise(resolve =>
+            setTimeout(() =>
+              resolve(value))
+          )
       }
     }
 
@@ -152,8 +152,12 @@ describe('Stateful Component', () => {
     }
 
     const element = document.createElement('div');
-    app.render(element, <Main/>);
-    expect(element.textContent).toEqual('a');
+    document.body.appendChild(element);
+    app.render(element, <Main />);
+    setTimeout(() => {
+      expect(element.textContent).toEqual('a');
+      done();
+    },10)
   });
 
   it('should off all events after unmount', () => {
@@ -165,7 +169,7 @@ describe('Stateful Component', () => {
         '2': state=> state,
       }
     }
-    
+
     const component = new Ch().mount();
     expect(app['_events']['#1'].length).toBe(1);
     expect(app['_events']['#2'].length).toBe(1);
@@ -178,4 +182,67 @@ describe('Stateful Component', () => {
     expect(component['_app']['_events']['2']).toBeUndefined();
 
   });
+
+  it('should share same instance when refresh', (done) => {
+    class Child extends Component {
+      state = { n: 0 }
+      view = (state) => {
+        return <div>{state.n}</div>
+      }
+      mounted = ({ n }) => {
+        // on second refresh, the state should retain
+        if (n === 2 && this.state.n === 1) done();
+        this.state.n = n;
+      }
+    }
+    class Main extends Component {
+      state = 0
+      view = (state) => {
+        return <div>
+          <Child n={state}/>
+        </div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+    }
+    const element = document.createElement('div');
+    const component = new Main().start(element);
+
+    component.run('+1'); // triger a refresh
+    component.run('+1'); // triger a refresh
+  });
+
+  it('should not share the same instance', () => {
+    class Child extends Component {
+      state = { n: 0 }
+      view = (state) => {
+        return <div>{state.n}</div>
+      }
+      constructor({n}) {
+        super();
+        this.state.n = n;
+      }
+      // mounted = ({ n }) => { this.setState({n}) }
+    }
+    class Main extends Component {
+      state = 0
+      view = (state) => {
+        return <div>
+          <Child n="1" />
+          <div>
+            <Child n="2"/>
+          </div>
+          <Child n="3"/>
+        </div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
+    expect(element.textContent).toBe("123");
+  });
+
 });

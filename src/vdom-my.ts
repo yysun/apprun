@@ -26,7 +26,7 @@ export function createElement (tag: string | Function, props: {}, ...children) {
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    return createComponent(tag, { ...props, children });
+    return { tag, props, children:ch } // createComponent(tag, { ...props, children });
   }
   else
     return tag(props, ch);
@@ -36,9 +36,13 @@ const keyCache = {};
 
 export const updateElement = render;
 
-export function render(element: Element, nodes: VNode | VNode[]) {
+export function render(element: Element, nodes: VNode | VNode[], parent = {}) {
   // console.log('render', element, node);
-  if (nodes==null || !element) return;
+  if (nodes == null) return;
+
+  nodes = createComponent(nodes, parent);
+
+  if (!element) return;
   if (Array.isArray(nodes)) {
     updateChildren(element, nodes);
   } else {
@@ -134,7 +138,7 @@ function create(node: VNode | string): Element {
   // console.log('create', node, typeof node);
 
   if (typeof node === "string") return createText(node);
-  if (!node.tag) return createText(JSON.stringify(node));
+  if (!node.tag || (typeof node.tag == 'function')) return createText(JSON.stringify(node));
 
   const element = (node.tag === "svg")
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)

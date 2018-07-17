@@ -1,20 +1,38 @@
 import app from './app';
 
-const cache = {}
-export default function (componentClass, props) {
+function render(node, parent, idx) {
+  const { tag, props, children } = node;
+
   let id = props && props['id'];
-  let component;
-  if (id) {
-    component = cache[id];
-    if (!component) component = cache[id] = new componentClass(props).mount(id);
+  let key = `_${tag.name}_${idx}`
+  if (!id) {
+    id = `_${tag.name}_${idx}`;
   } else {
-    id = `_${componentClass.name}_${performance.now()}`;
-    component = cache[componentClass];
-    if (!component) component = cache[componentClass] = new componentClass(props).mount(id);
+    key = `_${tag.name}_${id}`;
   }
-  if (component.mounted) setTimeout(() => component.mounted(props), 0);
-  if (component.rendered) setTimeout(() => component.rendered(component.state), 0);
-  return <div id={id}>
-    {component.view && component.view(component.state)}
-  </div>
+
+  if (!parent.__componentCache) parent.__componentCache = {};
+  let component = parent.__componentCache[key];
+  if (!component) {
+    component = parent.__componentCache[key] = new tag({ ...props, children }).mount(id);
+  }
+  component.mounted && component.mounted(props, children);
+  const state = component.state;
+  let vdom = '';
+  if (!(state instanceof Promise) && component.view) {
+    vdom = component.view(state);
+    component.rendered && component.rendered(state);
+  }
+  return <div id={id}>{vdom}</div>;
 }
+
+function createComponent(node, parent, idx = 0) {
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
+  let vdom = node;
+  if (node && node.tag && Object.getPrototypeOf(node.tag).__isAppRunComponent) vdom = render(node, parent, idx++);
+  if (vdom && vdom.children) vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
+  return vdom;
+ }
+
+export default createComponent;
