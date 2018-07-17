@@ -1,8 +1,7 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
 import morph = require('morphdom')
 
-export function render(element, html) {
-  console.assert(!!element);
+export function render(element, html, parent?) {
   if (typeof html === 'string') {
     html = html.trim();
     if (element.firstChild) {
@@ -11,7 +10,7 @@ export function render(element, html) {
       element.innerHTML = html;
     }
   } else {
-    updateElement(element, html);
+    updateElement(element, html, parent);
   }
 }
 export { createElement, Fragment };
