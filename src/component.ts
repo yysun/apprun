@@ -10,6 +10,7 @@ export class Component<T=any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
+  private _state;
   element;
   private _history = [];
   private _history_idx = -1;
@@ -50,7 +51,9 @@ export class Component<T=any> {
         console.error(err);
         throw err;
       })
+      this._state = state;
     } else {
+      this._state = state;
       if (state == null) return;
       this.state = state;
       if (options.render !== false) this.renderState(state);
