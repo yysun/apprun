@@ -33,10 +33,8 @@ export class Component<T=any> {
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
     if (el) el['_component'] = this;
-    if (el && app.render) {
-      app.render(el, html);
-      if (this.rendered) (this.rendered(this.state));
-    }
+    app.render(el, html, this);
+    if (this.rendered) (this.rendered(this.state));
   }
 
   public setState(state: T, options: { render: boolean, history: boolean, callback?}
