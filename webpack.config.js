@@ -4,6 +4,7 @@ module.exports = {
   entry: {
     'dist/apprun': './src/apprun.ts',
     'dist/apprun-html': './src/apprun-html.ts',
+    'dist/apprun-dev-tools': './src/apprun-dev-tools.tsx',
     'demo/app': './demo/main.ts'
   },
   output: {
