@@ -1,5 +1,19 @@
 # Change Log
 
+## Releases
+* apprun@latet: 1.x, stable, es5
+* apprun@beta: 2.x, stable, es2015, web component
+* apprun@next: 3.x, development, es5
+* apprun@es6: 4.x, development, es2015, web component
+
+## 3.0 next
+
+* New logic for creating stateful component
+* Add unmount function
+* Server-side rendering
+* Don't render vnode of false
+* Add dev-tools (dist/apprun-dev-tools.js)
+
 ## 2.0 beta
 
 * Make AppRun component web component
