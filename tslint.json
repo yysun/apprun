@@ -33,7 +33,17 @@
     ],
     // Disallows a variable definition in an inner scope from shadowing a variable in an outer scope. Developers should
     // instead use a separate variable name.
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": [false,
+      {
+        "class": true,
+        "enum": true,
+        "function": true,
+        "interface": false,
+        "namespace": true,
+        "typeAlias": false,
+        "typeParameter": false
+      }
+    ],
     // Empty blocks are almost never needed. Allow the one general exception: empty catch blocks.
     "no-empty": [
       false,
