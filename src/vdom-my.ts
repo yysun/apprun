@@ -7,7 +7,7 @@ const ATTR_PROPS = '_props';
 function collect(children) {
   const ch = [];
   const push = (c) => {
-    if (c !== null && c !== undefined && c !== '') {
+    if (c !== null && c !== undefined && c !== '' && c !== false) {
       ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
     }
   }
