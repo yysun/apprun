@@ -10,6 +10,7 @@ export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
     options?: { history?, rendered?: (state: T) => void}): Component<T>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
+  off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): void;
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
