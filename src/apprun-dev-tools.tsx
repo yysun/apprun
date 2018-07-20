@@ -1,17 +1,11 @@
 import app from './app';
 import toHTML from './vdom-to-html';
 
-const log = p => console.log(p);
-let debug = false;
-
-window['_debug'] = (on) => {
-  on ? !debug && app.on('debug', log) : debug && app.off('debug', log);
-  debug = on;
-}
+const commands = {};
 
 function newWin(html) {
-  const newWin = window.open('', '_apprun_debug', 'toolbar=0');
-  newWin.document.write(`<html>
+  const win = window.open('', '_apprun_debug', 'toolbar=0');
+  win.document.write(`<html>
   <title>AppRun Analyzer | ${document.location.href}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI" }
@@ -22,7 +16,7 @@ function newWin(html) {
   </script>
   </body>
   </html>`);
-  newWin.document.close();
+  win.document.close();
 }
 
 const Events = ({ events }) => <ul>
@@ -47,7 +41,7 @@ const view = state => <ul>
   </li>)}
 </ul>
 
-window['_components'] = (print) => {
+const _components = (print?) => {
   const o = { components: {} };
   app.run('get-components', o);
   const { components } = o;
@@ -65,3 +59,40 @@ window['_components'] = (print) => {
     });
   }
 }
+
+commands['ls'] = (cmd, ...p) => {
+  if (cmd === 'components') _components(...p);
+}
+
+let debugging = 0;
+app.on('debug', p => {
+  if (debugging & 1 && p.event) console.log(p);
+  if (debugging & 2 && p.vdom) console.log(p);
+});
+
+commands['debug'] = (a1?, a2?) => {
+  if (a1 === 'on') {
+    debugging = 3;
+  } else if (a1 === 'off') {
+    debugging = 0;
+  } else if (a1 === 'event') {
+    if (a2 === 'on') {
+      debugging |= 1;
+    } else if (a2 === 'off') {
+      debugging &= ~1;
+    }
+  } else if (a1 === 'view') {
+    if (a2 === 'on') {
+      debugging |= 2;
+    } else if (a2 === 'off') {
+      debugging &= ~2;
+    }
+  }
+}
+
+window['_apprun'] = (strings) => {
+  const [cmd, ...p] = strings[0].split(' ');
+  if (commands[cmd]) commands[cmd](...p);
+  else console.log('Unknown command: ' + cmd);
+}
+
