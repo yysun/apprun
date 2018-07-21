@@ -61,6 +61,7 @@ Starting AppRun 2.0 beta, you can build applications using the [web components](
 </head>
 <body>
   <my-app id='counter'></my-app>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
   <script src="https://unpkg.com/apprun@beta/dist/apprun-html.js"></script>
   <script>
     class Counter extends Component {
@@ -110,8 +111,10 @@ To explore more about AppRun, read the following.
 * [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
 * [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
 * [Component](https://yysun.github.io/apprun/docs/#/?id=component)
+* Server-Side Rendering
 * [Routing](https://yysun.github.io/apprun/docs/#/?id=routing)
 * [CLI](https://yysun.github.io/apprun/docs/#/?id=cli)
+* Dev-Tools
 
 ## Video Tutorials
 
@@ -131,7 +134,9 @@ To explore more about AppRun, read the following.
 * [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
 * [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
 
+* [AppRun Admin Dashboard](https://yysun.github.com/apprun-bootstrap)
 * [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
+* [AppRun Server-Side Rendering for ASP.NET MVC](https://github.com/yysun/apprun-ssr-aspnet)
 * [AppRun Multilingual Example](https://github.com/yysun/apprun-multilingual)
 * [AppRun Firebase Authentication](https://github.com/yysun/apprun-firebase-authentication)
 * [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
