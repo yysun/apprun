@@ -21,7 +21,7 @@ function render(node, parent, idx) {
   let vdom = '';
   if (!(state instanceof Promise) && component.view) {
     vdom = component.view(state);
-    component.rendered && component.rendered(state);
+    component.rendered && setTimeout(() => component.rendered(state));
   }
   return <div id={id}>{vdom}</div>;
 }
