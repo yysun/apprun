@@ -15,7 +15,7 @@ function newWin(html) {
   <title>AppRun Analyzer | ${document.location.href}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI" }
-    li { margin-left: 30px; }
+    li { margin-left: 80px; }
   </style>
   <body>
   <div id="main">${html}</div>
@@ -25,44 +25,110 @@ function newWin(html) {
   win.document.close();
 }
 
-const Events = ({ events }) => <ul>
-  {events && events
-    .sort(((a, b) => a.name > b.name ? 1 : -1))
-    .map(event => <li>
-    {event.name}
-  </li>)}
-</ul>;
-
-const Components = ({ components }) => <ul>
-  {components.map(component => <li>
-    <div>{component.constructor.name}</div>
-    <Events events={component['_actions']} />
-  </li>)}
-</ul>;
-
-const view = state => <ul>
-  {Object.keys(state).map(name =><li>
-    <div>#{name}</div>
-    <Components components={state[name]} />
-  </li>)}
-</ul>
-
-const _components = (print?) => {
+const get_components = () => {
   const o = { components: {} };
   app.run('get-components', o);
   const { components } = o;
+  return components;
+}
+
+const viewComponents = state => {
+
+  const Events = ({ events }) => <ul>
+    {events && events.map(event => <li>
+      {event.name}
+    </li>)}
+  </ul>;
+
+  const Components = ({ components }) => <ul>
+    {components.map(component => <li>
+      <div>{component.constructor.name}</div>
+      <Events events={component['_actions']} />
+    </li>)}
+  </ul>;
+
+  return <ul>
+    {Object.keys(state).map(name => <li>
+      <div>#{name}</div>
+      <Components components={state[name]} />
+    </li>)}
+  </ul>
+}
+
+const viewEvents = state => {
+
+  const Components = ({ components }) => <ul>
+    {components.map(component => <li>
+      <div>{component.constructor.name}</div>
+    </li>)}
+  </ul>;
+
+  const Events = ({ events, global }) => <ul>
+    {events && events
+      .filter(event => event.global === global)
+      .map(({ event, components }) => <li>
+        <div>{event}</div>
+        <Components components={components} />
+    </li>)}
+  </ul>;
+
+  return <div>
+    <div>GLOBAL EVENTS</div>
+    <Events events={state} global={true} />
+    <div>LOCAL EVENTS</div>
+    <Events events={state} global={false} />
+    </div>
+}
+
+const _events = (print?) => {
+  const global_events = app['_events']
+  const events = {};
+  const cache = get_components();
+  Object.keys(cache).forEach(el => {
+    cache[el].forEach(component => {
+      component['_actions'].forEach(event => {
+        events[event.name] = events[event.name] || [];
+        events[event.name].push(component);
+      })
+    });
+  });
+  const data = [];
+  Object.keys(events).forEach(event => {
+    data.push({ event, components: events[event], global: global_events[event] ? true : false });
+  });
+
+  data.sort(((a, b) => a.event > b.event ? 1 : -1)).map(e => e.event);
+
   if (print) {
-    const vdom = view(components);
+    const vdom = viewEvents(data);
     newWin(toHTML(vdom));
   } else {
-    Object.keys(components).forEach(el => {
-      const element = typeof el === 'string' ? document.getElementById(el) : el;
-      const comps = components[el].map(component => ({
-        component,
-        events: component['_actions'].sort(((a, b) => a.name > b.name ? 1 : -1)).map(e => e.name),
-      }));
-      console.log(element, comps);
-    });
+    console.log('=== GLOBAL EVENTS ===')
+    data.filter(event=>event.global)
+      .forEach(({ event, components }) => console.log({ event }, components));
+    console.log('=== LOCAL EVENTS ===')
+    data.filter(event=>!event.global)
+      .forEach(({ event, components }) => console.log({ event }, components));
+  }
+
+}
+
+const _components = (print?) => {
+  const components = get_components();
+  const data = [];
+  Object.keys(components).forEach(el => {
+    const element = typeof el === 'string' ? document.getElementById(el) : el;
+    const comps = components[el].map(component => ({
+      component,
+      events: component['_actions']
+    }));
+    data.push({ element, comps });
+  });
+  if (print) {
+    const vdom = viewComponents(components);
+    newWin(toHTML(vdom));
+  } else {
+    data.forEach(({ element, comps }) => console.log(element, comps));
   }
 }
 
@@ -90,11 +156,15 @@ commands['log'] = ['log [event|view] on|off', (a1?, a2?) => {
       debugging &= ~2;
     }
   }
-  console.log(`log ${a1} ${a2||''}`)
+  console.log(`* log ${a1} ${a2||''}`)
 }];
 
 commands['components'] = ['components log|print', (p) => {
   _components(p === 'print');
+}]
+
+commands['events'] = ['events log|print', (p) => {
+  _events(p === 'print');
 }]
 
 window['_apprun'] = (strings) => {
@@ -104,4 +174,4 @@ window['_apprun'] = (strings) => {
   else commands['help'][1]();
 }
 
-console.info('AppRun Commands 0.1: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 0.1: type "_apprun `help`" to list all available commands.');
