@@ -175,3 +175,12 @@ window['_apprun'] = (strings) => {
 }
 
 console.info('AppRun DevTools 0.1: type "_apprun `help`" to list all available commands.');
+
+import { connectViaExtension, extractState } from 'remotedev';
+const remotedev = connectViaExtension();
+
+app.on('debug', p => p.event && remotedev.send({
+  type: p.event,
+  payload: p.e,
+  component: p.component
+}, p.state));
