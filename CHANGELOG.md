@@ -6,17 +6,18 @@
 * apprun@next: 3.x, development, es5
 * apprun@es6: 4.x, development, es2015, web component
 
-## 3.0 next
+## 2.0 beta (ES6)
+
+* Make AppRun component web component
+
+## 1.14
 
 * New logic for creating stateful component
 * Add unmount function
+* Add app.off function
 * Server-side rendering
 * Don't render vnode of false
 * Add dev-tools (dist/apprun-dev-tools.js)
-
-## 2.0 beta
-
-* Make AppRun component web component
 
 ## 1.13
 

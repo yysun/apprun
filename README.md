@@ -51,7 +51,7 @@ Below is a counter application using AppRun.
 
 ## Web Components
 
-Starting AppRun 2.0 beta, you can build applications using the [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that are also powered with the AppRun architecture.
+Using apprun@es6, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events.
 
 ```html
 <html>
@@ -62,7 +62,7 @@ Starting AppRun 2.0 beta, you can build applications using the [web components](
 <body>
   <my-app id='counter'></my-app>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-  <script src="https://unpkg.com/apprun@beta/dist/apprun-html.js"></script>
+  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
   <script>
     class Counter extends Component {
       constructor() {
@@ -87,20 +87,30 @@ Starting AppRun 2.0 beta, you can build applications using the [web components](
 
 ## Install
 
-You can include AppRun in your html.
+You can include AppRun in your html directly and use it with JavaScript.
 ```javascript
 <script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
 ```
-See Examples Online @ [glitch.com](https://glitch.com/@yysun)
 
-
-Or, you can install the AppRun CLI and initialize a TypeScript and webpack configured project:
+## CLI
+Or you can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 ```sh
 npx apprun --init --spa
 npm start
 ```
 
-See Examples Online @ [stackblitz.com](https://stackblitz.com/@yysun)
+## Online Demos
+See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.com](https://stackblitz.com/@yysun)
+
+## Dev-Tools
+
+To use the AppRun dev-tools, include the the dev-tools script.
+```JavaScript
+<script src="https://unpkg.com/apprun@es6/dist/apprun-dev-tools.js"></script>
+```
+Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
+
+![app-dev-tools](docs/apprun-dev-tools.gif)
 
 ## Documenttion
 
@@ -111,10 +121,8 @@ To explore more about AppRun, read the following.
 * [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
 * [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
 * [Component](https://yysun.github.io/apprun/docs/#/?id=component)
-* Server-Side Rendering
 * [Routing](https://yysun.github.io/apprun/docs/#/?id=routing)
 * [CLI](https://yysun.github.io/apprun/docs/#/?id=cli)
-* Dev-Tools
 
 ## Video Tutorials
 
