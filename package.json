@@ -42,6 +42,7 @@
     "json-loader": "^0.5.7",
     "marked": "^0.4.0",
     "morphdom": "^2.3.2",
+    "remotedev": "^0.2.7",
     "ts-jest": "^22.4.6",
     "ts-loader": "^4.4.2",
     "tslint": "^5.10.0",
