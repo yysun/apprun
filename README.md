@@ -106,7 +106,7 @@ See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.co
 
 To use the AppRun dev-tools, include the the dev-tools script.
 ```JavaScript
-<script src="https://unpkg.com/apprun@es6/dist/apprun-dev-tools.js"></script>
+<script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
 ```
 Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 

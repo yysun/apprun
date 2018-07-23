@@ -138,6 +138,14 @@ app.on('debug', p => {
   if (debugging & 2 && p.vdom) console.log(p);
 });
 
+commands['components'] = ['components [print]', (p) => {
+  _components(p === 'print');
+}]
+
+commands['events'] = ['events [print]', (p) => {
+  _events(p === 'print');
+}]
+
 commands['log'] = ['log [event|view] on|off', (a1?, a2?) => {
   if (a1 === 'on') {
     debugging = 3;
@@ -159,13 +167,6 @@ commands['log'] = ['log [event|view] on|off', (a1?, a2?) => {
   console.log(`* log ${a1} ${a2||''}`)
 }];
 
-commands['components'] = ['components log|print', (p) => {
-  _components(p === 'print');
-}]
-
-commands['events'] = ['events log|print', (p) => {
-  _events(p === 'print');
-}]
 
 window['_apprun'] = (strings) => {
   const [cmd, ...p] = strings[0].split(' ').filter(c => !!c);
@@ -174,13 +175,27 @@ window['_apprun'] = (strings) => {
   else commands['help'][1]();
 }
 
-console.info('AppRun DevTools 0.1: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 0.2: type "_apprun `help`" to list all available commands.');
 
-import { connectViaExtension, extractState } from 'remotedev';
-const remotedev = connectViaExtension();
-
-app.on('debug', p => p.event && remotedev.send({
-  type: p.event,
-  payload: p.e,
-  component: p.component
-}, p.state));
+let devTools_running = false;
+const devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
+devTools.subscribe((message) => {
+  if (message.type === 'START') devTools_running = true;
+  else if (message.type === 'STOP') devTools_running = false;
+  else if (message.type === 'DISPATCH') {
+    //console.log('DevTools: ', message);
+  }
+});
+app.on('debug', p => {
+  if (devTools_running && p.event) {
+    const state = p.newState;
+    const type = p.event;
+    const payload = p.e;
+    const action = { type, payload };
+    if (state instanceof Promise) {
+      state.then(s => devTools.send(action, s));
+    } else {
+      devTools.send(action, state);
+    }
+  }
+});
