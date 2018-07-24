@@ -1,12 +1,14 @@
 import app from './app';
 import toHTML from './vdom-to-html';
 
-const commands = {};
-
-commands['help'] = ['', () => {
-  Object.keys(commands).forEach(cmd => cmd === 'help' ?
-    console.log('AppRun Commands:'):
-    console.log(`* ${cmd}: ${commands[cmd][0]}`));
+window['_apprun-help'] = ['', () => {
+  Object.keys(window).forEach(cmd => {
+    if (cmd.startsWith('_apprun-')) {
+      cmd === '_apprun-help' ?
+        console.log('AppRun Commands:') :
+        console.log(`* ${cmd.substring(8)}: ${window[cmd][0]}`);
+    }
+  });
 }];
 
 function newWin(html) {
@@ -138,15 +140,15 @@ app.on('debug', p => {
   if (debugging & 2 && p.vdom) console.log(p);
 });
 
-commands['components'] = ['components [print]', (p) => {
+window['_apprun-components'] = ['components [print]', (p) => {
   _components(p === 'print');
 }]
 
-commands['events'] = ['events [print]', (p) => {
+window['_apprun-events'] = ['events [print]', (p) => {
   _events(p === 'print');
 }]
 
-commands['log'] = ['log [event|view] on|off', (a1?, a2?) => {
+window['_apprun-log'] = ['log [event|view] on|off', (a1?, a2?) => {
   if (a1 === 'on') {
     debugging = 3;
   } else if (a1 === 'off') {
@@ -170,9 +172,9 @@ commands['log'] = ['log [event|view] on|off', (a1?, a2?) => {
 
 window['_apprun'] = (strings) => {
   const [cmd, ...p] = strings[0].split(' ').filter(c => !!c);
-  if (commands[cmd]) commands[cmd][1](...p);
-  // else console.log('Unknown command: ' + cmd);
-  else commands['help'][1]();
+  const command = window[`_apprun-${cmd}`];
+  if (command) command[1](...p);
+  else window['_apprun-help'][1]();
 }
 
 console.info('AppRun DevTools 0.2: type "_apprun `help`" to list all available commands.');
