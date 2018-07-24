@@ -30,14 +30,14 @@ const _createEventTests = () => {
   Object.keys(components).forEach(el => {
     components[el].forEach(component => {
       write(`const component = ${component.constructor.name};`);
-      write(`describe('${component.constructor.name}', ()=>{)`);
+      write(`describe('${component.constructor.name}', ()=>{`);
       component._actions.forEach(action => {
         write(`  it ('should handle event: ${action.name}', ()=>{`);
         write(`    component.run('${action.name}');`);
-        write(`    expect(component.state).toBe();`);
+        write(`    expect(component.state).toBeTruthy();`);
         write(`  })`);
       });
-      write(`}`);
+      write(`});`);
     });
   });
   closeWin();
