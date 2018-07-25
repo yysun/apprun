@@ -162,3 +162,52 @@ html {
   float: none;
   vertical-align: text-top;
 }
+svg {
+  display: block;
+  margin-bottom: 10px;
+  border: 1px solid gray;
+}
+g#carousel {
+  -webkit-transition: -webkit-transform 1s ease;
+  transition: transform 1s ease;
+}
+polygon {
+  stroke: #808000;
+  transition: fill 0.5s linear;
+}
+polygon#yellow {
+  fill: rgba(255,255,0,0.4);
+}
+polygon#yellow:hover, polygon#yellow:active {
+  fill: yellow;
+}
+polygon#green {
+  fill: rgba(0,128,0,0.4);
+}
+polygon#green:hover, polygon#green:active {
+  fill: green;
+}
+polygon#magenta {
+  fill: rgba(255,0,255,0.4);
+}
+polygon#magenta:hover, polygon#magenta:active {
+  fill: magenta;
+}
+polygon#red {
+  fill: rgba(255,0,0,0.4);
+}
+polygon#red:hover, polygon#red:active {
+  fill: red;
+}
+polygon#cyan {
+  fill: rgba(0,255,255,0.4);
+}
+polygon#cyan:hover, polygon#cyan:active {
+  fill: cyan;
+}
+polygon#blue {
+  fill: rgba(0,0,255,0.4);
+}
+polygon#blue:hover, polygon#blue:active {
+  fill: blue;
+}
