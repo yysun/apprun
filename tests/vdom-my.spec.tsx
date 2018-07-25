@@ -106,7 +106,7 @@ describe('vdom-my', () => {
   });
 
   it('it should render array of nodes', () => {
-    const element = render(createElement('div', 'a'));
+    const element = render(createElement('div', null, 'a'));
     let nodes = {
       tag: "div",
       props: null,
@@ -118,7 +118,7 @@ describe('vdom-my', () => {
   });
 
   it('it should render array of text', () => {
-    const element = render(createElement('div', 'a'));
+    const element = render(createElement('div', null, 'a'));
     const nodes =
       { "tag": "div", "props": null, "children": [{ "tag": "div", "props": null, "children": ["Hello: ", "world"] }] }
     for (let i = 0; i < 5; i++){

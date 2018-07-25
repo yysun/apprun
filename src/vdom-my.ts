@@ -21,12 +21,12 @@ function collect(children) {
   return ch;
 }
 
-export function createElement (tag: string | Function, props: {}, ...children) {
+export function createElement(tag: string | Function, props: {}, ...children) {
   const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    return { tag, props, children:ch } // createComponent(tag, { ...props, children });
+    return { tag, props, children: ch } // createComponent(tag, { ...props, children });
   }
   else
     return tag(props, ch);
@@ -59,7 +59,7 @@ function same(el: Element, node: VNode) {
   // if (!el || !node) return false;
   const key1 = el.nodeName;
   const key2 = `${node.tag || ''}`;
-  return key1 === key2.toUpperCase();
+  return key1.toUpperCase() === key2.toUpperCase();
 }
 
 function update(element: Element, node: VNode) {
@@ -133,20 +133,20 @@ function createText(node) {
   }
 }
 
-function create(node: VNode | string): Element {
+function create(node: VNode | string, isSvg = false): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
 
   if (typeof node === "string") return createText(node);
   if (!node.tag || (typeof node.tag == 'function')) return createText(JSON.stringify(node));
-
-  const element = (node.tag === "svg")
+  isSvg = isSvg || node.tag === "svg";
+  const element = isSvg
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
     : document.createElement(node.tag);
 
   updateProps(element, node.props);
 
-  if (node.children) node.children.forEach(child => element.appendChild(create(child)));
+  if (node.children) node.children.forEach(child => element.appendChild(create(child, isSvg)));
 
   return element
 }
@@ -176,8 +176,9 @@ function updateProps(element: Element, props: {}) {
       }
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
-        if (element.dataset[dname] !== value) element.dataset[dname] = value;
-    } else if (name.startsWith("role") || name.startsWith("aria-")) {
+      if (element.dataset[dname] !== value) element.dataset[dname] = value;
+    } else if (element instanceof SVGElement ||
+      name.startsWith("role") || name.startsWith("aria-")) {
       if (element.getAttribute(name) !== value) element.setAttribute(name, value)
     } else {
       if (element[name] !== value) element[name] = value;
