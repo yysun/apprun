@@ -291,6 +291,20 @@ describe('Component', () => {
     expect(document.body['_component']).toBe(component);
   })
 
+
+  it('should clean up the element children', () => {
+    class Test extends Component {
+      view = () => <img src="a"/>
+    }
+    const div = document.createElement('div');
+    const img1 = document.createElement('img');
+    const img2 = document.createElement('img');
+    div.appendChild(img1);
+    div.appendChild(img2);
+    const t = new Test().start(div);
+    expect(div.children.length).toBe(1);
+  });
+  
 });
 
 
