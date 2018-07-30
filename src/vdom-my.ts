@@ -46,12 +46,7 @@ export function render(element: Element, nodes: VNode | VNode[], parent = {}) {
   if (Array.isArray(nodes)) {
     updateChildren(element, nodes);
   } else {
-    const node = nodes;
-    if (!element.firstChild) {
-      element.appendChild(create(node));
-    } else {
-      update(element.firstChild, node);
-    }
+    updateChildren(element, [nodes]);
   }
 }
 

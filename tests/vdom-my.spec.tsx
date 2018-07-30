@@ -192,4 +192,16 @@ describe('vdom-my', () => {
     expect(element.outerHTML).toBe('<div><div><img><img></div></div>');
   });
 
+  it('it should remove children', () => {
+    root.innerHTML = "<div>1</div><div>2</div>";
+    const element = root;
+
+    render(createElement('div', null,
+      createElement('img', null),
+      null,
+      createElement('img', null),
+    ));
+    expect(element.childNodes.length).toBe(1)
+    expect(element.outerHTML).toBe('<div><div><img><img></div></div>');
+  });
 });
