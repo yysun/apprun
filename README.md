@@ -3,7 +3,7 @@
 
 AppRun is a 3K library for building applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
-> AppRun is a MIT-licensed open source project. Please consider [support the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+> AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
 ## Architecture Concept
 
@@ -15,7 +15,7 @@ Application logic is broken down into three separated parts in the AppRun archit
 
 AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
 
-Applications built with AppRun have less line of code, smaller js file, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 
 ## Quick Start
@@ -112,7 +112,7 @@ Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-
 
 ![app-dev-tools](docs/apprun-dev-tools.gif)
 
-## Documenttion
+## Documentation
 
 To explore more about AppRun, read the following.
 
