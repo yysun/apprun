@@ -84,22 +84,16 @@ function updateChildren(element, children) {
     } else {
       const key = child.props && child.props['key'];
       if (key) {
-        if (el.key === key) {
-          update(element.childNodes[i], child);
-        } else {
+        if (el.key !== key) {
           const old = key && keyCache[key];
           if (old) {
-            element.replaceChild(old, el);
-            element.appendChild(el);
-            update(element.childNodes[i], child);
+            element.insertBefore(old, el);
           } else {
-            element.appendChild(create(child), el);
-            update(element.childNodes[i], child);
+            element.insertBefore(create(child), el);
           }
         }
-      } else {
-        update(element.childNodes[i], child);
       }
+      update(element.childNodes[i], child);
     }
   }
 
