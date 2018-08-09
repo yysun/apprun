@@ -87,14 +87,13 @@ function updateChildren(element, children) {
         if (el.key === key) {
           update(element.childNodes[i], child);
         } else {
-          const old = key && keyCache[key];
+          const old = keyCache[key];
           if (old) {
-            element.replaceChild(old, el);
+            element.insertBefore(old, el);
             element.appendChild(el);
             update(element.childNodes[i], child);
           } else {
-            element.appendChild(create(child), el);
-            update(element.childNodes[i], child);
+            element.insertBefore(create(child), el);
           }
         }
       } else {
@@ -171,7 +170,8 @@ function updateProps(element: Element, props: {}) {
       }
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
-      if (element.dataset[dname] !== value) element.dataset[dname] = value;
+      const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
+      if (element.dataset[cname] !== value) element.dataset[cname] = value;
     } else if (element instanceof SVGElement ||
       name.startsWith("role") || name.startsWith("aria-")) {
       if (element.getAttribute(name) !== value) element.setAttribute(name, value)
