@@ -1,7 +1,7 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
 
 
-AppRun is a 3K library for building applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a 3K library for building applications using the [Elm inspired Architecture](https://apprun.js.org/#/?id=architecture), [event pub-sub](https://apprun.js.org/#/?id=event-pubsubs) and [components](https://apprun.js.org/#/?id=component).
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
@@ -13,7 +13,7 @@ Application logic is broken down into three separated parts in the AppRun archit
 * View — a function to display the state
 * Update — a collection of event handlers to update the state
 
-AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
+AppRun ties the three parts together and drives the applications using [event pub-sub](https://apprun.js.org/#/?id=event-pubsubs).
 
 Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
@@ -116,13 +116,14 @@ Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-
 
 To explore more about AppRun, read the following.
 
-* [Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture)
-* [Event Pub and Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs)
-* [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
-* [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
-* [Component](https://yysun.github.io/apprun/docs/#/?id=component)
-* [Routing](https://yysun.github.io/apprun/docs/#/?id=routing)
-* [CLI](https://yysun.github.io/apprun/docs/#/?id=cli)
+* [Architecture](https://apprun.js.org/#/?id=architecture)
+* [Event Pub and Sub](https://apprun.js.org/#/?id=event-pubsubs)
+* [State Management](https://apprun.js.org/#/?id=state-management)
+* [Virtual DOM](https://apprun.js.org/#/?id=virtual-dom)
+* [Component](https://apprun.js.org/#/?id=component)
+* [Routing](https://apprun.js.org/#/?id=routing)
+* [CLI](https://apprun.js.org/#/?id=cli)
+* [PERFORMANCE](https://apprun.js.org/#/?id=performance)
 
 ## Video Tutorials
 
