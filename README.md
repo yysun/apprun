@@ -1,9 +1,10 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
 
 
-AppRun is a 3K library for building applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a 3K library for building high-performance and reliable web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+
 
 ## Architecture Concept
 
@@ -134,14 +135,14 @@ To explore more about AppRun, read the following.
 * [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
 * [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
-
+* [Redux vs. The React Context API vs. AppRun](https://medium.com/@yiyisun/redux-vs-the-react-context-api-vs-apprun-f324bee8cbbf)
+* [I Also Created the Exact Same App Using AppRun](https://medium.com/@yiyisun/i-also-created-the-exact-same-app-using-apprun-dd1860cb8112)
 
 ## Examples
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
 * [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
-
 * [AppRun Admin Dashboard](https://yysun.github.com/apprun-bootstrap)
 * [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
 * [AppRun Server-Side Rendering for ASP.NET MVC](https://github.com/yysun/apprun-ssr-aspnet)
