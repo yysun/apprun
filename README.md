@@ -18,6 +18,9 @@ AppRun ties the three parts together and drives the applications using [event pu
 
 Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
+## AppRun Book from Apress
+
+![https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/](https://images.springer.com/sgw/books/medium/9781484240687.jpg)
 
 ## Quick Start
 
@@ -180,7 +183,7 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2018 Yiyi Sun
+Copyright (c) 2015-2019 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master
