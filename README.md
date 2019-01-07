@@ -20,7 +20,10 @@ Applications built with AppRun have less lines of code, smaller js files, and be
 
 ## AppRun Book from Apress
 
-![https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/](https://images.springer.com/sgw/books/medium/9781484240687.jpg)
+[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
+* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
 
 ## Quick Start
 
