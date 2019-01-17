@@ -10,6 +10,12 @@
 
 * Make AppRun component web component
 
+## 1.16
+
+* Support class attribute
+* Export app (non-default)
+* Use release-it
+
 ## 1.14
 
 * New logic for creating stateful component

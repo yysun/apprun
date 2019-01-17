@@ -195,7 +195,6 @@ describe('vdom-my', () => {
   it('it should remove children', () => {
     root.innerHTML = "<div>1</div><div>2</div>";
     const element = root;
-
     render(createElement('div', null,
       createElement('img', null),
       null,
@@ -204,4 +203,21 @@ describe('vdom-my', () => {
     expect(element.childNodes.length).toBe(1)
     expect(element.outerHTML).toBe('<div><div><img><img></div></div>');
   });
+
+  it('it should update textarea', () => {
+    root.innerHTML = "<div><textarea></textarea></div>";
+    render(createElement('textarea', null, "a"));
+    expect(root.outerHTML).toBe('<div><textarea>a</textarea></div>');
+    render(createElement('textarea', null, "b"));
+    expect(root.outerHTML).toBe('<div><textarea>b</textarea></div>');
+  });
+
+  it('it should support DOM custom attribute', () => {
+    const element = render(createElement('div', { "my": "a" }, ""));
+    expect(element["my"]).toBe('a');
+  });
+
+  it('it should support class attribute', () => {
+    const element = render(createElement('div', { "class": "a"} ));
+    expect(element.className).toBe('a');  });
 });

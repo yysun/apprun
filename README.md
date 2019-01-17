@@ -1,9 +1,10 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
 
 
-AppRun is a 3K library for building applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a 3K library for building high-performance and reliable web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+
 
 ## Architecture Concept
 
@@ -16,6 +17,12 @@ Application logic is broken down into three separated parts in the AppRun archit
 AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
 
 Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+
+## AppRun Book from Apress
+
+[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
+* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 
 ## Quick Start
@@ -134,14 +141,14 @@ To explore more about AppRun, read the following.
 * [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
 * [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
 * [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
-
+* [Redux vs. The React Context API vs. AppRun](https://medium.com/@yiyisun/redux-vs-the-react-context-api-vs-apprun-f324bee8cbbf)
+* [I Also Created the Exact Same App Using AppRun](https://medium.com/@yiyisun/i-also-created-the-exact-same-app-using-apprun-dd1860cb8112)
 
 ## Examples
 
 * [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
 * [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
 * [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
-
 * [AppRun Admin Dashboard](https://yysun.github.com/apprun-bootstrap)
 * [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
 * [AppRun Server-Side Rendering for ASP.NET MVC](https://github.com/yysun/apprun-ssr-aspnet)
@@ -179,7 +186,7 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2018 Yiyi Sun
+Copyright (c) 2015-2019 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master
