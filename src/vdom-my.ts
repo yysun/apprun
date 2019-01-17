@@ -163,6 +163,7 @@ function updateProps(element: Element, props: {}) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
+    if (name === 'class') name = 'className';
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
       for (let s in value) {

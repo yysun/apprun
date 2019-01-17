@@ -212,4 +212,12 @@ describe('vdom-my', () => {
     expect(root.outerHTML).toBe('<div><textarea>b</textarea></div>');
   });
 
+  it('it should support DOM custom attribute', () => {
+    const element = render(createElement('div', { "my": "a" }, ""));
+    expect(element["my"]).toBe('a');
+  });
+
+  it('it should support class attribute', () => {
+    const element = render(createElement('div', { "class": "a"} ));
+    expect(element.className).toBe('a');  });
 });
