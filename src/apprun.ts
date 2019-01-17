@@ -43,7 +43,7 @@ if (!app['route']) {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { Component, View, Action, Update, on, update };
+export { app, Component, View, Action, Update, on, update };
 export { update as event };
 export default app as IApp;
 

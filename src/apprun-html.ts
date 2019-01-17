@@ -6,7 +6,7 @@ app.render = render;
 app.Fragment = Fragment;
 
 export default app;
-export { Component, View, Action, Update, on, update };
+export { app, Component, View, Action, Update, on, update };
 
 if (typeof window === 'object') {
   window['Component'] = Component;
