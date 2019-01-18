@@ -15,6 +15,7 @@
 * Support class attribute
 * Export app (non-default)
 * Use release-it
+* CLI: use src and dist folder, es6 flag
 
 ## 1.14
 
