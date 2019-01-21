@@ -9,15 +9,19 @@ const tsconfig_json = path.resolve('./tsconfig.json');
 const webpack_config_js = path.resolve('./webpack.config.js');
 const git_ignore_file = path.resolve('./.gitignore');
 const index_html = path.resolve('./index.html');
-const main_tsx = path.resolve('./main.tsx');
+const main_tsx = path.resolve('./src/main.tsx');
 const spa_index = path.resolve('./index.html');
-const spa_main_tsx = path.resolve('./main.tsx');
+const spa_main_tsx = path.resolve('./src/main.tsx');
 const readme_md = path.resolve('./README.md');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
+const dir_src = './src';
+const dir_tests = './tests';
+
 let show_start = false;
 let show_test = false;
+let es6 = false;
 
 function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
@@ -45,9 +49,11 @@ function init() {
     execSync('npm init -y');
   }
 
+  if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
+
   console.log('Installing packages. This might take a couple minutes.');
   execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
-  execSync('npm install apprun --save');
+  es6 ? execSync('npm install apprun@es6 --save') : execSync('npm install apprun --save');
 
   write(tsconfig_json, read('tsconfig.json'));
   write(webpack_config_js, read('webpack.config.js'))
@@ -84,9 +90,9 @@ function git_init() {
 }
 
 function component(name) {
-  const fn = path.resolve(name + '.tsx');
+  const fn = path.resolve(dir_src + '/' + name + '.tsx');
   const component_template = read('component.ts_');
-  write(name + '.tsx', component_template.replace(/\#name/g, name),
+  write(fn, component_template.replace(/\#name/g, name),
     `Creating component ${name}`);
   show_start = true;
 }
@@ -128,7 +134,8 @@ function jest_init() {
 }
 
 function component_spec(name) {
-  const fn = path.resolve(name + '.spec.ts');
+  if (!fs.existsSync(dir_tests)) fs.mkdirSync(dir_tests);
+  const fn = path.resolve(dir_tests + '/' + name + '.spec.ts');
   const test_template = read('spec.ts_');
   write(fn, test_template.replace(/\#name/g, name),
     `Creating component spec ${name}`);
@@ -146,7 +153,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.12.6')
+  .version('1.16.0')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
@@ -154,6 +161,7 @@ program
   .option('-k, --karma', 'Install karma')
   .option('-t, --test <file>', 'Generate component spec')
   .option('-s, --spa', 'Generate SPA app')
+  .option('-e, --es6', 'Use apprun@es6')
   .parse(process.argv);
 
 program._name = 'apprun';
@@ -164,6 +172,7 @@ if (!program.init && !program.component && !program.git && !program.jest &&
   process.exit()
 }
 
+if (program.es6) es6 = true;
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
