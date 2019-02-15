@@ -78,7 +78,7 @@ export class Component<T=any> {
   public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
 
     console.assert(!this.element, 'Component already mounted.')
-    this.options = options = Object.assign(this.options || {}, options);
+    this.options = options = { ...this.options, ...options };
     this.element = element;
     this.global_event = options.global_event;
     this.enable_history = !!options.history;
