@@ -30,7 +30,7 @@ function createComponent(node, parent, idx = 0) {
   if (typeof node === 'string') return node;
   if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
   let vdom = node;
-  if (node && node.tag && Object.getPrototypeOf(node.tag).__isAppRunComponent) vdom = render(node, parent, idx++);
+  if (node && typeof (node.tag) === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) vdom = render(node, parent, idx++);
   if (vdom && vdom.children) vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
   return vdom;
  }
