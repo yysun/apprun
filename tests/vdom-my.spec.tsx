@@ -213,11 +213,32 @@ describe('vdom-my', () => {
   });
 
   it('it should support DOM custom attribute', () => {
-    const element = render(createElement('div', { "my": "a" }, ""));
+    const element = render(createElement('div', { "my-a": "a" }, ""));
+    expect(element.getAttribute("my-a")).toBe('a');
+  });
+
+  it('it should allow to update DOM custom attribute', () => {
+    let element = render(createElement('div', { "my": "a" }, ""));
     expect(element["my"]).toBe('a');
+    element = render(createElement('div', { "my": "b" }, ""));
+    expect(element["my"]).toBe('b');
+
   });
 
   it('it should support class attribute', () => {
-    const element = render(createElement('div', { "class": "a"} ));
-    expect(element.className).toBe('a');  });
+    let element = render(createElement('div', { "className": "a"} ));
+    expect(element.className).toBe('a');
+    expect(element.getAttribute('class')).toBe('a');
+    element = render(createElement('div', { "class": "b" }));
+    expect(element.className).toBe('b');
+  });
+
+  it('it should support class attribute for svg', () => {
+    let  element = render(createElement('svg', { "class": "a" }));
+    expect(element.getAttribute('class')).toBe('a');
+    element = render(createElement('svg', { "className": "b" }));
+    expect(element.getAttribute('class')).toBe('b');
+
+  });
+
 });
