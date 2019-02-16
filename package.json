@@ -1,7 +1,7 @@
 {
   "name": "apprun",
-  "version": "2.16.0",
-  "description": "",
+  "version": "2.16.1",
+  "description": "JavaScript framework that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
@@ -37,19 +37,18 @@
     "commander": "^2.19.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.3.5",
+    "@types/jasmine": "^3.3.9",
     "jasmine-core": "^3.3.0",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "json-loader": "^0.5.7",
     "marked": "^0.6.0",
-    "morphdom": "^2.3.2",
-    "release-it": "^10.0.0",
+    "morphdom": "^2.3.3",
     "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.0",
-    "typescript": "^3.2.2",
-    "webpack": "^4.28.1",
-    "webpack-cli": "^3.2.1",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
   },
   "jest": {

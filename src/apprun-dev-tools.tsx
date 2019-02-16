@@ -177,27 +177,33 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 0.2: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 0.3: type "_apprun `help`" to list all available commands.');
 
-let devTools_running = false;
-const devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
-devTools.subscribe((message) => {
-  if (message.type === 'START') devTools_running = true;
-  else if (message.type === 'STOP') devTools_running = false;
-  else if (message.type === 'DISPATCH') {
-    //console.log('DevTools: ', message);
+const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
+if (reduxExt) {
+  let devTools_running = false;
+  const devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
+  if (devTools) {
+    console.info('Connected to the Redux DevTools');
+    devTools.subscribe((message) => {
+      if (message.type === 'START') devTools_running = true;
+      else if (message.type === 'STOP') devTools_running = false;
+      else if (message.type === 'DISPATCH') {
+        //console.log('DevTools: ', message);
+      }
+    });
+    app.on('debug', p => {
+      if (devTools_running && p.event) {
+        const state = p.newState;
+        const type = p.event;
+        const payload = p.e;
+        const action = { type, payload };
+        if (state instanceof Promise) {
+          state.then(s => devTools.send(action, s));
+        } else {
+          devTools.send(action, state);
+        }
+      }
+    });
   }
-});
-app.on('debug', p => {
-  if (devTools_running && p.event) {
-    const state = p.newState;
-    const type = p.event;
-    const payload = p.e;
-    const action = { type, payload };
-    if (state instanceof Promise) {
-      state.then(s => devTools.send(action, s));
-    } else {
-      devTools.send(action, state);
-    }
-  }
-});
+}

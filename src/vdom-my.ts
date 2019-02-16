@@ -163,7 +163,6 @@ function updateProps(element: Element, props: {}) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
-    if (name === 'class') name = 'className';
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
       for (let s in value) {
@@ -174,9 +173,11 @@ function updateProps(element: Element, props: {}) {
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
       if (element.dataset[cname] !== value) element.dataset[cname] = value;
     } else if (element instanceof SVGElement ||
-      name.startsWith("role") || name.startsWith("aria-")) {
+      name.startsWith("role") || name.indexOf("-")>=0) {
+      if (name === 'className') name = 'class';
       if (element.getAttribute(name) !== value) element.setAttribute(name, value)
     } else {
+      if (name === 'class') name = 'className';
       if (element[name] !== value) element[name] = value;
       if (name === 'key' && value) keyCache[value] = element;
     }
