@@ -53,9 +53,15 @@ function init() {
 
   console.log('Installing packages. This might take a couple minutes.');
   execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
-  es6 ? execSync('npm install apprun@es6 --save') : execSync('npm install apprun --save');
 
-  write(tsconfig_json, read('tsconfig.json'));
+  es6 ?
+    execSync('npm install apprun@es6 --save') :
+    execSync('npm install apprun --save');
+
+  es6 ?
+    write(tsconfig_json, read('tsconfig.es6.json')) :
+    write(tsconfig_json, read('tsconfig.es5.json'));
+
   write(webpack_config_js, read('webpack.config.js'))
   write(index_html, read('index.html'));
   write(main_tsx, read('main.ts_'));
@@ -153,7 +159,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.16.0')
+  .version('1.16.2')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
