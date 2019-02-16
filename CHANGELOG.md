@@ -2,20 +2,20 @@
 
 ## Releases
 * apprun@latet: 1.x, stable, es5
-* apprun@beta: 2.x, stable, es2015, web component
-* apprun@next: 3.x, development, es5
-* apprun@es6: 4.x, development, es2015, web component
+* apprun@es6: 2.x, stable, es2015, web component
 
-## 2.0 beta (ES6)
+## 1.16 / 2.16
 
-* Make AppRun component web component
-
-## 1.16
-
-* Support class attribute
+* Support class attribute in JSX
+* Support class and className attribute for SVG
+* Support custom attribute (with kebab case/snake case)
 * Export app (non-default)
-* Use release-it
 * CLI: use src and dist folder, es6 flag
+
+## 1.15
+
+* Support SVG
+* Conver kebab-case to camelCase for data- attributes
 
 ## 1.14
 
