@@ -1,8 +1,5 @@
 import app from '../src/apprun';
-import route from '../src/router';
-
-const ROUTER_EVENT: string = '//';
-const ROUTER_404_EVENT: string = '///';
+import route, { ROUTER_EVENT, ROUTER_404_EVENT } from '../src/router';
 
 describe('router', () => {
 

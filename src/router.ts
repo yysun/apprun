@@ -1,7 +1,7 @@
 import app from './app';
 
-const ROUTER_EVENT: string = '//';
-const ROUTER_404_EVENT: string = '///';
+export const ROUTER_EVENT: string = '//';
+export const ROUTER_404_EVENT: string = '///';
 
 export default function route(url: string) {
   if (!url) url = '#';
