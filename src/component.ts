@@ -18,6 +18,8 @@ export class Component<T=any> {
   private global_event;
   public rendered;
   public mounted;
+  public unload;
+  private tracking_id;
 
   private renderState(state: T) {
     if (!this.view) return;
@@ -33,7 +35,25 @@ export class Component<T=any> {
 
     const el = (typeof this.element === 'string') ?
       document.getElementById(this.element) : this.element;
-    if (el) el['_component'] = this;
+
+    if (el) {
+      if (!this.unload) {
+        el.removeAttribute('_c');
+      } else if (el['_component'] !== this) {
+        this.tracking_id = new Date().valueOf().toString();
+        el.setAttribute('_c', this.tracking_id);
+        const observer = new MutationObserver(changes => {
+          const { attributeName, oldValue } = changes[0];
+          if (attributeName === '_c' && oldValue === this.tracking_id) {
+            this.unload();
+            observer.disconnect();
+          }
+        });
+        observer.observe(el, { attributes: true, attributeOldValue: true });
+      }
+      el['_component'] = this;
+    }
+    
     app.render(el, html, this);
     if (this.rendered) (this.rendered(this.state));
   }

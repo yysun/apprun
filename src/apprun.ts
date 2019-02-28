@@ -49,4 +49,8 @@ export { app, Component, View, Action, Update, on, update };
 export { update as event };
 export default app as IApp;
 
+if (typeof window === 'object') {
+  window['Component'] = Component;
+}
+
 app.on('debug', _ => 0);
