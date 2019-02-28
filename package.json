@@ -9,6 +9,7 @@
     "build": "webpack -p --mode production",
     "test": "jest --watch",
     "jest": "jest",
+    "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start": "webpack-dev-server --mode development",
     "build:docs": "marked -i docs/README.md -o demo/components/home.html"
   },
