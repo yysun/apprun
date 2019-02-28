@@ -3,7 +3,9 @@ import { createElement, render, Fragment } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
 import { on, update } from './decorator';
-import route from './router';
+import route, { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+
+export { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
@@ -31,7 +33,7 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
 
 if (!app['route']) {
   app['route'] = route;
-  app.on('//', _ => { });
+  app.on(ROUTER_EVENT, _ => { });
   app.on('#', _ => { });
   app.on('route', url => route(url));
   if (typeof document === 'object') {
