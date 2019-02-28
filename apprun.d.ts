@@ -35,6 +35,7 @@ declare module 'apprun' {
     rendered: (state: T) => void;
     mounted: (props: any) => void;
     unmount: () => void;
+    unload: () => void;
   }
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;

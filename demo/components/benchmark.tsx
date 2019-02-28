@@ -130,4 +130,5 @@ document.body.addEventListener('click', e => {
 });
 
 let component = new Component(store, view, update);
+component.unload = () => { console.log('benchmark.unload')};
 export default (element) => component.mount(element);
