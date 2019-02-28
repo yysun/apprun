@@ -11,12 +11,12 @@ export class App {
     this._events = {};
   }
 
-  on(name: string, fn: (...args) => void, options: any = {}) {
+  on(name: string, fn: (...args) => void, options: any = {}): void {
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn: fn, options: options });
   }
 
-  off(name: string, fn: (...args) => void) {
+  off(name: string, fn: (...args) => void): void {
     let subscribers = this._events[name];
     if (subscribers) {
       subscribers = subscribers.filter((sub) => sub.fn !== fn);
@@ -25,7 +25,7 @@ export class App {
     }
   }
 
-  run(name: string, ...args) {
+  run(name: string, ...args): number {
     let subscribers = this._events[name];
     console.assert(!!subscribers, 'No subscriber for event: ' + name);
     if (subscribers) {
@@ -41,13 +41,15 @@ export class App {
       if (subscribers.length) this._events[name] = subscribers;
       else delete this._events[name]
     }
+
+    return subscribers ? subscribers.length : 0;
   }
 
-  once(name: string, fn, options: any = {}) {
+  once(name: string, fn, options: any = {}): void {
     this.on(name, fn, { ...options, once: true });
   }
 
-  private delay(name, fn, args, options) {
+  private delay(name, fn, args, options): void {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
