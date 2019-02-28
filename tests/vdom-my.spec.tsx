@@ -255,7 +255,21 @@ describe('vdom-my', () => {
     expect(element.getAttribute('class')).toBe('a');
     element = render(createElement('svg', { "className": "b" }));
     expect(element.getAttribute('class')).toBe('b');
-
   });
+
+  it('it should reset event handler', () => {
+    let element = render(createElement('div', {
+      class: 'a',
+      onclick: () => {}
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.onclick).not.toBeNull();
+    render(createElement("div", {className: 'b'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('b');
+    expect(element.onclick).toBeNull();
+  });
+
 
 });

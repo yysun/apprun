@@ -172,27 +172,21 @@ function updateProps(element: Element, props: {}) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
       if (element.dataset[cname] !== value) {
-        if(value || value === "") element.dataset[cname] = value;
+        if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (element instanceof SVGElement ||
-      name.startsWith("role") || name.indexOf("-")>=0) {
+    } else if (name === 'className' || name === 'class' ||
+      name.startsWith("role") || name.indexOf("-") >= 0 ||
+      element instanceof SVGElement) {
       if (name === 'className') name = 'class';
       if (element.getAttribute(name) !== value) {
-        if(value) element.setAttribute(name, value);
+        if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
-    } else {
-      if (name === 'class') name = 'className';
-      if (element[name] !== value) {
-        if(value) element[name] = value;
-        else {
-          if (name === 'className') name = 'class';
-          element.removeAttribute(name);
-        }
-      }
-      if (name === 'key' && value) keyCache[value] = element;
+    } else if (element[name] !== value) {
+      element[name] = value;
     }
+    if (name === 'key' && value) keyCache[value] = element;
   }
 }
 
