@@ -137,7 +137,7 @@ along with the current application state.
 5. AppRun renders the HTML to the screen and calls the optional
 rendered function to complete the AppRun event life cycle.
 
-![AppRun event life cycle](https://github.com/yysun/apprun/raw/docs/docs/Figure_1-1.png)
+![AppRun event life cycle](https://github.com/yysun/apprun/raw/master/docs/Figure_1-1.png)
 
 The AppRun architecture supports asynchronous operations in the AppRun event
 handlers. We only need to add the async keyword in front of the event handler and call
