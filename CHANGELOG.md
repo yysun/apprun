@@ -4,6 +4,11 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.17 / 2.17
+
+* Pull requests: #48, #49, #50, thanks to @phBalance
+* Added lifecycle function: unload
+
 ## 1.16 / 2.16
 
 * Support class attribute in JSX
@@ -15,7 +20,7 @@
 ## 1.15
 
 * Support SVG
-* Conver kebab-case to camelCase for data- attributes
+* Convert kebab-case to camelCase for data- attributes
 
 ## 1.14
 
@@ -28,7 +33,7 @@
 
 ## 1.13
 
-* Add lifecyle method: mounted
+* Add lifecycle method: mounted
 * Add event 'get-components' to retrieve the stateful component cache
 
 ## 1.12

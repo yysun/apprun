@@ -1,22 +1,21 @@
 # Building Applications with AppRun
 
-AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture) and event publication and subscription.
+AppRun is a 3K library for building applications using the [elm architecture](https://guide.elm-lang.org/architecture) and the [event pubsub pattern](##event-pubsub) and [components](##component).
 
-## Architecture
+## AppRun Architecture
 
-According to the elm architecture, there are three separated parts in an application.
+Like the elm architecture, there are three parts in the AppRun application architecture.
 
 * Model — the data model of your application state
-* Update — a set of functions to update the state
 * View — a function to display the state as HTML
+* Update — a set of functions to update the state
 
 The 15 lines of code below is a simple counter application demonstrates the architecture using AppRun.
 
-```
+```javascript
 const state = 0;
 
-const view = state => {
-  return `<div>
+const view = state => `<div>
     <h1>${state}</h1>
     <button onclick='app.run("-1")'>-1</button>
     <button onclick='app.run("+1")'>+1</button>
@@ -31,30 +30,21 @@ const update = {
 app.start('my-app', state, view, update);
 ```
 
+You can try the counter example online: [Simple Counter](https://jsfiddle.net/ap1kgyeb/4).
+
 ### The Model
 
 The model can be any data structure, a number, an array, or an object that reflects the state of the application. In the counter example, it is a number.
-```
+```javascript
 const state = 0;
-```
-
-### The Update
-
-The update contains functions that take existing state and create new states.
-```
-const update = {
-  '+1': state => state + 1,
-  '-1': state => state - 1
-}
 ```
 
 ### The View
 
 The view generates HTML based on the state. AppRun parses the HTML string into virtual dom. It then calculates the differences against the web page element and renders the changes.
 
-```
-const view = state => {
-  return `<div>
+```javascript
+const view = state => `<div>
     <h1>${state}</h1>
     <button onclick='app.run("-1")'>-1</button>
     <button onclick='app.run("+1")'>+1</button>
@@ -62,145 +52,208 @@ const view = state => {
 };
 ```
 
-### Trigger the Update
+### The Update
 
-AppRun exposes a global object named _app_ that is accessible globally to trigger the Update by calling _app.run_ function.
-```
-app.run('+1');
-```
-The web page programming is event driven. Connecting web events to AppRun events, you can trigger update functions from user input, click, navigation and etc.
-
-E.g. call _app.run_ in HTML markup directly:
-```
-<button id="inc" onclick="app.run('+1')">+1</button>
-```
-Or in JavaScript:
-```
-document.getElementById('inc').addEventListener('click',
-  () => app.run('+1'));
-```
-Or with JSX:
-```
-<button onclick={()=>app.run("+1")}>+1</button>
-```
-Or even with jQuery:
-```
-$('#inc').on('click', ()=>app.run('+1'));
+Update is a collection of named event handlers, or a dictionary of event handlers. Each
+event handler creates a new state from the current state.
+```javascript
+const update = {
+  '+1': state => state + 1,
+  '-1': state => state - 1
+}
 ```
 
-Finally, _app.start_ function from AppRun ties State, View and Update together to an element and starts the application.
+AppRun registers the event handlers defined in the Update to the [event pubsub system](#event-pubsub). We can trigger these event handlers using the event name. Once we trigger the events, AppRun manages a event cycle that calls the event handlers, then calls the view function, and finally renders the web page:
+
 ```
-const element = document.getElementById('my-app');
-app.start(element, State, view, update);
+AppRun Events => (current state) => Update => (new state) => View => (HTML/Virtual DOM) => Web Page
 ```
 
-To summarize above, the two functions from AppRun (_app.run_ and _app.start_) are all you need to make an application of elm architecture.
+At the core, AppRun has an [event pubsub system](#event-pubsub), a [state manage system](#state-management), and a [virtual DOM rendering system](#virtual-dom).
 
-Try the counter example online: [Simple Counter](https://jsfiddle.net/ap1kgyeb/4).
-
-## Event PubSubs
+## Event PubSub
 
 At the core, AppRun is an event publication and subscription system, which is also known as event emitter. It is a commonly used pattern in JavaScript programming.
 
-AppRun has two important functions: _app.run_ and _app.on_. _app.run_ fires events.
-_app.on_ handles events. E.g. :
+* Publishing an event means to raise an event for some other code to handle. Publishing an event is also referred to as firing an event or
+triggering an event.
+* Subscribing an event means to register an event handler function to the event. The event handler function executes when the correspondent event.
 
-Module A subscribes to an event _print_:
-```
+AppRun has two functions to facilitate the event pubsub pattern.
+
+* app.on for registering event handlers (event subscription)
+* app.run for firing events (event publication)
+
+E.g., Module A subscribes to an event _print_:
+```javascript
 import app from 'apprun';
 export () => app.on('print', e => console.log(e));
 ```
 Module B publishes the event _print_:
-```
+```javascript
 import app from 'apprun';
 export () => app.run('print', {});
 ```
 Main Module:
-```
+```javascript
 import a from './A';
 import b from './B';
 a();
 b();
 ```
-Module A and Module B only have to know the event system, not other modules, so they are only dependent on the event system, not other modules. Therefore modules are decoupled. Thus makes it easier to modify, extend and swap modules.
+Module A and Module B only have to know the event system, not each other, so they are only dependent on the event system. Therefore modules are decoupled. Therefore it is easier to modify, extend and swap modules.
 
-The most significant benefit of such event system is decoupling. In traditional MVC architecture, the model, view and controller are coupled, which makes it difficult to test and maintain. In result, there are many architecture patterns have been developed to solve the coupling problem, such as Model-View-Presenter, Presentation Model, and Model-View-ViewModel. AppRun solved the coupling problem by using event publication and subscription. Model, View and Controller/Update don't know each.
+In AppRun applications, there is no dependencies between the View and event handlers. It makes the AppRun applications easier to develop, test and maintain.
 
-AppRun applications have an event cycle like below:
 
+The web page programming is event-driven. Connecting web events to AppRun events, you can trigger event handlers from user input, click, navigation, etc.
+
+E.g. call _app.run_ in HTML markup directly:
+```javascript
+<button id="inc" onclick="app.run('+1')">+1</button>
 ```
-Web events => AppRun Events => Update => (new state) => View => (HTML)
+Or in JavaScript:
+```javascript
+document.getElementById('inc').addEventListener('click',
+  () => app.run('+1'));
+```
+Or with JSX:
+```javascript
+<button onclick={()=>app.run("+1")}>+1</button>
+```
+Or even with jQuery:
+```javascript
+$('#inc').on('click', ()=>app.run('+1'));
 ```
 
-Behind scene AppRun events trigger update functions; the update functions create new states; AppRun then let view function turn the new state into HTML or virtual DOM. Finally AppRun renders the HTML or virtual DOM to web page element.
+While developing AppRun applications, we convert DOM events such as timer,
+user input, and button click events using the web event handlers for AppRun events.
+Therefore, the following steps take place:
+1. AppRun dispatches the events to the event handlers in the update
+along with the current application state.
+2. The event handlers create a new state based on the current state.
+3. AppRun passes the new state to the view function.
+4. The view function creates HTML or a virtual DOM.
+5. AppRun renders the HTML to the screen and calls the optional
+rendered function to complete the AppRun event life cycle.
+
+![AppRun event life cycle](https://github.com/yysun/apprun/raw/docs/docs/Figure_1-1.png)
+
+The AppRun architecture supports asynchronous operations in the AppRun event
+handlers. We only need to add the async keyword in front of the event handler and call
+the functions to return a Promise object with the await keyword.
+
+```javascript
+import app from 'apprun';
+const get = async (url) => { };
+const state = {};
+const view = (state) => <div>{state}</div>;
+const update = {
+  '#': async (state) => {
+    try {
+      const data = await get('https://...');
+      return { ...state, data }
+    } catch (err) {
+    return { ...state, err }
+    }
+   }
+};
+app.start('my-app', state, view, update);
+```
 
 ## State Management
 
-During the event cycle, AppRun manages application states. It passes current state into the update functions. It takes the new state from the update functions and passes into the view function. Therefore it can maintain the history of all states, which enables the time travel / undo-redo feature.
+During the event cycle, AppRun manages application states. It passes current state into the event handlers. It takes the new state from the event handlers and passes into the view function. Therefore it can maintain the history of all states, which enables the time travel / undo-redo feature.
 
-In leverage the time travel / undo-redo feature, the update functions must make sure current state immutable and always create a new state.
+In leverage the time travel / undo-redo feature, the event handlers must make sure current state immutable and always create a new state.
 
 See the multiple counter example that has undo-redo online: [Multiple counters](https://jsfiddle.net/ap1kgyeb/6)
 
 
 ## Virtual DOM
 
-When applications get complex, we start to think performance and build system.
+AppRun uses virtual DOM technology. The virtual DOM (VDOM) is the data
+representing a DOM structure. AppRun compares the VDOM with the real DOM and updates only the changed elements and element properties.
 
-In the simple counter example above, the View creates HTML string out of the state.
-Although HTML string is easy to understand and useful for trying out ideas, it takes
-time to parse it into virtual dom at run time, which may cause performance issue.
+In the simple counter example above, the View creates HTML string out of the state. AppRun parses the HTML string into VDOM. Although HTML string is easy to understand and useful for trying out ideas, it takes time to parse it into virtual dom at run time, which may cause performance issue.
 It also has some problems that have been documented by the Facebook React team:
 [Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals).
 
-Using JSX, the JSX compiler compiles the JSX into functions at compile time. The View function creates virtual dom in runtime directly without parsing HTML, which gives
-better performance. Therefore, we recommend using JSX in production.
-
-To compile and build production code, we recommend using TypeScript and webpack. See CLI section below.
+We recommend to use JSX. The JSX compiler compiles the JSX into functions at compile time. The View function creates virtual dom in runtime directly without parsing HTML, which gives
+better performance. To compile the JSX, we also recommend using TypeScript and webpack. See CLI section below.
 
 
 ## Component
 
-Another thing to consider when applications get complex is to divide and organize code into components.
+A component is a technique to decompose the large system into smaller, manageable,
+and reusable pieces. Usually, a component is an autonomous and reusable module
+that encapsulates a set of data and functions. A component is the basic building block
+in other popular frameworks and libraries such as Angular, React, and Vue. Elm does
+not have components. Elm has the concern that the relationship and communication
+between components might prevent or cause difficulties to ensure that everything is done in
+the functional programming style.
 
-A component in AppRun is a mini elm architecture, which means inside a component, there are model, view and update. Let's use _AppRun CLI_ to generate a component.
+AppRun solves the component relationship and communication problem by
+using event pubsub. AppRun components are decoupled and isolated modules. Elm’s
+concern is not an issue in AppRun. In AppRun applications, the component is a mini-application
+and has a component-scoped AppRun architecture, which includes the
+three architecture parts discussed previously: state, view, and update. Components
+communicate with each other through the events.
 
-```
-apprun -c Counter
-```
+### Create and Mount Components
+A component in AppRun is a mini elm architecture, which means inside a component, there are model, view, and update. Because components are classes, it is straightforward to use them in code. We first create an object of the component.
 
-It generates a Counter component:
-```
+```javascript
 import app, {Component} from 'apprun';
 
-export default class CounterComponent extends Component {
-  state = 'Counter';
-  view = state => {
-    return <div>
-      <h1>{state}</h1>
-    </div>
-  }
-  update = {
-    '#Counter': state => state,
-  }
+export default class extends Component {
+  state = '';
+  view = state => <div/>;
+  update = {};
 }
 ```
 
-To use the Counter component, create an instance of it and then mount the instance to an element.
+Then we mount the component instance to an element.
 
-```
+```javascript
 import Counter from './Counter';
 const element = document.getElementById('my-app');
 new Counter().mount(element);
 ```
 
-Notice the update has a '#Counter' function. It is a route. See Routing section below.
+The component is mounted to the web page element or element ID. When the
+component is mounted to an element ID, it retrieves the element by using the document.
+getElementID function at the time it needs to render the element. It will not render the
+element if it cannot find it. The lazy components are useful for single-page applications
+(SPAs), where we can mount multiple components to a single element. The components
+are hidden until the events that wake them up and display them.
+
+### Components in JSX
+
+A useful convention in JSX is that when the JSX tag name is capitalized, it creates components. We can use the capitalized JSX tag to create AppRun Components in JSX.
+
+```javascript
+class Child extends Component {
+  state = {}
+  view = state => <div></div>
+  update = {}
+}
+
+class Parent extends Component {
+  state = {}
+  view = state => <div>
+    <Child />
+  </div>
+  update = {}
+}
+
+```
 
 ### Pure Function Component
 
-Pure Function Component is fully supported. Make sure the function name is capitalized.
+We can also use the capitalized JSX tag to call JavaScript functions with capitalized the function names. The functions are also known as the Pure Function Component.
 
-```
+```javascript
 const Counter = ({num, idx}) => (
   <div>
     <h1>{num}</h1>
@@ -215,7 +268,6 @@ const CounterList = ({counters}) => counters.map((num, idx) =>
 );
 
 const view = state => {
-  console.log(state);
   return (
   <div>
     <div>
@@ -228,43 +280,17 @@ const view = state => {
 };
 ```
 
-### Child Stateful Component
 
-(Working in progress)
+### Event Handler Decorator
 
-```
-    class TestComponent extends Component {
-      state = '';
-      view = state => <div>{state}</div>
-      update = { }
-      constructor({ id }) {
-        super();
-      }
-    }
+AppRun has included two decorators to create the event handlers in the component. _@event_ and _@on_. _@event_ is for class functions. _@on_ is for class properties.
 
-    class MainComponent extends Component {
-      view = state => {
-        return <div>
-          <TestComponent id = 'c1' />
-          <TestComponent id = 'c2' />
-          <TestComponent id = 'c3'/>
-        </div>
-      }
-    }
-
-    new MainComponent().start('my-app');
-```
-
-### Update function Decorator
-
-In AppRun, there are two decorators to make the update functions easier to write and read in component. _@update_ and _@on_. _@update_ is for class functions. _@on_ is for class properties.
-
-```
+```javascript
     class TestComponent extends Component {
       view = state => state
 
       // function decorator
-      @update('hi, #hi')
+      @event('hi, #hi')
       f2(state, val) {
         return val;
       }
@@ -277,9 +303,9 @@ In AppRun, there are two decorators to make the update functions easier to write
 
 ## Routing
 
-Because AppRun can connect web page events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL and calls update functions by matching the hash. E.g., when URL in the browser address bar becomes http://..../#Counter, The #Couter update function of the component will run.
+Because we can connect the DOM events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL (by listening to the window's onpopstate event) and triggers the AppRun events with matching the hash. E.g., when URL in the browser address bar becomes http://..../#Counter, it triggers the #Couter event.
 
-Each component defines its route in an update function. The URL changes trigger and run the update function. It can avoid a lot of code for registering and matching routes like in the other frameworks and libraries.
+Using the events, each component defines its route events. It can avoid much code for registering and matching routes like in the other frameworks and libraries.
 
 
 ## CLI
@@ -320,6 +346,14 @@ AppRun itself is lightweight. It is about 3K gzipped. More important is that app
 See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-e1cb62fd526c).
 
 AppRun has also joined the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project. You can see its [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries.
+
+## Book About AppRun
+
+For more details, please refer to the AppRun book published by Apress.
+
+[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
+[Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 
 AppRun makes your applications clean, precious, declarative and has no ceremony.
