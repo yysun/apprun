@@ -31,17 +31,16 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
     return component;
 };
 
-if (!app['route']) {
-  app['route'] = route;
-  app.on(ROUTER_EVENT, _ => { });
-  app.on('#', _ => { });
-  app.on('route', url => route(url));
-  if (typeof document === 'object') {
-    document.addEventListener("DOMContentLoaded", () => {
-      window.onpopstate = () => route(location.hash);
-      route(location.hash);
-    });
-  }
+app.on(ROUTER_EVENT, _ => { });
+app.on('#', _ => { });
+app['route'] = route;
+app.on('route', url => app['route'] && app['route'](url));
+
+if (typeof document === 'object') {
+  document.addEventListener("DOMContentLoaded", () => {
+    window.onpopstate = () => app['route'] && app['route'](location.hash);
+    app['route'] && app['route'](location.hash);
+  });
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;

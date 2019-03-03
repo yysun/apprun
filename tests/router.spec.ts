@@ -1,10 +1,11 @@
 import app from '../src/apprun';
-import route, { ROUTER_EVENT, ROUTER_404_EVENT } from '../src/router';
+import { ROUTER_EVENT, ROUTER_404_EVENT } from '../src/router';
 
 describe('router', () => {
 
   beforeAll(() => {
-    window.onpopstate = () => route(location.hash || location.pathname);
+    // DOMContentLoaded not called in Jest
+    window.onpopstate = () => app.run('route', location.hash || location.pathname);
   });
 
   it('should not fire event if not initialize', () => {
@@ -18,7 +19,7 @@ describe('router', () => {
     const fn2 = jasmine.createSpy('fn2');
     app.on('#', fn1);
     app.on(ROUTER_EVENT, fn2);
-    route('');
+    app.run('route', '');
     expect(fn1).toHaveBeenCalledWith();
     expect(fn2).toHaveBeenCalledWith('#');
   });
@@ -175,8 +176,40 @@ describe('router', () => {
     expect(fn1).toHaveBeenCalledWith('foo/fred');
     expect(fn2).toHaveBeenCalledWith('foo/fred');
     expect(console.assert).toHaveBeenCalled();
-    
+
     app.off(ROUTER_EVENT, fn1);
     app.off(ROUTER_404_EVENT, fn2);
   });
+
+  it('should allow removing the default route function', () => {
+    const fn1 = jasmine.createSpy('fn1');
+    const fn2 = jasmine.createSpy('fn2');
+    app.on(ROUTER_EVENT, fn1);
+    app.on(ROUTER_404_EVENT, fn2);
+
+    app['route'] = null;
+    app.run('route', '');
+
+    expect(fn1).not.toHaveBeenCalled();
+    expect(fn2).not.toHaveBeenCalled();
+
+    app.off(ROUTER_EVENT, fn1);
+    app.off(ROUTER_404_EVENT, fn2);
+  });
+
+  it('should allow overriding the default route function', () => {
+    const fn3 = jasmine.createSpy('fn3');
+    const fn4 = jasmine.createSpy('fn4');
+
+    app.on('x', fn3);
+    app.on(ROUTER_EVENT, fn4);
+
+    app['route'] = url => { app.run('x', url) };
+    app.run('route', '#xx');
+
+    expect(fn3).toHaveBeenCalledWith('#xx');
+    expect(fn4).not.toHaveBeenCalled();
+  });
+
+
 });
