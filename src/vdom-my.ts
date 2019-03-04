@@ -146,6 +146,7 @@ function create(node: VNode | string, isSvg = false): Element {
 }
 
 function mergeProps(oldProps: {}, newProps: {}): {} {
+  newProps['class'] = newProps['class'] || newProps['className'];
   const props = {};
   if (oldProps) Object.keys(oldProps).forEach(p => props[p] = null);
   if (newProps) Object.keys(newProps).forEach(p => props[p] = newProps[p]);
@@ -155,9 +156,8 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
 function updateProps(element: Element, props: {}) {
   console.assert(!!element);
   // console.log('updateProps', element, props);
-
   const cached = element[ATTR_PROPS] || {};
-  props = mergeProps(cached, props);
+  props = mergeProps(cached, props || {});
   element[ATTR_PROPS] = props;
   for (let name in props) {
     const value = props[name];
@@ -175,10 +175,8 @@ function updateProps(element: Element, props: {}) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'className' || name === 'class' ||
-      name.startsWith("role") || name.indexOf("-") >= 0 ||
+    } else if (name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
       element instanceof SVGElement) {
-      if (name === 'className') name = 'class';
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
