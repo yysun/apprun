@@ -109,7 +109,6 @@ describe('app events', () => {
     expect(console.assert).toHaveBeenCalled();
   });
 
-
   it('should run only once', () => {
     const app = new App();
     spyOn(console, 'assert');
@@ -119,4 +118,21 @@ describe('app events', () => {
     expect(console.assert).toHaveBeenCalled();
   });
 
+  it('should return the number of subscribers for a valid event name', () => {
+    const app = new App();
+    const hello = () => {};
+    app.on('hello', hello);
+    debugger;
+    const subs: number = app.run('hello');
+    expect(subs).toBe(1);
+    app.off('hello', hello);
+  });
+
+  it('should return 0 subscribers for an invalid event name', () => {
+    const app = new App();
+    spyOn(console, 'assert');
+    const subs: number = app.run('hiiiiiiii');
+    expect(console.assert).toHaveBeenCalled();
+    expect(subs).toBe(0);
+  });
 });

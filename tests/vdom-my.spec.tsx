@@ -67,7 +67,6 @@ describe('vdom-my', () => {
   });
 
   it('it should update className', () => {
-
     const element = render(createElement('div', { className: 'a' }, 'x'));
     expect(element.className).toEqual('a');
     render(createElement('div', { className: 'a b' }, 'xx'));
@@ -87,6 +86,22 @@ describe('vdom-my', () => {
 
   it('it should reset class and style', () => {
     let element = render(createElement('div', {
+      class: 'a',
+      style: { left: '5px' }
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.textContent).toEqual('x');
+    expect(element.style.left).toEqual('5px');
+    render(createElement("div", null));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.style.left).toEqual('');
+    expect(element.className).toEqual('');
+    expect(element.textContent).toEqual('');
+  });
+
+  it('it should reset className and style', () => {
+    let element = render(createElement('div', {
       className: 'a',
       style: { left: '5px' }
     }, 'x'));
@@ -95,8 +110,10 @@ describe('vdom-my', () => {
     expect(element.textContent).toEqual('x');
     expect(element.style.left).toEqual('5px');
     render(createElement("div", null));
+    expect(element.nodeName).toEqual('DIV');
     expect(element.style.left).toEqual('');
     expect(element.className).toEqual('');
+    expect(element.textContent).toEqual('');
   });
 
   it('it should flatten children', () => {
@@ -238,7 +255,21 @@ describe('vdom-my', () => {
     expect(element.getAttribute('class')).toBe('a');
     element = render(createElement('svg', { "className": "b" }));
     expect(element.getAttribute('class')).toBe('b');
-
   });
+
+  it('it should reset event handler', () => {
+    let element = render(createElement('div', {
+      class: 'a',
+      onclick: () => {}
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.onclick).not.toBeNull();
+    render(createElement("div", {className: 'b'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('b');
+    expect(element.onclick).toBeNull();
+  });
+
 
 });

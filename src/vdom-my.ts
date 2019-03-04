@@ -145,10 +145,10 @@ function create(node: VNode | string, isSvg = false): Element {
   return element
 }
 
-function mergeProps(a: {}, b: {}): {} {
+function mergeProps(oldProps: {}, newProps: {}): {} {
   const props = {};
-  if (a) Object.keys(a).forEach(p => props[p] = '');
-  if (b) Object.keys(b).forEach(p => props[p] = b[p]);
+  if (oldProps) Object.keys(oldProps).forEach(p => props[p] = null);
+  if (newProps) Object.keys(newProps).forEach(p => props[p] = newProps[p]);
   return props;
 }
 
@@ -171,16 +171,22 @@ function updateProps(element: Element, props: {}) {
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
-      if (element.dataset[cname] !== value) element.dataset[cname] = value;
-    } else if (element instanceof SVGElement ||
-      name.startsWith("role") || name.indexOf("-")>=0) {
+      if (element.dataset[cname] !== value) {
+        if (value || value === "") element.dataset[cname] = value;
+        else delete element.dataset[cname];
+      }
+    } else if (name === 'className' || name === 'class' ||
+      name.startsWith("role") || name.indexOf("-") >= 0 ||
+      element instanceof SVGElement) {
       if (name === 'className') name = 'class';
-      if (element.getAttribute(name) !== value) element.setAttribute(name, value)
-    } else {
-      if (name === 'class') name = 'className';
-      if (element[name] !== value) element[name] = value;
-      if (name === 'key' && value) keyCache[value] = element;
+      if (element.getAttribute(name) !== value) {
+        if (value) element.setAttribute(name, value);
+        else element.removeAttribute(name);
+      }
+    } else if (element[name] !== value) {
+      element[name] = value;
     }
+    if (name === 'key' && value) keyCache[value] = element;
   }
 }
 
