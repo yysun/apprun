@@ -38,6 +38,7 @@ export const updateElement = render;
 
 export function render(element: Element, nodes: VNode | VNode[], parent = {}) {
   // console.log('render', element, node);
+  // tslint:disable-next-line
   if (nodes == null) return;
 
   nodes = createComponent(nodes, parent);
@@ -132,7 +133,7 @@ function create(node: VNode | string, isSvg = false): Element {
   // console.log('create', node, typeof node);
 
   if (typeof node === "string") return createText(node);
-  if (!node.tag || (typeof node.tag == 'function')) return createText(JSON.stringify(node));
+  if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
   isSvg = isSvg || node.tag === "svg";
   const element = isSvg
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
@@ -160,13 +161,13 @@ function updateProps(element: Element, props: {}) {
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
   element[ATTR_PROPS] = props;
-  for (let name in props) {
+  for (const name in props) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
-      for (let s in value) {
+      for (const s in value) {
         if (element.style[s] !== value[s]) element.style[s] = value[s];
       }
     } else if (name.startsWith('data-')) {

@@ -74,7 +74,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset and apply new style', () => {
-    let element = render(createElement('div', null, 'x'));
+    const element = render(createElement('div', null, 'x'));
     expect(element.nodeName).toEqual('DIV');
     expect(element.textContent).toEqual('x');
     render(createElement("div", { style: { left: '5px' } }));
@@ -85,7 +85,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset class and style', () => {
-    let element = render(createElement('div', {
+    const element = render(createElement('div', {
       class: 'a',
       style: { left: '5px' }
     }, 'x'));
@@ -101,7 +101,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset className and style', () => {
-    let element = render(createElement('div', {
+    const element = render(createElement('div', {
       className: 'a',
       style: { left: '5px' }
     }, 'x'));
@@ -124,7 +124,7 @@ describe('vdom-my', () => {
 
   it('it should render array of nodes', () => {
     const element = render(createElement('div', null, 'a'));
-    let nodes = {
+    const nodes = {
       tag: "div",
       props: null,
       children: [createElement('div', null, 'x'), createElement('div', null, 'xx')]
@@ -258,7 +258,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset event handler', () => {
-    let element = render(createElement('div', {
+    const element = render(createElement('div', {
       class: 'a',
       onclick: () => {}
     }, 'x'));
@@ -272,7 +272,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset className with class', () => {
-    let element = render(createElement('div', { className: 'a'}));
+    const element = render(createElement('div', { className: 'a'}));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('a');
     render(createElement("div", {class: 'b'}));
@@ -283,7 +283,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset class with className', () => {
-    let element = render(createElement('div', { class: 'a'}));
+    const element = render(createElement('div', { class: 'a'}));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('a');
     render(createElement("div", {className: 'b'}));
