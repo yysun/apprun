@@ -38,8 +38,10 @@ app.on('route', url => app['route'] && app['route'](url));
 
 if (typeof document === 'object') {
   document.addEventListener("DOMContentLoaded", () => {
-    window.onpopstate = () => app['route'] && app['route'](location.hash);
-    app['route'] && app['route'](location.hash);
+    if (app['route'] === route) {
+      window.onpopstate = () => route(location.hash);
+      route(location.hash);
+    }
   });
 }
 
