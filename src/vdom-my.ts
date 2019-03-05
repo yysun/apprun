@@ -21,7 +21,7 @@ function collect(children) {
   return ch;
 }
 
-export function createElement(tag: string | Function, props: {}, ...children) {
+export function createElement(tag: string | Function, props?: {}, ...children) {
   const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
@@ -147,6 +147,7 @@ function create(node: VNode | string, isSvg = false): Element {
 
 function mergeProps(oldProps: {}, newProps: {}): {} {
   newProps['class'] = newProps['class'] || newProps['className'];
+  delete newProps['className'];
   const props = {};
   if (oldProps) Object.keys(oldProps).forEach(p => props[p] = null);
   if (newProps) Object.keys(newProps).forEach(p => props[p] = newProps[p]);

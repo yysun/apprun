@@ -271,5 +271,26 @@ describe('vdom-my', () => {
     expect(element.onclick).toBeNull();
   });
 
+  it('it should reset className with class', () => {
+    let element = render(createElement('div', { className: 'a'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    render(createElement("div", {class: 'b'}));
+    expect(element.className).toEqual('b');
+    render(createElement("div"));
+    expect(element.className).toBe('');
+    expect(element.getAttribute('class')).toBeNull();
+  });
+
+  it('it should reset class with className', () => {
+    let element = render(createElement('div', { class: 'a'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    render(createElement("div", {className: 'b'}));
+    expect(element.className).toEqual('b');
+    render(createElement("div"));
+    expect(element.className).toBe('');
+    expect(element.getAttribute('class')).toBeNull();
+  });
 
 });

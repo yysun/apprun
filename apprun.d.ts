@@ -19,7 +19,7 @@ declare module 'apprun' {
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
     run(name: string, ...args: any[]): number;
-    createElement(tag: string | Function, props, ...children): VNode | VNode[];
+    createElement(tag: string | Function, props?, ...children): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
     Fragment(props, ...children): any[];
   }
