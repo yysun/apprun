@@ -39,7 +39,7 @@ export class Component<T=any> {
     if (el) {
       const tracking_attr = '_c';
       if (!this.unload) {
-        el.removeAttribute(tracking_attr);
+        el.removeAttribute && el.removeAttribute(tracking_attr);
       } else if (el['_component'] !== this) {
         this.tracking_id = new Date().valueOf().toString();
         el.setAttribute(tracking_attr, this.tracking_id);

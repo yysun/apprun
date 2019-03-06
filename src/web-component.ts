@@ -1,4 +1,3 @@
-import { Component } from './component';
 declare var customElements;
 
 export const customElement = (componentClass, options={}) => class extends HTMLElement {
