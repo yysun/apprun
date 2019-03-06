@@ -6,8 +6,8 @@
 
 ## 1.17 / 2.17
 
-* Pull requests: #48, #49, #50, thanks to @phBalance
-* Added lifecycle function: unload
+* Pull requests: #48, #49, #50, #52, thanks to @phBalance
+* Added lifecycle function: unload (beta)
 
 ## 1.16 / 2.16
 
