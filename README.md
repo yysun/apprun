@@ -111,9 +111,6 @@ npx apprun --init --spa --es6
 npm start
 ```
 
-## Online Demos
-See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.com](https://stackblitz.com/@yysun)
-
 ## Dev-Tools
 
 To use the AppRun dev-tools, include the the dev-tools script.
@@ -129,7 +126,7 @@ Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-
 To explore more about AppRun, read the following.
 
 * [Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture)
-* [Event Pub and Sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs)
+* [Event PubSub](https://yysun.github.io/apprun/docs/#/?id=event-pubsub)
 * [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
 * [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
 * [Component](https://yysun.github.io/apprun/docs/#/?id=component)
@@ -164,6 +161,10 @@ To explore more about AppRun, read the following.
 * [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
 * [AppRun Desktop Application with Electron](https://github.com/yysun/apprun-electron)
 * [AppRun Mobile Application with Framework7](https://github.com/yysun/f7)
+
+## Online Demos
+
+See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.com](https://stackblitz.com/@yysun)
 
 
 ## Contribute

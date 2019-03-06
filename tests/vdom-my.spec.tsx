@@ -67,7 +67,6 @@ describe('vdom-my', () => {
   });
 
   it('it should update className', () => {
-
     const element = render(createElement('div', { className: 'a' }, 'x'));
     expect(element.className).toEqual('a');
     render(createElement('div', { className: 'a b' }, 'xx'));
@@ -75,7 +74,7 @@ describe('vdom-my', () => {
   });
 
   it('it should reset and apply new style', () => {
-    let element = render(createElement('div', null, 'x'));
+    const element = render(createElement('div', null, 'x'));
     expect(element.nodeName).toEqual('DIV');
     expect(element.textContent).toEqual('x');
     render(createElement("div", { style: { left: '5px' } }));
@@ -86,7 +85,23 @@ describe('vdom-my', () => {
   });
 
   it('it should reset class and style', () => {
-    let element = render(createElement('div', {
+    const element = render(createElement('div', {
+      class: 'a',
+      style: { left: '5px' }
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.textContent).toEqual('x');
+    expect(element.style.left).toEqual('5px');
+    render(createElement("div", null));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.style.left).toEqual('');
+    expect(element.className).toEqual('');
+    expect(element.textContent).toEqual('');
+  });
+
+  it('it should reset className and style', () => {
+    const element = render(createElement('div', {
       className: 'a',
       style: { left: '5px' }
     }, 'x'));
@@ -95,8 +110,10 @@ describe('vdom-my', () => {
     expect(element.textContent).toEqual('x');
     expect(element.style.left).toEqual('5px');
     render(createElement("div", null));
+    expect(element.nodeName).toEqual('DIV');
     expect(element.style.left).toEqual('');
     expect(element.className).toEqual('');
+    expect(element.textContent).toEqual('');
   });
 
   it('it should flatten children', () => {
@@ -107,7 +124,7 @@ describe('vdom-my', () => {
 
   it('it should render array of nodes', () => {
     const element = render(createElement('div', null, 'a'));
-    let nodes = {
+    const nodes = {
       tag: "div",
       props: null,
       children: [createElement('div', null, 'x'), createElement('div', null, 'xx')]
@@ -238,7 +255,42 @@ describe('vdom-my', () => {
     expect(element.getAttribute('class')).toBe('a');
     element = render(createElement('svg', { "className": "b" }));
     expect(element.getAttribute('class')).toBe('b');
+  });
 
+  it('it should reset event handler', () => {
+    const element = render(createElement('div', {
+      class: 'a',
+      onclick: () => {}
+    }, 'x'));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    expect(element.onclick).not.toBeNull();
+    render(createElement("div", {className: 'b'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('b');
+    expect(element.onclick).toBeNull();
+  });
+
+  it('it should reset className with class', () => {
+    const element = render(createElement('div', { className: 'a'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    render(createElement("div", {class: 'b'}));
+    expect(element.className).toEqual('b');
+    render(createElement("div"));
+    expect(element.className).toBe('');
+    expect(element.getAttribute('class')).toBeNull();
+  });
+
+  it('it should reset class with className', () => {
+    const element = render(createElement('div', { class: 'a'}));
+    expect(element.nodeName).toEqual('DIV');
+    expect(element.className).toEqual('a');
+    render(createElement("div", {className: 'b'}));
+    expect(element.className).toEqual('b');
+    render(createElement("div"));
+    expect(element.className).toBe('');
+    expect(element.getAttribute('class')).toBeNull();
   });
 
 });

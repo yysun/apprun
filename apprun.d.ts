@@ -18,8 +18,8 @@ declare module 'apprun' {
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
-    run(name: string, ...args: any[]): void;
-    createElement(tag: string | Function, props, ...children): VNode | VNode[];
+    run(name: string, ...args: any[]): number;
+    createElement(tag: string | Function, props?, ...children): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
     Fragment(props, ...children): any[];
     webComponent(name: string, componentClass, options?): void;
@@ -32,10 +32,11 @@ declare module 'apprun' {
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
-    run(name: string, ...args: any[]): void;
+    run(name: string, ...args: any[]): number;
     rendered: (state: T) => void;
     mounted: (props: any) => void;
     unmount: () => void;
+    unload: () => void;
   }
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;
@@ -48,4 +49,6 @@ declare module 'apprun' {
   export const app: IApp
   export default app;
 
+  export const ROUTER_EVENT: string;
+  export const ROUTER_404_EVENT: string;
 }

@@ -21,7 +21,7 @@ function collect(children) {
   return ch;
 }
 
-export function createElement(tag: string | Function, props: {}, ...children) {
+export function createElement(tag: string | Function, props?: {}, ...children) {
   const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (tag === undefined && children) return ch; // JSX fragments
@@ -38,6 +38,7 @@ export const updateElement = render;
 
 export function render(element: Element, nodes: VNode | VNode[], parent = {}) {
   // console.log('render', element, node);
+  // tslint:disable-next-line
   if (nodes == null) return;
 
   nodes = createComponent(nodes, parent);
@@ -132,7 +133,7 @@ function create(node: VNode | string, isSvg = false): Element {
   // console.log('create', node, typeof node);
 
   if (typeof node === "string") return createText(node);
-  if (!node.tag || (typeof node.tag == 'function')) return createText(JSON.stringify(node));
+  if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
   isSvg = isSvg || node.tag === "svg";
   const element = isSvg
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
@@ -145,42 +146,47 @@ function create(node: VNode | string, isSvg = false): Element {
   return element
 }
 
-function mergeProps(a: {}, b: {}): {} {
+function mergeProps(oldProps: {}, newProps: {}): {} {
+  newProps['class'] = newProps['class'] || newProps['className'];
+  delete newProps['className'];
   const props = {};
-  if (a) Object.keys(a).forEach(p => props[p] = '');
-  if (b) Object.keys(b).forEach(p => props[p] = b[p]);
+  if (oldProps) Object.keys(oldProps).forEach(p => props[p] = null);
+  if (newProps) Object.keys(newProps).forEach(p => props[p] = newProps[p]);
   return props;
 }
 
 function updateProps(element: Element, props: {}) {
   console.assert(!!element);
   // console.log('updateProps', element, props);
-
   const cached = element[ATTR_PROPS] || {};
-  props = mergeProps(cached, props);
+  props = mergeProps(cached, props || {});
   element[ATTR_PROPS] = props;
-  for (let name in props) {
+  for (const name in props) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
     if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
-      for (let s in value) {
+      for (const s in value) {
         if (element.style[s] !== value[s]) element.style[s] = value[s];
       }
     } else if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
-      if (element.dataset[cname] !== value) element.dataset[cname] = value;
-    } else if (element instanceof SVGElement ||
-      name.startsWith("role") || name.indexOf("-")>=0) {
-      if (name === 'className') name = 'class';
-      if (element.getAttribute(name) !== value) element.setAttribute(name, value)
-    } else {
-      if (name === 'class') name = 'className';
-      if (element[name] !== value) element[name] = value;
-      if (name === 'key' && value) keyCache[value] = element;
+      if (element.dataset[cname] !== value) {
+        if (value || value === "") element.dataset[cname] = value;
+        else delete element.dataset[cname];
+      }
+    } else if (name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
+      element instanceof SVGElement) {
+      if (element.getAttribute(name) !== value) {
+        if (value) element.setAttribute(name, value);
+        else element.removeAttribute(name);
+      }
+    } else if (element[name] !== value) {
+      element[name] = value;
     }
+    if (name === 'key' && value) keyCache[value] = element;
   }
 }
 

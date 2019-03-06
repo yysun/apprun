@@ -304,7 +304,21 @@ describe('Component', () => {
     const t = new Test().start(div);
     expect(div.children.length).toBe(1);
   });
+
+  // it('should call destroy when component is replaced', () => {
+  //// Jest does not support MutationObserver, run the following in browser console in V2 branch (ES6)
+    // class Test extends Component {
+    //   view = () => { }
+    //   unload = () => console.log('destroy');
+    // }
+    // const div = document.createElement('div');
+    // const t = new Test().start(div);
+    // div.setAttribute('_c', null);
   
+    // const e = document.querySelector('#my-app');
+    // e.parentNode.removeChild(e)
+  // });
+
 });
 
 
