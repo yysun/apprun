@@ -12,7 +12,7 @@ export interface IApp {
     options?: { history?, rendered?: (state: T) => void}): Component<T>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
-  run(name: string, ...args: any[]): void;
+  run(name: string, ...args: any[]): number;
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
@@ -38,8 +38,10 @@ app.on('route', url => app['route'] && app['route'](url));
 
 if (typeof document === 'object') {
   document.addEventListener("DOMContentLoaded", () => {
-    window.onpopstate = () => app['route'] && app['route'](location.hash);
-    app['route'] && app['route'](location.hash);
+    if (app['route'] === route) {
+      window.onpopstate = () => route(location.hash);
+      route(location.hash);
+    }
   });
 }
 

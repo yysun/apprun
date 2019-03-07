@@ -11,11 +11,11 @@ export class Component<T=any> {
   private _app = new App();
   private _actions = [];
   private _state;
-  element;
   private _history = [];
   private _history_idx = -1;
   private enable_history;
   private global_event;
+  public element;
   public rendered;
   public mounted;
   public unload;
@@ -37,23 +37,27 @@ export class Component<T=any> {
       document.getElementById(this.element) : this.element;
 
     if (el) {
+      const tracking_attr = '_c';
       if (!this.unload) {
-        el.removeAttribute('_c');
+        el.removeAttribute(tracking_attr);
       } else if (el['_component'] !== this) {
         this.tracking_id = new Date().valueOf().toString();
-        el.setAttribute('_c', this.tracking_id);
+        el.setAttribute(tracking_attr, this.tracking_id);
         const observer = new MutationObserver(changes => {
-          const { attributeName, oldValue } = changes[0];
-          if (attributeName === '_c' && oldValue === this.tracking_id) {
+          const { removedNodes, oldValue } = changes[0];
+          if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >=0){
             this.unload();
             observer.disconnect();
           }
         });
-        observer.observe(el, { attributes: true, attributeOldValue: true });
+        if (el.parentNode) observer.observe(el.parentNode, {
+          childList: true, subtree: true,
+          attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+        });
       }
       el['_component'] = this;
     }
-    
+
     app.render(el, html, this);
     if (this.rendered) (this.rendered(this.state));
   }
