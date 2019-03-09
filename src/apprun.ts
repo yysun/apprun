@@ -5,8 +5,6 @@ import { VNode, View, Action, Update } from './types';
 import { on, update } from './decorator';
 import route, { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
-export { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
-
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
     options?: { history?, rendered?: (state: T) => void}): Component<T>;
@@ -16,6 +14,7 @@ export interface IApp {
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
+  route?(url: string, ...args: any[]): any;
 }
 
 app.createElement = createElement;
@@ -48,6 +47,7 @@ if (typeof document === 'object') {
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { app, Component, View, Action, Update, on, update };
 export { update as event };
+export { ROUTER_EVENT, ROUTER_404_EVENT };
 export default app as IApp;
 
 if (typeof window === 'object') {
