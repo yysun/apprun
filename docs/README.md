@@ -303,7 +303,7 @@ AppRun has included two decorators to create the event handlers in the component
 
 ## Routing
 
-Because we can connect the DOM events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL (by listening to the window's onpopstate event) and triggers the AppRun events with matching the hash. E.g., when URL in the browser address bar becomes http://..../#Counter, it triggers the #Couter event.
+Because we can connect the DOM events to AppRun Event, handling routing becomes much easier. AppRun detects the hash changes in URL (by listening to the window's onpopstate event) and triggers the AppRun events with matching the hash. E.g., when URL in the browser address bar becomes http://..../#Counter, it triggers the #Counter event.
 
 Using the events, each component defines its route events. It can avoid much code for registering and matching routes like in the other frameworks and libraries.
 
