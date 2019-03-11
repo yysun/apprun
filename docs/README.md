@@ -206,7 +206,7 @@ A component in AppRun is a mini elm architecture, which means inside a component
 ```javascript
 import app, {Component} from 'apprun';
 
-export default class extends Component {
+export default class Counter extends Component {
   state = '';
   view = state => <div/>;
   update = {};
