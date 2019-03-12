@@ -1,9 +1,11 @@
 import app from './app';
 
+export type IRoute = (url: string, ...args: any[]) => any;
+
 export const ROUTER_EVENT: string = '//';
 export const ROUTER_404_EVENT: string = '///';
 
-export default function route(url: string) {
+export const route: IRoute = (url: string) => {
   if (!url) url = '#';
   if (url.startsWith('#')) {
     const [name, ...rest] = url.split('/');
@@ -18,3 +20,4 @@ export default function route(url: string) {
     app.run(ROUTER_EVENT, url);
   }
 }
+export default route;
