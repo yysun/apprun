@@ -3,7 +3,7 @@ import { createElement, render, Fragment } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
 import { on, update } from './decorator';
-import route, { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import { IRoute, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
@@ -14,7 +14,7 @@ export interface IApp {
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
-  route?(url: string, ...args: any[]): any;
+  route?: IRoute;
 }
 
 app.createElement = createElement;
@@ -30,8 +30,8 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
     return component;
 };
 
-app.on(ROUTER_EVENT, _ => { });
-app.on('#', _ => { });
+app.on(ROUTER_EVENT, _ => {/* Intentionally empty */});
+app.on('#', _ => {/* Intentionally empty */});
 app['route'] = route;
 app.on('route', url => app['route'] && app['route'](url));
 
