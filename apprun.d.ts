@@ -12,7 +12,7 @@ declare module 'apprun' {
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
   export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
-  export type IRoute = (url: string, ...args: any[]) => any;
+  export type Route = (url: string, ...args: any[]) => any;
 
   export interface IApp {
     start<T>(element?: Element, model?: T, view?: View<T>, update?: Update<T>,
@@ -24,7 +24,7 @@ declare module 'apprun' {
     createElement(tag: string | Function, props?, ...children): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
     Fragment(props, ...children): any[];
-    route?: IRoute;
+    route?: Route;
   }
 
   export class Component<T=any> {
