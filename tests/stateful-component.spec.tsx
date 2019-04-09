@@ -262,4 +262,17 @@ describe('Stateful Component', () => {
     expect((main.children[3] as HTMLDivElement).dataset.a).toBe("a");
   });
 
+  it("should get props in view function", () => {
+    class Child extends Component {
+      view = (_, props) => {
+        expect(props['class']).toBe('c1');
+      }
+    }
+    class Main extends Component {
+      view = _ => <Child class="c1" id="c1" />
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
+  });
+
 });

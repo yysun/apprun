@@ -8,7 +8,7 @@ declare module 'apprun' {
     children: Array<VNode|string>
   };
 
-  export type View<T> = (state: T) => string | VNode | VNode[] | void;
+  export type View<T> = (state: T, props?) => string | VNode | VNode[] | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
   export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
 
@@ -35,8 +35,8 @@ declare module 'apprun' {
     start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     run(name: string, ...args: any[]): number;
-    rendered: (state: T) => void;
-    mounted: (props: any) => void;
+    rendered: (state: T, props?) => void;
+    mounted: (props: any, children?) => void;
     unmount: () => void;
     unload: () => void;
   }
