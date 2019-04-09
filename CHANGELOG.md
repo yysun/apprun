@@ -6,8 +6,10 @@
 
 ## 1.17 / 2.17
 
-* Pull requests: #48, #49, #50, #52, thanks to @phBalance
+* Pull requests: #48, #49, #50, #52, #53, #54, #55 thanks to @phBalance, @Sebring
 * Added lifecycle function: unload (beta)
+* Add props to the wrapper div of stateful component, #57, thanks to @bo-kh
+* Pass props to view, children to mounted functions of the stateful component
 
 ## 1.16 / 2.16
 
@@ -16,6 +18,7 @@
 * Support custom attribute (with kebab case/snake case)
 * Export app (non-default)
 * CLI: use src and dist folder, es6 flag
+* Fix CLI error: #45, thanks to @srlopez
 
 ## 1.15
 
