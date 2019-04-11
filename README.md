@@ -1,5 +1,6 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
 
+[![Discord Chat][discord-image]][discord-invite]
 
 AppRun is a 3K library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
@@ -206,3 +207,6 @@ Copyright (c) 2015-2019 Yiyi Sun
 
 [twitter]: https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social
+
+[discord-image]: https://img.shields.io/discord/476903999023480842.svg
+[discord-invite]: https://discord.gg/M5EDsj
