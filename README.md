@@ -120,6 +120,13 @@ Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-
 
 ![app-dev-tools](docs/apprun-dev-tools.gif)
 
+
+# VS Code Extension
+
+AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
+
+![app-dev-tools](docs/apprun-vscode-extension.png)
+
 ## Documentation
 
 To explore more about AppRun, read the following.
