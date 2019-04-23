@@ -1,7 +1,16 @@
 import app from '../src/apprun-html';
 
 const model = 'y';
-const view = _ => `\n <div>${_}</div>`;
+const view = _ => {
+  switch (_) {
+    case 'a':
+      return `<div>${_}</div><div>2</div><div>3</div>`
+    default:
+      return `\n <div>${_}</div>`
+
+  }
+}
+
 const update = {
   hi: (_, val) => val
 }
@@ -9,7 +18,7 @@ const update = {
 describe('vdom-html', () => {
 
   let element;
-  beforeEach(()=>{
+  beforeEach(() => {
     element = document.createElement('div');
     app.start(element, model, view, update);
   });
@@ -27,9 +36,10 @@ describe('vdom-html', () => {
   });
 
   it('should update child element', () => {
-    app.run('hi', 'yyy');
-    expect(element.firstChild.nodeName).toEqual('DIV');
-    expect(element.firstChild.textContent).toEqual('yyy');
+    app.run('hi', 'a');
+    expect(element.children.length).toEqual(3);
+    app.run('hi', 'b');
+    expect(element.children.length).toEqual(1);
   });
 
 });
