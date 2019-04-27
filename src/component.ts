@@ -131,7 +131,7 @@ export class Component<T=any> {
       this.on(options.history.next || 'history-next', next)
     }
     this.add_actions();
-    if (this.state === undefined) this.state = this['model'] || {};
+    if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
     if (options.render) {
       this.setState(this.state, { render: true, history: true });
     } else {
