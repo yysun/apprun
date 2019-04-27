@@ -44,6 +44,18 @@ if (typeof document === 'object') {
   });
 }
 
+app.on('$', (key:string, props:[], component: Component) => {
+  if (key.startsWith('$on')) {
+    const event = props[key];
+    key = key.substring(1)
+    if (typeof event === 'boolean') {
+      props[key] = e => component.run(key, e);
+    } else if (typeof event === 'string') {
+      props[key] = e => component.run(event, e)
+    }
+  }
+});
+
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { app, Component, View, Action, Update, on, update };
 export { update as event };
