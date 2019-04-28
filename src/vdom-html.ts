@@ -1,11 +1,13 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-import * as morphdom from 'morphdom';
+import morph = require('morphdom')
 
 export function render(element, html, parent?) {
   if (typeof html === 'string') {
     html = html.trim();
     if (element.firstChild) {
-      morphdom(element.firstChild, html);
+      const el = element.cloneNode(false);
+      el.innerHTML = html;
+      morph(element, el);
     } else {
       element.innerHTML = html;
     }

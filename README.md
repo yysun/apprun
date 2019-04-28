@@ -1,5 +1,4 @@
-# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
-
+# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
 AppRun is a 3K library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
@@ -16,7 +15,7 @@ Application logic is broken down into three separated parts in the AppRun archit
 
 AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
 
-Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 ## AppRun Book from Apress
 
@@ -27,7 +26,7 @@ Applications built with AppRun have less lines of code, smaller js files, and be
 
 ## Quick Start
 
-Below is a counter application using AppRun.
+Below is a counter application using AppRun ([Online Demo](https://apprun-counter.glitch.me)).
 ```html
 <html>
 <head>
@@ -58,7 +57,7 @@ Below is a counter application using AppRun.
 
 ## Web Components
 
-Using apprun@es6, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events.
+Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun-web-component.glitch.me)).
 
 ```html
 <html>
@@ -120,6 +119,13 @@ To use the AppRun dev-tools, include the the dev-tools script.
 Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
 ![app-dev-tools](docs/apprun-dev-tools.gif)
+
+
+# VS Code Extension
+
+AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
+
+![app-dev-tools](docs/apprun-vscode-extension.png)
 
 ## Documentation
 
@@ -206,3 +212,6 @@ Copyright (c) 2015-2019 Yiyi Sun
 
 [twitter]: https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social
+
+[discord-image]: https://img.shields.io/discord/476903999023480842.svg
+[discord-invite]: https://discord.gg/M5EDsj

@@ -23,7 +23,18 @@ export class Component<T=any> {
 
   private renderState(state: T) {
     if (!this.view) return;
+    const h = app.createElement;
+    app.createElement = (tag, props, ...children) => {
+      props && Object.keys(props).forEach(key => {
+        if (key.startsWith('$')) {
+          app.run('$', key, props, this);
+          delete props[key];
+        }
+      });
+      return h(tag, props, ...children);
+    }
     const html = this.view(state);
+    app.createElement = h;
 
     app.run('debug', {
       component: this,
@@ -131,7 +142,7 @@ export class Component<T=any> {
       this.on(options.history.next || 'history-next', next)
     }
     this.add_actions();
-    if (this.state === undefined) this.state = this['model'] || {};
+    if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
     if (options.render) {
       this.setState(this.state, { render: true, history: true });
     } else {

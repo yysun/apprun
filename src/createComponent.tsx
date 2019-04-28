@@ -20,10 +20,10 @@ function render(node, parent, idx) {
   const state = component.state;
   let vdom = '';
   if (!(state instanceof Promise) && component.view) {
-    vdom = component.view(state);
-    component.rendered && setTimeout(() => component.rendered(state));
+    vdom = component.view(state, props);
+    component.rendered && setTimeout(() => component.rendered(state, props));
   }
-  return <div id={id}>{vdom}</div>;
+  return <div {...props} id={id}>{vdom}</div>;
 }
 
 function createComponent(node, parent, idx = 0) {

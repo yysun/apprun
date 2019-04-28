@@ -4,8 +4,7 @@ import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
 import { on, update } from './decorator';
 import webComponent from './web-component';
-import route, { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
-export { ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
   start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
@@ -16,6 +15,7 @@ export interface IApp {
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
+  route?: Route;
   webComponent(name: string, componentClass, options?): void;
 }
 
@@ -33,8 +33,8 @@ app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, upda
     return component;
 };
 
-app.on(ROUTER_EVENT, _ => { });
-app.on('#', _ => { });
+app.on(ROUTER_EVENT, _ => {/* Intentionally empty */});
+app.on('#', _ => {/* Intentionally empty */});
 app['route'] = route;
 app.on('route', url => app['route'] && app['route'](url));
 
@@ -47,9 +47,22 @@ if (typeof document === 'object') {
   });
 }
 
+app.on('$', (key:string, props:[], component: Component) => {
+  if (key.startsWith('$on')) {
+    const event = props[key];
+    key = key.substring(1)
+    if (typeof event === 'boolean') {
+      props[key] = e => component.run(key, e);
+    } else if (typeof event === 'string') {
+      props[key] = e => component.run(event, e)
+    }
+  }
+});
+
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { app, Component, View, Action, Update, on, update };
 export { update as event };
+export { ROUTER_EVENT, ROUTER_404_EVENT };
 export default app as IApp;
 
 if (typeof window === 'object') {
