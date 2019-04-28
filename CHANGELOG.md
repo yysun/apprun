@@ -4,6 +4,11 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.18 / 2.18
+
+* Support directive event, e.g. $onlick
+* Fixed #57, #58
+
 ## 1.17 / 2.17
 
 * Pull requests: #48, #49, #50, #52, #53, #54, #55 thanks to @phBalance, @Sebring
