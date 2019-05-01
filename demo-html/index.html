@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AppRun HTML</title>
+  <style>
+    body {
+      font-family: Lato;
+    }
+  </style>
+</head>
+<body>
+  <div id="my-app"></div>
+  <script src="../dist/apprun-html.js"></script>
+  <script>
+    model = 0;
+    view = state => `<div>
+      <h1>${state}</h1>
+      <button onclick='app.run("-1")'>-1</button>
+      <button onclick='app.run("+1")'>+1</button>
+      </div>`;
+    update = {
+      '+1': state => state + 1,
+      '-1': state => state - 1,
+    };
+    app.start('my-app', model, view, update);
+  </script>
+</body>
+
+</html>

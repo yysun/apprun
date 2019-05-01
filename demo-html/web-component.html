@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>AppRun Web Component</title>
+  <style>
+    body {
+      font-family: Lato;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <h1>Web Component Demo</h1>
+    <div>A web component created from the <a href="https://github.com/yysun/apprun">AppRun</a> component</div>
+  </div>
+  <my-app id="counter"></my-app>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
+  <script src="../dist/apprun-html.js"></script>
+  <script>
+    class Counter extends Component {
+      constructor() {
+        super();
+        this.state = 0;
+        this.view = state => `<div>
+          <h1>${state}</h1>
+          <button onclick='counter.run("-1")'>-1</button>
+          <button onclick='counter.run("+1")'>+1</button>
+          </div>`;
+        this.update = {
+          '+1': state => state + 1,
+          '-1': state => state - 1
+        };
+      }
+    }
+    app.webComponent('my-app', Counter);
+  </script>
+</body>
+
+</html>
