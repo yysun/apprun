@@ -1,5 +1,5 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-import morph = require('morphdom')
+import morphdom from 'morphdom';
 
 export function render(element, html, parent?) {
   if (typeof html === 'string') {
@@ -7,7 +7,7 @@ export function render(element, html, parent?) {
     if (element.firstChild) {
       const el = element.cloneNode(false);
       el.innerHTML = html;
-      morph(element, el);
+      morphdom(element, el);
     } else {
       element.innerHTML = html;
     }
