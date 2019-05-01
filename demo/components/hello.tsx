@@ -65,6 +65,11 @@ export class HelloDirectiveComponent extends Component {
           <td>&lt;input $oninput='ev1' /&gt;</td>
           <td><input value={state} $oninput='ev1' /></td>
         </tr>
+        <tr>
+          <td>Bind:</td>
+          <td>&lt;input $bind /&gt;</td>
+          <td><input value={state} $bind /></td>
+        </tr>
       </table>
     </div>
   }

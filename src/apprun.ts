@@ -53,6 +53,17 @@ app.on('$', (key:string, props:[], component: Component) => {
     } else if (typeof event === 'string') {
       props[key] = e => component.run(event, e)
     }
+  } else if (key === '$bind') {
+    const name = props[key];
+    props['oninput'] = e => {
+      if (typeof name === 'string') {
+        const state = { ...component['state'] };
+        state[name] = e.target.value;
+        component.setState(state);
+      } else {
+        component.setState(e.target.value);
+      }
+    }
   }
 });
 
