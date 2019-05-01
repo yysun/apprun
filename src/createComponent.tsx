@@ -23,7 +23,7 @@ function render(node, parent, idx) {
     vdom = component.view(state, props);
     component.rendered && setTimeout(() => component.rendered(state, props));
   }
-  return <div {...props} id={id}>{vdom}</div>;
+  return <section {...props} id={id}>{vdom}</section>;
 }
 
 let _idx = 0;
