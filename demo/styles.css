@@ -56,112 +56,6 @@ html {
   cursor: pointer;
 }
 
-.hn ul {
-  list-style: none;
-  margin-left: -30px;
-}
-
-.hn .header {
-  position: fixed;
-  background-color: white;
-  z-index: 1;
-  top: 50px;
-  width: 100%;
-  padding: 15px 0;
-}
-
-.hn .story {
-  clear: left;
-  padding-top: 2px;
-}
-
-.hn .story-list {
-  list-style: none;
-  margin-left: -50px;
-  padding-top: 10px;
-}
-
-.hn .story-list li {
-  padding: 10px 0;
-}
-
-.hn .score {
-  color: #666;
-  font-size: 1.1em;
-  font-weight: 700;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  float:left;
-  padding-top: 10px;
-}
-
-.hn .meta {
-  color: #aaa;
-}
-
-.hn .meta a {
-  color: #096;
-  cursor: pointer;
-}
-
-.hn.item .list {
-  padding-top: 80px
-}
-
-.hn .comment {
-  padding: 5px 10px;
-  border-left: 1px solid #eeeeee;
-}
-
-.hn .text {
-  padding: 10px 0;
-}
-
-.hn .toggle {
-  color: #096;
-  padding-bottom: 10px;
-  cursor: pointer;
-}
-
-.hn .collapsed {
-  display: none;
-}
-
-.hn .toggle:before {
-  content: ' [-] '
-}
-
-.hn .toggle.closed:before {
-  content: ' [+] '
-}
-
-.hn .toggle.closed:after{
-  content: ' (...)'
-}
-
-.hn .loading {
-  padding-top: 20px;
-}
-
-.hn .more a {
-  cursor: pointer;
-  padding-bottom: 150px;
-}
-
-.panel-container {
-  border: 1px solid #eeeeee;
-  height: calc(100vh - 120px);
-  overflow-x: scroll;
-  white-space: nowrap;
-}
-.panel {
-  height: calc(100vh - 180px);
-  min-width: 300px;
-  display: inline-block;
-  float: none;
-  vertical-align: text-top;
-}
 svg {
   display: block;
   margin-bottom: 10px;
@@ -211,3 +105,23 @@ polygon#blue {
 polygon#blue:hover, polygon#blue:active {
   fill: blue;
 }
+
+.playground .row {
+  padding-bottom: 10px;
+}
+
+.playground .textarea {
+  display: none;
+}
+
+.playground iframe {
+  width: 100%;
+  height: calc(100vh - 200px);
+}
+
+.playground .CodeMirror {
+  border: solid 1px black;
+  width: 100%;
+  height: calc(100vh - 200px);
+}
+
