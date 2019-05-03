@@ -43,7 +43,7 @@ app.start(document.body, state, view, update);
 
   {
     name: 'Clock',
-    code: ` // Clock
+    code: `// Clock
 const state = new Date();
 const view = state => <h1>{state.toLocaleTimeString()}</h1>;
 const update = {
@@ -56,29 +56,30 @@ app.start(document.body, state, view, update);
 
   {
     name: 'Stopwatch',
-    code: ` // Stopwatch
+    code: `// Stopwatch
 const state = {
-  current: new Date(),
   start: new Date(),
-  active: false
+  active: false,
+  elapsed: '0'
 }
 const view = state => {
-  const elapsed = state.active ?
-    ((state.current - state.start) / 1000).toFixed(3) + ' seconds'
-    : '(stopped)';
   return <div>
-    <h1>{elapsed}</h1>
+    <h1>{state.elapsed}</h1>
     <button $onclick="start">Start</button>
     <button $onclick="stop">Stop</button>
   </div>;
 };
 const update = {
   'start':state =>({
-    current: new Date(),
     start: new Date(),
     active: true}),
-  'stop': state => ({ active: false }),
-  'timer': state => ({ ...state, current: new Date() })
+  'stop': state => ({ ...state, active: false }),
+  'timer': state => {
+    if(state.active){
+      state.elapsed = ((new Date() - state.start) / 1000).toFixed(3) + ' seconds';
+      return state
+    }
+  }
 };
 window.setInterval(() => { app.run('timer') }, 100);
 app.start(document.body, state, view, update);
