@@ -39,14 +39,14 @@ const run = ({ code }) => {
 export class PlayComponent extends Component {
 
   codeEditor = null
-  state = {...examples[0], selectedIdx: 0}
+  state = {...examples[0], selectedIndex: 0}
 
   view = (state) => <div class="playground">
     <div class="row">
       <div class="col-sm-12">
         Examples:&nbsp;
       <select $onchange="select">
-          {examples.map((ex, idx) => <option selected={idx===state.selectedIdx}>{ex.name}</option>)}
+          {examples.map((ex, idx) => <option selected={idx===state.selectedIndex}>{ex.name}</option>)}
         </select>
       </div>
     </div>
@@ -63,11 +63,23 @@ export class PlayComponent extends Component {
   </div>;
 
   update = {
-    '#play': (state) => state,
+    '#play': (state, idx) => {
+      const selectedIndex = parseInt(idx);
+      if (!isNaN(selectedIndex)) {
+        state = {
+          ...examples[selectedIndex],
+          selectedIndex
+        };
+      }
+      this.codeEditor = null;
+      return state;
+    },
     'select': (state, e) => {
       this.state = {
-        ...examples[e.target.selectedIndex], selectedIdx: e.target.selectedIndex
+        ...examples[e.target.selectedIndex],
+        selectedIndex: e.target.selectedIndex
       };
+      history.pushState(null, null, '#play/' + e.target.selectedIndex);
       this.codeEditor.setValue(this.state.code);
     },
     'change': (state, code) => {
