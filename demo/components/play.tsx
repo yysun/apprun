@@ -3,7 +3,7 @@ import examples from './play-examples';
 
 declare var CodeMirror;
 
-const run = ({ code }) => {
+const run = ({ code, noJSX }) => {
   let iframe = document.getElementById('iframe') as HTMLIFrameElement;
   iframe.parentNode.replaceChild(iframe.cloneNode(), iframe);
   iframe = document.getElementById('iframe') as HTMLIFrameElement;
@@ -14,7 +14,8 @@ const run = ({ code }) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
+        <title>AppRun Playground</title>
         <style>
           body {
             font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
@@ -25,7 +26,7 @@ const run = ({ code }) => {
         <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
       </head>
       <body>
-      <script type="text/babel">
+      <script ${noJSX ? '' : 'type="text/babel"'}>
           //app.on('debug', p=>console.log(p))
           const React = app;
           ${code}

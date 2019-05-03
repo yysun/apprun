@@ -116,5 +116,34 @@ const update = {
   '-1': state => state - 1
 };
 app.start(document.body, state, view, update);
-`
-  }];
+`,
+    noJSX: true
+  },
+
+  {
+    name: 'Counter (Web Component)',
+    code: `// Counter (Web Component)
+class Counter extends Component {
+  constructor() {
+    super();
+    this.state = 0;
+    this.view = state => \`<div>
+      <h1>\${state}</h1>
+      <button onclick='counter.run("-1")'>-1</button>
+      <button onclick='counter.run("+1")'>+1</button>
+      </div>\`;
+    this.update = {
+      '+1': state => state + 1,
+      '-1': state => state - 1
+    };
+  }
+}
+const wc = document.createElement('my-app');
+wc.id = 'counter';
+document.body.appendChild(wc);
+app.webComponent('my-app', Counter);
+`,
+    noJSX: true
+  }
+
+];
