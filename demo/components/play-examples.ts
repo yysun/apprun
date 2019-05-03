@@ -145,6 +145,28 @@ document.body.appendChild(wc);
 app.webComponent('my-app', Counter);
 `,
     noJSX: true
+  },
+
+  {
+    name: 'Async fetch',
+    code: `// Async fetch
+const state = {};
+const view = (state) => <>
+  <div><button $onclick='fetchComic'>XKCD</button></div>
+  {state.comic && <>
+    <h3>{state.comic.title}</h3>
+    <img src={state.comic.url} />
+  </>}
+</>;
+const update = {
+  'fetchComic': async _ => {
+    const response = await fetch('https://xkcd-imgs.herokuapp.com/');
+    const comic = await response.json();
+    return {comic};
+  }
+};
+app.start(document.body, state, view, update);
+`
   }
 
 ];

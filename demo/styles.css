@@ -116,12 +116,12 @@ polygon#blue:hover, polygon#blue:active {
 
 .playground iframe {
   width: 100%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 180px);
 }
 
 .playground .CodeMirror {
   border: solid 1px black;
   width: 100%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 180px);
 }
 
