@@ -28,7 +28,7 @@ export class Component<T=any> {
     app.createElement = (tag, props, ...children) => {
       props && Object.keys(props).forEach(key => {
         if (key.startsWith('$')) {
-          directive(key, props, this);
+          directive(key, props, tag, this);
           delete props[key];
         }
       });
@@ -69,7 +69,6 @@ export class Component<T=any> {
       }
       el['_component'] = this;
     }
-
     app.render(el, html, this);
     if (this.rendered) (this.rendered(this.state));
   }
