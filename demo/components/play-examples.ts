@@ -169,6 +169,48 @@ app.start(document.body, state, view, update);
 `
   },
 
+//   {
+//     name: '$bind Directives',
+//     code: `// $bind Directives
+// const state = {
+//   a:'a',
+//   b:'b',
+//   c:5,
+//   d:true,
+//   e:'A',
+//   f:5,
+//   h:1,
+//   o1: false,
+//   o2: true,
+//   o3: false
+// };
+// const view = state => <>
+//   state: {state}<hr/>
+//   a: <input $bind name='a' /><br/>
+//   b: <input $bind='b' /><br/>
+//   c: <input type='number' name='c' $bind /><br/>
+//   d: <input type='checkbox' name='d' $bind /><br/>
+//   e: <input type='radio' name='e' value='A' $bind /> A
+//      <input type='radio' name='e' value='B' $bind /> B <br/>
+//   f: <input type='range' min='0' max='5' name='f' $bind /><br/>
+
+//   h: <select $bind name='h'>
+//     <option>0</option>
+//     <option>1</option>
+//     <option>2</option>
+//     <option>3</option>
+//   </select><br/>
+
+//   i: <select multiple name='i'>
+//     <option $bind='o1'>1</option>
+//     <option $bind='o2'>2</option>
+//     <option $bind='o3'>3</option>
+//   </select>
+// </>
+// app.start(document.body, state, view, {});
+// `
+//   },
+
   {
     name: 'Animation Directive',
     code: `// Animation Directive

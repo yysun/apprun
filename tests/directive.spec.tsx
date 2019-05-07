@@ -1,10 +1,10 @@
-import app, { Component, on , event} from '../src/apprun';
+import app, { Component, on, event } from '../src/apprun';
 
 describe('Directive', () => {
-
   it('should trigger driective event - $on', () => {
     class Test extends Component {
       state = 0;
+      // prettier-ignore
       view = () => <>
         <button id='b1' $onclick />
         <button id='b2' $onclick='+2' />
@@ -15,7 +15,7 @@ describe('Directive', () => {
       onclick = state => state + 1;
 
       @event('+2, #2')
-      add2 (state) {
+      add2(state) {
         return state + 2;
       }
     }
@@ -34,64 +34,96 @@ describe('Directive', () => {
 
   it('should bind input to state - $bind', () => {
     class Test extends Component {
-      state = 0;
-      view = () => <>
-        <input $bind value='0'/>
-        <input $bind value='1' name='a' />
-        <input $bind='b' value='2'/>
-        <input type='number' value='3' name='c' $bind />
+      state = {
+        a: 'a',
+        b: 'b',
+        c: 5,
+        d: true,
+        e: 'A',
+        f: 5,
+        h: 1,
+        o1: false,
+        o2: true,
+        o3: false
+      };
+
+      // prettier-ignore
+      view = state => <>
+        <input $bind />
+        <input $bind name='a' />
+        <input $bind='b' />
+        <input type='number' name='c' $bind />
         <input type='checkbox' name='d' $bind />
         <input type='radio' name='e' value='A' $bind />
         <input type='radio' name='e' value='B' $bind />
-        <input type='range' value='4' min='0' max='5' name='f' $bind />
-        <input type='date' value='2020-01-01' name='g' $bind />
+        <input type='range' min='0' max='5' name='f' $bind />
         <select $bind name='h'>
           <option>1</option>
-          <option selected>2</option>
+          <option>2</option>
           <option>3</option>
         </select>
-        <select multiple $bind name='i'>
-          <option selected>1</option>
-          <option selected>2</option>
-          <option selected>3</option>
+        <select multiple name='i'>
+          <option $bind='o1'>1</option>
+          <option $bind='o2'>2</option>
+          <option $bind='o3'>3</option>
         </select>
       </>
     }
-
-    // var event = document.createEvent('Event');
-    // event.initEvent('input', true, true);
 
     const div = document.createElement('div');
     document.body.appendChild(div);
     const component = new Test().start(div) as any;
     const inputs = document.querySelectorAll('input');
 
-    inputs[0].dispatchEvent(new Event('input', {'bubbles': true,'cancelable': true}));
-    expect(component.state).toBe('0');
-
-    inputs[1].dispatchEvent(new Event('input', { 'bubbles': true, 'cancelable': true }));
+    expect(inputs[1].value).toBe('a');
+    inputs[1].value = '1';
+    inputs[1].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
     expect(component.state.a).toBe('1');
 
-    inputs[2].dispatchEvent(new Event('input', { 'bubbles': true, 'cancelable': true }));
+    expect(inputs[2].value).toBe('b');
+    inputs[2].value = '2';
+    inputs[2].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
     expect(component.state.b).toBe('2');
 
-    inputs[3].dispatchEvent(new Event('input', { 'bubbles': true, 'cancelable': true }));
+    expect(inputs[3].value).toBe('5');
+    inputs[3].value = '3';
+    inputs[3].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
     expect(component.state.c).toBe(3);
 
-    inputs[4].click();
-    expect(component.state.d).toBeTruthy();
+    expect(inputs[4].checked).toBeTruthy();
     inputs[4].click();
     expect(component.state.d).toBeFalsy();
+    inputs[4].click();
+    expect(component.state.d).toBeTruthy();
 
+    expect(inputs[5].checked).toBeTruthy();
     inputs[5].click();
-    expect(component.state.e).toBe('A')
+    expect(component.state.e).toBe('A');
+    expect(inputs[6].checked).toBeFalsy();
     inputs[6].click();
     expect(component.state.e).toBe('B');
 
-    inputs[7].dispatchEvent(new Event('input', { 'bubbles': true, 'cancelable': true }));
+    expect(inputs[7].value).toBe('5');
+    inputs[7].value = '4';
+    inputs[7].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
     expect(component.state.f).toBe(4);
-    inputs[8].dispatchEvent(new Event('change', { 'bubbles': true, 'cancelable': true }));
-    expect(component.state.g).toBe(Date.parse('2020-01-01'));
 
+    const select = document.querySelector('select');
+    expect(select.selectedIndex).toBe(1);
+    select.selectedIndex = 2;
+    select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+    expect(component.state.h).toBe(2);
+
+    const options = document.querySelectorAll('option');
+    // expect(options[1].selected).toBeTruthy();
+    expect(options[4].selected).toBeTruthy();
+
+    options[4].selected = true;
+    options[4].dispatchEvent(new Event('click', { bubbles: true, cancelable: true }));
+    expect(component.state.o2).toBeTruthy();
+
+    inputs[0].value = '0';
+    inputs[0].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+    expect(component.state).toBe('0');
   });
 });
