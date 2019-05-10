@@ -60,6 +60,8 @@ const update = {
 }
 ```
 
+### AppRun Event Lifecycle
+
 When the three parts, the _state_, _view_, and _update_ are provided to AppRun to start an application, AppRun registers the event handlers defined in the _update_ to its [event system](##event-pubsub). If we trigger the AppRun events, the following steps take place:
 
 1. AppRun dispatches the events to the event handlers defined in the _update_
@@ -213,7 +215,7 @@ See the multiple counter app example that has undo-redo online: [Multiple counte
 
 AppRun uses virtual DOM technology. The virtual DOM (VDOM) is the data
 representing a DOM structure. AppRun compares the VDOM with the real DOM and updates only the changed elements and element properties.
-It has a high performance. It also has makes AppRun friendly with other libraries and frameworks. E.g., you can jQuery to render an element and change the element using AppRun VDOM. We embrace 3rd libraries and recommend you to use them in your AppRun applications where you need them.
+It has a high performance. It also has makes AppRun friendly with other libraries and frameworks. E.g., you can jQuery to render an element and change the element using AppRun VDOM. We embrace 3rd party libraries and recommend you to use them in your AppRun applications where you need them.
 
 ### HTML string vs JSX
 
@@ -350,7 +352,7 @@ You can see the $bind example from the [AppRun playground](https://apprun.js.org
 When AppRun is processing the JSX code, it publishes the $ event when it finds the custom attributes named like $X. You can simply subscribe to the $ event to provide your own directives. E.g., if you create the $animation directive to attach the animation classes from the animation library, [animation.css](https://daneden.github.io/animate.css).
 
 ```javascript
-app.on('$', (key, props) => {
+app.on('$', ({key, props}) => {
   if (key === '$animation') {
     const value = props[key];
     if (typeof value === 'string') {

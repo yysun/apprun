@@ -40,6 +40,7 @@ app.start(&#39;my-app&#39;, state, view, update);</code></pre>
   &#39;+1&#39;: state =&gt; state + 1,
   &#39;-1&#39;: state =&gt; state - 1
 }</code></pre>
+<h3 id="apprun-event-lifecycle">AppRun Event Lifecycle</h3>
 <p>When the three parts, the <em>state</em>, <em>view</em>, and <em>update</em> are provided to AppRun to start an application, AppRun registers the event handlers defined in the <em>update</em> to its <a href="##event-pubsub">event system</a>. If we trigger the AppRun events, the following steps take place:</p>
 <ol>
 <li>AppRun dispatches the events to the event handlers defined in the <em>update</em>
@@ -139,7 +140,7 @@ app.start(&#39;my-app&#39;, state, view, update);</code></pre>
 <h2 id="virtual-dom">Virtual DOM</h2>
 <p>AppRun uses virtual DOM technology. The virtual DOM (VDOM) is the data
 representing a DOM structure. AppRun compares the VDOM with the real DOM and updates only the changed elements and element properties.
-It has a high performance. It also has makes AppRun friendly with other libraries and frameworks. E.g., you can jQuery to render an element and change the element using AppRun VDOM. We embrace 3rd libraries and recommend you to use them in your AppRun applications where you need them.</p>
+It has a high performance. It also has makes AppRun friendly with other libraries and frameworks. E.g., you can jQuery to render an element and change the element using AppRun VDOM. We embrace 3rd party libraries and recommend you to use them in your AppRun applications where you need them.</p>
 <h3 id="html-string-vs-jsx">HTML string vs JSX</h3>
 <p>In the simple counter app example above, the View creates HTML string out of the state. AppRun parses the HTML string into VDOM. Although HTML string is easy to understand and useful for trying out ideas, it takes time to parse it into virtual dom at run time, which may cause performance issue.
 It also has some problems that have been documented by the Facebook React team:
@@ -236,7 +237,7 @@ You can see the $on example from the <a href="https://apprun.js.org/#play/1">App
 You can see the $bind example from the <a href="https://apprun.js.org/#play/0">AppRun playground</a>.</p>
 <h3 id="custom-directive">Custom directive</h3>
 <p>When AppRun is processing the JSX code, it publishes the $ event when it finds the custom attributes named like $X. You can simply subscribe to the $ event to provide your own directives. E.g., if you create the $animation directive to attach the animation classes from the animation library, <a href="https://daneden.github.io/animate.css">animation.css</a>.</p>
-<pre><code class="language-javascript">app.on(&#39;$&#39;, (key, props) =&gt; {
+<pre><code class="language-javascript">app.on(&#39;$&#39;, ({key, props}) =&gt; {
   if (key === &#39;$animation&#39;) {
     const value = props[key];
     if (typeof value === &#39;string&#39;) {

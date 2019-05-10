@@ -57,6 +57,6 @@ export default (key: string, props: [], tag, component) => {
       props['onclick'] = e => setStateValue(component, name || e.target.name, e.target.selected);
     }
   } else {
-    app.run('$', key, props, component);
+    app.run('$', { key, tag, props, component });
   }
 }

@@ -214,7 +214,7 @@ app.start(document.body, state, view, update);
   {
     name: 'Animation Directive',
     code: `// Animation Directive
-app.on('$', (key, props) => {
+app.on('$', ({key, props}) => {
   if (key === '$animation') {
     const value = props[key];
     if (typeof value === 'string') {
