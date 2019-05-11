@@ -52,6 +52,7 @@ export default app as IApp;
 
 if (typeof window === 'object') {
   window['Component'] = Component;
+  window['React'] = app;
 }
 
 app.on('debug', _ => 0);
