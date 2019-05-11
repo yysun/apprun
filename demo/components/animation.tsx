@@ -1,6 +1,6 @@
 import app, { Component } from '../../src/apprun'
 
-app.on('$', (key, props, component) => {
+app.on('$', ({ key, props }) => {
   if (key === '$animation') {
     const value = props[key];
     if (typeof value === 'string') {
@@ -17,8 +17,8 @@ export class MyComponent extends Component {
   view = state => <>
     <img $animation={state.animation && 'bounce infinite'} src='logo.png' />
     <div $animation='bounceInRight'>
-      <button $onclick='start-animation'>start</button>
-      <button $onclick='stop-animation'>stop</button>
+      <button disabled={state.animation} $onclick='start-animation'>start</button>
+      <button disabled={!state.animation} $onclick='stop-animation'>stop</button>
     </div>
   </>
 

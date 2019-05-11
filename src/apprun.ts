@@ -47,29 +47,6 @@ if (typeof document === 'object') {
   });
 }
 
-app.on('$', (key:string, props:[], component: Component) => {
-  if (key.startsWith('$on')) {
-    const event = props[key];
-    key = key.substring(1)
-    if (typeof event === 'boolean') {
-      props[key] = e => component.run(key, e);
-    } else if (typeof event === 'string') {
-      props[key] = e => component.run(event, e)
-    }
-  } else if (key === '$bind') {
-    const name = props[key];
-    props['oninput'] = e => {
-      if (typeof name === 'string') {
-        const state = { ...component['state'] };
-        state[name] = e.target.value;
-        component.setState(state);
-      } else {
-        component.setState(e.target.value);
-      }
-    }
-  }
-});
-
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
 export { app, Component, View, Action, Update, on, update };
 export { update as event };

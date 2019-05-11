@@ -1,8 +1,22 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a 3K library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a Javascript library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+
+## AppRun Benefits
+
+* Write less code
+* No proprietary syntax to learn
+* Compiler/transpiler is optional
+* State management, routing and directives included
+* Run side-by-side with other frameworks
+
+## AppRun Book from Apress
+
+[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
+* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 
 ## Architecture Concept
@@ -17,16 +31,9 @@ AppRun ties the three parts together and drives the applications using [event pu
 
 Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
-## AppRun Book from Apress
-
-[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
-
-* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
-
-
 ## Quick Start
 
-Below is a counter application using AppRun ([Online Demo](https://apprun-counter.glitch.me)).
+Below is a counter application using AppRun ([Online Demo](https://apprun.js.org/#play/6)).
 ```html
 <html>
 <head>
@@ -57,7 +64,7 @@ Below is a counter application using AppRun ([Online Demo](https://apprun-counte
 
 ## Web Components
 
-Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun-web-component.glitch.me)).
+Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun.js.org/#play/7)).
 
 ```html
 <html>
@@ -90,6 +97,9 @@ Using **apprun@es6**, you can convert AppRun components into [web components](ht
 </body>
 </html>
 ```
+## AppRun Playground
+
+Try the [AppRun Playground](https://apprun.js.org/#play).
 
 ## Install
 
