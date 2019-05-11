@@ -21,10 +21,11 @@ function collect(children) {
   return ch;
 }
 
-export function createElement(tag: string | Function, props?: {}, ...children) {
+export function createElement(tag: string | Function | [], props?: {}, ...children) {
   const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
-  else if (tag === undefined && children) return ch; // JSX fragments
+  else if (Array.isArray(tag)) return tag; // JSX fragments - babel
+  else if (tag === undefined && children) return ch; // JSX fragments - typescript
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
     return { tag, props, children: ch } // createComponent(tag, { ...props, children });
   }
