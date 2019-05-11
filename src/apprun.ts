@@ -23,7 +23,7 @@ app.Fragment = Fragment;
 
 app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T>,
   options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
-    const opts = Object.assign(options || {}, { render: true, global_event: true });
+    const opts = {...options, render: true, global_event: true };
     const component = new Component<T>(model, view, update);
     if (options && options.rendered) component.rendered = options.rendered;
     component.mount(element, opts);
