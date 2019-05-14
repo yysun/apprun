@@ -1,13 +1,13 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { VNode, View, Update } from './types';
+import { View, Update } from './types';
 import directive from './directive';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 
-export class Component<T=any> {
+export class Component<T=any, E=any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
@@ -101,7 +101,7 @@ export class Component<T=any> {
   constructor(
     protected state?: T,
     protected view?: View<T>,
-    protected update?: Update<T>,
+    protected update?: Update<T, E>,
     protected options?) {
   }
 

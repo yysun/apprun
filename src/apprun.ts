@@ -6,7 +6,7 @@ import { on, update } from './decorator';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
-  start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
+  start<T, E>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
     options?: { history?, rendered?: (state: T) => void}): Component<T>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
@@ -21,7 +21,7 @@ app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
 
-app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T>,
+app.start = <T, E>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T, E>,
   options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
     const opts = {...options, render: true, global_event: true };
     const component = new Component<T>(model, view, update);

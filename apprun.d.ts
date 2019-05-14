@@ -10,12 +10,13 @@ declare module 'apprun' {
 
   export type View<T> = (state: T, props?) => string | VNode | VNode[] | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
-  export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
+  export type ActionDef<T, E> = [E, Action<T>, {}?]
+  export type Update<T, E> = ActionDef<T, E>[] | { [name: string]: Action<T> | [Action<T>, {}] | void; };
 
   export type Route = (url: string, ...args: any[]) => any;
 
   export interface IApp {
-    start<T>(element?: Element, model?: T, view?: View<T>, update?: Update<T>,
+    start<T, E>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
       options?: { history?, rendered?: (state: T) => void }): Component<T>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
@@ -27,8 +28,8 @@ declare module 'apprun' {
     route?: Route;
   }
 
-  export class Component<T=any> {
-    constructor(state?: T, view?: View<T>, update?: Update<T>);
+  export class Component<T=any, E=any> {
+    constructor(state?: T, view?: View<T>, update?: Update<T, E>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
     mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
