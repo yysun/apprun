@@ -11,7 +11,8 @@ describe('app', () => {
       <h1>{state.msg}</h1>
     </div>;
     const update: Update<State> = {
-      '#': (state) => state,
+      '#': state => state,
+      '#1': _ => { }
     }
     app.start<State>(element, state, view, update);
     expect(element.textContent).toBe('Hello');
@@ -19,13 +20,13 @@ describe('app', () => {
 
   it('should support global application - typed state and events', () => {
     const view: View<State> = (state) => <div>
-      <h1>{state.msg}</h1>
+      <h1 onclick={e=>myapp.run('#2')}>{state.msg}</h1>
     </div>;
     const update: Update<State, Events> = [
       ['#', state => state],
-      ['#1', state => state]
+      ['#1', state => { } ]
     ]
-    app.start<State, Events>(element, state, view, update);
+    const myapp = app.start<State, Events>(element, state, view, update);
     expect(element.textContent).toBe('Hello');
   })
 
@@ -33,10 +34,10 @@ describe('app', () => {
     class MyComponent extends Component<State> {
       state = { msg: 'World' };
       view: View<State> = state => <h1>{state.msg}</h1>;
-      update = {
+      update:Update<State> = {
         '#1': state => state,
-        '#2': (state: State) => state,
-        '#3': async (state: State) => state
+        '#2': state => { },
+        '#3': async state => state
       }
       @on('#4')
       route: Action<State> = (state) => state
@@ -55,8 +56,8 @@ describe('app', () => {
       view: View<State> = state => <h1>{state.msg}</h1>;
       update: Update<State, Events> = [
         ['#1', state => state],
-        ['#2', (state: State) => state],
-        ['#3', async (state: State) => state]
+        ['#2', state => { this.run('#2') }],
+        ['#3', async state => state]
       ]
       @on<Events>('#4')
       route: Action<State> = (state) => state

@@ -7,7 +7,7 @@ import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
   start<T, E=any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
-    options?: { history?, rendered?: (state: T) => void}): Component<T>;
+    options?: { history?, rendered?: (state: T) => void}): Component<T, E>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
@@ -22,9 +22,9 @@ app.render = render;
 app.Fragment = Fragment;
 
 app.start = <T, E=any>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T, E>,
-  options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
+  options?: { history?, rendered?: (state: T) => void }) : Component<T, E> => {
     const opts = {...options, render: true, global_event: true };
-    const component = new Component<T>(model, view, update);
+    const component = new Component<T, E>(model, view, update);
     if (options && options.rendered) component.rendered = options.rendered;
     component.mount(element, opts);
     return component;

@@ -160,7 +160,7 @@ export class Component<T=any, E=any> {
 
   add_action(name: string, action, options: any = {}) {
     if (!action || typeof action !== 'function') return;
-    this.on(name, (...p) => {
+    this.on(name as any, (...p) => {
       const newState = action(this.state, ...p);
 
       app.run('debug', {
@@ -202,13 +202,15 @@ export class Component<T=any, E=any> {
     });
   }
 
-  public run(name: string, ...args) {
+  public run(event: E, ...args) {
+    const name = event.toString();
     return this.global_event || this.is_global_event(name) ?
       app.run(name, ...args) :
       this._app.run(name, ...args);
   }
 
-  public on(name: string, fn: (...args) => void, options?: any) {
+  public on(event: E, fn: (...args) => void, options?: any) {
+    const name = event.toString();
     this._actions.push({ name, fn });
     return this.global_event || this.is_global_event(name) ?
       app.on(name, fn, options) :
