@@ -5,6 +5,6 @@ export type VNode = {
 }
 export type VDOM = string | VNode | Array<VNode | string>;
 export type View<T> = (state: T, props?) => VDOM | void;
-export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
+export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
 export type ActionDef<T, E> = [E, Action<T>, {}?]
-export type Update<T, E=any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] | void; };
+export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] };
