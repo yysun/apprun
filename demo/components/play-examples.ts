@@ -14,14 +14,17 @@ app.start(document.body, state, view, {});
   {
     name: 'Hello World ($on)',
     code: `// Hello World ($on)
-const state = {};
+const state = { who: 'Would' };
 const view = ({who}) => <div>
   <h1>Hello {who}</h1>
-  <input $oninput="hello" />
+  <input $oninput="hello" value={who}/>
+  <h1>Hello {who}</h1>
+  <input $oninput={[hello]} value={who}/>
 </div>;
 const update = {
   'hello': (_, e) => ({who:e.target.value})
 }
+const hello = (_, e) => ({who:e.target.value});
 app.start(document.body, state, view, update);
 `
   },

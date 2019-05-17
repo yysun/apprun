@@ -32,6 +32,47 @@ describe('Directive', () => {
     expect(component.state).toBe(5);
   });
 
+  it('should trigger driective event - $on to function', () => {
+    class Test extends Component {
+      state = 0;
+      // prettier-ignore
+      view = () => <button id='b4' $onclick={this.add2} />
+
+      add2(state) {
+        return state + 2;
+      }
+    }
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const component = new Test().start(div) as any;
+    expect(component.state).toBe(0);
+    document.getElementById('b4').click();
+    expect(component.state).toBe(2);
+  });
+
+  it('should trigger driective event - $on to function that returns Promise', (done) => {
+    class Test extends Component {
+      state = 0;
+      // prettier-ignore
+      view = () => <>
+        <button id='b5' $onclick={[this.add, 3]} />
+        <button id='b6' $onclick={[this.addPromise, 3]} />
+      </>
+      addPromise = (state, n) => new Promise((r) => r(state + n));
+      add = (state, n) => state + n;
+    }
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const component = new Test().start(div) as any;
+    expect(component.state).toBe(0);
+    document.getElementById('b5').click();
+    document.getElementById('b6').click();
+    setTimeout(() => {
+      expect(component.state).toBe(6);
+      done();
+    }, 0)
+  });
+
   it('should bind input to state - $bind', () => {
     class Test extends Component {
       state = {
