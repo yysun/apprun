@@ -39,17 +39,17 @@
   "devDependencies": {
     "@types/jasmine": "^3.3.12",
     "jasmine-core": "^3.4.0",
-    "jest": "^24.7.1",
+    "jest": "^24.8.0",
     "json-loader": "^0.5.7",
     "marked": "^0.6.2",
     "morphdom": "^2.5.3",
     "ts-jest": "^24.0.2",
     "ts-loader": "^5.3.3",
     "tslint": "^5.15.0",
-    "typescript": "^3.4.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.0"
+    "typescript": "^3.4.5",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
   },
   "jest": {
     "transform": {
