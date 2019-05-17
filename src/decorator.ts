@@ -18,18 +18,18 @@ export const Reflect = {
   }
 }
 
-export function update(name?: string, options: any = {}) {
+export function update<E=string>(events?: E, options: any = {}) {
   return (target: any, key: string, descriptor: any) => {
-    name = name || key;
+    const name = events ? events.toString() : key;
     Reflect.defineMetadata(`apprun-update:${name}`,
       { name, key, options }, target);
     return descriptor;
   }
 }
 
-export function on(name?: string, options: any = {}) {
+export function on<E>(events?: E, options: any = {}) {
   return function (target: any, key: string) {
-    name = name || key;
+    const name = events ? events.toString() : key;
     Reflect.defineMetadata(`apprun-update:${name}`,
         { name, key, options }, target)
   }

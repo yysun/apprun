@@ -14,14 +14,17 @@ app.start(document.body, state, view, {});
   {
     name: 'Hello World ($on)',
     code: `// Hello World ($on)
-const state = {};
+const state = { who: 'Would' };
 const view = ({who}) => <div>
   <h1>Hello {who}</h1>
-  <input $oninput="hello" />
+  <input $oninput="hello" value={who}/>
+  <h1>Hello {who}</h1>
+  <input $oninput={[hello]} value={who}/>
 </div>;
 const update = {
   'hello': (_, e) => ({who:e.target.value})
 }
+const hello = (_, e) => ({who:e.target.value});
 app.start(document.body, state, view, update);
 `
   },
@@ -117,34 +120,28 @@ const update = {
   '-1': state => state - 1
 };
 app.start(document.body, state, view, update);
-`,
-    noJSX: true
+`
   },
 
   {
     name: 'Counter (Web Component)',
     code: `// Counter (Web Component)
 class Counter extends Component {
-  constructor() {
-    super();
-    this.state = 0;
-    this.view = state => \`<div>
-      <h1>\${state}</h1>
-      <button onclick='counter.run("-1")'>-1</button>
-      <button onclick='counter.run("+1")'>+1</button>
-      </div>\`;
-    this.update = {
-      '+1': state => state + 1,
-      '-1': state => state - 1
-    };
-  }
+  state = 0;
+  view = state => <>
+    <h1>{state}</h1>
+    <button $onclick='-1'>-1</button>
+    <button $onclick='+1'>+1</button>
+  </>;
+  update = {
+    '+1': state => state + 1,
+    '-1': state => state - 1
+  };
 }
 const wc = document.createElement('my-app');
-wc.id = 'counter';
 document.body.appendChild(wc);
 app.webComponent('my-app', Counter);
-`,
-    noJSX: true
+`
   },
 
   {

@@ -7,8 +7,8 @@ import webComponent from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
-  start<T>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T>,
-    options?: { history?, rendered?: (state: T) => void}): Component<T>;
+  start<T, E=any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+    options?: { history?, rendered?: (state: T) => void}): Component<T, E>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
@@ -24,10 +24,10 @@ app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
 
-app.start = <T>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T>,
-  options?: { history?, rendered?: (state: T) => void }) : Component<T> => {
-    const opts = Object.assign(options || {}, { render: true, global_event: true });
-    const component = new Component<T>(model, view, update);
+app.start = <T, E=any>(element?: HTMLElement | string, model?: T,  view?: View<T>, update?: Update<T, E>,
+  options?: { history?, rendered?: (state: T) => void }) : Component<T, E> => {
+    const opts = {...options, render: true, global_event: true };
+    const component = new Component<T, E>(model, view, update);
     if (options && options.rendered) component.rendered = options.rendered;
     component.mount(element, opts);
     return component;
@@ -55,6 +55,7 @@ export default app as IApp;
 
 if (typeof window === 'object') {
   window['Component'] = Component;
+  window['React'] = app;
 }
 
 app.on('debug', _ => 0);

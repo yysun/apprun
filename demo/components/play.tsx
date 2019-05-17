@@ -27,10 +27,9 @@ const run = ({ code, noJSX }) => {
         <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
       </head>
       <body>
-      <script ${noJSX ? '' : 'type="text/babel"'}>
-          //app.on('debug', p=>console.log(p))
-          const React = app;
-          ${code}
+      <script type="text/babel" data-presets="es2017, react">
+        const React = app;
+        ${code}
       </script>
     </body>
     </html>`;

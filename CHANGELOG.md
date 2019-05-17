@@ -4,9 +4,18 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.19 / 2.19
+
+* $on directive use tuple for event parameters
+* Add event type to app, component and decorators
+* Support _Update_ as array of tuple to enforce the event type
+* Set window['React']=app for using babel in browser
+
 ## 1.18 / 2.18
 
-* Support directive event, e.g. $onlick
+* Support JSX directives $on and $bind
+* Add $ event for custom directives
+* Change the component wrapper element from <div> to <section>
 * Fixed #57, #58
 
 ## 1.17 / 2.17
