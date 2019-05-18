@@ -14,16 +14,18 @@ app.start(document.body, state, view, {});
   {
     name: 'Hello World ($on)',
     code: `// Hello World ($on)
-const state = { who: 'Would' };
+const state = { who: 'World' };
 const view = ({who}) => <div>
   <h1>Hello {who}</h1>
-  <input $oninput="hello" value={who}/>
-  <h1>Hello {who}</h1>
-  <input $oninput={[hello]} value={who}/>
+  <p><input $oninput value={who}/> $oninput</p>
+  <p><input $oninput="hello" value={who}/> $oninput="event"</p>
+  <p><input $oninput={hello} value={who}/> $oninput=Function</p>
+  <p><input $oninput={[hello]} value={who}/> $oninput=Tuple [Function, ...p] </p>
 </div>;
-const update = {
-  'hello': (_, e) => ({who:e.target.value})
-}
+// update tuple, new in 1.19.2
+const update = [
+  ['oninput, hello', (_, e) => ({who:e.target.value})]
+];
 const hello = (_, e) => ({who:e.target.value});
 app.start(document.body, state, view, update);
 `
