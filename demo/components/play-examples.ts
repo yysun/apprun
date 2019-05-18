@@ -22,9 +22,10 @@ const view = ({who}) => <div>
   <p><input $oninput={hello} value={who}/> $oninput=Function</p>
   <p><input $oninput={[hello]} value={who}/> $oninput=Tuple [Function, ...p] </p>
 </div>;
-const update = {
-  'oninput, hello': (_, e) => ({who:e.target.value})
-};
+// update tuple, new in 1.19.2
+const update = [
+  ['oninput, hello', (_, e) => ({who:e.target.value})]
+];
 const hello = (_, e) => ({who:e.target.value});
 app.start(document.body, state, view, update);
 `

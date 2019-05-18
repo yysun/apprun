@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update } from './types';
+import { View, Update, ActionDef } from './types';
 import directive from './directive';
 
 const componentCache = {};
@@ -184,13 +184,22 @@ export class Component<T=any, E=any> {
         actions[meta.name] = [this[meta.key].bind(this), meta.options];
       }
     })
+
     const all = {};
-    Object.keys(actions).forEach(name => {
-      const action = actions[name];
-      if (typeof action === 'function' || Array.isArray(action)) {
-        name.split(',').forEach(n => all[n.trim()] = action)
-      }
-    })
+    if (Array.isArray(actions)) {
+      actions.forEach(act => {
+        const [name, action, opts] = act as ActionDef<T, E>;
+        const names = name.toString();
+        names.split(',').forEach(n => all[n.trim()] = [action, opts])
+      })
+    } else {
+      Object.keys(actions).forEach(name => {
+        const action = actions[name];
+        if (typeof action === 'function' || Array.isArray(action)) {
+          name.split(',').forEach(n => all[n.trim()] = action)
+        }
+      })
+    }
 
     Object.keys(all).forEach(name => {
       const action = all[name];
@@ -200,6 +209,7 @@ export class Component<T=any, E=any> {
         this.add_action(name, action[0], action[1]);
       }
     });
+
   }
 
   public run(event: E, ...args) {
