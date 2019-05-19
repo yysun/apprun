@@ -3,40 +3,48 @@ import examples from './play-examples';
 
 declare var CodeMirror;
 
-const run = ({ code, noJSX }) => {
+const html = code => `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+  <title>AppRun Playground</title>
+  <style>
+    body {
+      font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+      margin: 2em;
+    }
+  </style>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
+</head>
+<body>
+<script type="text/babel" data-presets="es2017, react">
+  ${code}
+</script>
+</body>
+</html>`;
+
+const tab = ({ code }) => {
+  const doc = window.open().document;
+  doc.open();
+  doc.write(html(code));
+  doc.close();
+};
+
+const run = ({ code }) => {
   let iframe = document.getElementById('iframe') as HTMLIFrameElement;
   iframe.parentNode.replaceChild(iframe.cloneNode(), iframe);
   iframe = document.getElementById('iframe') as HTMLIFrameElement;
   const doc = iframe.contentWindow.document;
-  const html = `<!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-        <title>AppRun Playground</title>
-        <style>
-          body {
-            font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
-            margin: 2em;
-          }
-        </style>
-        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-        <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
-      </head>
-      <body>
-      <script type="text/babel" data-presets="es2017, react">
-        const React = app;
-        ${code}
-      </script>
-    </body>
-    </html>`;
   doc.open();
-  doc.write(html);
+  doc.write(html(code));
   doc.close();
 };
+
 export class PlayComponent extends Component {
 
   codeEditor = null
@@ -44,11 +52,14 @@ export class PlayComponent extends Component {
 
   view = (state) => <div class="playground">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-6">
         Examples:&nbsp;
       <select $onchange="select">
           {examples.map((ex, idx) => <option selected={idx===state.selectedIndex}>{ex.name}</option>)}
         </select>
+      </div>
+      <div class="col-sm-6">
+        <button class="btn btn-default btn-sm pull-right" $onclick='openTab'>Open in a new tab</button>
       </div>
     </div>
     <div class="row">
@@ -86,6 +97,10 @@ export class PlayComponent extends Component {
     'change': (state, code) => {
       state.code = code;
       run(state);
+    },
+    'openTab': (state, e) => {
+      e.preventDefault();
+      tab(state);
     }
   }
 
