@@ -201,6 +201,7 @@ export class Component<T=any, E=any> {
       })
     }
 
+    if (!all['.']) all['.'] = state => state;
     Object.keys(all).forEach(name => {
       const action = all[name];
       if (typeof action === 'function') {
