@@ -7,6 +7,8 @@ import directive from './directive';
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 
+const REFRESH = state => state;
+
 export class Component<T=any, E=any> {
   static __isAppRunComponent = true;
   private _app = new App();
@@ -201,7 +203,7 @@ export class Component<T=any, E=any> {
       })
     }
 
-    if (!all['.']) all['.'] = state => state;
+    if (!all['.']) all['.'] = REFRESH;
     Object.keys(all).forEach(name => {
       const action = all[name];
       if (typeof action === 'function') {

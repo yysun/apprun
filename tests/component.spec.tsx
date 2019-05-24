@@ -327,7 +327,7 @@ describe('Component', () => {
     const div = document.createElement('div');
     const t = new Test().mount(div);
     t.run('.');
-    expect(div.innerText).toBe('a');
+    expect(div.innerHTML).toBe('<div>a</div>');
 
   })
 });
