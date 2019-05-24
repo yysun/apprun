@@ -9,6 +9,7 @@
 * Add event type to app, component and decorators
 * Support update as array of tuple to enforce the event type
 * Set window['React']=app for using babel in browser
+* $bind to function and tuple
 
 ## 1.18 / 2.18
 
