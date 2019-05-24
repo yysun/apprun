@@ -8,16 +8,16 @@ app.on(ROUTER_EVENT, route => {
 })
 
 import home from './components/home';
-import counter from './components/counter';
-import counters from './components/counters';
-import dragdrop from './components/dragdrop';
-import blade from './components/blade';
-import todo from './components/todo';
+// import counter from './components/counter';
+// import counters from './components/counters';
+// import dragdrop from './components/dragdrop';
+// import blade from './components/blade';
+// import todo from './components/todo';
 import benchmark from './components/benchmark';
-import hello from './components/hello';
-import svg from './components/svg';
-import animation from './components/animation';
+// import hello from './components/hello';
+// import svg from './components/svg';
+// import animation from './components/animation';
 import play from './components/play';
 
 const element = document.getElementById('my-app');
-[home, hello, blade, counter, counters, dragdrop, todo, animation, benchmark, svg, play].forEach(c => c(element));
+[home, benchmark, play].forEach(c => c(element));
