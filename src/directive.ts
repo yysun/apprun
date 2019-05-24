@@ -1,5 +1,3 @@
-app.on('$', () => { });
-
 const getStateValue = (component, name) => {
   return name ? component['state'][name] : component['state'];
 }
