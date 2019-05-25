@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello AppRun Module!</title>
+  <meta charset="utf-8">
+</head>
+<body>
+
+  <script type="module">
+    import { html, render } from 'https://unpkg.com/lit-html?module';
+    import { app } from '/dist/apprun.esm.js';
+    app.render = (element, html) => render(html, element);
+    const state = 0;
+    const view = state => html`<div>
+      <h1>${state}</h1>
+      <button onclick='app.run("-1")'>-1</button>
+      <button onclick='app.run("+1")'>+1</button>
+    </div>`;
+    const update = {
+      '+1': state => state + 1,
+      '-1': state => state - 1
+    };
+    app.start(document.body, state, view, update);
+  </script>
+</body>
+
+</html>
