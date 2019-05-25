@@ -3,6 +3,7 @@
   "version": "2.19.2",
   "description": "JavaScript framework that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
+  "module": "dist/apprun.mjs",
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
   "scripts": {
@@ -12,7 +13,8 @@
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start": "webpack-dev-server --mode development",
-    "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html"
+    "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html",
+    "rollup": "tsc -p src & rollup -c"
   },
   "keywords": [
     "JavaScript",
@@ -35,7 +37,8 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "commander": "^2.20.0"
+    "commander": "^2.20.0",
+    "morphdom": "^2.5.4"
   },
   "devDependencies": {
     "@types/jasmine": "^3.3.12",
@@ -43,7 +46,9 @@
     "jest": "^24.8.0",
     "json-loader": "^0.5.7",
     "marked": "^0.6.2",
-    "morphdom": "^2.5.3",
+    "rollup": "^1.12.3",
+    "rollup-plugin-filesize": "^6.1.0",
+    "rollup-plugin-terser": "^5.0.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^5.3.3",
     "tslint": "^5.15.0",
