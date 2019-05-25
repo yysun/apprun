@@ -58,13 +58,15 @@ export class App {
   }
 }
 
+const AppRunVersions = 'AppRun-1';
 let app: App;
-declare var global;
-const root = global || window;
-if (root['app'] && root['app']['start']) {
+const root = (typeof self === 'object' && self.self === self && self) ||
+  (typeof global === 'object' && global.global === global && global)
+if (root['app'] && root['_AppRunVersions']) {
   app = root['app'];
 } else {
   app = new App();
   root['app'] = app;
+  root['_AppRunVersions'] = AppRunVersions;
 }
 export default app;
