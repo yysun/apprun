@@ -33,8 +33,11 @@ app.start = <T, E=any>(element?: HTMLElement | string, model?: T,  view?: View<T
     return component;
 };
 
-app.on(ROUTER_EVENT, _ => {/* Intentionally empty */});
-app.on('#', _ => {/* Intentionally empty */});
+const NOOP = _ => {/* Intentionally empty */ }
+app.on('$', NOOP);
+app.on('debug', _ => NOOP);
+app.on(ROUTER_EVENT, NOOP);
+app.on('#', NOOP);
 app['route'] = route;
 app.on('route', url => app['route'] && app['route'](url));
 
@@ -58,4 +61,4 @@ if (typeof window === 'object') {
   window['React'] = app;
 }
 
-app.on('debug', _ => 0);
+

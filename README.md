@@ -119,68 +119,30 @@ To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --e
 npx apprun --init --spa --es6
 npm start
 ```
+## Dev-Tools CLI
 
-## Dev-Tools
+We have been using the command line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser's developer tool?
 
-To use the AppRun dev-tools, include the the dev-tools script.
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
+
+To use the AppRun dev-tools CLI, include the the dev-tools script.
+
 ```JavaScript
 <script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
 ```
-Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
+
+## Dev-Tools
+
+AppRun support the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
 ![app-dev-tools](docs/apprun-dev-tools.gif)
 
 
-# VS Code Extension
+## VS Code Extension
 
 AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
 
 ![app-dev-tools](docs/apprun-vscode-extension.png)
-
-## Documentation
-
-To explore more about AppRun, read the following.
-
-* [Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture)
-* [Event PubSub](https://yysun.github.io/apprun/docs/#/?id=event-pubsub)
-* [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
-* [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
-* [Component](https://yysun.github.io/apprun/docs/#/?id=component)
-* [Routing](https://yysun.github.io/apprun/docs/#/?id=routing)
-* [CLI](https://yysun.github.io/apprun/docs/#/?id=cli)
-
-## Video Tutorials
-
-* [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
-* [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
-
-## Articles
-
-* [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
-* [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
-* [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
-* [Redux vs. The React Context API vs. AppRun](https://medium.com/@yiyisun/redux-vs-the-react-context-api-vs-apprun-f324bee8cbbf)
-* [I Also Created the Exact Same App Using AppRun](https://medium.com/@yiyisun/i-also-created-the-exact-same-app-using-apprun-dd1860cb8112)
-
-## Examples
-
-* [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
-* [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
-* [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
-* [AppRun Admin Dashboard](https://yysun.github.com/apprun-bootstrap)
-* [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
-* [AppRun Server-Side Rendering for ASP.NET MVC](https://github.com/yysun/apprun-ssr-aspnet)
-* [AppRun Multilingual Example](https://github.com/yysun/apprun-multilingual)
-* [AppRun Firebase Authentication](https://github.com/yysun/apprun-firebase-authentication)
-* [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
-* [AppRun Hot Module Reload with Webpack](https://github.com/yysun/apprun-hot-module-reload)
-* [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
-* [AppRun Desktop Application with Electron](https://github.com/yysun/apprun-electron)
-* [AppRun Mobile Application with Framework7](https://github.com/yysun/f7)
-
-## Online Demos
-
-See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.com](https://stackblitz.com/@yysun)
 
 
 ## Contribute

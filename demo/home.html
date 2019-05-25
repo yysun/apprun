@@ -1,0 +1,121 @@
+<h1 id="apprun-build-npm-version-downloads-license-twitter-discord-chat">AppRun <a href="https://travis-ci.org/yysun/apprun"><img src="https://travis-ci.org/yysun/apprun.svg?branch=master" alt="Build"></a> <a href="https://npmjs.org/package/apprun"><img src="https://img.shields.io/npm/v/apprun.svg" alt="NPM version"></a> <a href="https://npmjs.org/package/apprun"><img src="http://img.shields.io/npm/dm/apprun.svg" alt="Downloads"></a> <a href="LICENSE.md"><img src="https://img.shields.io/:license-mit-blue.svg" alt="License"></a> <a href="https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs"><img src="https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social" alt="twitter"></a> <a href="https://discord.gg/M5EDsj"><img src="https://img.shields.io/discord/476903999023480842.svg" alt="Discord Chat"></a></h1>
+<p>AppRun is a Javascript library for building reliable, high-performance web applications using the <a href="https://yysun.github.io/apprun/docs/#/?id=architecture">Elm inspired Architecture</a>, <a href="https://yysun.github.io/apprun/docs/#/?id=event-pubsubs">event pub-sub</a> and <a href="https://yysun.github.io/apprun/docs/#/?id=component">components</a>.</p>
+<blockquote>
+<p>AppRun is a MIT-licensed open source project. Please consider <a href="https://www.patreon.com/apprun">supporting the project on Patreon</a>. 👍❤️🙏</p>
+</blockquote>
+<h2 id="apprun-benefits">AppRun Benefits</h2>
+<ul>
+<li>Write less code</li>
+<li>No proprietary syntax to learn</li>
+<li>Compiler/transpiler is optional</li>
+<li>State management, routing and directives included</li>
+<li>Run side-by-side with other frameworks</li>
+</ul>
+<h2 id="apprun-book-from-apress">AppRun Book from Apress</h2>
+<p><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/"><img src="https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067" alt="Order from Amazon"></a></p>
+<ul>
+<li><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">Order from Amazon</a></li>
+</ul>
+<h2 id="architecture-concept">Architecture Concept</h2>
+<p>Application logic is broken down into three separated parts in the AppRun architecture.</p>
+<ul>
+<li>State (a.k.a. Model) — the state of your application</li>
+<li>View — a function to display the state</li>
+<li>Update — a collection of event handlers to update the state</li>
+</ul>
+<p>AppRun ties the three parts together and drives the applications using <a href="https://yysun.github.io/apprun/docs/#/?id=event-pubsubs">event pub-sub</a>.</p>
+<p>Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from <a href="https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075">A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)</a>. You can also see the <a href="https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html">performance results</a> compared to other frameworks and libraries in the <a href="https://github.com/krausest/js-framework-benchmark">js-framework-benchmark</a> project.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>Below is a counter application using AppRun (<a href="https://apprun.js.org/#play/6">Online Demo</a>).</p>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Counter&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src=&quot;https://unpkg.com/apprun@latest/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
+  &lt;div id=&quot;my-app&quot;&gt;&lt;/div&gt;
+  &lt;script&gt;
+    const state = 0;
+    const view = state =&gt; {
+      return `&lt;div&gt;
+        &lt;h1&gt;${state}&lt;/h1&gt;
+        &lt;button onclick=&#39;app.run(&quot;-1&quot;)&#39;&gt;-1&lt;/button&gt;
+        &lt;button onclick=&#39;app.run(&quot;+1&quot;)&#39;&gt;+1&lt;/button&gt;
+      &lt;/div&gt;`;
+    };
+    const update = {
+      &#39;+1&#39;: state =&gt; state + 1,
+      &#39;-1&#39;: state =&gt; state - 1
+    };
+    app.start(&#39;my-app&#39;, state, view, update);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2 id="web-components">Web Components</h2>
+<p>Using <strong>apprun@es6</strong>, you can convert AppRun components into <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">web components</a>. AppRun components become the custom elements that also can handle AppRun events (<a href="https://apprun.js.org/#play/7">Online Demo</a>).</p>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Counter as web component&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;my-app id=&#39;counter&#39;&gt;&lt;/my-app&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://unpkg.com/apprun@es6/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    class Counter extends Component {
+      constructor() {
+        super();
+        this.state = 0;
+        this.view = state =&gt; `&lt;div&gt;
+          &lt;h1&gt;${state}&lt;/h1&gt;
+          &lt;button onclick=&#39;counter.run(&quot;-1&quot;)&#39;&gt;-1&lt;/button&gt;
+          &lt;button onclick=&#39;counter.run(&quot;+1&quot;)&#39;&gt;+1&lt;/button&gt;
+          &lt;/div&gt;`;
+        this.update = {
+          &#39;+1&#39;: state =&gt; state + 1,
+          &#39;-1&#39;: state =&gt; state - 1
+        };
+      }
+    }
+    app.webComponent(&#39;my-app&#39;, Counter);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2 id="apprun-playground">AppRun Playground</h2>
+<p>Try the <a href="https://apprun.js.org/#play">AppRun Playground</a>.</p>
+<h2 id="install">Install</h2>
+<p>You can include AppRun in your html directly and use it with JavaScript.</p>
+<pre><code class="language-javascript">&lt;script src=&quot;https://unpkg.com/apprun@latest/dist/apprun-html.js&quot;&gt;&lt;/script&gt;</code></pre>
+<h2 id="cli">CLI</h2>
+<p>Or you can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
+<pre><code class="language-sh">npx apprun --init --spa
+npm start</code></pre>
+<p>To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --es6 flag:</p>
+<pre><code class="language-sh">npx apprun --init --spa --es6
+npm start</code></pre>
+<h2 id="dev-tools-cli">Dev-Tools CLI</h2>
+<p>We have been using the command line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser&#39;s developer tool?</p>
+<p><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png" alt=""></p>
+<p>To use the AppRun dev-tools CLI, include the the dev-tools script.</p>
+<pre><code class="language-JavaScript">&lt;script src=&quot;https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;</code></pre>
+<h2 id="dev-tools">Dev-Tools</h2>
+<p>AppRun support the Redux DevTools Extension. To use the dev-tools, install the <a href="https://github.com/zalmoxisus/redux-devtools-extension">Redux DevTools Extension</a>. You can monitor the events and states in the devtools.</p>
+<p><img src="docs/apprun-dev-tools.gif" alt="app-dev-tools"></p>
+<h2 id="vs-code-extension">VS Code Extension</h2>
+<p>AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.</p>
+<p><img src="docs/apprun-vscode-extension.png" alt="app-dev-tools"></p>
+<h2 id="contribute">Contribute</h2>
+<p>You can launch the webpack dev-server and the demo app from the <em>demo</em> folder with the following npm commands:</p>
+<pre><code class="language-sh">npm install
+npm start</code></pre>
+<p>You can run the unit tests from the <em>tests</em> folder.</p>
+<pre><code class="language-sh">npm test</code></pre>
+<p>Unit tests can serve as functional specifications.</p>
+<p>Finally, to build optimized js files to the dist folder, just run:</p>
+<pre><code class="language-sh">npm run build</code></pre>
+<p>Have fun and send pull requests.</p>
+<h2 id="license">License</h2>
+<p>MIT</p>
+<p>Copyright (c) 2015-2019 Yiyi Sun</p>

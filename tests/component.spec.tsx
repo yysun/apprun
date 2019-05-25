@@ -314,11 +314,22 @@ describe('Component', () => {
     // const div = document.createElement('div');
     // const t = new Test().start(div);
     // div.setAttribute('_c', null);
-  
+
     // const e = document.querySelector('#my-app');
     // e.parentNode.removeChild(e)
   // });
 
+  it('should add the . event by default', () => {
+    class Test extends Component {
+      state = 'a'
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().mount(div);
+    t.run('.');
+    expect(div.innerHTML).toBe('<div>a</div>');
+
+  })
 });
 
 
