@@ -1,6 +1,6 @@
 {
   "name": "apprun",
-  "version": "2.20.0",
+  "version": "2.20.1",
   "description": "JavaScript framework that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
   "module": "dist/apprun.esm.js",
