@@ -170,7 +170,7 @@ Below is the complete code of using lit-html in browser.
   <body>
   <script type="module">
     import { html, render } from 'https://unpkg.com/lit-html?module';
-    import { app } from 'https://unpkg.com/apprun@es6/dist/apprun.esm.js';
+    import { app } from 'https://unpkg.com/apprun@es6/dist/apprun.esm';
     app.render = (element, html) => render(html, element);
     const state = 0;
     const view = state => html`<div>

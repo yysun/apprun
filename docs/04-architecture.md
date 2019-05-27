@@ -68,7 +68,7 @@ along with the _current state_.
 5. AppRun renders the HTML/Virtual DOM to the screen
 6. AppRun calls the optional _rendered_ function to complete the AppRun event life cycle.
 
-![AppRun event life cycle](https://github.com/yysun/apprun/raw/master/docs/Figure_1-1.png)
+![AppRun event life cycle](imgs/Figure_1-1.png)
 
 Web programming is event-driven. All we have to do is to convert DOM events to AppRun events to trigger the AppRun event life cycle.
 

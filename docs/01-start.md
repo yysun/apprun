@@ -61,7 +61,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 </head>
 <body>
 <script type="module">
-  import { app } from 'https://unpkg.com/apprun@es6/dist/apprun?module';
+  import { app } from 'https://unpkg.com/apprun@es6/dist/apprun.esm';
   const view = state => `<div>${state}</div>`;
   app.start(document.body, 0, view);
 </script>
@@ -80,7 +80,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 <body>
 <script type="module">
   import { html, render } from 'https://unpkg.com/lit-html?module';
-  import { app } from 'https://unpkg.com/apprun@es6/dist/apprun.esm.js';
+  import { app } from 'https://unpkg.com/apprun@es6/dist/apprun.esm';
   app.render = (element, html) => render(html, element); // overwrite AppRun render
   const view = state => html`<div>${state}</div>`;
   app.start(document.body, 0, view);

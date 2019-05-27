@@ -2,7 +2,7 @@
 
 ## Create Your First App
 
-The easiest way to include AppRun in the HTML file. Use the counter app as an example.
+The easiest way is to include AppRun in the HTML file. Let's use the counter app below as an example.
 
 ```html
 <html>
@@ -32,7 +32,7 @@ The easiest way to include AppRun in the HTML file. Use the counter app as an ex
 </html>
 ```
 
-You can run the HTML above locally or use the following online editors.
+You can save and run the HTML above locally or use the following online editors.
 
 
 ## Online Editor
@@ -54,7 +54,11 @@ You can run the HTML above locally or use the following online editors.
 
 ## Dev Environment
 
-For real world application development use AppRun CLI to create a TypeScript and webpack configured project, you get a productive development environment in Visual Studio Code.
+For real world application development, you can use the AppRun CLI to create a TypeScript and webpack configured project. You will get a productive development environment in Visual Studio Code.
+
+```sh
+npx apprun --init
+```
 
 ![debug](imgs/debug.png)
 
