@@ -4,6 +4,13 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.20 / 2.20
+
+* Add . event to Component,a.k.s the refresh event
+* Add ES6 module build: apprun.esm.js
+* Store _AppRunVersions in global
+* New docs
+
 ## 1.19 / 2.19
 
 * Add event type to app, component and decorators

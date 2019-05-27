@@ -1,6 +1,6 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a Javascript library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a Javascript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
@@ -9,8 +9,8 @@ AppRun is a Javascript library for building reliable, high-performance web appli
 * Write less code
 * No proprietary syntax to learn
 * Compiler/transpiler is optional
-* State management, routing and directives included
-* Run side-by-side with other frameworks
+* State management and routing included
+* Run side-by-side with jQuery, chartjs, D3, lit-html ...
 
 ## AppRun Book from Apress
 
@@ -27,9 +27,7 @@ Application logic is broken down into three separated parts in the AppRun archit
 * View — a function to display the state
 * Update — a collection of event handlers to update the state
 
-AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
-
-Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+AppRun ties the three parts together and drives the applications. Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 ## Quick Start
 
@@ -64,7 +62,7 @@ Below is a counter application using AppRun ([Online Demo](https://apprun.js.org
 
 ## Web Components
 
-Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun.js.org/#play/7)).
+Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).([Online Demo](https://apprun.js.org/#play/7))
 
 ```html
 <html>
@@ -119,9 +117,9 @@ To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --e
 npx apprun --init --spa --es6
 npm start
 ```
-## Dev-Tools CLI
+## CLI in Console
 
-We have been using the command line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser's developer tool?
+AppRun CLI also runs in console.
 
 ![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
 
@@ -135,14 +133,14 @@ To use the AppRun dev-tools CLI, include the the dev-tools script.
 
 AppRun support the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
-![app-dev-tools](docs/apprun-dev-tools.gif)
+![app-dev-tools](docs/imgs/apprun-dev-tools.gif)
 
 
 ## VS Code Extension
 
 AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
 
-![app-dev-tools](docs/apprun-vscode-extension.png)
+![app-dev-tools](docs/imgs/apprun-vscode-extension.png)
 
 
 ## Contribute
