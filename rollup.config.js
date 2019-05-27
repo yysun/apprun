@@ -2,7 +2,7 @@ import filesize from 'rollup-plugin-filesize';
 import { terser } from 'rollup-plugin-terser';
 
 export default {
-  input: 'dist/es6/apprun.js',
+  input: 'esm/apprun.js',
   output: {
     file: 'dist/apprun.esm.js',
     format: 'esm',
