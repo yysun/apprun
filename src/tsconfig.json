@@ -9,5 +9,6 @@
 		"experimentalDecorators": true,
 		"esModuleInterop": true,
 		"outDir": "../esm",
+		"sourceMap": true
 	}
 }
