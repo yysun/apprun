@@ -8,7 +8,7 @@
   "bin": "apprun-cli.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "webpack -p --mode production",
+    "build": "tsc -p src & rollup -c && webpack -p --mode production",
     "test": "jest --watch",
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
