@@ -11,6 +11,10 @@ export const customElement = (componentClass, options = {}) => class extends HTM
   get component() { return this._component; }
   get state() { return this._component.state; }
 
+  static get observedAttributes() {
+    return { ...options }['observedAttributes'];
+  }
+
   connectedCallback() {
     if (this.isConnected && !this._component) {
       const opts = { render: true, shadow: false, ...options };
@@ -31,6 +35,10 @@ export const customElement = (componentClass, options = {}) => class extends HTM
   disconnectedCallback() {
     this._component.unmount();
     this._component = null;
+  }
+
+  attributeChangedCallback(...args) {
+    this._component && this._component.run('attributeChanged', ...args);
   }
 }
 
