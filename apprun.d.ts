@@ -40,6 +40,7 @@ declare module 'apprun' {
     mounted: (props: any, children?) => void;
     unmount: () => void;
     unload: () => void;
+    render(element: HTMLElement, node: any): void;
   }
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;

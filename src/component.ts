@@ -24,6 +24,10 @@ export class Component<T=any, E=any> {
   public unload;
   private tracking_id;
 
+  render(element: HTMLElement, node) {
+    app.render(element, node, this);
+  }
+
   private renderState(state: T) {
     if (!this.view) return;
     const h = app.createElement;
@@ -71,7 +75,7 @@ export class Component<T=any, E=any> {
       }
       el['_component'] = this;
     }
-    app.render(el, html, this);
+    this.render(el, html);
     if (this.rendered) (this.rendered(this.state));
   }
 
