@@ -10,7 +10,7 @@ export const customElement = (componentClass, options = {}) => class extends HTM
   }
   get component() { return this._component; }
   get state() { return this._component.state; }
-  
+
   connectedCallback() {
     if (this.isConnected && !this._component) {
       const opts = { render: true, shadow: false, ...options };
@@ -31,12 +31,6 @@ export const customElement = (componentClass, options = {}) => class extends HTM
   disconnectedCallback() {
     this._component.unmount();
     this._component = null;
-  }
-
-  attributeChangedCallback() {
-    const props = {};
-    Array.from(this.attributes).forEach(item => props[item.name] = item.value);
-    this._component.run('.', props);
   }
 }
 

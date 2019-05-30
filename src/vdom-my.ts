@@ -179,7 +179,7 @@ function updateProps(element: Element, props: {}) {
         else delete element.dataset[cname];
       }
     } else if (name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-      element instanceof SVGElement) {
+      element instanceof SVGElement || element.tagName.indexOf('-') > 0) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
