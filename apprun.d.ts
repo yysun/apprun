@@ -49,6 +49,7 @@ declare module 'apprun' {
   // obsolete
   export function update<E>(name?: E, options?: { render?: boolean, history?: boolean });
   export function event<E>(name?: E, options?: { render?: boolean, history?: boolean });
+  export function customElement(name: string): <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
   export const app: IApp
   export default app;

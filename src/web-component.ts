@@ -43,5 +43,5 @@ export const customElement = (componentClass, options = {}) => class extends HTM
 }
 
 export default (name: string, componentClass, options?) => {
-  customElements && customElements.define(name, customElement(componentClass, options))
+  (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options))
 }

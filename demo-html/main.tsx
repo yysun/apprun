@@ -1,6 +1,7 @@
 
-import app, { Component } from '../src/apprun';
-declare var customElements;
+import app, { Component, customElement } from '../src/apprun';
+
+@customElement("my-app")
 class MyApp extends Component {
   // state = 0/
 
@@ -27,5 +28,3 @@ class MyApp extends Component {
     this.state = parseInt(num);
   }
 }
-
-app.webComponent('my-app', MyApp);

@@ -31,6 +31,14 @@ export function on<E>(events?: E, options: any = {}) {
   return function (target: any, key: string) {
     const name = events ? events.toString() : key;
     Reflect.defineMetadata(`apprun-update:${name}`,
-        { name, key, options }, target)
+      { name, key, options }, target)
   }
 }
+
+export function customElement(name: string) {
+  return function _customElement<T extends { new(...args: any[]): {} }>(constructor: T) {
+    app.webComponent(name, constructor)
+    return constructor;
+  }
+}
+

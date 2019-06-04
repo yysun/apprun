@@ -1,4 +1,4 @@
-import app, { Component, on, update, event } from '../src/apprun';
+import app, { Component, on, update, event, customElement } from '../src/apprun';
 
 describe('Update decorator', () => {
 
@@ -99,6 +99,12 @@ describe('Update decorator', () => {
     const test = new TestComponent().mount();
     test.run('test');
   })
+
+  it('should support this in @customElement', () => {
+    @customElement('my-app')
+    class TestComponent extends Component {
+    }
+  });
 
 
 })
