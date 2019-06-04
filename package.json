@@ -1,7 +1,7 @@
 {
   "name": "apprun",
-  "version": "1.20.0",
-  "description": "JavaScript framework that has Elm inspired architecture, event pub-sub and components",
+  "version": "1.20.5",
+  "description": "JavaScript library that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",

@@ -7,7 +7,8 @@
 ## 1.20 / 2.20
 
 * Add . event to Component,a.k.s the refresh event
-* Add ES6 module build: apprun.esm.js
+* Add ES6 module build: apprun.esm.js (2.20+)
+* Add @customElement decorator (2.20+)
 * Store _AppRunVersions in global
 * New docs
 
