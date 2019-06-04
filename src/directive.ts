@@ -24,7 +24,11 @@ export default (key: string, props: [], tag, component) => {
       props[key] = e => component.setState(event(component.state, e));
     } else if (Array.isArray(event)) {
       const [handler, ...p] = event;
-      props[key] = e => component.setState(handler(component.state, ...p, e));
+      if (typeof handler === 'string') {
+        props[key] = e => component.run(handler, ...p, e);
+      } else if (typeof handler === 'function') {
+        props[key] = e => component.setState(handler(component.state, ...p, e));
+      }
     }
 
   } else if (key === '$bind') {
