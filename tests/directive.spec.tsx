@@ -1,7 +1,7 @@
 import app, { Component, on, event } from '../src/apprun';
 
 describe('Directive', () => {
-  it('should trigger driective event - $on', () => {
+  it('should trigger event - $on', () => {
     class Test extends Component {
       state = 0;
       // prettier-ignore
@@ -32,7 +32,7 @@ describe('Directive', () => {
     expect(component.state).toBe(5);
   });
 
-  it('should trigger driective event - $on to function', () => {
+  it('should trigger event - $on to function', () => {
     class Test extends Component {
       state = 0;
       // prettier-ignore
@@ -50,7 +50,7 @@ describe('Directive', () => {
     expect(component.state).toBe(2);
   });
 
-  it('should trigger driective event - $on to function that returns Promise', (done) => {
+  it('should trigger event - $on to function that returns Promise', (done) => {
     class Test extends Component {
       state = 0;
       // prettier-ignore
@@ -71,6 +71,38 @@ describe('Directive', () => {
       expect(component.state).toBe(6);
       done();
     }, 0)
+  });
+
+  it('should trigger event - $on [function ...]', () => {
+    class Test extends Component {
+      state = 0;
+      // prettier-ignore
+      view = () => <button id='b7' $onclick={[this.add, 3]} />
+
+      add = (state, num) => state + num;
+    }
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const component = new Test().start(div) as any;
+    expect(component.state).toBe(0);
+    document.getElementById('b7').click();
+    expect(component.state).toBe(3);
+  });
+
+  it('should trigger event - $on [event: string ...]', () => {
+    class Test extends Component {
+      state = 0;
+      // prettier-ignore
+      view = () => <button id='b8' $onclick={['add', 3]} />
+
+      @on() add = (state, num) => state + num;
+    }
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const component = new Test().start(div) as any;
+    expect(component.state).toBe(0);
+    document.getElementById('b8').click();
+    expect(component.state).toBe(3);
   });
 
   it('should bind input to state - $bind', () => {
