@@ -29,8 +29,7 @@ You can also load AppRun directly from the unpkg.com CDN:
   app.start(document.body, 0, view);
 </script>
 </body>
-</html>`;
-
+</html>
 ```
 
 ### Use JSX
@@ -48,8 +47,7 @@ You can also load AppRun directly from the unpkg.com CDN:
   app.start(document.body, 0, view);
 </script>
 </body>
-</html>`;
-
+</html>
 ```
 
 ### Use ES Module
@@ -66,8 +64,7 @@ You can also load AppRun directly from the unpkg.com CDN:
   app.start(document.body, 0, view);
 </script>
 </body>
-</html>`;
-
+</html>
 ```
 
 ### Use lit-html
@@ -86,8 +83,7 @@ You can also load AppRun directly from the unpkg.com CDN:
   app.start(document.body, 0, view);
 </script>
 </body>
-</html>`;
-
+</html>
 ```
 
 ## Use TypeScript
