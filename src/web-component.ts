@@ -22,11 +22,10 @@ export const customElement = (componentClass, options = {}) => class extends HTM
         this.attachShadow({ mode: 'open' }) : this;
       const props = {}
       Array.from(this.attributes).forEach(item => props[item.name] = item.value);
-      if (this.children) {
-        props['children'] = Array.from(this.children);
-        props['children'].forEach(el => el.parentElement.removeChild(el));
-      }
+      const children = this.children ? Array.from(this.children) : [];
+      children.forEach(el => el.parentElement.removeChild(el));
       this._component = new componentClass(props).mount(this._shadowRoot, opts);
+      this._component.mounted(props, children);
       this.on = this._component.on.bind(this._component);
       this.run = this._component.run.bind(this._component);
     }
