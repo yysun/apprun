@@ -113,9 +113,34 @@ npm start
 
 Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.
 ```sh
-npx degit apprunjs/apprun-starter
+npx degit apprunjs/apprun-webpack my-app
+npx degit apprunjs/apprun-rollup my-app
+npx degit apprunjs/apprun-parcel my-app
+npx degit apprunjs/apprun-web-components my-app
+
 ```
 
-You can see AppRun is so flexible that you can choose your favorite ways of using it.
+AppRun is so flexible that you can choose your favorite ways of using it.
+
+
+## AppRun Site Framework
+
+[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
+
+* Progressive Web App (PWA) - support offline
+* Single Page App (SPA) - routing using / or #
+* 4 built-in layouts and bring your own
+* Compile html, markdown pages to AppRun components
+* Auto generate the index of pages
+* Build app logic using AppRun/Web components
+* Targets ES5 or ES Module
+
+You can create AppRun Site apps using the apprun-site package.
+
+```sh
+npx apprun-site init my-app
+```
+
+Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
 
 Next, you will see the [tutorial](02-tutorial) of creating AppRun apps.

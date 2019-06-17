@@ -5,34 +5,30 @@
 AppRun is a JavaScript library for building applications using the [elm](https://guide.elm-lang.org/architecture) inspired architecture, events and component.
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
-## AppRun Architecture
+## Why AppRun
 
-AppRun lets you divide the application logic into three parts.
+### Best Developer Experiences
 
-* Model — the state of your application
-* View — a function to display the state
-* Update — a set of event handlers to update the state
+* Write less code
+* No proprietary syntax to learn
+* Rich developer tools
 
-Below is a simple counter application using AppRun.
+### Flexible and Practical
 
-```javascript
-const state = 0;
-const view = state => `<div>
-    <h1>${state}</h1>
-    <button onclick='app.run("-1")'>-1</button>
-    <button onclick='app.run("+1")'>+1</button>
-  </div>`;
-};
-const update = {
-  '+1': state => state + 1,
-  '-1': state => state - 1
-};
-app.start(document.body, state, view, update);
-```
+* State management and routing included
+* Web Components Support
+* Works well with other libraries, such as jQuery, chartjs, D3, lit-html ...
+
+### Best Application Quality
+
+Applications built with AppRun have **less lines of code**, **smaller js files**, and **better performance**. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075).
+
+You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+
 
 ## AppRun API
 
-There is no proprietary syntax to learn and no compiler required. You only need to know three functions:
+You only need to know three functions to start using AppRun:
 
 ```javascript
 app.run() // to publish events
@@ -41,18 +37,6 @@ app.start() // to start your application
 
 ```
 
-## AppRun Site Framework
+## Ready to try it yourself?
 
-[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
-
-* Progressive Web App (PWA) - support offline
-* Single Page App (SPA) - routing using / or #
-* 4 built-in layouts and bring your own
-* Compile html, markdown pages to AppRun components
-* Auto generate the index of pages
-* Build app logic using AppRun/Web components
-* Targets ES5 or ES Module
-
-Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
-
-Ready to try it yourself? Head over to [Getting Started](/01-start).
+Head over to [Getting Started](/01-start).
