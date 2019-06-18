@@ -13,6 +13,10 @@ declare module 'apprun' {
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
   export type Route = (url: string, ...args: any[]) => any;
+  export type EventOption = {
+    render?: boolean, history?, global?: boolean;
+    callback?: (state) => void
+  };
 
   export interface IApp {
     start<T, E=any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
@@ -44,10 +48,10 @@ declare module 'apprun' {
 
   export type StatelessComponent<T={}> = (args: T) => VNode | void;
 
-  export function on<E>(name?: E, options?: { render?: boolean, history?: boolean });
+  export function on<E>(name?: E, options?: EventOption);
   // obsolete
-  export function update<E>(name?: E, options?: { render?: boolean, history?: boolean });
-  export function event<E>(name?: E, options?: { render?: boolean, history?: boolean });
+  export function update<E>(name?: E, options?: EventOption);
+  export function event<E>(name?: E, options?: EventOption);
 
   export const app: IApp
   export default app;

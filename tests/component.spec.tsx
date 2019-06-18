@@ -18,7 +18,8 @@ class TestComponent extends Component {
       })
     },
     'hiAsyncNull': async (state, value) => {
-    }
+    },
+    'hi-global': [(state, value) => value, { global: true}]
   }
   rendered = () => { }
 }
@@ -98,6 +99,12 @@ describe('Component', () => {
     expect(component.view).toHaveBeenCalled();
   })
 
+  it('should handle individual global event', () => {
+    component.mount(document.body);
+    spyOn(component, 'view');
+    app.run('hi-global', '');
+    expect(component.view).toHaveBeenCalled();
+  })
 
   it('should track history', () => {
     component.start(document.body, { history: true });
