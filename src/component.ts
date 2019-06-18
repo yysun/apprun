@@ -105,6 +105,26 @@ export class Component<T=any, E=any> {
     }
   }
 
+  private _history_prev = () => {
+    this._history_idx--;
+    if (this._history_idx >= 0) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = 0;
+    }
+  };
+
+  private _history_next = () => {
+    this._history_idx++;
+    if (this._history_idx < this._history.length) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = this._history.length - 1;
+    }
+  };
+
   constructor(
     protected state?: T,
     protected view?: View<T>,
@@ -126,27 +146,8 @@ export class Component<T=any, E=any> {
     this.enable_history = !!options.history;
 
     if (this.enable_history) {
-      const prev = () => {
-        this._history_idx --;
-        if (this._history_idx >=0) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = 0;
-        }
-      };
-
-      const next = () => {
-        this._history_idx ++;
-        if (this._history_idx < this._history.length) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = this._history.length - 1;
-        }
-      };
-      this.on(options.history.prev || 'history-prev', prev)
-      this.on(options.history.next || 'history-next', next)
+      this.on(options.history.prev || 'history-prev', this._history_prev);
+      this.on(options.history.next || 'history-next', this._history_next);
     }
     this.add_actions();
     if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
