@@ -1,6 +1,10 @@
 declare var customElements;
 
-export const customElement = (componentClass, options = {}) => class extends HTMLElement {
+export type CustomElementOptions = {
+  render?, shadow?, history?, global_event?: boolean;
+};
+
+export const customElement = (componentClass, options: CustomElementOptions = {}) => class extends HTMLElement {
   private _shadowRoot;
   private _component;
   public on;
@@ -41,6 +45,6 @@ export const customElement = (componentClass, options = {}) => class extends HTM
   }
 }
 
-export default (name: string, componentClass, options?) => {
+export default (name: string, componentClass, options?: CustomElementOptions) => {
   (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options))
 }

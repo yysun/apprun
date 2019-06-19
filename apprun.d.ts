@@ -17,6 +17,9 @@ declare module 'apprun' {
     render?: boolean, history?, global?: boolean;
     callback?: (state) => void
   };
+  export type CustomElementOptions = {
+    render?, shadow?, history?, global_event?: boolean;
+  };
 
   export interface IApp {
     start<T, E=any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
@@ -29,7 +32,7 @@ declare module 'apprun' {
     render(element: HTMLElement, node: VNode): void;
     Fragment(props, ...children): any[];
     route?: Route;
-    webComponent(name: string, componentClass, options?): void;
+    webComponent(name: string, componentClass, options?: CustomElementOptions): void;
   }
 
   export class Component<T=any, E=any> {
@@ -53,7 +56,8 @@ declare module 'apprun' {
   export function update<E>(name?: E, options?: EventOption);
   export function on<E>(name?: E, options?: EventOption);
   export function event<E>(name?: E, options?: EventOption);
-  export function customElement(name: string, options?: EventOption): <T extends { new(...args: any[]): {} }>(constructor: T) => T;
+  export function customElement(name: string, options?: CustomElementOptions):
+    <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
   export const app: IApp
   export default app;

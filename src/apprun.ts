@@ -3,7 +3,7 @@ import { createElement, render, Fragment } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update } from './types';
 import { on, update, customElement } from './decorator';
-import webComponent from './web-component';
+import webComponent, { CustomElementOptions } from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
@@ -16,7 +16,7 @@ export interface IApp {
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
   route?: Route;
-  webComponent(name: string, componentClass, options?): void;
+  webComponent(name: string, componentClass, options?: CustomElementOptions): void;
 }
 
 app.createElement = createElement;
@@ -51,7 +51,7 @@ if (typeof document === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, customElement };
+export { app, Component, View, Action, Update, on, update, customElement, CustomElementOptions };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export default app as IApp;
