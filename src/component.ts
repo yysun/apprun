@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef } from './types';
+import { View, Update, ActionDef, EventOption } from './types';
 import directive from './directive';
 
 const componentCache = {};
@@ -13,6 +13,7 @@ export class Component<T=any, E=any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
+  private _global_events = [];
   private _state;
   private _history = [];
   private _history_idx = -1;
@@ -81,7 +82,7 @@ export class Component<T=any, E=any> {
     if (this.rendered) (this.rendered(this.state));
   }
 
-  public setState(state: T, options: { render: boolean, history: boolean, callback?}
+  public setState(state: T, options: EventOption
     = { render: true, history: false}) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
@@ -106,6 +107,26 @@ export class Component<T=any, E=any> {
     }
   }
 
+  private _history_prev = () => {
+    this._history_idx--;
+    if (this._history_idx >= 0) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = 0;
+    }
+  };
+
+  private _history_next = () => {
+    this._history_idx++;
+    if (this._history_idx < this._history.length) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = this._history.length - 1;
+    }
+  };
+
   constructor(
     protected state?: T,
     protected view?: View<T>,
@@ -127,27 +148,8 @@ export class Component<T=any, E=any> {
     this.enable_history = !!options.history;
 
     if (this.enable_history) {
-      const prev = () => {
-        this._history_idx --;
-        if (this._history_idx >=0) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = 0;
-        }
-      };
-
-      const next = () => {
-        this._history_idx ++;
-        if (this._history_idx < this._history.length) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = this._history.length - 1;
-        }
-      };
-      this.on(options.history.prev || 'history-prev', prev)
-      this.on(options.history.next || 'history-next', next)
+      this.on(options.history.prev || 'history-prev', this._history_prev);
+      this.on(options.history.next || 'history-next', this._history_next);
     }
     this.add_actions();
     if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
@@ -163,11 +165,15 @@ export class Component<T=any, E=any> {
   }
 
   is_global_event(name: string): boolean {
-    return name && (name.startsWith('#') || name.startsWith('/'));
+    return name && (
+      this.global_event ||
+      this._global_events.indexOf(name) >= 0 ||
+      name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
   }
 
-  add_action(name: string, action, options: any = {}) {
+  add_action(name: string, action, options: EventOption = {}) {
     if (!action || typeof action !== 'function') return;
+    if (options.global) this. _global_events.push(name);
     this.on(name as any, (...p) => {
       const newState = action(this.state, ...p);
 
@@ -223,7 +229,7 @@ export class Component<T=any, E=any> {
 
   public run(event: E, ...args) {
     const name = event.toString();
-    return this.global_event || this.is_global_event(name) ?
+    return this.is_global_event(name) ?
       app.run(name, ...args) :
       this._app.run(name, ...args);
   }
@@ -231,7 +237,7 @@ export class Component<T=any, E=any> {
   public on(event: E, fn: (...args) => void, options?: any) {
     const name = event.toString();
     this._actions.push({ name, fn });
-    return this.global_event || this.is_global_event(name) ?
+    return this.is_global_event(name) ?
       app.on(name, fn, options) :
       this._app.on(name, fn, options);
   }
@@ -239,7 +245,7 @@ export class Component<T=any, E=any> {
   public unmount() {
     this._actions.forEach(action => {
       const { name, fn } = action;
-      this.global_event || this.is_global_event(name) ?
+      this.is_global_event(name) ?
         app.off(name, fn) :
         this._app.off(name, fn);
     });

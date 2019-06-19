@@ -125,3 +125,7 @@ polygon#blue:hover, polygon#blue:active {
   height: calc(100vh - 180px);
 }
 
+img {
+  max-width: 100%
+}
+

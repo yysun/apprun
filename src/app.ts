@@ -62,7 +62,7 @@ export class App {
 const AppRunVersions = 'AppRun-2';
 let app: App;
 const root = (typeof self === 'object' && self.self === self && self) ||
-  (typeof global === 'object' && global.global === global && global) 
+  (typeof global === 'object' && global.global === global && global)
 if (root['app'] && root['_AppRunVersions']) {
   app = root['app'];
 } else {

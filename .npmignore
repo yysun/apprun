@@ -1,9 +1,11 @@
-# Node generated files
-demo
-node_modules
-npm-debug.log
 # OS generated files
 Thumbs.db
 .DS_Store
+# Node generated files
+npm-debug.log
+node_modules
 coverage
 docs
+demo
+demo-html
+demo-node

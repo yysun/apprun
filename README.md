@@ -1,6 +1,6 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a Javascript library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a Javascript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
@@ -9,8 +9,10 @@ AppRun is a Javascript library for building reliable, high-performance web appli
 * Write less code
 * No proprietary syntax to learn
 * Compiler/transpiler is optional
-* State management, routing and directives included
-* Run side-by-side with other frameworks
+* State management and routing included
+* Run side-by-side with jQuery, chartjs, D3, lit-html ...
+
+Applications built with AppRun have **less lines of code**, **smaller js files**, and **better performance**. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 ## AppRun Book from Apress
 
@@ -27,11 +29,21 @@ Application logic is broken down into three separated parts in the AppRun archit
 * View — a function to display the state
 * Update — a collection of event handlers to update the state
 
-AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
-
-Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+AppRun ties the three parts together and drives the applications.
 
 ## Quick Start
+
+### AppRun Playground
+
+Try the [AppRun Playground](https://apprun.js.org/#play).
+
+
+### Use AppRun in Browsers
+
+You can include AppRun in your html directly and use it with JavaScript.
+```javascript
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
+```
 
 Below is a counter application using AppRun ([Online Demo](https://apprun.js.org/#play/6)).
 ```html
@@ -62,54 +74,9 @@ Below is a counter application using AppRun ([Online Demo](https://apprun.js.org
 </html>
 ```
 
-## Web Components
+### Use TypeScript and Webpack
 
-Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun.js.org/#play/7)).
-
-```html
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Counter as web component</title>
-</head>
-<body>
-  <my-app id='counter'></my-app>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
-  <script>
-    class Counter extends Component {
-      constructor() {
-        super();
-        this.state = 0;
-        this.view = state => `<div>
-          <h1>${state}</h1>
-          <button onclick='counter.run("-1")'>-1</button>
-          <button onclick='counter.run("+1")'>+1</button>
-          </div>`;
-        this.update = {
-          '+1': state => state + 1,
-          '-1': state => state - 1
-        };
-      }
-    }
-    app.webComponent('my-app', Counter);
-  </script>
-</body>
-</html>
-```
-## AppRun Playground
-
-Try the [AppRun Playground](https://apprun.js.org/#play).
-
-## Install
-
-You can include AppRun in your html directly and use it with JavaScript.
-```javascript
-<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
-```
-
-## CLI
-Or you can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
+You can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 ```sh
 npx apprun --init --spa
 npm start
@@ -119,9 +86,27 @@ To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --e
 npx apprun --init --spa --es6
 npm start
 ```
-## Dev-Tools CLI
 
-We have been using the command line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser's developer tool?
+## AppRun Site Framework
+
+[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
+
+* Progressive Web App (PWA) - support offline
+* Single Page App (SPA) - routing using / or #
+* 4 built-in layouts and bring your own
+* Compile html, markdown pages to AppRun components
+* Auto generate the index of pages
+* Build app logic using AppRun/Web components
+* Targets ES5 or ES Module
+
+Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
+
+
+## Developer Tools
+
+### CLI in Console
+
+AppRun CLI also runs in console.
 
 ![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
 
@@ -131,18 +116,18 @@ To use the AppRun dev-tools CLI, include the the dev-tools script.
 <script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
 ```
 
-## Dev-Tools
+### Dev-Tools Extensions
 
 AppRun support the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
-![app-dev-tools](docs/apprun-dev-tools.gif)
+![app-dev-tools](docs/imgs/apprun-dev-tools.gif)
 
 
-## VS Code Extension
+### VS Code Extension
 
 AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
 
-![app-dev-tools](docs/apprun-vscode-extension.png)
+![app-dev-tools](docs/imgs/apprun-vscode-extension.png)
 
 
 ## Contribute

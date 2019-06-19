@@ -4,6 +4,14 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.20 / 2.20
+
+* Add . event to Component,a.k.s the refresh event
+* Add ES6 module build: apprun.esm.js (2.20+)
+* Add @customElement decorator (2.20+)
+* Store _AppRunVersions in global
+* New docs
+
 ## 1.19 / 2.19
 
 * $on directive use tuple for event parameters
