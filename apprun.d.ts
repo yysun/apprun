@@ -19,6 +19,7 @@ declare module 'apprun' {
   };
   export type CustomElementOptions = {
     render?, shadow?, history?, global_event?: boolean;
+    observedAttributes?: string[]
   };
 
   export interface IApp {
