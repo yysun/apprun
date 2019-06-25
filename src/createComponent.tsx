@@ -32,8 +32,10 @@ function createComponent(node, parent, idx = 0) {
   if (typeof node === 'string') return node;
   if (Array.isArray(node)) return node.map(child => createComponent(child, parent, _idx++));
   let vdom = node;
-  if (node && typeof (node.tag) === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) vdom = render(node, parent, _idx++);
-  if (vdom && vdom.children) vdom.children = vdom.children.map(child => createComponent(child, parent, _idx++));
+  if (node && typeof (node.tag) === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent)
+    vdom = render(node, parent, _idx++);
+  if (vdom && Array.isArray(vdom.children))
+    vdom.children = vdom.children.map(child => createComponent(child, parent, _idx++));
   return vdom;
  }
 

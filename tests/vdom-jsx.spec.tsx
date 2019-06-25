@@ -128,4 +128,14 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('xxxxx');
   });
 
+  it('should allow element in JSX', () => {
+    const element = document.createElement('p');
+    element.innerHTML = 'ab';
+    const view = () => <div>
+      {element}
+    </div>
+    app.render(document.body, view());
+    expect(document.body.innerHTML).toBe('<div><p>ab</p></div>');
+  })
+
 })
