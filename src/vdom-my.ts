@@ -26,11 +26,9 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   if (typeof tag === 'string') return { tag, props, children: ch };
   else if (Array.isArray(tag)) return tag; // JSX fragments - babel
   else if (tag === undefined && children) return ch; // JSX fragments - typescript
-  else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    return { tag, props, children: ch } // createComponent(tag, { ...props, children });
-  }
-  else
-    return tag(props, ch);
+  else if (Object.getPrototypeOf(tag).__isAppRunComponent) return { tag, props, children: ch } // createComponent(tag, { ...props, children });
+  else if (typeof tag === 'function') return tag(props, ch);
+  else throw new Error(`Unknown tag in vdom ${tag}`);
 };
 
 const keyCache = {};
@@ -75,7 +73,10 @@ function updateChildren(element, children) {
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
-    if (typeof child === 'string') {
+    if (child instanceof HTMLElement) {
+      element.insertBefore(child, el);
+    }
+    else if (typeof child === 'string') {
       if (el.textContent !== child) {
         if (el.nodeType === 3) {
           el.textContent = child
