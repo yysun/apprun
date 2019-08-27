@@ -131,9 +131,9 @@ describe('Directive', () => {
         <input type='radio' name='e' value='B' $bind />
         <input type='range' min='0' max='5' name='f' $bind />
         <select $bind name='h'>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
+          <option value='v1'>1</option>
+          <option value='v2'>2</option>
+          <option value='v3'>3</option>
         </select>
         <select multiple name='i'>
           <option $bind='o1'>1</option>
@@ -185,7 +185,7 @@ describe('Directive', () => {
     expect(select.selectedIndex).toBe(1);
     select.selectedIndex = 2;
     select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
-    expect(component.state.h).toBe(2);
+    expect(component.state.h).toBe('v3');
 
     const options = document.querySelectorAll('option');
     // expect(options[1].selected).toBeTruthy();
