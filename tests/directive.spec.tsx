@@ -114,7 +114,7 @@ describe('Directive', () => {
         d: true,
         e: 'A',
         f: 5,
-        h: 1,
+        h: 'v2',
         o1: false,
         o2: true,
         o3: false
@@ -183,7 +183,7 @@ describe('Directive', () => {
 
     const select = document.querySelector('select');
     expect(select.selectedIndex).toBe(1);
-    select.selectedIndex = 2;
+    select.value = 'v3';
     select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
     expect(component.state.h).toBe('v3');
 

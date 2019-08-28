@@ -54,7 +54,7 @@ export default (key: string, props: [], tag, component) => {
           props['oninput'] = e => setStateValue(component, name || e.target.name, e.target.value);
       }
     } else if (tag === 'select') {
-      props['selectedIndex'] = getStateValue(component, name);
+      props['value'] = getStateValue(component, name);
       props['onchange'] = e => {
         if (!e.target.multiple) { // multiple selection use $bind on option
           setStateValue(component, name || e.target.name, e.target.value);
