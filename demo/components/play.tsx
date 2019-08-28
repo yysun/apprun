@@ -19,7 +19,7 @@ const html = code => `<!DOCTYPE html>
     }
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="//localhost:8080/dist/apprun-html.js"></script>
+  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/pikaday@latest/css/pikaday.css">
   <script src="https://unpkg.com/pikaday@latest/pikaday.js"></script>
 </head>
