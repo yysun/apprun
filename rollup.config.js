@@ -20,7 +20,7 @@ export default {
       },
     }),
     filesize({
-      showBrotliSize: true,
+      // showBrotliSize: true,
     }),
     sourcemaps()
   ]

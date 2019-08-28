@@ -1,4 +1,4 @@
-import app, { CustomElementOptions } from './apprun';
+import webComponent, { CustomElementOptions } from './web-component';
 
 // tslint:disable:no-invalid-this
 export const Reflect = {
@@ -40,7 +40,7 @@ export function on<E>(events?: E, options: any = {}) {
 
 export function customElement(name: string, options?: CustomElementOptions) {
   return function _customElement<T extends { new(...args: any[]): {} }>(constructor: T) {
-    app.webComponent(name, constructor, options);
+    webComponent(name, constructor, options);
     return constructor;
   }
 }

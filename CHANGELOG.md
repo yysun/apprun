@@ -4,6 +4,10 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.21 / 2.21
+
+* Allow embedding elements in JSX
+
 ## 1.20 / 2.20
 
 * Add . event to Component,a.k.s the refresh event
