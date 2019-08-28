@@ -1,6 +1,6 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a Javascript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
+AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 

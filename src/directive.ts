@@ -1,5 +1,5 @@
 const getStateValue = (component, name) => {
-  return name ? component['state'][name] : component['state'];
+  return (name ? component['state'][name] : component['state']) || '';
 }
 
 const setStateValue = (component, name, value) => {
@@ -57,7 +57,7 @@ export default (key: string, props: [], tag, component) => {
       props['selectedIndex'] = getStateValue(component, name);
       props['onchange'] = e => {
         if (!e.target.multiple) { // multiple selection use $bind on option
-          setStateValue(component, name || e.target.name, e.target.selectedIndex);
+          setStateValue(component, name || e.target.name, e.target.value);
         }
       }
     } else if (tag === 'option') {

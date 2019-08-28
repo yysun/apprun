@@ -51,9 +51,10 @@ if (typeof document === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, customElement, CustomElementOptions };
-export { update as event, EventOptions };
+export { app, Component, View, Action, Update, on, update, EventOptions }
+export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
+export { customElement, CustomElementOptions };
 export default app as IApp;
 
 if (typeof window === 'object') {
