@@ -30,7 +30,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
       const children = this.children ? Array.from(this.children) : [];
       children.forEach(el => el.parentElement.removeChild(el));
       this._component = new componentClass({ ...props, children }).mount(this._shadowRoot, opts);
-      this._component.mounted(props, children);
+      this._component.mounted && this._component.mounted(props, children);
       this.on = this._component.on.bind(this._component);
       this.run = this._component.run.bind(this._component);
     }
