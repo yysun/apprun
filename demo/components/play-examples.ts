@@ -235,12 +235,39 @@ const view = state => <>
 </>
 
 const update = {
-  '#animation': state => state,
   'start-animation': state => ({ ...state, animation: true }),
   'stop-animation': state => ({...state, animation: false})
 }
 app.start(document.body, state, view, update);
 `
-  }
+  },
 
+  {
+    name: 'Pikaday',
+    code: `// Pikaday
+
+const state = { day: '8/19/2016' }
+
+const view = state => <>
+  <h1>{state}</h1>
+  <input autocomplete="off" id="datepicker" placeholder="Click to pick a date"/>
+</>
+const update = {
+  'set-date': (state, e) => ({ ...state, day: e })
+}
+
+app.start(document.body, state, view, update, {
+  rendered: () => {
+    const input = document.getElementById('datepicker')
+    let pik = new Pikaday({
+      field: input,
+      onSelect: d => {
+        pik.destroy();
+        app.run('set-date', d.toLocaleDateString());
+      }
+    })
+  }
+});
+`
+  }
 ];
