@@ -1,6 +1,6 @@
 # 3rd Party Libraries
 
-Using jQuery and jQuery plugins is not an anti-pattern. It is welcomed and encourages. AppRun embrace 3rd libraries and recommend you to use them in your AppRun application development.
+Using jQuery and jQuery plugins is not an anti-pattern. It is welcomed and encouraged. AppRun embrace 3rd libraries and recommend you to use them in your AppRun application development.
 
 ## Rendered Callback
 
