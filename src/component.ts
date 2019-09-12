@@ -23,6 +23,7 @@ export class Component<T=any, E=any> {
   public rendered;
   public mounted;
   public unload;
+  public el;
   private tracking_id;
 
   render(element: HTMLElement, node) {
