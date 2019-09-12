@@ -27,6 +27,7 @@ export class Component<T=any, E=any> {
 
   render(element: HTMLElement, node) {
     app.render(element, node, this);
+    this.el = node;
   }
 
   private renderState(state: T) {
@@ -66,6 +67,7 @@ export class Component<T=any, E=any> {
           const { removedNodes, oldValue } = changes[0];
           if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >=0){
             this.unload();
+            this.el = null;
             observer.disconnect();
           }
         });
