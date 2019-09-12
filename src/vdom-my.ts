@@ -179,14 +179,14 @@ function updateProps(element: Element, props: {}) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-      element instanceof SVGElement || element.tagName.indexOf('-') > 0) {
+    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
+      element instanceof SVGElement) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
     } else if (element[name] !== value) {
-      element[name] = value;
+        element[name] = value;
     }
     if (name === 'key' && value) keyCache[value] = element;
   }

@@ -293,4 +293,10 @@ describe('vdom-my', () => {
     expect(element.getAttribute('class')).toBeNull();
   });
 
+  it('it should clear id', () => {
+    const element = render(createElement('div', { id: 'a' }));
+    render(createElement('div'));
+    expect(element.id).toBe('');
+  });
+
 });
