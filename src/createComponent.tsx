@@ -6,7 +6,7 @@ function render(node, parent, idx) {
   let id = props && props['id'];
   let key = `_${idx}_`
   if (!id) {
-    id = `_${idx}_`;
+    id = `_${idx}_${Date.now()}`;
   } else {
     key = `_${id}_`;
   }
