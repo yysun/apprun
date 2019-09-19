@@ -20,7 +20,7 @@ function render(node, parent, idx) {
   const state = component.state;
   let vdom = '';
   if (!(state instanceof Promise) && component.view) {
-    vdom = component.view(state, props);
+    vdom = component._view(state, props);
     component.rendered && setTimeout(() => component.rendered(state, props));
   }
   return <section {...props} id={id}>{vdom}</section>;
