@@ -42,7 +42,7 @@ declare module 'apprun' {
     rendered: (state: T, props?) => void;
     mounted: (props: any, children?) => void;
     unmount: () => void;
-    unload: () => void;
+    unload: (state: T) => void;
     render(element: HTMLElement, node: any): void;
   }
 
