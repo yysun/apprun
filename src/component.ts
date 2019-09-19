@@ -29,7 +29,7 @@ export class Component<T=any, E=any> {
     app.render(element, node, this);
   }
 
-  private renderState(state: T) {
+  private _view(state, p = null) {
     if (!this.view) return;
     const h = app.createElement;
     app.createElement = (tag, props, ...children) => {
@@ -41,9 +41,14 @@ export class Component<T=any, E=any> {
       });
       return h(tag, props, ...children);
     }
-    const html = this.view(state);
+    const html = p ? this.view(state, p) : this.view(state);
     app.createElement = h;
-
+    return html;
+  }
+  
+  private renderState(state: T) {
+    if (!this.view) return;
+    const html = this._view(state);
     app.run('debug', {
       component: this,
       state,
