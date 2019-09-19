@@ -45,7 +45,7 @@ export class Component<T=any, E=any> {
     app.createElement = h;
     return html;
   }
-  
+
   private renderState(state: T) {
     if (!this.view) return;
     const html = this._view(state);
@@ -71,7 +71,7 @@ export class Component<T=any, E=any> {
           const observer = new MutationObserver(changes => {
             const { removedNodes, oldValue } = changes[0];
             if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >= 0) {
-              this.unload();
+              this.unload(this.state);
               observer.disconnect();
             }
           });
