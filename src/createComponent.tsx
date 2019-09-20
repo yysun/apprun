@@ -2,19 +2,17 @@ import app from './app';
 
 function render(node, parent, idx) {
   const { tag, props, children } = node;
-
   let id = props && props['id'];
-  let key = `_${idx}_`
-  if (!id) {
-    id = `_${idx}_${Date.now()}`;
-  } else {
-    key = `_${id}_`;
-  }
+  if (!id) id = `_${idx}${Date.now()}`;
+  const key = `_${idx}`;
 
   if (!parent.__componentCache) parent.__componentCache = {};
   let component = parent.__componentCache[key];
   if (!component) {
     component = parent.__componentCache[key] = new tag({ ...props, children }).mount(id);
+    component['__eid'] = id;
+  } else {
+    id = component['__eid'];
   }
   component.mounted && component.mounted(props, children);
   const state = component.state;
@@ -27,7 +25,7 @@ function render(node, parent, idx) {
 }
 
 let _idx = 0;
-function createComponent(node, parent, idx = 0) {
+export default function createComponent(node, parent, idx = 0) {
   if (idx === 0) _idx = 0;
   if (typeof node === 'string') return node;
   if (Array.isArray(node)) return node.map(child => createComponent(child, parent, _idx++));
@@ -38,5 +36,3 @@ function createComponent(node, parent, idx = 0) {
     vdom.children = vdom.children.map(child => createComponent(child, parent, _idx++));
   return vdom;
  }
-
-export default createComponent;
