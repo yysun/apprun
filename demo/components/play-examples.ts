@@ -269,37 +269,43 @@ app.start(document.body, state, view, update, {
   }
 });
 `},
-  
+
   {
     name: 'Child Component',
     code: `// Child Component
 
-    class Counter extends Component {
-      state = 0;
-      view = state => (
-        <div>
-          <h1>{state}</h1>
-          <button $onclick='-1'>-1</button>
-          <button $onclick='+1'>+1</button>
-        </div>
-      );
-      update = {
-        '+1': state => state + 1,
-        '-1': state => state - 1
-      };
-    }
+class Counter extends Component {
+  state = 0;
+  view = state => (
+    <div>
+      <h1>{state}</h1>
+      <button $onclick='-1'>-1</button>
+      <button $onclick='+1'>+1</button>
+    </div>
+  );
+  update = {
+    '+1': state => state + 1,
+    '-1': state => state - 1
+  };
+}
 
-    class App extends Component {
-      state = {};
-      view = state => (
-        <div>
-          <Counter />
-        </div>
-      );
-      update = {};
-    }
+class App extends Component {
+  state = 0;
+  view = state => (
+    <div>
+      <button $onclick='+1'>{state}</button>
+      <hr/>
+      <Counter />
+      <Counter />
+      <Counter />
+    </div>
+  );
+  update = {
+    '+1': state => state + 1,
+  };
+}
 
-    new App().start(document.body);
+new App().start(document.body);
 `
   }
 ];

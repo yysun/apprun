@@ -6,6 +6,7 @@
 		"lib": ["dom", "es2015", "es5"],
 		"experimentalDecorators": true,
 		"sourceMap": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"downlevelIteration": true
 	}
 }

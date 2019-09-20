@@ -24,16 +24,28 @@ class Aside extends Base {
   state = 'Aside';
 }
 
+class Child extends Base {
+  state = 'Home';
+}
+
 class Home extends Base {
   state = 'Home';
+
+  view = _ => <>
+    <Child />
+    <Child />
+    <Child />
+  </>
 }
 
 
 describe('Nested Stateful Component', () => {
 
-  it('should load correctly', () => {
+  it('should not generate same id', () => {
 
     const element = document.createElement('div');
+    document.body.appendChild(element);
+
     app.render(element, <>
       <Header />
       <div class="app-body">
@@ -53,7 +65,6 @@ describe('Nested Stateful Component', () => {
         <main class="main">
           <Breadcrumb />
           <div class="container-fluid" id="apprun-app-main">
-            <Home />
           </div>
         </main>
         <aside class="aside-menu">
@@ -63,7 +74,10 @@ describe('Nested Stateful Component', () => {
       <Footer />
     </>);
 
-    expect(element.innerHTML.toString().indexOf('_31_') > 0).toBeTruthy()
+    new Home().start('apprun-app-main');
+    const ids = [].slice.call(document.querySelectorAll('*[id]')).map(e => e._props.id);
+    const dis = [...new Set(ids)];
+    expect(ids.length).toEqual(dis.length);
 
   })
 
