@@ -1,6 +1,8 @@
 import app from './app';
 import toHTML from './vdom-to-html';
 
+app['debug'] = true;
+
 window['_apprun-help'] = ['', () => {
   Object.keys(window).forEach(cmd => {
     if (cmd.startsWith('_apprun-')) {
@@ -169,7 +171,6 @@ window['_apprun-log'] = ['log [event|view] on|off', (a1?, a2?) => {
   console.log(`* log ${a1} ${a2||''}`)
 }];
 
-
 window['_apprun'] = (strings) => {
   const [cmd, ...p] = strings[0].split(' ').filter(c => !!c);
   const command = window[`_apprun-${cmd}`];
@@ -177,7 +178,7 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 0.3: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 0.4: type "_apprun `help`" to list all available commands.');
 
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
