@@ -7,6 +7,7 @@
 ## 1.21 / 2.21
 
 * Allow embedding elements in JSX
+* Use app['debug'] to turn on/off debug events
 
 ## 1.20 / 2.20
 

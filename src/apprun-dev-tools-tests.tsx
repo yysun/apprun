@@ -1,5 +1,6 @@
 declare var app;
 let win;
+app['debug'] = true;
 
 function openWin(name) {
   win = window.open('', name);

@@ -49,7 +49,7 @@ export class Component<T=any, E=any> {
   private renderState(state: T) {
     if (!this.view) return;
     const html = this._view(state);
-    app.run('debug', {
+    app['debug'] && app.run('debug', {
       component: this,
       state,
       vdom: html || '[vdom is null - no render]',
@@ -182,7 +182,7 @@ export class Component<T=any, E=any> {
     this.on(name as any, (...p) => {
       const newState = action(this.state, ...p);
 
-      app.run('debug', {
+      app['debug'] && app.run('debug', {
         component: this,
         'event': name,
         e: p,
