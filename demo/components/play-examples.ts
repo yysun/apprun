@@ -62,9 +62,9 @@ app.start(document.body, state, view, update);
   {
     name: 'Stopwatch',
     code: `// Stopwatch
+let id;
 const state = {
   start: new Date(),
-  active: false,
   elapsed: '0'
 }
 const view = state => {
@@ -75,18 +75,18 @@ const view = state => {
   </div>;
 };
 const update = {
-  'start':state =>({
-    start: new Date(),
-    active: true}),
-  'stop': state => ({ ...state, active: false }),
+  'start':state => {
+    state.start = new Date();
+    id = id || window.setInterval(() => { app.run('timer') }, 100);
+  },
+  'stop': state => {
+    id = id && window.clearInterval(id) && false;
+  },
   'timer': state => {
-    if(state.active){
-      state.elapsed = ((new Date() - state.start) / 1000).toFixed(3) + ' seconds';
-      return state
-    }
+    state.elapsed = ((new Date() - state.start) / 1000).toFixed(3) + ' seconds';
+    return state
   }
 };
-window.setInterval(() => { app.run('timer') }, 100);
 app.start(document.body, state, view, update);
 `
   },
