@@ -5,17 +5,17 @@ declare module 'apprun' {
   export type VNode = {
     tag: string,
     props: {},
-    children: Array<VNode|string>
+    children: Array<VNode | string>
   };
 
-  export type View<T> = (state: T, props?) => string | VNode | VNode[] | void;
+  export type View<T> = (state: T, props?: any[]) => string | VNode | VNode[] | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
   export type Route = (url: string, ...args: any[]) => any;
-  export type EventOptions = {
-    render?: boolean, history?, global?: boolean;
-    callback?: (state) => void
+  export type EventOptions<T = any> = {
+    render?: boolean, history?: boolean, global?: boolean;
+    callback?: (state: T) => void
   };
   export type CustomElementOptions = {
     render?, shadow?, history?, global_event?: boolean;
@@ -23,40 +23,40 @@ declare module 'apprun' {
   };
 
   export interface IApp {
-    start<T, E=any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
-      options?: { history?, rendered?: (state: T) => void }): Component<T, E>;
+    start<T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
+      options?: { history?: any, rendered?: (state: T) => void }): Component<T, E>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
     run(name: string, ...args: any[]): number;
-    createElement(tag: string | Function, props?, ...children): VNode | VNode[];
+    createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
-    Fragment(props, ...children): any[];
+    Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
   }
 
-  export class Component<T=any, E=any> {
+  export class Component<T = any, E = any> {
     constructor(state?: T, view?: View<T>, update?: Update<T, E>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
-    start(element?: Element, options?: { render?: boolean, history?, global_event?: boolean }): Component<T>;
+    mount(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
+    start(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
-    rendered: (state: T, props?) => void;
-    mounted: (props: any, children?) => void;
+    rendered: (state: T, props?: any[]) => void;
+    mounted: (props: any, children?: any[]) => void;
     unmount: () => void;
     unload: (state: T) => void;
     render(element: HTMLElement, node: any): void;
   }
 
-  export type StatelessComponent<T={}> = (args: T) => VNode | void;
+  export type StatelessComponent<T = {}> = (args: T) => VNode | void;
 
-  export function on<E>(name?: E, options?: EventOptions);
+  export function on<E>(name?: E, options?: EventOptions): void;
   // obsolete
-  export function update<E>(name?: E, options?: EventOptions);
-  export function event<E>(name?: E, options?: EventOptions);
+  export function update<E>(name?: E, options?: EventOptions): void;
+  export function event<E>(name?: E, options?: EventOptions): void;
   export function customElement(name: string, options?: CustomElementOptions):
     <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
