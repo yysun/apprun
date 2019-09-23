@@ -130,10 +130,10 @@ function createText(node) {
   }
 }
 
-function create(node: VNode | string, isSvg = false): Element {
+function create(node: VNode | string | HTMLElement | SVGElement, isSvg = false): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
-
+  if ((node instanceof HTMLElement) || (node instanceof SVGElement)) return node;
   if (typeof node === "string") return createText(node);
   if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
   isSvg = isSvg || node.tag === "svg";
