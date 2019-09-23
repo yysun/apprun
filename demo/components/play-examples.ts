@@ -307,5 +307,23 @@ class App extends Component {
 
 new App().start(document.body);
 `
+  },
+
+  {
+    name: 'Element in JSX',
+    code: `// Element in JSX
+
+class Test extends Component {
+  state = 'world';
+  view = state => {
+    const element = document.createElement('div');
+    element.innerHTML = 'hello ' + state;
+    return <div>
+      {element}
+    </div>
+  }
+}
+new Test().start(document.body);
+`
   }
 ];
