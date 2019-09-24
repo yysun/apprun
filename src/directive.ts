@@ -1,3 +1,5 @@
+import app from './app';
+
 const getStateValue = (component, name) => {
   return (name ? component['state'][name] : component['state']) || '';
 }
