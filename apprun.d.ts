@@ -48,10 +48,10 @@ declare module 'apprun' {
 
   export type StatelessComponent<T = {}> = (args: T) => VNode | void;
 
-  export function on<E>(name?: E, options?: EventOptions): void;
+  export function on<E>(name?: E, options?: EventOptions): any;
   // obsolete
-  export function update<E>(name?: E, options?: EventOptions): void;
-  export function event<E>(name?: E, options?: EventOptions): void;
+  export function update<E>(name?: E, options?: EventOptions): any;
+  export function event<E>(name?: E, options?: EventOptions): any;
 
   export const app: IApp
   export default app;
