@@ -2,10 +2,10 @@ import app from './app';
 
 function render(node, parent, idx) {
   const { tag, props, children } = node;
+  let key = `_${idx}`;
   let id = props && props['id'];
   if (!id) id = `_${idx}${Date.now()}`;
-  const key = `_${idx}`;
-
+  else key = id;
   if (!parent.__componentCache) parent.__componentCache = {};
   let component = parent.__componentCache[key];
   if (!component) {
@@ -28,11 +28,11 @@ let _idx = 0;
 export default function createComponent(node, parent, idx = 0) {
   if (idx === 0) _idx = 0;
   if (typeof node === 'string') return node;
-  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, _idx++));
+  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, _idx));
   let vdom = node;
   if (node && typeof (node.tag) === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent)
     vdom = render(node, parent, _idx++);
   if (vdom && Array.isArray(vdom.children))
-    vdom.children = vdom.children.map(child => createComponent(child, parent, _idx++));
+    vdom.children = vdom.children.map(child => createComponent(child, parent, _idx));
   return vdom;
  }

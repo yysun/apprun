@@ -68,7 +68,7 @@ describe('Nested Stateful Component', () => {
           </div>
         </main>
         <aside class="aside-menu">
-          <Aside />
+          <Aside id="aside"/>
         </aside>
       </div>
       <Footer />
