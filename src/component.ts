@@ -163,9 +163,10 @@ export class Component<T=any, E=any> {
     } else {
       this.setState(this.state, { render: false, history: true });
     }
-
-    componentCache[element] = componentCache[element] || [];
-    componentCache[element].push(this);
+    if (app['debug']) {
+      componentCache[element] = componentCache[element] || [];
+      componentCache[element].push(this);
+    }
     return this;
   }
 
