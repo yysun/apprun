@@ -130,6 +130,18 @@ function createText(node) {
   }
 }
 
+// Would prefer to use lookupNamespaceURI, but this seems to only work once the element is attached to the DOM
+// so use this kludge.
+const SVG_XML_URI = 'http://www.w3.org/2000/svg';
+const XLINK_XML_URI = 'http://www.w3.org/1999/xlink';
+const XMLNS_URI = 'http://www.w3.org/2000/xmlns/';
+const XML_URI = 'http://www.w3.org/XML/1998/namespace';
+const xmlNamespaces = { // prefix to uri key value pairs
+  xlink: XLINK_XML_URI,
+  xml: XML_URI,
+  xmlns: XMLNS_URI,
+};  
+
 function create(node: VNode | string | HTMLElement | SVGElement, isSvg = false): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
@@ -138,7 +150,7 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg = false):
   if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
   isSvg = isSvg || node.tag === "svg";
   const element = isSvg
-    ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
+    ? document.createElementNS(SVG_XML_URI, node.tag)
     : document.createElement(node.tag);
 
   updateProps(element, node.props);
@@ -179,12 +191,53 @@ function updateProps(element: Element, props: {}) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-      element instanceof SVGElement) {
+    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
+    } else if (element instanceof SVGElement) {
+      let setName = name;
+      let getName = name;
+      let namespace = null;
+
+      // We allow a couple of camel case to xml conversions since JSX gacks on ":" in attribute names
+      // Permit anything starting with "xlink:", "xmlns:", "xml:". 
+      if(name.search(/^xlink[A-Z]/) >= 0 || name.search(/^xmlns[A-Z]/) >= 0) {
+        // xlinkXxxx to xlink:xxxx and xmlnsXxxx to xmlns:xxxx
+        setName = name.substring(0,5) + ":" + name[5].toLowerCase() + name.substring(6);
+      } else if(name.search(/^xml[A-Z]/) >= 0) {
+        // xmlXxxx to xml:xxxx
+        setName = name.substring(0,3) + ":" + name[3].toLowerCase() + name.substring(4);
+      }
+
+      // If there is a ":" in the name then we have a namespaced attribute.
+      const colonPos = setName.indexOf(":");
+      if(colonPos >= 0) {
+        const xmlnsPrefix = setName.substring(0, colonPos);
+        const localName = setName.substring(colonPos + 1);
+
+        // Is this a namespace or a namespace declaration?
+        if(xmlnsPrefix === "xmlns") {
+          xmlNamespaces[localName] = value;
+
+          // All xmlns entries are name spaced to XML see:         
+          // https://www.w3.org/TR/DOM-Level-3-Core/core.html#Namespaces-Considerations
+          namespace = xmlNamespaces[xmlnsPrefix];
+        } else {
+          namespace = xmlNamespaces[xmlnsPrefix];
+          getName = localName;
+        }
+      } else if(setName === "xmlns") {
+          // All xmlns entries are name spaced to XML see:         
+          // https://www.w3.org/TR/DOM-Level-3-Core/core.html#Namespaces-Considerations
+          namespace = xmlNamespaces[setName];
+      }
+
+      if (element.getAttributeNS(namespace, getName) !== value) {
+        if (value) element.setAttributeNS(namespace, setName, value);
+        else element.removeAttributeNS(namespace, getName);
+      }  
     } else if (element[name] !== value) {
         element[name] = value;
     }
