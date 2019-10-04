@@ -1,7 +1,7 @@
 {
   "name": "apprun",
-  "version": "1.17.0",
-  "description": "JavaScript framework that has Elm inspired architecture, event pub-sub and components",
+  "version": "1.21.10",
+  "description": "JavaScript library that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
@@ -11,7 +11,7 @@
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start": "webpack-dev-server --mode development",
-    "build:docs": "marked -i docs/README.md -o demo/components/home.html"
+    "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html"
   },
   "keywords": [
     "JavaScript",
@@ -34,22 +34,22 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "commander": "^2.19.0"
+    "commander": "^2.20.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.3.9",
-    "jasmine-core": "^3.3.0",
-    "jest": "^23.6.0",
+    "@types/jasmine": "^3.4.0",
+    "jasmine-core": "^3.4.0",
+    "jest": "^24.9.0",
     "json-loader": "^0.5.7",
-    "marked": "^0.6.0",
-    "morphdom": "^2.3.3",
-    "ts-jest": "^23.10.5",
-    "ts-loader": "^5.3.3",
-    "tslint": "^5.12.0",
-    "typescript": "^3.3.3",
-    "webpack": "^4.29.4",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
+    "marked": "^0.7.0",
+    "morphdom": "^2.5.3",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.15.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
   },
   "jest": {
     "transform": {

@@ -4,10 +4,39 @@
 * apprun@latet: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
+## 1.21 / 2.21
+
+* Allow embedding elements in JSX
+* Use app['debug'] to turn on/off debug events and component cache
+
+## 1.20 / 2.20
+
+* Add . event to Component,a.k.s the refresh event
+* Add ES6 module build: apprun.esm.js (2.20+)
+* Add @customElement decorator (2.20+)
+* Store _AppRunVersions in global
+* New docs
+
+## 1.19 / 2.19
+
+* Add event type to app, component and decorators
+* Support update as array of tuple to enforce the event type
+* Set window['React']=app for using babel in browser
+* $bind to function and tuple
+
+## 1.18 / 2.18
+
+* Support JSX directives $on and $bind
+* Add $ event for custom directives
+* Change the component wrapper element from <div> to <section>
+* Fixed #57, #58
+
 ## 1.17 / 2.17
 
-* Pull requests: #48, #49, #50, #52, thanks to @phBalance
+* Pull requests: #48, #49, #50, #52, #53, #54, #55 thanks to @phBalance, @Sebring
 * Added lifecycle function: unload (beta)
+* Add props to the wrapper div of stateful component, #57, thanks to @bo-kh
+* Pass props to view, children to mounted functions of the stateful component
 
 ## 1.16 / 2.16
 
@@ -16,6 +45,7 @@
 * Support custom attribute (with kebab case/snake case)
 * Export app (non-default)
 * CLI: use src and dist folder, es6 flag
+* Fix CLI error: #45, thanks to @srlopez
 
 ## 1.15
 

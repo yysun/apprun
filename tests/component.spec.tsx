@@ -18,7 +18,8 @@ class TestComponent extends Component {
       })
     },
     'hiAsyncNull': async (state, value) => {
-    }
+    },
+    'hi-global': [(state, value) => value, { global: true}]
   }
   rendered = () => { }
 }
@@ -98,6 +99,12 @@ describe('Component', () => {
     expect(component.view).toHaveBeenCalled();
   })
 
+  it('should handle individual global event', () => {
+    component.mount(document.body);
+    spyOn(component, 'view');
+    app.run('hi-global', '');
+    expect(component.view).toHaveBeenCalled();
+  })
 
   it('should track history', () => {
     component.start(document.body, { history: true });
@@ -314,11 +321,22 @@ describe('Component', () => {
     // const div = document.createElement('div');
     // const t = new Test().start(div);
     // div.setAttribute('_c', null);
-  
+
     // const e = document.querySelector('#my-app');
     // e.parentNode.removeChild(e)
   // });
 
+  it('should add the . event by default', () => {
+    class Test extends Component {
+      state = 'a'
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().mount(div);
+    t.run('.');
+    expect(div.innerHTML).toBe('<div>a</div>');
+
+  })
 });
 
 

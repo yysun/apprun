@@ -1,15 +1,19 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { VNode, View, Update } from './types';
+import { View, Update, ActionDef, EventOptions } from './types';
+import directive from './directive';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 
-export class Component<T=any> {
+const REFRESH = state => state;
+
+export class Component<T=any, E=any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
+  private _global_events = [];
   private _state;
   private _history = [];
   private _history_idx = -1;
@@ -21,11 +25,31 @@ export class Component<T=any> {
   public unload;
   private tracking_id;
 
+  render(element: HTMLElement, node) {
+    app.render(element, node, this);
+  }
+
+  private _view(state, p = null) {
+    if (!this.view) return;
+    const h = app.createElement;
+    app.createElement = (tag, props, ...children) => {
+      props && Object.keys(props).forEach(key => {
+        if (key.startsWith('$')) {
+          directive(key, props, tag, this);
+          delete props[key];
+        }
+      });
+      return h(tag, props, ...children);
+    }
+    const html = p ? this.view(state, p) : this.view(state);
+    app.createElement = h;
+    return html;
+  }
+
   private renderState(state: T) {
     if (!this.view) return;
-    const html = this.view(state);
-
-    app.run('debug', {
+    const html = this._view(state);
+    app['debug'] && app.run('debug', {
       component: this,
       state,
       vdom: html || '[vdom is null - no render]',
@@ -43,26 +67,27 @@ export class Component<T=any> {
       } else if (el['_component'] !== this) {
         this.tracking_id = new Date().valueOf().toString();
         el.setAttribute(tracking_attr, this.tracking_id);
-        const observer = new MutationObserver(changes => {
-          const { removedNodes, oldValue } = changes[0];
-          if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >=0){
-            this.unload();
-            observer.disconnect();
-          }
-        });
-        if (el.parentNode) observer.observe(el.parentNode, {
-          childList: true, subtree: true,
-          attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
-        });
+        if (typeof MutationObserver !== 'undefined') {
+          const observer = new MutationObserver(changes => {
+            const { removedNodes, oldValue } = changes[0];
+            if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >= 0) {
+              this.unload(this.state);
+              observer.disconnect();
+            }
+          });
+          if (el.parentNode) observer.observe(el.parentNode, {
+            childList: true, subtree: true,
+            attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+          });
+        }
       }
       el['_component'] = this;
     }
-
-    app.render(el, html, this);
+    this.render(el, html);
     if (this.rendered) (this.rendered(this.state));
   }
 
-  public setState(state: T, options: { render: boolean, history: boolean, callback?}
+  public setState(state: T, options: EventOptions
     = { render: true, history: false}) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
@@ -87,10 +112,30 @@ export class Component<T=any> {
     }
   }
 
+  private _history_prev = () => {
+    this._history_idx--;
+    if (this._history_idx >= 0) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = 0;
+    }
+  };
+
+  private _history_next = () => {
+    this._history_idx++;
+    if (this._history_idx < this._history.length) {
+      this.setState(this._history[this._history_idx], { render: true, history: false });
+    }
+    else {
+      this._history_idx = this._history.length - 1;
+    }
+  };
+
   constructor(
     protected state?: T,
     protected view?: View<T>,
-    protected update?: Update<T>,
+    protected update?: Update<T, E>,
     protected options?) {
   }
 
@@ -108,51 +153,37 @@ export class Component<T=any> {
     this.enable_history = !!options.history;
 
     if (this.enable_history) {
-      const prev = () => {
-        this._history_idx --;
-        if (this._history_idx >=0) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = 0;
-        }
-      };
-
-      const next = () => {
-        this._history_idx ++;
-        if (this._history_idx < this._history.length) {
-          this.setState(this._history[this._history_idx], { render: true, history: false });
-        }
-        else {
-          this._history_idx = this._history.length - 1;
-        }
-      };
-      this.on(options.history.prev || 'history-prev', prev)
-      this.on(options.history.next || 'history-next', next)
+      this.on(options.history.prev || 'history-prev', this._history_prev);
+      this.on(options.history.next || 'history-next', this._history_next);
     }
     this.add_actions();
-    if (this.state === undefined) this.state = this['model'] || {};
+    if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
     if (options.render) {
       this.setState(this.state, { render: true, history: true });
     } else {
       this.setState(this.state, { render: false, history: true });
     }
-
-    componentCache[element] = componentCache[element] || [];
-    componentCache[element].push(this);
+    if (app['debug']) {
+      componentCache[element] = componentCache[element] || [];
+      componentCache[element].push(this);
+    }
     return this;
   }
 
   is_global_event(name: string): boolean {
-    return name && (name.startsWith('#') || name.startsWith('/'));
+    return name && (
+      this.global_event ||
+      this._global_events.indexOf(name) >= 0 ||
+      name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
   }
 
-  add_action(name: string, action, options: any = {}) {
+  add_action(name: string, action, options: EventOptions = {}) {
     if (!action || typeof action !== 'function') return;
-    this.on(name, (...p) => {
+    if (options.global) this. _global_events.push(name);
+    this.on(name as any, (...p) => {
       const newState = action(this.state, ...p);
 
-      app.run('debug', {
+      app['debug'] && app.run('debug', {
         component: this,
         'event': name,
         e: p,
@@ -173,14 +204,24 @@ export class Component<T=any> {
         actions[meta.name] = [this[meta.key].bind(this), meta.options];
       }
     })
-    const all = {};
-    Object.keys(actions).forEach(name => {
-      const action = actions[name];
-      if (typeof action === 'function' || Array.isArray(action)) {
-        name.split(',').forEach(n => all[n.trim()] = action)
-      }
-    })
 
+    const all = {};
+    if (Array.isArray(actions)) {
+      actions.forEach(act => {
+        const [name, action, opts] = act as ActionDef<T, E>;
+        const names = name.toString();
+        names.split(',').forEach(n => all[n.trim()] = [action, opts])
+      })
+    } else {
+      Object.keys(actions).forEach(name => {
+        const action = actions[name];
+        if (typeof action === 'function' || Array.isArray(action)) {
+          name.split(',').forEach(n => all[n.trim()] = action)
+        }
+      })
+    }
+
+    if (!all['.']) all['.'] = REFRESH;
     Object.keys(all).forEach(name => {
       const action = all[name];
       if (typeof action === 'function') {
@@ -189,17 +230,20 @@ export class Component<T=any> {
         this.add_action(name, action[0], action[1]);
       }
     });
+
   }
 
-  public run(name: string, ...args) {
-    return this.global_event || this.is_global_event(name) ?
+  public run(event: E, ...args) {
+    const name = event.toString();
+    return this.is_global_event(name) ?
       app.run(name, ...args) :
       this._app.run(name, ...args);
   }
 
-  public on(name: string, fn: (...args) => void, options?: any) {
+  public on(event: E, fn: (...args) => void, options?: any) {
+    const name = event.toString();
     this._actions.push({ name, fn });
-    return this.global_event || this.is_global_event(name) ?
+    return this.is_global_event(name) ?
       app.on(name, fn, options) :
       this._app.on(name, fn, options);
   }
@@ -207,7 +251,7 @@ export class Component<T=any> {
   public unmount() {
     this._actions.forEach(action => {
       const { name, fn } = action;
-      this.global_event || this.is_global_event(name) ?
+      this.is_global_event(name) ?
         app.off(name, fn) :
         this._app.off(name, fn);
     });

@@ -4,20 +4,38 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>AppRun</title>
-  <link rel="stylesheet" href="https://unpkg.com/docute@3/dist/docute.css">
+  <title>AppRun Docs</title>
+  <link rel="stylesheet" href="https://unpkg.com/docute@4/dist/docute.css">
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/docute@3/dist/docute.js"></script>
+  <script src="https://unpkg.com/docute@4/dist/docute.js"></script>
   <script>
-    docute.init({
-      // sidebar: false,
+    new Docute({
+      target:'#app',
+      title: 'AppRun',
       nav: [
-        {title: 'AppRun Docs', path: '/'},
-        {title: 'Examples', path: 'https://yysun.github.io/apprun'},
-        {title: 'Github', path: 'https://github.com/yysun/apprun'}
-      ]
+        {title: 'AppRun', link: 'https://yysun.github.io/apprun'},
+        {title: 'Play', link: 'https://yysun.github.io/apprun/#play'},
+        {title: 'Github', link: 'https://github.com/yysun/apprun'}
+      ],
+      sidebar: [{
+        children: [
+          { title: 'Introduction', link: '/'},
+          { title: 'Getting Started',link: '/01-start'},
+          { title: 'Tutorial', link: '/02-tutorial' },
+          { title: 'Dev Tools', link: '/03-dev-tools' },
+          { title: 'Architecture', link: '/04-architecture' },
+          { title: 'Component', link: '/05-component' },
+          { title: 'View Patterns', link: '/06-view-patterns' },
+          { title: 'Routing', link: '/07-routing' },
+          { title: '3rd Party Libs', link: '/08-3rd-party-libs' },
+          { title: 'Server Sider Rendering', link: '/09-ssr' },
+          { title: 'Strong Typing', link: '/10-strong-typing' },
+          { title: 'Unit Testing', link: '/11-unit-testing' },
+          { title: 'Books and Resources', link: '/12-resources' },
+        ]
+      }]
     })
   </script>
 </body>

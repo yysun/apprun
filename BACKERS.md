@@ -1,4 +1,6 @@
 ## Thank you for your support
 
-Kevin Shi
-Chancy Kennedy
+* Gyuri Lajos
+* Lorenz Glißmann
+* Kevin Shi
+* Chancy Kennedy

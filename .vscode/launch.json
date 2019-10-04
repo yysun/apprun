@@ -8,12 +8,17 @@
     "type": "node",
     "request": "launch",
     "name": "Launch Jest",
-    "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+    "program": "${workspaceFolder}/node_modules/.bin/jest",
     "args": [
-      "${relativeFile}"
+      "--runInBand",
+      "${fileBasenameNoExtension}"
     ],
     "console": "integratedTerminal",
-    "internalConsoleOptions": "neverOpen"
+    "internalConsoleOptions": "neverOpen",
+    "disableOptimisticBPs": true,
+    "windows": {
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+    }
   },
   ]
 }

@@ -4,6 +4,11 @@ export type VNode = {
   children: Array<VNode|string>
 }
 export type VDOM = string | VNode | Array<VNode | string>;
-export type View<T> = (state: T) => VDOM | void;
-export type Action<T> = (state: T, ...p: any[]) => T | Promise<T>;
-export type Update<T> = { [name: string]: Action<T> | {}[] | void; };
+export type View<T> = (state: T, props?) => VDOM | void;
+export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
+export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
+export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
+export type EventOptions = {
+  render?: boolean, history?, global?: boolean;
+  callback?: (state) => void
+};

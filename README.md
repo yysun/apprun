@@ -1,9 +1,24 @@
-# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter]
+# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-
-AppRun is a 3K library for building reliable, high-performance web applications using the [Elm inspired Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture), [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs) and [components](https://yysun.github.io/apprun/docs/#/?id=component).
+AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
 
 > AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+
+## AppRun Benefits
+
+* Write less code
+* No proprietary syntax to learn
+* Compiler/transpiler is optional
+* State management and routing included
+* Run side-by-side with jQuery, chartjs, D3, lit-html ...
+
+Applications built with AppRun have **less lines of code**, **smaller js files**, and **better performance**. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+
+## AppRun Book from Apress
+
+[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+
+* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 
 ## Architecture Concept
@@ -14,20 +29,23 @@ Application logic is broken down into three separated parts in the AppRun archit
 * View — a function to display the state
 * Update — a collection of event handlers to update the state
 
-AppRun ties the three parts together and drives the applications using [event pub-sub](https://yysun.github.io/apprun/docs/#/?id=event-pubsubs).
-
-Applications built with AppRun have less lines of code, smaller js files, and better performance. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2018 update)](https://medium.freecodecamp.org/a-real-world-comparison-of-front-end-frameworks-with-benchmarks-2018-update-e5760fb4a962). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
-
-## AppRun Book from Apress
-
-[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
-
-* [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
-
+AppRun ties the three parts together and drives the applications.
 
 ## Quick Start
 
-Below is a counter application using AppRun.
+### AppRun Playground
+
+Try the [AppRun Playground](https://apprun.js.org/#play).
+
+
+### Use AppRun in Browsers
+
+You can include AppRun in your html directly and use it with JavaScript.
+```javascript
+<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
+```
+
+Below is a counter application using AppRun ([Online Demo](https://apprun.js.org/#play/6)).
 ```html
 <html>
 <head>
@@ -56,51 +74,9 @@ Below is a counter application using AppRun.
 </html>
 ```
 
-## Web Components
+### Use TypeScript and Webpack
 
-Using apprun@es6, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events.
-
-```html
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Counter as web component</title>
-</head>
-<body>
-  <my-app id='counter'></my-app>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
-  <script>
-    class Counter extends Component {
-      constructor() {
-        super();
-        this.state = 0;
-        this.view = state => `<div>
-          <h1>${state}</h1>
-          <button onclick='counter.run("-1")'>-1</button>
-          <button onclick='counter.run("+1")'>+1</button>
-          </div>`;
-        this.update = {
-          '+1': state => state + 1,
-          '-1': state => state - 1
-        };
-      }
-    }
-    app.webComponent('my-app', Counter);
-  </script>
-</body>
-</html>
-```
-
-## Install
-
-You can include AppRun in your html directly and use it with JavaScript.
-```javascript
-<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
-```
-
-## CLI
-Or you can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
+You can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 ```sh
 npx apprun --init --spa
 npm start
@@ -111,60 +87,47 @@ npx apprun --init --spa --es6
 npm start
 ```
 
-## Dev-Tools
+## AppRun Site Framework
 
-To use the AppRun dev-tools, include the the dev-tools script.
+[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
+
+* Progressive Web App (PWA) - support offline
+* Single Page App (SPA) - routing using / or #
+* 4 built-in layouts and bring your own
+* Compile html, markdown pages to AppRun components
+* Auto generate the index of pages
+* Build app logic using AppRun/Web components
+* Targets ES5 or ES Module
+
+Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
+
+
+## Developer Tools
+
+### CLI in Console
+
+AppRun CLI also runs in console.
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
+
+To use the AppRun dev-tools CLI, include the the dev-tools script.
+
 ```JavaScript
 <script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
 ```
-Then install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
-![app-dev-tools](docs/apprun-dev-tools.gif)
+### Dev-Tools Extensions
 
-## Documentation
+AppRun support the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
-To explore more about AppRun, read the following.
+![app-dev-tools](docs/imgs/apprun-dev-tools.gif)
 
-* [Architecture](https://yysun.github.io/apprun/docs/#/?id=architecture)
-* [Event PubSub](https://yysun.github.io/apprun/docs/#/?id=event-pubsub)
-* [State Management](https://yysun.github.io/apprun/docs/#/?id=state-management)
-* [Virtual DOM](https://yysun.github.io/apprun/docs/#/?id=virtual-dom)
-* [Component](https://yysun.github.io/apprun/docs/#/?id=component)
-* [Routing](https://yysun.github.io/apprun/docs/#/?id=routing)
-* [CLI](https://yysun.github.io/apprun/docs/#/?id=cli)
 
-## Video Tutorials
+### VS Code Extension
 
-* [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
-* [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
+AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
 
-## Articles
-
-* [Building Applications with AppRun](https://medium.com/@yiyisun/building-applications-with-apprun-d103cd461bae)
-* [Deep Dive into AppRun State](https://medium.com/@yiyisun/deep-dive-into-apprun-state-3d6fb58b1521)
-* [Deep Dive into AppRun Events](https://medium.com/@yiyisun/deep-dive-into-apprun-events-1650dc7811ea)
-* [Redux vs. The React Context API vs. AppRun](https://medium.com/@yiyisun/redux-vs-the-react-context-api-vs-apprun-f324bee8cbbf)
-* [I Also Created the Exact Same App Using AppRun](https://medium.com/@yiyisun/i-also-created-the-exact-same-app-using-apprun-dd1860cb8112)
-
-## Examples
-
-* [RealWorld Example App](https://github.com/gothinkster/apprun-realworld-example-app) - a SPA blogging platform adheres to the [RealWorld specification](https://github.com/gothinkster/realworld) (1100 lines).
-* [Hacker News Reader](https://github.com/yysun/apprun-hn) - PWA hacker news reader (230 lines)
-* [AppRun Demo App](https://yysun.github.com/apprun) - a SPA that has 8 components, including a [Todo component](https://github.com/yysun/apprun/tree/master/demo/components/todo.tsx) (90 lines)
-* [AppRun Admin Dashboard](https://yysun.github.com/apprun-bootstrap)
-* [AppRun Server-Side Rendering](https://github.com/yysun/apprun-ssr)
-* [AppRun Server-Side Rendering for ASP.NET MVC](https://github.com/yysun/apprun-ssr-aspnet)
-* [AppRun Multilingual Example](https://github.com/yysun/apprun-multilingual)
-* [AppRun Firebase Authentication](https://github.com/yysun/apprun-firebase-authentication)
-* [AppRun Dynamic Module Import](https://github.com/yysun/apprun-dynamic-components)
-* [AppRun Hot Module Reload with Webpack](https://github.com/yysun/apprun-hot-module-reload)
-* [Use Apprun with Parcel](https://github.com/yysun/apprun-parcel-bundler)
-* [AppRun Desktop Application with Electron](https://github.com/yysun/apprun-electron)
-* [AppRun Mobile Application with Framework7](https://github.com/yysun/f7)
-
-## Online Demos
-
-See Examples Online @[glitch.com](https://glitch.com/@yysun) and @[stackblitz.com](https://stackblitz.com/@yysun)
+![app-dev-tools](docs/imgs/apprun-vscode-extension.png)
 
 
 ## Contribute
@@ -206,3 +169,6 @@ Copyright (c) 2015-2019 Yiyi Sun
 
 [twitter]: https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social
+
+[discord-image]: https://img.shields.io/discord/476903999023480842.svg
+[discord-invite]: https://discord.gg/M5EDsj

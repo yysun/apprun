@@ -23,9 +23,9 @@ const view = (model) => {
   };
 
   return <div
-    onmousedown = { e => app.run('drag', e)}
-    onmousemove = { e => app.run('move', e)}
-    onmouseup =   { e => app.run('drop')}
+    $onpointerdown = 'drag'
+    $onpointermove = 'move'
+    $onpointerup =   'drop'
     style={style}
     > Drag me!
   </div>
@@ -33,10 +33,14 @@ const view = (model) => {
 
 const update = {
   '#dragdrop': (model) => model,
-  drag: (model, e) => ({ ...model,
-    dragging: true,
-    start: {x: e.pageX, y: e.pageY}
-  }),
+  drag: (model, e) => {
+    e.target.setPointerCapture(e.pointerId);
+    return {
+      ...model,
+      dragging: true,
+      start: { x: e.pageX, y: e.pageY }
+    }
+  },
   move: (model, e) => {
     if (!model.dragging) return { ...model,
       view: NOOP // this is tells app not to call view function
@@ -48,7 +52,12 @@ const update = {
     }
     return ({...model, start, position})
   },
-  drop: (model) => ({ ...model, dragging: false })
+  drop: (model, e) => {
+    e.target.releasePointerCapture(e.pointerId);
+    return {
+      ...model, dragging: false
+    }
+  }
 }
 
 export default (element) => app.start(element, model, view, update);

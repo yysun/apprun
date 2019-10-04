@@ -223,7 +223,6 @@ describe('Stateful Component', () => {
         super();
         this.state.n = n;
       }
-      // mounted = ({ n }) => { this.setState({n}) }
     }
     class Main extends Component {
       state = 0
@@ -236,13 +235,44 @@ describe('Stateful Component', () => {
           <Child n="3"/>
         </div>
       }
-      update = {
-        '+1': state => state + 1
-      }
     }
     const element = document.createElement('div');
     app.render(element, <Main />);
     expect(element.textContent).toBe("123");
+  });
+
+  it("should set props to child component's div wrapper", () => {
+    class Child extends Component {
+    }
+    class Main extends Component {
+      view = _ => <>
+        <Child class="c1" id="c1" />
+        <Child className="c2" />
+        <Child style={{ 'color': 'red' }} />
+        <Child data-a='a' />
+      </>;
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
+    const main = element.children[0];
+    expect(main.children[0].id).toBe("c1");
+    expect(main.children[0].className).toBe("c1");
+    expect(main.children[1].className).toBe("c2");
+    expect((main.children[2] as HTMLDivElement).style.color).toBe("red");
+    expect((main.children[3] as HTMLDivElement).dataset.a).toBe("a");
+  });
+
+  it("should get props in view function", () => {
+    class Child extends Component {
+      view = (_, props) => {
+        expect(props['class']).toBe('c1');
+      }
+    }
+    class Main extends Component {
+      view = _ => <Child class="c1" id="c1" />
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
   });
 
 });

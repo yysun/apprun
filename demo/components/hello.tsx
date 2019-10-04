@@ -1,23 +1,5 @@
 import app, { Component, on } from '../../src/apprun'
 
-let h = app.createElement;
-const createElement = (component) => (tag, props, ...children) => {
-  if (props) Object.keys(props).forEach(key => {
-    if (key.startsWith('on') && typeof event !== 'function') {
-      const event = props[key];
-      if (typeof event === 'boolean') {
-        props[key] = e => component.run(key, e);
-      } else if (typeof event === 'string') {
-        props[key] = e => component.run(event, e)
-      } else if (event instanceof Component) {
-        props[key] = e => event.run(key, e)
-      } else if (Array.isArray(event)) {
-        props[key] = e => event[0].run(event[1] || key, e)
-      }
-    }
-  });
-  return h(tag, props, ...children)
-}
 export class HelloComponent extends Component {
   model = 'world';
   view = state => <div>
@@ -69,41 +51,33 @@ export class HelloDelayComponent extends Component {
 export class HelloDirectiveComponent extends Component {
   model = 'world';
   view = state => {
-    app.createElement = createElement(this);
-    const ret = <div>
+    return <div>
       <div>Test directive</div>
       <h1>Hello: {state}</h1>
       <table>
         <tr>
           <td>Default event:</td>
-          <td>&lt;input oninput /&gt;</td>
-          <td><input value={state} oninput /></td>
+          <td>&lt;input $oninput /&gt;</td>
+          <td><input value={state} $oninput /></td>
         </tr>
         <tr>
           <td>Named event:</td>
-          <td>&lt;input oninput='oninput' /&gt;</td>
-          <td><input value={state} oninput='oninput' /></td>
+          <td>&lt;input $oninput='ev1' /&gt;</td>
+          <td><input value={state} $oninput='ev1' /></td>
         </tr>
         <tr>
-          <td>Set target:</td>
-          <td>&lt;input oninput={'{this}'} /&gt;</td>
-          <td><input value={state} oninput={this} /></td>
-        </tr>
-        <tr>
-          <td>Set target and name:</td>
-          <td>&lt;input oninput={'{[this, "oninput"]}'} /&gt;</td>
-          <td><input value={state} oninput={[this, 'oninput']} /></td>
+          <td>Bind:</td>
+          <td>&lt;input $bind /&gt;</td>
+          <td><input value={state} $bind /></td>
         </tr>
       </table>
     </div>
-    app.createElement = h;
-    return ret;
   }
 
   @on('#hello-directive')
   hello = state => state
 
-  @on('oninput')
+  @on('oninput, ev1')
   oninput = (_, e) => e.target.value // will be converted to update functions
 }
 

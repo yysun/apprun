@@ -128,4 +128,35 @@ describe('vdom-jsx', () => {
     expect(element.textContent).toEqual('xxxxx');
   });
 
+  it('should allow element in JSX - p', () => {
+    const element = document.createElement('p');
+    element.innerHTML = 'ab';
+    const view = () => <div>
+      {element}
+    </div>
+    app.render(document.body, view());
+    expect(document.body.innerHTML).toBe('<div><p>ab</p></div>');
+  });
+
+  it('should allow element in JSX - div', () => {
+    const element = document.createElement('div');
+    element.innerHTML = 'cd';
+    const view = () => <div>
+      {element}
+    </div>
+    app.render(document.body, view());
+    expect(document.body.innerHTML).toBe('<div><div>cd</div></div>');
+  });
+
+  it('should allow element in JSX - svg', () => {
+    const element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    element.setAttributeNS('http://www.w3.org/2000/svg', 'x', '100')
+    const view = () => <div>
+      {element}
+    </div>
+    app.render(document.body, view());
+    expect(document.body.innerHTML).toBe('<div><svg x="100"></svg></div>');
+  });
+
+
 })

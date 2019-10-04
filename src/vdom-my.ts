@@ -21,15 +21,14 @@ function collect(children) {
   return ch;
 }
 
-export function createElement(tag: string | Function, props?: {}, ...children) {
+export function createElement(tag: string | Function | [], props?: {}, ...children) {
   const ch = collect(children);
   if (typeof tag === 'string') return { tag, props, children: ch };
-  else if (tag === undefined && children) return ch; // JSX fragments
-  else if (Object.getPrototypeOf(tag).__isAppRunComponent) {
-    return { tag, props, children: ch } // createComponent(tag, { ...props, children });
-  }
-  else
-    return tag(props, ch);
+  else if (Array.isArray(tag)) return tag; // JSX fragments - babel
+  else if (tag === undefined && children) return ch; // JSX fragments - typescript
+  else if (Object.getPrototypeOf(tag).__isAppRunComponent) return { tag, props, children: ch } // createComponent(tag, { ...props, children });
+  else if (typeof tag === 'function') return tag(props, ch);
+  else throw new Error(`Unknown tag in vdom ${tag}`);
 };
 
 const keyCache = {};
@@ -74,7 +73,10 @@ function updateChildren(element, children) {
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
-    if (typeof child === 'string') {
+    if (child instanceof HTMLElement) {
+      element.insertBefore(child, el);
+    }
+    else if (typeof child === 'string') {
       if (el.textContent !== child) {
         if (el.nodeType === 3) {
           el.textContent = child
@@ -128,10 +130,10 @@ function createText(node) {
   }
 }
 
-function create(node: VNode | string, isSvg = false): Element {
+function create(node: VNode | string | HTMLElement | SVGElement, isSvg = false): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
-
+  if ((node instanceof HTMLElement) || (node instanceof SVGElement)) return node;
   if (typeof node === "string") return createText(node);
   if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
   isSvg = isSvg || node.tag === "svg";
@@ -177,14 +179,14 @@ function updateProps(element: Element, props: {}) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
+    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
       element instanceof SVGElement) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
     } else if (element[name] !== value) {
-      element[name] = value;
+        element[name] = value;
     }
     if (name === 'key' && value) keyCache[value] = element;
   }
