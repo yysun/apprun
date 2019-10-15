@@ -14,7 +14,7 @@ export class App {
 
   on(name: string, fn: (...args) => void, options: any = {}): void {
     this._events[name] = this._events[name] || [];
-    this._events[name].push({ fn: fn, options: options });
+    this._events[name].push({ fn, options });
   }
 
   off(name: string, fn: (...args) => void): void {
@@ -24,6 +24,10 @@ export class App {
       if (subscribers.length) this._events[name] = subscribers;
       else delete this._events[name]
     }
+  }
+
+  find(name: string): any {
+    return this._events[name];
   }
 
   run(name: string, ...args): number {
