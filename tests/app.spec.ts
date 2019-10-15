@@ -135,4 +135,14 @@ describe('app events', () => {
     expect(console.assert).toHaveBeenCalled();
     expect(subs).toBe(0);
   });
+
+  it('should return undefined for an invalid event name', () => {
+    const app = new App();
+    app.on('hi', _ => 0);
+    let has = app.find('hi');
+    expect(has).not.toBeUndefined();
+    has = app.find('hix');
+    expect(has).toBeUndefined();
+  });
+
 });
