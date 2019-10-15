@@ -164,8 +164,9 @@ export class Component<T=any, E=any> {
       this.setState(this.state, { render: false, history: true });
     }
     if (app['debug']) {
-      componentCache[element] = componentCache[element] || [];
-      componentCache[element].push(this);
+      const id = typeof element === 'string' ? element : element.id;
+      componentCache[id] = componentCache[id] || [];
+      componentCache[id].push(this);
     }
     return this;
   }
