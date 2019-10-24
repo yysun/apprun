@@ -30,55 +30,14 @@ describe('app events', () => {
     const app = new App();
     app.on('hi', (p1, p2, p3, p4) => { }, { once: true });
     app.run('hi', 1, 'xx', null, { a: 1 });
-    expect(app['_events']['hi'].length).toBe(0);
+    expect(app['_events']['hi']).toBeUndefined();
   });
 
   it('should run once', () => {
     const app = new App();
     app.once('hi1', (p1, p2, p3, p4) => { });
     app.run('hi1', 1, 'xx', null, { a: 1 });
-    expect(app['_events']['hi1'].length).toBe(0);
-  });
-
-  it('should allow off inside run', () => {
-    const app = new App();
-    const eventName = 'test';
-    const fn = (name: string, fn: any) => {
-      app.off(name, fn);
-    };
-
-    expect(app['_events'][eventName]).toBeUndefined();
-    app.on(eventName, fn);
-    app.run(eventName, eventName, fn);
-    expect(app['_events'][eventName].length).toBe(0);
-  });
-
-  it('should allow another on event inside run', () => {
-    const app = new App();
-    const eventName = 'test1';
-    const fn = (name: string, fn: any) => {
-      app.on(name, fn);
-    };
-
-    expect(app['_events'][eventName]).toBeUndefined();
-    app.on(eventName, fn);
-    app.run(eventName, eventName, fn);
-    expect(app['_events'][eventName].length).toBe(2);
-  });
-
-  it('should allow new on event inside run', () => {
-    const app = new App();
-    const eventName = 'test1';
-    const newEventName = 'test2';
-    const fn = (name: string, fn: any) => {
-      app.on(name, fn);
-    };
-
-    expect(app['_events'][eventName]).toBeUndefined();
-    app.on(eventName, fn);
-    app.run(eventName, newEventName, fn);
-    expect(app['_events'][eventName].length).toBe(1);
-    expect(app['_events'][newEventName].length).toBe(1);
+    expect(app['_events']['hi1']).toBeUndefined();
   });
 
   it('should allow off', () => {
@@ -86,7 +45,7 @@ describe('app events', () => {
     const fn = (a) => {}
     app.on('hi', fn);
     app.off('hi', fn);
-    expect(app['_events']['hi'].length).toBe(0);
+    expect(app['_events']['hi']).toBeUndefined();
   });
 
   it('should take delay option', (done) => {
@@ -163,6 +122,7 @@ describe('app events', () => {
     const app = new App();
     const hello = () => {};
     app.on('hello', hello);
+    debugger;
     const subs: number = app.run('hello');
     expect(subs).toBe(1);
     app.off('hello', hello);

@@ -17,9 +17,12 @@ export class App {
   }
 
   off(name: string, fn: (...args) => void): void {
-    const subscribers = this._events[name] || [];
-    
-    this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
+    let subscribers = this._events[name];
+    if (subscribers) {
+      subscribers = subscribers.filter((sub) => sub.fn !== fn);
+      if (subscribers.length) this._events[name] = subscribers;
+      else delete this._events[name]
+    }
   }
 
   find(name: string): any {
@@ -27,27 +30,23 @@ export class App {
   }
 
   run(name: string, ...args): number {
-    let subscribers = this._events[name] || [];
+    let subscribers = this._events[name];
+    console.assert(!!subscribers, 'No subscriber for event: ' + name);
+    if (subscribers) {
+      subscribers = subscribers.filter((sub) => {
+        const { fn, options } = sub;
+        if (options.delay) {
+          this.delay(name, fn, args, options);
+        } else {
+          fn.apply(this, args);
+        }
+        return !sub.options.once;
+      });
+      if (subscribers.length) this._events[name] = subscribers;
+      else delete this._events[name]
+    }
 
-    console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
-
-    // Update the list of subscribers by pulling out those which will run once.
-    // We must do this update prior to running any of the events in case they
-    // cause additional events to be turned off or on.
-    this._events[name] = subscribers.filter((sub) => {
-      return !sub.options.once;
-    });
-
-    subscribers.forEach((sub) => {
-      const { fn, options } = sub;
-      if (options.delay) {
-        this.delay(name, fn, args, options);
-      } else {
-        fn.apply(this, args);
-      }
-    });
-
-    return subscribers.length;
+    return subscribers ? subscribers.length : 0;
   }
 
   once(name: string, fn, options: any = {}): void {
