@@ -24,6 +24,7 @@ declare module 'apprun' {
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
+    find(name: string): any;
     run(name: string, ...args: any[]): number;
     createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
