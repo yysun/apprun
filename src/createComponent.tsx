@@ -14,7 +14,7 @@ function render(node, parent, idx) {
   } else {
     id = component['__eid'];
   }
-  component.mounted && component.mounted(props, children);
+  if (component.mounted) component.state = component.mounted(props, children);
   const state = component.state;
   let vdom = '';
   if (!(state instanceof Promise) && component.view) {
