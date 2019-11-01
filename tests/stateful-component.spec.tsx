@@ -160,6 +160,37 @@ describe('Stateful Component', () => {
     },10)
   });
 
+
+  it('should allow Promise returned from the mounted function', (done) => {
+    class Child4 extends Component {
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      mounted = ({ n }) => {
+        return new Promise(resolve =>
+          setTimeout(() => resolve(n +'!'))
+        )
+      }
+    }
+
+    class Main extends Component {
+      view = (state) => {
+        return <div>
+          <Child4 n='a' />
+        </div>
+      }
+    }
+
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    app.render(element, <Main />);
+    setTimeout(() => {
+      expect(element.textContent).toEqual('a!');
+      done();
+    }, 10)
+  });
+
+
   it('should off all events after unmount', () => {
     class Ch extends Component {
       update = {
