@@ -1,3 +1,4 @@
+import { EventOptions} from './types'
 export class App {
 
   private _events: Object;
@@ -12,7 +13,7 @@ export class App {
     this._events = {};
   }
 
-  on(name: string, fn: (...args) => void, options: any = {}): void {
+  on(name: string, fn: (...args) => void, options: EventOptions = {}): void {
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn, options });
   }
@@ -50,7 +51,7 @@ export class App {
     return subscribers ? subscribers.length : 0;
   }
 
-  once(name: string, fn, options: any = {}): void {
+  once(name: string, fn, options: EventOptions = {}): void {
     this.on(name, fn, { ...options, once: true });
   }
 

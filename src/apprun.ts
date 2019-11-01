@@ -1,7 +1,7 @@
 import app from './app';
 import { createElement, render, Fragment } from './vdom';
 import { Component } from './component';
-import { VNode, View, Action, Update, EventOptions } from './types';
+import { VNode, View, Action, Update, EventOptions, ActionOptions } from './types';
 import { on, update, customElement } from './decorator';
 import webComponent, { CustomElementOptions } from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
@@ -51,7 +51,7 @@ if (typeof document === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, EventOptions }
+export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions }
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions };

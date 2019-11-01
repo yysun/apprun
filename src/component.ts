@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, EventOptions } from './types';
+import { View, Update, ActionDef, ActionOptions } from './types';
 import directive from './directive';
 
 const componentCache = {};
@@ -87,7 +87,7 @@ export class Component<T=any, E=any> {
     if (this.rendered) (this.rendered(this.state));
   }
 
-  public setState(state: T, options: EventOptions
+  public setState(state: T, options: ActionOptions
     = { render: true, history: false}) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
@@ -178,7 +178,7 @@ export class Component<T=any, E=any> {
       name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
   }
 
-  add_action(name: string, action, options: EventOptions = {}) {
+  add_action(name: string, action, options: ActionOptions = {}) {
     if (!action || typeof action !== 'function') return;
     if (options.global) this. _global_events.push(name);
     this.on(name as any, (...p) => {
