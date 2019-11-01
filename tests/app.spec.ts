@@ -124,7 +124,7 @@ describe('app events', () => {
     const app = new App();
     spyOn(console, 'assert');
     let i = 0;
-    app.on('hi', () => { i++; }, {one: true, delay: 200});
+    app.on('hi', () => { i++; }, {once: true, delay: 200});
     app.run('hi');
     app.run('hi');
     app.run('hi');

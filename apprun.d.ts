@@ -14,8 +14,8 @@ declare module 'apprun' {
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
   export type Route = (url: string, ...args: any[]) => any;
   export type EventOptions<T = any> = {
-    render?: boolean, history?: boolean, global?: boolean;
-    callback?: (state: T) => void
+    once?: boolean;
+    delay?: number;
   };
 
   export interface IApp {
