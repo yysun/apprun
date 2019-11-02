@@ -23,7 +23,7 @@ function closeWin() {
   win.document.close();
 }
 
-const _createEventTests = () => {
+export const _createEventTests = () => {
   const o = { components: {} };
   app.run('get-components', o);
   const { components } = o;
@@ -54,7 +54,7 @@ app.on('debug', p => {
   }
 });
 
-const _createStateTests = (s) => {
+export const _createStateTests = (s) => {
 
   const printTests = () => {
     if (events.length === 0) {
@@ -87,10 +87,10 @@ const _createStateTests = (s) => {
   }
 }
 
-window['_apprun-create-event-tests'] = ['create-event-tests',
-  () => _createEventTests()
-]
+// window['_apprun-create-event-tests'] = ['create-event-tests',
+//   () => _createEventTests()
+// ]
 
-window['_apprun-create-state-tests'] = ['create-state-tests <start|stop>',
-  (p?) => _createStateTests(p)
-]
+// window['_apprun-create-state-tests'] = ['create-state-tests <start|stop>',
+//   (p?) => _createStateTests(p)
+// ]
