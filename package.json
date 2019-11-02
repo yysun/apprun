@@ -37,19 +37,19 @@
     "commander": "^2.20.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.4.0",
-    "jasmine-core": "^3.4.0",
+    "@types/jasmine": "^3.4.5",
+    "jasmine-core": "^3.5.0",
     "jest": "^24.9.0",
     "json-loader": "^0.5.7",
     "marked": "^0.7.0",
     "morphdom": "^2.5.3",
-    "ts-jest": "^24.0.2",
-    "ts-loader": "^6.0.4",
-    "tslint": "^5.15.0",
-    "typescript": "^3.5.3",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.1",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
   },
   "jest": {
     "transform": {
