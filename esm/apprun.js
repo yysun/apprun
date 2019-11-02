@@ -1,0 +1,43 @@
+import app from './app';
+import { createElement, render, Fragment } from './vdom';
+import { Component } from './component';
+import { on, update, customElement } from './decorator';
+import webComponent from './web-component';
+import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+app.createElement = createElement;
+app.render = render;
+app.Fragment = Fragment;
+app.webComponent = webComponent;
+app.start = (element, model, view, update, options) => {
+    const opts = Object.assign(Object.assign({}, options), { render: true, global_event: true });
+    const component = new Component(model, view, update);
+    if (options && options.rendered)
+        component.rendered = options.rendered;
+    component.mount(element, opts);
+    return component;
+};
+const NOOP = _ => { };
+app.on('$', NOOP);
+app.on('debug', _ => NOOP);
+app.on(ROUTER_EVENT, NOOP);
+app.on('#', NOOP);
+app['route'] = route;
+app.on('route', url => app['route'] && app['route'](url));
+if (typeof document === 'object') {
+    document.addEventListener("DOMContentLoaded", () => {
+        if (app['route'] === route) {
+            window.onpopstate = () => route(location.hash);
+            route(location.hash);
+        }
+    });
+}
+export { app, Component, on, update };
+export { update as event };
+export { ROUTER_EVENT, ROUTER_404_EVENT };
+export { customElement };
+export default app;
+if (typeof window === 'object') {
+    window['Component'] = Component;
+    window['React'] = app;
+}
+//# sourceMappingURL=apprun.js.map
