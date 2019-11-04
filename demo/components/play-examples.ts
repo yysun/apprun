@@ -325,5 +325,75 @@ class Test extends Component {
 }
 new Test().start(document.body);
 `
+  },
+  {
+    name: 'Calculator',
+    code: `// Calculator
+    const state = {
+      value: 0,
+      input: '',
+      done: true
+    };
+    const view = ({input, value}) => <>
+      <style>{\`
+    .calculator { width: 200px; }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 2px;
+    }
+    button { padding: 10px; width:100%; }
+    button:nth-of-type(1) {
+      grid-column: span 3;
+    }
+    button:nth-of-type(15) {
+      grid-column: span 2;
+    }
+    \`}</style>
+      <div class="calculator">
+        <h1>{value}</h1>
+        <div class="buttons" $onclick='oninput'>
+          <button>C</button>
+          <button>/</button>
+          <button>7</button>
+          <button>8</button>
+          <button>9</button>
+          <button>*</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button>-</button>
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>+</button>
+          <button>0</button>
+          <button>.</button>
+          <button>=</button>
+        </div>
+        <small>{input}</small>
+      </div>
+      </>;
+
+    const update = {
+      'oninput': ({value, input, done}, e) => {
+        const c = e.target.textContent;
+        switch(c) {
+          case 'C':
+            return { value: 0, input: '', done: true}
+          case '=':
+            const val = eval(input);
+            return { value:val, input:\`\${input}=\${val}\`, done: true}
+          default:
+            const isNumber = /\\d|\\./.test(c);
+            done && isNumber && (value = 0);
+            input.indexOf('=') >0 && (input = value || '');
+            return { value: isNumber?(value||'') + c : value,
+                    input: input + c, done: !isNumber}
+        }
+      }
+    }
+    app.start(document.body, state, view, update);
+`
   }
 ];
