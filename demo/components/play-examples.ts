@@ -378,20 +378,24 @@ new Test().start(document.body);
     const update = {
       'oninput': ({value, input, done}, e) => {
         const c = e.target.textContent;
-        switch(c) {
+        switch (c) {
           case 'C':
-            return { value: 0, input: '', done: true}
+            return { value: '0', input: '', done: true }
           case '=':
-            const val = eval(input);
-            return { value:val, input:\`\${input}=\${val}\`, done: true}
+            input = input || 0;
+            value = eval(input).toString();
+            return { value, input: \`\${input} = \${value}\`, done: true }
           default:
-            const isNumber = /\\d|\\./.test(c);
+            const isNumber = /\d|\./.test(c);
             done && isNumber && (value = 0);
-            input.indexOf('=') >0 && (input = value || '');
-            return { value: isNumber?(value||'') + c : value,
-                    input: input + c, done: !isNumber}
+            done && !isNumber && (input = !input ? value : input.substring(0, input.length - 1))
+            input.indexOf('=') > 0 && (input = value || '');
+            return {
+              value: isNumber ? (value || '') + c : value,
+              input: input + c, done: !isNumber
         }
       }
+    }
     }
     app.start(document.body, state, view, update);
 `
