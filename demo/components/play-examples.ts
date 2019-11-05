@@ -393,11 +393,31 @@ new Test().start(document.body);
             return {
               value: isNumber ? (value || '') + c : value,
               input: input + c, done: !isNumber
+            }
         }
       }
     }
-    }
     app.start(document.body, state, view, update);
+`
+  },
+  {
+    name: 'Shadow DOM',
+    code: `// Shadow DOM
+const Shadow = (_, children) => {
+  const el = document.createElement('section');
+  el.attachShadow({ mode: 'open' });
+  app.render(el.shadowRoot, children);
+  return <>{el}</>;
+};
+
+const View = () => <>
+  <div>black</div>
+  <Shadow>
+    <style>{'div {color: red}'}</style>
+    <div>red</div>
+  </Shadow>
+</>
+app.render(document.body, <View />);
 `
   }
 ];
