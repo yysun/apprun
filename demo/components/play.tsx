@@ -20,8 +20,9 @@ const html = code => `<!DOCTYPE html>
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/pikaday@latest/css/pikaday.css">
+  <script src="https://unpkg.com/moment/min/moment.min.js"></script>
   <script src="https://unpkg.com/pikaday@latest/pikaday.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/pikaday@latest/css/pikaday.css">
 </head>
 <body>
 <script type="text/babel" data-presets="es2017, react">
@@ -96,10 +97,10 @@ export class PlayComponent extends Component {
       history.pushState(null, null, '#play/' + e.target.selectedIndex);
       this.codeEditor.setValue(this.state.code);
     },
-    'change': (state, code) => {
+    'change': [(state, code) => {
       state.code = code;
       run(state);
-    },
+      }, {delay: 500}],
     'openTab': (state, e) => {
       e.preventDefault();
       tab(state);
