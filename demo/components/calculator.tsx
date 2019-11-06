@@ -60,9 +60,13 @@ export const onInput = ({ value, input, done }, c) => {
       return { value, input: `${input}=${value}`, done: true }
     default:
       const isNumber = /\d|\./.test(c);
-      done && isNumber && (value = 0);
-      done && !isNumber && (input = !input ? value : input.substring(0, input.length - 1))
-      input.indexOf('=') > 0 && (input = value || '');
+      if (input.indexOf('=') > 0) {
+        isNumber && (input = value = '');
+        !isNumber && (input = value || '');
+      } else if (done) {
+        isNumber && (value = '');
+        !isNumber && (input = input || value)
+      }
       return {
         value: isNumber ? (value || '') + c : value,
         input: input + c, done: !isNumber

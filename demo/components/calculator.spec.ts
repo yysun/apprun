@@ -52,12 +52,12 @@ describe('calculator', () => {
     expect(done).toBe(false);
   })
 
-  it('case 6', () => {
-    const { value, input, done } = click(['1', '/', '/']);
-    expect(value).toBe('1');
-    expect(input).toBe('1/');
-    expect(done).toBe(true);
-  })
+  // it('case 6', () => {
+  //   const { value, input, done } = click(['1', '/', '/']);
+  //   expect(value).toBe('1');
+  //   expect(input).toBe('1/');
+  //   expect(done).toBe(true);
+  // })
 
   // it('case 7', () => {
   //   const { value, input, done } = click(['1', '/', '=']);
@@ -66,12 +66,12 @@ describe('calculator', () => {
   //   expect(done).toBe(true);
   // })
 
-  it('case 8', () => {
-    const { value, input, done } = click(['1', '/', '+']);
-    expect(value).toBe('1');
-    expect(input).toBe('1+');
-    expect(done).toBe(true);
-  })
+  // it('case 8', () => {
+  //   const { value, input, done } = click(['1', '/', '+']);
+  //   expect(value).toBe('1');
+  //   expect(input).toBe('1+');
+  //   expect(done).toBe(true);
+  // })
 
   it('case 9', () => {
     const { value, input, done } = click(['1', '/', '1', '0']);
@@ -113,6 +113,13 @@ describe('calculator', () => {
     expect(value).toBe('5');
     expect(input).toBe('5');
     expect(done).toBe(false);
+  })
+
+  it('case 15', () => {
+    const { value, input, done } = click(['1', '+', '2', '=', '/']);
+    expect(value).toBe('3');
+    expect(input).toBe('3/');
+    expect(done).toBe(true);
   })
 
 });
