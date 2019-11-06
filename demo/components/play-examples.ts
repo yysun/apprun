@@ -7,7 +7,7 @@ const view = state => <div>
   <h1>Hello {state}</h1>
   <input $bind />
 </div>;
-app.start(document.body, state, view, {});
+app.start(document.body, state, view);
 `
   },
 
@@ -140,9 +140,8 @@ class Counter extends Component {
     '-1': state => state - 1
   };
 }
-const wc = document.createElement('my-app');
-document.body.appendChild(wc);
 app.webComponent('my-app', Counter);
+app.render(document.body, <my-app />);
 `
   },
 
@@ -167,49 +166,6 @@ const update = {
 app.start(document.body, state, view, update);
 `
   },
-
-//   {
-//     name: '$bind Directives',
-//     code: `// $bind Directives
-// const state = {
-//   a:'a',
-//   b:'b',
-//   c:5,
-//   d:true,
-//   e:'A',
-//   f:5,
-//   h:1,
-//   o1: false,
-//   o2: true,
-//   o3: false
-// };
-// const view = state => <>
-//   state: {state}<hr/>
-//   a: <input $bind name='a' /><br/>
-//   b: <input $bind='b' /><br/>
-//   c: <input type='number' name='c' $bind /><br/>
-//   d: <input type='checkbox' name='d' $bind /><br/>
-//   e: <input type='radio' name='e' value='A' $bind /> A
-//      <input type='radio' name='e' value='B' $bind /> B <br/>
-//   f: <input type='range' min='0' max='5' name='f' $bind /><br/>
-
-//   h: <select $bind name='h'>
-//     <option>0</option>
-//     <option>1</option>
-//     <option>2</option>
-//     <option>3</option>
-//   </select><br/>
-
-//   i: <select multiple name='i'>
-//     <option $bind='o1'>1</option>
-//     <option $bind='o2'>2</option>
-//     <option $bind='o3'>3</option>
-//   </select>
-// </>
-// app.start(document.body, state, view, {});
-// `
-//   },
-
   {
     name: 'Animation Directive',
     code: `// Animation Directive
@@ -245,30 +201,27 @@ app.start(document.body, state, view);
     name: 'Pikaday Directive and $bind',
     code: `// Pikaday Directive and $bind
 const state = { day: '8/19/2016' }
-
-const DatePicker = (id, format) => {
-  setTimeout(()=>{
-    const input = document.getElementById(id);
-    console.assert(!!input, 'Cannot find input for date picker, missing Id?');
-    const pik = new Pikaday({
-      format: !format|| format===true?'MM/DD/YYYY': format,
-      field: input,
-      onSelect: d => {
-        pik.destroy();
-        input.dispatchEvent(new Event('input'));
-      }
-    });
-  });
-}
-
 app.on('$', ({key, props}) => {
-  key === '$pikaday' && DatePicker(props['id'], props[key]);
+  if(key === '$pikaday') {
+    props['ref'] = props['ref'] || {};
+    setTimeout(()=>{
+      const input = props['ref'].value;
+      const pik = new Pikaday({
+        format: 'MM/DD/YYYY',
+        field: input,
+        onSelect: d => {
+          pik.destroy();
+          input.dispatchEvent(new Event('input'));
+        }
+      });
+	});
+  }
 });
 
 const view = state => <>
   <h1>{state.day}</h1>
-  <input $bind='day' $pikaday="MM/DD/YYYY"
-    autocomplete="off" id="datepicker" placeholder="Click to pick a date"/>
+  <input $bind='day' $pikaday
+    autocomplete="off" placeholder="Click to pick a date"/>
 </>
 
 app.start(document.body, state, view);
