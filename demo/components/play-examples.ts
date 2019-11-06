@@ -226,50 +226,53 @@ const state = {
   animation: true
 }
 
+const start_animation = state => ({ animation: true })
+const stop_animation = state => ({ animation: false })
+
 const view = state => <>
   <img $animation={state.animation && 'bounce infinite'} src='logo.png' />
   <div $animation='bounceInRight'>
-    <button disabled={state.animation} $onclick='start-animation'>start</button>
-    <button disabled={!state.animation} $onclick='stop-animation'>stop</button>
+    <button disabled={state.animation} $onclick={start_animation}>start</button>
+    <button disabled={!state.animation} $onclick={stop_animation}>stop</button>
   </div>
 </>
 
-const update = {
-  'start-animation': state => ({ ...state, animation: true }),
-  'stop-animation': state => ({...state, animation: false})
-}
-app.start(document.body, state, view, update);
+app.start(document.body, state, view);
 `
   },
 
   {
-    name: 'Pikaday',
-    code: `// Pikaday
-
+    name: 'Pikaday Directive and $bind',
+    code: `// Pikaday Directive and $bind
 const state = { day: '8/19/2016' }
 
-const view = state => <>
-  <h1>{state}</h1>
-  <input autocomplete="off" id="datepicker" placeholder="Click to pick a date"/>
-</>
-const update = {
-  'set-date': (state, e) => ({ ...state, day: e })
-}
-
-app.start(document.body, state, view, update, {
-  rendered: () => {
-    const input = document.getElementById('datepicker')
-    let pik = new Pikaday({
+const DatePicker = (id, format) => {
+  setTimeout(()=>{
+    const input = document.getElementById(id);
+    console.assert(!!input, 'Cannot find input for date picker, missing Id?');
+    const pik = new Pikaday({
+      format: !format|| format===true?'MM/DD/YYYY': format,
       field: input,
       onSelect: d => {
         pik.destroy();
-        app.run('set-date', d.toLocaleDateString());
+        input.dispatchEvent(new Event('input'));
       }
-    })
-  }
-});
-`},
+    });
+  });
+}
 
+app.on('$', ({key, props}) => {
+  key === '$pikaday' && DatePicker(props['id'], props[key]);
+});
+
+const view = state => <>
+  <h1>{state.day}</h1>
+  <input $bind='day' $pikaday="MM/DD/YYYY"
+    autocomplete="off" id="datepicker" placeholder="Click to pick a date"/>
+</>
+
+app.start(document.body, state, view);
+`},
   {
     name: 'Child Component',
     code: `// Child Component
