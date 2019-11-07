@@ -203,9 +203,7 @@ app.start(document.body, state, view);
 const state = { day: '8/19/2016' }
 app.on('$', ({key, props}) => {
   if(key === '$pikaday') {
-    props['ref'] = props['ref'] || {};
-    setTimeout(()=>{
-      const input = props['ref'].value;
+    props['ref'] = input => {
       const pik = new Pikaday({
         format: 'MM/DD/YYYY',
         field: input,
@@ -214,7 +212,7 @@ app.on('$', ({key, props}) => {
           input.dispatchEvent(new Event('input'));
         }
       });
-	});
+    }
   }
 });
 

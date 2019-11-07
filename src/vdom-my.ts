@@ -159,9 +159,6 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
 
 function updateProps(element: Element, props: {}) {
   console.assert(!!element);
-  if (props && typeof props['ref'] === 'object') {
-    props['ref']['value'] = element;
-  }
   // console.log('updateProps', element, props);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
@@ -192,6 +189,9 @@ function updateProps(element: Element, props: {}) {
         element[name] = value;
     }
     if (name === 'key' && value) keyCache[value] = element;
+  }
+  if (props && typeof props['ref'] === 'function') {
+    window.requestAnimationFrame(()=>props['ref'](element));
   }
 }
 
