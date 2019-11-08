@@ -30,7 +30,7 @@ function render(node, parent, idx) {
         }
         else {
             vdom = component._view(state, props);
-            component.rendered && setTimeout(() => component.rendered(state, props));
+            component.rendered && requestAnimationFrame(() => component.rendered(state, props));
         }
     }
     return app.createElement("section", Object.assign({}, props, { id: id }), vdom);

@@ -6,9 +6,10 @@
 
 ## 1.22 / 2.22
 
-*  Allow event to be turned or off inside a run call
-* Allow mounted life cycle function to return state and Promise of state
-* Merge dev-tools into one file: apprun-dev-tools.js
+* Call ref attribute in JSX as a function
+* Allow event to be turned or off inside a run call
+* Allow mounted life cycle function to return state and Promise of state
+* Merge dev-tools into one file: apprun-dev-tools.js
 
 ## 1.21 / 2.21
 

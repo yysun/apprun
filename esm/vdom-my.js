@@ -201,6 +201,9 @@ function updateProps(element, props) {
         if (name === 'key' && value)
             keyCache[value] = element;
     }
+    if (props && typeof props['ref'] === 'function') {
+        window.requestAnimationFrame(() => props['ref'](element));
+    }
 }
 export function Fragment(props, ...children) {
     return collect(children);
