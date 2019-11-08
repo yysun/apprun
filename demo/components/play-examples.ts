@@ -196,34 +196,15 @@ const view = state => <>
 app.start(document.body, state, view);
 `
   },
-
   {
-    name: 'Pikaday Directive and $bind',
-    code: `// Pikaday Directive and $bind
-const state = { day: '8/19/2016' }
-app.on('$', ({key, props}) => {
-  if(key === '$pikaday') {
-    props['ref'] = input => {
-      input['pik'] && input['pik'].destroy();
-      input['pik'] = new Pikaday({
-        format: 'MM/DD/YYYY',
-        field: input,
-        onSelect: d => {
-          input.dispatchEvent(new Event('input'));
-        }
-      });
-    }
-  }
-});
+    name: 'Ref - focus',
+    code: `// Ref - focus
+const ref = e => e.focus()
+const View = () => <input ref={ref}/>
 
-const view = state => <>
-  <h1>{state.day}</h1>
-  <input $bind='day' $pikaday
-    autocomplete="off" placeholder="Click to pick a date"/>
-</>
-
-app.start(document.body, state, view);
-`},
+app.render(document.body, <View />);
+`
+  },
   {
     name: 'Child Component',
     code: `// Child Component
@@ -375,15 +356,6 @@ const View = () => <>
     <div>red</div>
   </Shadow>
 </>
-app.render(document.body, <View />);
-`
-  },
-  {
-    name: 'Ref - focus',
-    code: `// Ref - focus
-const ref = e => e.focus()
-const View = () => <input ref={ref}/>
-
 app.render(document.body, <View />);
 `
   }
