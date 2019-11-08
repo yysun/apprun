@@ -25,7 +25,7 @@ function render(node, parent, idx) {
       state.then(() => component.run('.'));
     } else {
       vdom = component._view(state, props);
-      component.rendered && setTimeout(() => component.rendered(state, props));
+      component.rendered && requestAnimationFrame(() => component.rendered(state, props));
     }
   }
   return <section {...props} id={id}>{vdom}</section>;
