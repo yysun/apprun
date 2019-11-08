@@ -245,20 +245,19 @@ new App().start(document.body);
   },
 
   {
-    name: 'Element in JSX',
-    code: `// Element in JSX
-
-class Test extends Component {
-  state = 'world';
-  view = state => {
-    const element = document.createElement('div');
-    element.innerHTML = 'hello ' + state;
+    name: 'Element in JSX - canvas',
+    code: `// Element in JSX - canvas
+const View = () => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext("2d");
+  ctx.beginPath();
+  ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+  ctx.stroke();
     return <div>
-      {element}
+    {canvas}
     </div>
   }
-}
-new Test().start(document.body);
+app.render(document.body, <View/>);
 `
   },
   {
