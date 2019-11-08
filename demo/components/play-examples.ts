@@ -5,7 +5,7 @@ export default [
 const state = '';
 const view = state => <div>
   <h1>Hello {state}</h1>
-  <input $bind />
+  <input autofocus $bind />
 </div>;
 app.start(document.body, state, view);
 `
@@ -17,12 +17,13 @@ app.start(document.body, state, view);
 const state = { who: 'World' };
 const view = ({who}) => <div>
   <h1>Hello {who}</h1>
-  <p><input $oninput value={who}/> $oninput</p>
+  <p><input $oninput value={who} autofocus/> $oninput</p>
   <p><input $oninput="hello" value={who}/> $oninput="event"</p>
+  <p><input $oninput={["hello"]} value={who}/> $oninput=Tuple ["event", ...p]</p>
   <p><input $oninput={hello} value={who}/> $oninput=Function</p>
   <p><input $oninput={[hello]} value={who}/> $oninput=Tuple [Function, ...p] </p>
 </div>;
-// update tuple, new in 1.19.2
+
 const update = [
   ['oninput, hello', (_, e) => ({who:e.target.value})]
 ];
@@ -37,7 +38,7 @@ app.start(document.body, state, view, update);
 const state = '';
 const view = state => <div>
   <h1>Hello {state}</h1>
-  <input $oninput />
+  <input autofocus $oninput />
 </div>;
 const update = {
   'oninput': [(_, e) => e.target.value, { delay: 300 }]
@@ -253,10 +254,10 @@ const View = () => {
   ctx.beginPath();
   ctx.arc(95, 50, 40, 0, 2 * Math.PI);
   ctx.stroke();
-    return <div>
+  return <div>
     {canvas}
-    </div>
-  }
+  </div>
+}
 app.render(document.body, <View/>);
 `
   },
@@ -353,7 +354,9 @@ const View = () => <>
   <Shadow>
     <style>{'div {color: red}'}</style>
     <div>red</div>
+    <div>red</div>
   </Shadow>
+  <div>black</div>
 </>
 app.render(document.body, <View />);
 `

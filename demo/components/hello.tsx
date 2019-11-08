@@ -4,7 +4,7 @@ export class HelloComponent extends Component {
   model = 'world';
   view = state => <div>
     <h1>Hello: {state}</h1>
-    <input oninput={e => this.run('input', e)} />
+    <input autofocus oninput={e => this.run('input', e)} />
   </div>
 
   @on('#hello')
