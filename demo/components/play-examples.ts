@@ -204,11 +204,11 @@ const state = { day: '8/19/2016' }
 app.on('$', ({key, props}) => {
   if(key === '$pikaday') {
     props['ref'] = input => {
-      const pik = new Pikaday({
+      input['pik'] && input['pik'].destroy();
+      input['pik'] = new Pikaday({
         format: 'MM/DD/YYYY',
         field: input,
         onSelect: d => {
-          pik.destroy();
           input.dispatchEvent(new Event('input'));
         }
       });
@@ -340,7 +340,7 @@ new Test().start(document.body);
             value = eval(input).toString();
             return { value, input: \`\${input} = \${value}\`, done: true }
           default:
-            const isNumber = /\d|\./.test(c);
+            const isNumber = /\\d|\\./.test(c);
             if (input.indexOf('=') > 0) {
               isNumber && (input = value = '');
               !isNumber && (input = value || '');
@@ -375,6 +375,15 @@ const View = () => <>
     <div>red</div>
   </Shadow>
 </>
+app.render(document.body, <View />);
+`
+  },
+  {
+    name: 'Ref - focus',
+    code: `// Ref - focus
+const ref = e => e.focus()
+const View = () => <input ref={ref}/>
+
 app.render(document.body, <View />);
 `
   }
