@@ -91,24 +91,6 @@ const update = {
 app.start(document.body, state, view, update);
 `
   },
-
-  {
-    name: 'Counter (JSX)',
-    code: `// Counter (JSX)
-const state = 0;
-const view = state => <div>
-  <h1>{state}</h1>
-  <button $onclick='-1'>-1</button>
-  <button $onclick='+1'>+1</button>
-</div>;
-const update = {
-  '+1': state => state + 1,
-  '-1': state => state - 1
-};
-app.start(document.body, state, view, update);
-`
-  },
-
   {
     name: 'Counter (HTML)',
     code: `// Counter (HTML)
@@ -125,7 +107,36 @@ const update = {
 app.start(document.body, state, view, update);
 `
   },
+  {
+    name: 'Counter (JSX)',
+    code: `// Counter (JSX)
+const state = 0;
+const view = state => <div>
+  <h1>{state}</h1>
+  <button onclick={()=>app.run('-1')}>-1</button>
+  <button onclick={()=>app.run('+1')}>+1</button>
+</div>;
+const update = {
+  '+1': state => state + 1,
+  '-1': state => state - 1
+};
+app.start(document.body, state, view, update);
+`
+  },
+  {
+    name: 'Counter (JSX Directive)',
+    code:`// Counter (JSX Directive)
+const state = 0;
+const add = (state, n) => state + n;
+const view = state => <div>
+  <h1>{state}</h1>
+  <button $onclick={[add, -1]}>-1</button>
+  <button $onclick={[add, 1]}>+1</button>
+</div>;
 
+app.start(document.body, state, view);
+  `
+  },
   {
     name: 'Counter (Web Component)',
     code: `// Counter (Web Component)
@@ -145,7 +156,6 @@ app.webComponent('my-app', Counter);
 app.render(document.body, <my-app />);
 `
   },
-
   {
     name: 'Async fetch',
     code: `// Async fetch
