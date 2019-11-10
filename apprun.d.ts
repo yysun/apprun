@@ -41,7 +41,7 @@ declare module 'apprun' {
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
     rendered: (state: T, props?: any[]) => void;
-    mounted: (props: any, children?: any[]) => T | void;
+    mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
     unload: (state: T) => void;
     render(element: HTMLElement, node: any): void;

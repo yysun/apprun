@@ -187,7 +187,7 @@ describe('Stateful Component', () => {
     setTimeout(() => {
       expect(element.textContent).toEqual('a!');
       done();
-    }, 10)
+    }, 100)
   });
 
 
