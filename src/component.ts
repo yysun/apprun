@@ -24,6 +24,7 @@ export class Component<T=any, E=any> {
   public mounted;
   public unload;
   private tracking_id;
+  private observer;
 
   render(element: HTMLElement, node) {
     app.render(element, node, this);
@@ -64,17 +65,17 @@ export class Component<T=any, E=any> {
       const tracking_attr = '_c';
       if (!this.unload) {
         el.removeAttribute && el.removeAttribute(tracking_attr);
-      } else if (el['_component'] !== this) {
+      } else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
         this.tracking_id = new Date().valueOf().toString();
         el.setAttribute(tracking_attr, this.tracking_id);
         if (typeof MutationObserver !== 'undefined') {
-          const observer = new MutationObserver(changes => {
+          if(!this.observer)  this.observer = new MutationObserver(changes => {
             if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
               this.unload(this.state);
-              observer.disconnect();
+              this.observer.disconnect();
             }
           });
-          observer.observe(document.body, {
+          this.observer.observe(document.body, {
             childList: true, subtree: true,
             attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
           });
@@ -156,7 +157,7 @@ export class Component<T=any, E=any> {
       this.on(options.history.next || 'history-next', this._history_next);
     }
     this.add_actions();
-    if (this.state === undefined) this.state = this['model'] != null ? this['model'] : {};
+    this.state = this.state ?? this['model'] ?? {};
     if (options.render) {
       this.setState(this.state, { render: true, history: true });
     } else {
@@ -230,7 +231,6 @@ export class Component<T=any, E=any> {
         this.add_action(name, action[0], action[1]);
       }
     });
-
   }
 
   public run(event: E, ...args) {
@@ -249,6 +249,7 @@ export class Component<T=any, E=any> {
   }
 
   public unmount() {
+    this.observer?.disconnect();
     this._actions.forEach(action => {
       const { name, fn } = action;
       this.is_global_event(name) ?
