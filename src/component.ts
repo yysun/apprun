@@ -69,13 +69,12 @@ export class Component<T=any, E=any> {
         el.setAttribute(tracking_attr, this.tracking_id);
         if (typeof MutationObserver !== 'undefined') {
           const observer = new MutationObserver(changes => {
-            const { removedNodes, oldValue } = changes[0];
-            if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >= 0) {
+            if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
               this.unload(this.state);
               observer.disconnect();
             }
           });
-          if (el.parentNode) observer.observe(el.parentNode, {
+          observer.observe(document.body, {
             childList: true, subtree: true,
             attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
           });
@@ -84,7 +83,7 @@ export class Component<T=any, E=any> {
       el['_component'] = this;
     }
     this.render(el, html);
-    if (this.rendered) (this.rendered(this.state));
+    this.rendered && this.rendered(this.state);
   }
 
   public setState(state: T, options: ActionOptions
