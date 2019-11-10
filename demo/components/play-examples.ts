@@ -17,11 +17,11 @@ app.start(document.body, state, view);
 const state = { who: 'World' };
 const view = ({who}) => <div>
   <h1>Hello {who}</h1>
-  <p><input $oninput value={who} autofocus/> $oninput</p>
+  <p><input $oninput value={who} /> $oninput</p>
   <p><input $oninput="hello" value={who}/> $oninput="event"</p>
   <p><input $oninput={["hello"]} value={who}/> $oninput=Tuple ["event", ...p]</p>
-  <p><input $oninput={hello} value={who}/> $oninput=Function</p>
-  <p><input $oninput={[hello]} value={who}/> $oninput=Tuple [Function, ...p] </p>
+  <p><input $oninput={hello} value={who}/> $oninput=Function Name</p>
+  <p><input $oninput={(_, e)=>({who:e.target.value})} value={who}/> $oninput=Function</p>
 </div>;
 
 const update = [
@@ -57,6 +57,32 @@ const update = {
 }
 window.setInterval(() => { app.run('timer') }, 1000);
 app.start(document.body, state, view, update);
+`
+  },
+
+  {
+    name: 'Clock (Component)',
+    code: `// Clock (Component)
+class Clock extends Component {
+  id;
+  state = new Date();
+  view = state => <>
+    <h1>{state.toLocaleTimeString()}</h1>
+    <button onclick={()=>document.body.innerHTML="Clock deleted"}>delete</button>
+  </>;
+  update = {
+    'timer': state => new Date()
+  }
+  mounted = () => {
+    this.id = window.setInterval(() => { this.run('timer') }, 1000);
+    console.log('timer started');
+  }
+  unload = () => {
+    window.clearInterval(this.id);
+    console.log('timer cleared');
+  }
+}
+app.render(document.body, <Clock />);
 `
   },
 
@@ -127,13 +153,11 @@ app.start(document.body, state, view, update);
     name: 'Counter (JSX Directive)',
     code:`// Counter (JSX Directive)
 const state = 0;
-const add = (state, n) => state + n;
 const view = state => <div>
   <h1>{state}</h1>
-  <button $onclick={[add, -1]}>-1</button>
-  <button $onclick={[add, 1]}>+1</button>
+  <button $onclick={state => state - 1}>+1</button>
+  <button $onclick={state => state + 1}>+1</button>
 </div>;
-
 app.start(document.body, state, view);
   `
   },
@@ -274,79 +298,81 @@ app.render(document.body, <View/>);
   {
     name: 'Calculator',
     code: `// Calculator
-    const state = {
-      value: 0,
-      input: '',
-      done: true
-    };
-    const view = ({input, value}) => <>
-      <style>{\`
-    .calculator { width: 200px; }
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 2px;
-    }
-    button { padding: 10px; width:100%; }
-    button:nth-of-type(1) {
-      grid-column: span 3;
-    }
-    button:nth-of-type(15) {
-      grid-column: span 2;
-    }
-    \`}</style>
-      <div class="calculator">
-        <h1>{value}</h1>
-        <div class="buttons" $onclick='oninput'>
-          <button>C</button>
-          <button>/</button>
-          <button>7</button>
-          <button>8</button>
-          <button>9</button>
-          <button>*</button>
-          <button>4</button>
-          <button>5</button>
-          <button>6</button>
-          <button>-</button>
-          <button>1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>+</button>
-          <button>0</button>
-          <button>.</button>
-          <button>=</button>
-        </div>
-        <small>{input}</small>
-      </div>
-      </>;
+const state = {
+  value: 0,
+  input: '',
+  done: true
+};
 
-    const update = {
-      'oninput': ({value, input, done}, e) => {
-        const c = e.target.textContent;
-        switch (c) {
-          case 'C':
-            return { value: '0', input: '', done: true }
-          case '=':
-            input = input || 0;
-            value = eval(input).toString();
-            return { value, input: \`\${input} = \${value}\`, done: true }
-          default:
-            const isNumber = /\\d|\\./.test(c);
-            if (input.indexOf('=') > 0) {
-              isNumber && (input = value = '');
-              !isNumber && (input = value || '');
-            } else if (done) {
-              isNumber && (value = '');
-              !isNumber && (input = input || value)
-            }
-            return {
-              value: isNumber ? (value || '') + c : value,
-              input: input + c, done: !isNumber
-            }
-        }
+const oninput = ({value, input, done}, e) => {
+  const c = e.target.textContent;
+  switch (c) {
+    case 'C':
+      return { value: '0', input: '', done: true }
+    case '=':
+      input = input || 0;
+      value = eval(input).toString();
+      return { value, input: \`\${input} = \${value}\`, done: true }
+    default:
+      const isNumber = /\\d|\\./.test(c);
+      if (input.indexOf('=') > 0) {
+        isNumber && (input = value = '');
+        !isNumber && (input = value || '');
+      } else if (done) {
+        isNumber && (value = '');
+        !isNumber && (input = input || value)
       }
-    }
-    app.start(document.body, state, view, update);
+      return {
+        value: isNumber ? (value || '') + c : value,
+        input: input + c, done: !isNumber
+      }
+  }
+}
+
+const view = ({input, value}) => <>
+  <style>
+{\`
+.calculator { width: 200px; }
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 2px;
+}
+button { padding: 10px; width:100%; }
+button:nth-of-type(1) {
+  grid-column: span 3;
+}
+button:nth-of-type(15) {
+  grid-column: span 2;
+}
+\`}
+  </style>
+  <div class="calculator">
+    <h1>{value}</h1>
+    <div class="buttons" $onclick={oninput}>
+      <button>C</button>
+      <button>/</button>
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button>*</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>-</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>+</button>
+      <button>0</button>
+      <button>.</button>
+      <button>=</button>
+    </div>
+    <small>{input}</small>
+  </div>
+</>;
+
+app.start(document.body, state, view);
 `
   },
   {
