@@ -1,7 +1,7 @@
 # Change Log
 
 ## Releases
-* apprun@latet: 1.x, stable, es5
+* apprun@latest: 1.x, stable, es5
 * apprun@es6: 2.x, stable, es2015, web component
 
 
@@ -10,6 +10,7 @@
 * Call ref attribute in JSX as a function
 * Allow event to be turned or off inside a run call
 * Allow mounted life cycle function to return state and Promise of state
+* Pass _state_ to mounted function
 * Merge dev-tools into one file: apprun-dev-tools.js
 
 ## 1.21 / 2.21

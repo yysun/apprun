@@ -1,7 +1,7 @@
-# Server Side Rendering
+# Server-Side Rendering
 
 
-AppRun is a front-end library for developing SPA. It also supports to render the SPAs on the server-side just like other frameworks. Furthermore, it also allows us to make existing traditional server-side rendered applications into SPAs. AppRun can make many existing applications build using the server-side model-view-control (MVC) architecture become SPAs easily.
+AppRun is a front-end library for developing SPA. It also supports to render the SPAs on the server-side, just like other frameworks. Furthermore, it also allows us to make existing traditional server-side rendered applications into SPAs. AppRun can make many existing applications built using the server-side model-view-control (MVC) architecture become SPAs quickly.
 
 ## SPA to SSR
 
@@ -14,7 +14,7 @@ Included in the [SSR AppRun application example](https://github.com/yysun/apprun
 * The AppRun components (components/*.tsx)
 * The client-side application (/public/spa.js).
 
-You can run the application on @glitch, https://apprun-ssr.glitch.me
+You can run the application on @glitch, https://apprun-ssr.glitch.me.
 
 
 ## SSR to SPA

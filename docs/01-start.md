@@ -78,7 +78,8 @@ You can also load AppRun directly from the unpkg.com CDN:
 <script type="module">
   import { html, render } from 'https://unpkg.com/lit-html?module';
   import { app } from 'https://unpkg.com/apprun@es6?module';
-  app.render = (element, html) => render(html, element); // overwrite AppRun render
+  // replace AppRun virtual DOM with lit-html render function
+  app.render = (element, html) => render(html, element);
   const view = state => html`<div>${state}</div>`;
   app.start(document.body, 0, view);
 </script>
@@ -86,11 +87,9 @@ You can also load AppRun directly from the unpkg.com CDN:
 </html>
 ```
 
-## Use TypeScript
+## TypeScript and Webpack
 
-#### CLI
-
-AppRun includes a command line tool (CLI) for creating TypeScript and webpack configured project.
+AppRun includes a command-line tool (CLI) for creating a TypeScript and webpack configured project.
 
 You can initialize a SPA project.
 
@@ -125,12 +124,12 @@ AppRun is so flexible that you can choose your favorite ways of using it.
 
 ## AppRun Site Framework
 
-[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
+[AppRun Site](https://github.com/yysun/apprun-site) is a framework for building AppRun applications. It has the following features:
 
 * Progressive Web App (PWA) - support offline
 * Single Page App (SPA) - routing using / or #
-* 4 built-in layouts and bring your own
-* Compile html, markdown pages to AppRun components
+* four built-in layouts and bring your own
+* Compile HTML, markdown pages to AppRun components
 * Auto generate the index of pages
 * Build app logic using AppRun/Web components
 * Targets ES5 or ES Module
