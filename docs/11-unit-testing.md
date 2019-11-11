@@ -1,8 +1,8 @@
 # Unit Testing
 
-AppRun architecture is unit test-oriented. The three-architectural parts _state_, _view_ and _update_ (event handlers) are decoupled. They are very easy to test.
+AppRun architecture is unit test-oriented. The three-architectural parts _state_, _view_, and _update_ (event handlers) are decoupled. They are straightforward to test.
 
-AppRun development environment includes the Jest framework . The convention to run the tests is to use the npm script:
+AppRun development environment includes the Jest framework. The convention to run the tests is to use the npm script:
 ```sh
 npm run jest
 ```
@@ -10,11 +10,11 @@ We can also runt the Jest testing interactive mode using the npm script:
 ```sh
 npm test
 ```
-Jest watches file changes and runs the test files only related to changed files. Jest also execute the tests in parallel. It is very fast to execute the tests. The interactive way for us to define which tests to be executed during the watch mode.
+Jest watches file changes and runs the test files only related to changed files. Jest also executes the tests in parallel. It is very fast to execute the tests. The interactive way for us to define which tests to be executed during the watch mode.
 
 ## Types of Testing
 
-There are two types of unit tests in AppRun application.
+There are two types of unit tests in the AppRun application.
 
 1. Test the _events-states_ - publishing the events and asset the states.
 2. Test the _state-vdom_ - set the states and asset the VDOM output of the _view_ function.
@@ -23,11 +23,10 @@ There are two types of unit tests in AppRun application.
 
 Creating unit tests could be tedious, but you can use the [AppRun CLI in Console](03-dev-tools) to generate the tests.
 
-First, include the two CLI scripts in your HTML.
+First, include the CLI scripts in your HTML.
 
 ```html
 <script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
-<script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools-tests.js"></script>
 ```
 
 ### Event-State Tests

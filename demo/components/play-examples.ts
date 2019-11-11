@@ -155,8 +155,10 @@ app.start(document.body, state, view, update);
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
-  <button $onclick={state => state - 1}>+1</button>
-  <button $onclick={state => state + 1}>+1</button>
+  <button $onclick={()=>add(state, -1)}>-1</button>
+  <button $onclick={()=>add(state, +1)}>+1</button>
+  <button $onclick={state=>state-1}>-1</button>
+  <button $onclick={state=>state+1}>+1</button>
 </div>;
 app.start(document.body, state, view);
   `
