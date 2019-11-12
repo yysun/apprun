@@ -22,7 +22,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
 
   connectedCallback() {
     if (this.isConnected && !this._component) {
-      const opts = { render: true, shadow: false, ...options };
+      const opts = options || {};
       this._shadowRoot = opts.shadow ? this.attachShadow({ mode: 'open' }) : this;
       const props = {}
       Array.from(this.attributes).forEach(item => props[item.name] = item.value);
@@ -35,6 +35,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
       }
       this.on = this._component.on.bind(this._component);
       this.run = this._component.run.bind(this._component);
+      if (!(opts.render===false)) this._component.run('.');
     }
   }
 
