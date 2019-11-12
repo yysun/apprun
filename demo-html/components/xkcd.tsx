@@ -2,7 +2,7 @@ import app, { Component, customElement } from '../../src/apprun';
 
 // example of async fetch using mounted
 
-@customElement('my-xkcd')
+@customElement('my-xkcd', {shadow: true, render: false})
 export default class extends Component {
   state = {};
 
@@ -16,13 +16,12 @@ export default class extends Component {
   </>;
 
   update = {
-    'loading': (state, loading) => ({ ...state, loading }),
+    'loading': (_, loading) => ({ loading: true }),
     'fetchComic': async _ => {
       this.run('loading', true);
       const response = await fetch('https://xkcd-imgs.herokuapp.com/');
       const comic = await response.json();
-      this.run('loading', false);
-      return { comic };
+      return { comic, loading: false };
     }
   };
 
