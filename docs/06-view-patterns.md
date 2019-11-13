@@ -34,6 +34,19 @@ const view = state => <div>
 </div>;
 ```
 
+You can also use other JavaScript view engine of your choice. E.g. li-html.
+
+```javascript
+import { html, render } from 'lit-html';
+// Replace AppRun's view engine with lit-html
+app.render = (element, html) => render(html, element);
+const view = state => html`<div>
+  <h1>${state}</h1>
+  <button @click=${()=>app.run("-1")}>-1</button>
+  <button @click=${()=>app.run("+1")}>+1</button>
+</div>`;
+```
+
 ## JSX
 
 JSX is a syntax sugar of function calls. You can compose the functions and apply dynamic and conditional rendering without the run-time cost of parsing the HTML string. Below is a list of view patterns of JSX
