@@ -184,7 +184,7 @@ app.render(document.body, <my-app />);
     name: 'Async fetch',
     code: `// Async fetch
 const state = {};
-view = state => <>
+const view = state => <>
   <div><button $onclick="fetchComic">fetch ...</button></div>
   {state.loading && <div>loading ... </div>}
   {state.comic && <img src={state.comic.url}/>}

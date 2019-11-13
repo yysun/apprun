@@ -94,8 +94,12 @@ Events are not only used for handling user interactions. They are used for every
 * [Routing](07-routing) is through event.
 * [Directive](07a-directive) is through event.
 
-Events can be strongly typed. If you are interested, please read this post: [Strong Typing in AppRun](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1).
+## Event Types
+
+Events can be strongly typed using TypeScript Discriminated Unions. If you are interested, please read this post: [Strong Typing in AppRun](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1).
 
 ![typed events](https://cdn-images-1.medium.com/max/1600/1*Z1y_-n7_Y1bzDUJuw0ORVw.png)
+
+## Event Scope
 
 So far, the AppRun events we see are global events, which means that the events are published and handled globally by all modules. Sometime, you may want to limit the events to a certain scope. You then can use [components](04-component).
