@@ -75,29 +75,27 @@ export class Component {
             if (!this.unload) {
                 el.removeAttribute && el.removeAttribute(tracking_attr);
             }
-            else if (el['_component'] !== this) {
+            else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
                 this.tracking_id = new Date().valueOf().toString();
                 el.setAttribute(tracking_attr, this.tracking_id);
                 if (typeof MutationObserver !== 'undefined') {
-                    const observer = new MutationObserver(changes => {
-                        const { removedNodes, oldValue } = changes[0];
-                        if (oldValue === this.tracking_id || Array.from(removedNodes).indexOf(el) >= 0) {
-                            this.unload(this.state);
-                            observer.disconnect();
-                        }
-                    });
-                    if (el.parentNode)
-                        observer.observe(el.parentNode, {
-                            childList: true, subtree: true,
-                            attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+                    if (!this.observer)
+                        this.observer = new MutationObserver(changes => {
+                            if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
+                                this.unload(this.state);
+                                this.observer.disconnect();
+                            }
                         });
+                    this.observer.observe(document.body, {
+                        childList: true, subtree: true,
+                        attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+                    });
                 }
             }
             el['_component'] = this;
         }
         this.render(el, html);
-        if (this.rendered)
-            (this.rendered(this.state));
+        this.rendered && this.rendered(this.state);
     }
     setState(state, options = { render: true, history: false }) {
         if (state instanceof Promise) {
@@ -127,6 +125,7 @@ export class Component {
         }
     }
     mount(element = null, options) {
+        var _a, _b;
         console.assert(!this.element, 'Component already mounted.');
         this.options = options = Object.assign(Object.assign({}, this.options), options);
         this.element = element;
@@ -137,8 +136,7 @@ export class Component {
             this.on(options.history.next || 'history-next', this._history_next);
         }
         this.add_actions();
-        if (this.state === undefined)
-            this.state = this['model'] != null ? this['model'] : {};
+        this.state = (_b = (_a = this.state, (_a !== null && _a !== void 0 ? _a : this['model'])), (_b !== null && _b !== void 0 ? _b : {}));
         if (options.render) {
             this.setState(this.state, { render: true, history: true });
         }
@@ -225,6 +223,8 @@ export class Component {
             this._app.on(name, fn, options);
     }
     unmount() {
+        var _a;
+        (_a = this.observer) === null || _a === void 0 ? void 0 : _a.disconnect();
         this._actions.forEach(action => {
             const { name, fn } = action;
             this.is_global_event(name) ?

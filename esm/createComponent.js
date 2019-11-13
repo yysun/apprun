@@ -19,21 +19,16 @@ function render(node, parent, idx) {
     }
     let state = component.state;
     if (component.mounted) {
-        const new_state = component.mounted(props, children);
+        const new_state = component.mounted(props, children, state);
         if (typeof new_state !== 'undefined')
             state = component.state = new_state;
     }
-    let vdom = '';
-    if (component.view) {
-        if (state instanceof Promise) {
-            state.then(() => component.run('.'));
-        }
-        else {
-            vdom = component._view(state, props);
-            component.rendered && requestAnimationFrame(() => component.rendered(state, props));
-        }
-    }
-    return app.createElement("section", Object.assign({}, props, { id: id }), vdom);
+    const vdom = state instanceof Promise ? '' : component._view(state, props);
+    const render = el => {
+        component.element = el;
+        component.setState(state);
+    };
+    return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }), vdom);
 }
 let _idx = 0;
 export default function createComponent(node, parent, idx = 0) {
