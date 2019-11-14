@@ -158,5 +158,11 @@ describe('vdom-jsx', () => {
     expect(document.body.innerHTML).toBe('<div><svg x="100"></svg></div>');
   });
 
+  it('should render false', () => {
+    const element = document.createElement('div');
+    const View = () => false;
+    app.render(element, <View />);
+    expect(element.innerHTML).toBe('');
+  });
 
 })
