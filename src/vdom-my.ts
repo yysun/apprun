@@ -1,5 +1,5 @@
 import createComponent from './createComponent';
-import { VNode } from './types';
+import { VDOM, VNode } from './types';
 export type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 const ATTR_PROPS = '_props';
@@ -35,10 +35,10 @@ const keyCache = {};
 
 export const updateElement = render;
 
-export function render(element: Element, nodes: VNode | VNode[], parent = {}) {
+export function render(element: Element, nodes: VDOM, parent = {}) {
   // console.log('render', element, node);
   // tslint:disable-next-line
-  if (nodes == null) return;
+  if (nodes == null || nodes === false) return;
 
   nodes = createComponent(nodes, parent);
 
