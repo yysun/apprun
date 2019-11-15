@@ -37,7 +37,8 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "commander": "^2.20.0"
+    "commander": "^2.20.0",
+    "lit-html": "^1.1.2"
   },
   "devDependencies": {
     "@types/jasmine": "^3.4.6",
@@ -45,7 +46,6 @@
     "jest": "^24.9.0",
     "json-loader": "^0.5.7",
     "marked": "^0.7.0",
-    "morphdom": "^2.5.10",
     "rollup": "^1.27.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-filesize": "^6.2.1",
