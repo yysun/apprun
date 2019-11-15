@@ -61,8 +61,11 @@
     "webpack-dev-server": "^3.9.0"
   },
   "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!lit-html).+\\.js"
+    ],
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.(t|j)sx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
@@ -75,7 +78,8 @@
     ],
     "globals": {
       "ts-jest": {
-        "diagnostics": true
+        "diagnostics": true,
+        "tsConfig": "tsconfig.jest.json"
       }
     }
   }
