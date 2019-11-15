@@ -7,7 +7,7 @@ declare module 'apprun' {
     props: {},
     children: Array<VNode | string>
   };
-  export type VDOM = boolean | string | VNode | Array<VNode | string>;
+  export type VDOM = false | string | VNode | Array<VNode | string>;
   export type View<T> = (state: T, props?) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
