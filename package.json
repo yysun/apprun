@@ -8,13 +8,13 @@
   "bin": "apprun-cli.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc -p src & rollup -c & webpack -p --mode production",
+    "build": "tsc -p src && rollup -c && webpack -p --mode production",
     "test": "jest --watch",
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start": "webpack-dev-server --mode development",
     "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html",
-    "rollup": "tsc -p src & rollup -c"
+    "rollup": "tsc -p src && rollup -c"
   },
   "keywords": [
     "JavaScript",
