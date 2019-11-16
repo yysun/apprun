@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
-		"target": "es2015",
+		"target": "esnext",
 		"module": "es2015",
 		"moduleResolution": "node",
 		"jsx": "react",
 		"reactNamespace": "app",
-		"lib": ["dom", "es2015", "es5"],
+		"lib": ["dom", "esnext", "es5"],
 		"experimentalDecorators": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
