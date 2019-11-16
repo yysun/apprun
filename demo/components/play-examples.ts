@@ -150,13 +150,27 @@ app.start(document.body, state, view, update);
 `
   },
   {
+    name: 'Counter (lit-html)',
+    code: `// Counter (lit-html)
+const state = 0;
+const view = state => html\`<div>
+  <h1>\${state}</h1>
+  <button @click=\${()=>app.run("-1")}>-1</button>
+  <button @click=\${()=>app.run("+1")}>+1</button>
+</div>\`;
+const update = {
+  '+1': state => state + 1,
+  '-1': state => state - 1
+};
+app.start(document.body, state, view, update);
+`
+  },
+  {
     name: 'Counter (JSX Directive)',
     code:`// Counter (JSX Directive)
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
-  <button $onclick={()=>add(state, -1)}>-1</button>
-  <button $onclick={()=>add(state, +1)}>+1</button>
   <button $onclick={state=>state-1}>-1</button>
   <button $onclick={state=>state+1}>+1</button>
 </div>;
