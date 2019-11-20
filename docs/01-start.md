@@ -59,7 +59,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 </head>
 <body>
 <script type="module">
-  import { app } from 'https://unpkg.com/apprun@es6?module';
+  import { app } from 'https://unpkg.com/apprun@es6/esm/apprun-html?module';
   const view = state => `<div>${state}</div>`;
   app.start(document.body, 0, view);
 </script>
@@ -76,10 +76,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 </head>
 <body>
 <script type="module">
-  import { html, render } from 'https://unpkg.com/lit-html?module';
-  import { app } from 'https://unpkg.com/apprun@es6?module';
-  // replace AppRun virtual DOM with lit-html render function
-  app.render = (element, html) => render(html, element);
+  import { app, html } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
   const view = state => html`<div>${state}</div>`;
   app.start(document.body, 0, view);
 </script>

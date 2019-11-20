@@ -29,21 +29,30 @@ Application logic is broken down into three separated parts in the AppRun archit
 * View — a function to display the state
 * Update — a collection of event handlers to update the state
 
-AppRun ties the three parts together and drives the applications.
+AppRun ties the three parts together and drives the applications using events.
 
 ## Quick Start
 
-### AppRun Playground
-
-Try the [AppRun Playground](https://apprun.js.org/#play).
-
-
-### Use AppRun in Browsers
-
-You can include AppRun in your html directly and use it with JavaScript.
-```javascript
-<script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
+AppRun is distributed on npm.
+```sh
+npm install apprun
 ```
+
+You can also load AppRun directly from the unpkg.com CDN:
+
+```javascript
+<script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+```
+Or use it as ES module from unpkg.com:
+```javascript
+<script type="module">
+  import { app, Component } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
+</script>
+```
+
+## Examples
+
+### Use AppRun in Browsers (HTML)
 
 Below is a counter application using AppRun ([Online Demo](https://apprun.js.org/#play/6)).
 ```html
@@ -53,8 +62,7 @@ Below is a counter application using AppRun ([Online Demo](https://apprun.js.org
   <title>Counter</title>
 </head>
 <body>
-  <script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
-  <div id="my-app"></div>
+  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
   <script>
     const state = 0;
     const view = state => {
@@ -68,39 +76,68 @@ Below is a counter application using AppRun ([Online Demo](https://apprun.js.org
       '+1': state => state + 1,
       '-1': state => state - 1
     };
-    app.start('my-app', state, view, update);
+    app.start(document.body, state, view, update);
   </script>
 </body>
 </html>
 ```
 
-### Use TypeScript and Webpack
+### Web Component (lit-HTML)
+
+Below is a counter application using AppRun ([Online Demo](https://glitch.com/~apprun-lit-html-wc)).
+
+```html
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Counter Web Component</title>
+</head>
+<body>
+  <wc-lit-html></wc-lit-html>
+  <script type="module">
+    import { app, Component } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
+    class Counter extends Component {
+      state = 0;
+      view = (state) => html`<div>
+      <h1>${state}</h1>
+        <button @click=${()=>this.run("add", -1)}>-1</button>
+        <button @click=${()=>this.run("add", +1)}>+1</button>
+      </div>`;
+      update =[
+        ['add', (state, n) => state + n]
+      ]
+    }
+    app.webComponent('wc-lit-html', Counter);
+  </script>
+</body>
+</html>
+```
+
+
+### Use JSX, Directive, TypeScript and Webpack
 
 You can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 ```sh
-npx apprun --init --spa
-npm start
-```
-To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --es6 flag:
-```sh
-npx apprun --init --spa --es6
+npx apprun --init
 npm start
 ```
 
-## AppRun Site Framework
+Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack ([Online Demo](https://apprun.js.org/#play/7)).
 
-[AppRun Site](https://github.com/yysun/apprun-site) is an framework for building AppRun applications. It has the following features:
 
-* Progressive Web App (PWA) - support offline
-* Single Page App (SPA) - routing using / or #
-* 4 built-in layouts and bring your own
-* Compile html, markdown pages to AppRun components
-* Auto generate the index of pages
-* Build app logic using AppRun/Web components
-* Targets ES5 or ES Module
+```javascript
+import app from 'apprun';
+const state = 0;
+const view = state => <div>
+  <h1>{state}</h1>
+  <button $onclick={state => state - 1}>+1</button>
+  <button $onclick={state => state + 1}>+1</button>
+</div>;
+app.start(document.body, state, view);
+```
+## AppRun Playground
 
-Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
-
+Try the [AppRun Playground](https://apprun.js.org/#play) to see more examples.
 
 ## Developer Tools
 
