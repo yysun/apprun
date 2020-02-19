@@ -1,8 +1,23 @@
 # Change Log
 
 ## Releases
-* apprun@latest: 1.x, stable, es5
-* apprun@es6: 2.x, stable, es2015, web component
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web component
+* apprun@next: 3.x, dev, es2015, lit-html
+
+
+## 1.22 / 2.22
+
+* Call ref attribute in JSX as a function
+* Allow event to be turned or off inside a run call
+* Allow mounted life cycle function to return state and Promise of state
+* Pass _state_ to mounted function
+* Merge dev-tools into one file: apprun-dev-tools.js
+
+## 1.21 / 2.21
+
+* Allow embedding elements in JSX
+* Use app['debug'] to turn on/off debug events and component cache
 
 ## 1.22 / 2.22
 
