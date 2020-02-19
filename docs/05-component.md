@@ -8,9 +8,12 @@ The component is a technique to decompose the large system into smaller, managea
 
 It is straightforward to create a component. You create a component class around the _state_, _view_, and _update_.
 
+### Component Class
+
+The component class is a subclass of AppRun Component class.
+
 ```javascript
 import {app, Component} from 'apprun';
-
 class Counter extends Component {
   state = '';
   view = state => <div/>;
@@ -18,7 +21,9 @@ class Counter extends Component {
 }
 ```
 
-### Render Component to Element
+The counter component uses the _class fields_ to define the _state_, _view_, and _update_. Thanks to the TypeScript, _class fields_ are compiled into the code that browsers can run. Also, TypeScript compiles the JSX in the _view_ function.
+
+### Render the Component
 
 To use the components, you can render it to an element.
 
@@ -28,16 +33,41 @@ app.render(element, <Counter />);
 ```
 When rendering the component, AppRun creates a component instance and render it to the element.
 
-### Mount Component to Element
+### Mount and Start
 
-Or you can mount the component instance to an element.
+Or you can create the component using the constructor and mount the component instance to an element or to an _element ID_. When the component is mounted to an _element ID_, It will render the element only when it exists.
+
 
 ```javascript
 const element = document.getElementById('my-app');
 new Counter().mount(element);
 ```
-This way, you have then control of the component instance. Also, the component can be mounted to an _element ID_. When the component is mounted to an _element ID_, It will not render the element if it cannot find it.
 
+You can also pass the initial state in to the component's constructor directly:
+
+```javascript
+new Counter(100).mount(element);
+```
+
+
+When the component is mounted, by default it won't display until the events come. It is useful in the single page application (SPA) scenario where you can mount all components at once. Each component is activated by the routing events.
+
+If you need the component to display the initial state, you can use the _start_ function.
+
+```javascript
+new Counter().start(document.body); // mount and display
+```
+
+You can render, mount, or start the component to _document.body_.
+
+```javascript
+//
+app.render(document.body, <Counter />);
+//
+new Counter().mount(document.body);
+//
+new Counter().start(document.body);
+```
 
 ## Child Component
 
@@ -63,42 +93,37 @@ class Parent extends Component {
 But, you are not forced into the nested component structure. Sometimes, mounting components are more flexible. Please read this post, [Redux vs. The React Context API vs. AppRun](https://medium.com/@yiyisun/redux-vs-the-react-context-api-vs-apprun-f324bee8cbbf).
 
 
-## Component Class
+## Component Events
 
-AppRun Component class uses several advanced JavaScript features, such as _class field_ and _decorator_. Thanks to the TypeScript, these language features are compiled into the code that browsers can run.
+Component provides a local scope for events. The _update_ registers the local events in the component. The _this.run_ function fires local events that can only be picked up inside the component.
 
-### Class Fields
-
-The counter component uses the _class fields_ to define the _state_, _view_, and _update_.
+> You can prefix the event name with #, / or @ to make it global.
 
 ```javascript
-import app, { Component } from 'apprun';
 class Counter extends Component {
-  state = 0;
-  view = state => <>
-    <h1>{state}</h1>
-    <button onclick={()=>app.run('-1')}>-1</button>
-    <button onclick={()=>app.run('+1')}>+1</button>
-  </>;
-  update = {
-    '+1': state => state + 1,
-    '-1': state => state - 1
-  };
+   update = {
+      '+1': state=>state+1, // local event
+      '#+1': state=>state+1, // global event
+   }
 }
 ```
 
+The _app.run_ fires the global events that can be picked up by all components.
+
+In addition to use the _update_ for defining event handlers, you can also use the @on decoratot or the $on directive.
+
 ### Event Handler Decorator
 
-We can use @on decorators to create the event handlers in the component class without using the _update_ object.
+In the component class we can use the TypeScript to compile the @on decorators to create the event handlers without using the _update_ object.
 
 ```javascript
-import app, { Component, on, event } from 'apprun';
+import app, { Component, on } from 'apprun';
 class Counter extends Component {
   state = 0;
   view = state => <>
     <h1>{state}</h1>
-    <button onclick={()=>app.run('-1')}>-1</button>
-  <  button onclick={()=>app.run('+1')}>+1</button>
+    <button onclick={()=>this.run('-1')}>-1</button>
+    <button onclick={()=>this.run('+1')}>+1</button>
   </>;
 
   @on('-1')
@@ -107,11 +132,28 @@ class Counter extends Component {
   @on('+1')
   increase = state => state + 1;
 }
-
 ```
-## Life Cycle Methods
 
-You can define call back functions to have AppRun call them during the component life cycle.
+### Event Directive
+
+We can also use the [directive](07a-directive) to simplify the event handling.
+
+```javascript
+import {app, Component} from 'apprun';
+class Counter extends Component {
+  state = 0;
+  view = state => <div>
+    <h1>{state}</h1>
+    <button $onclick={state=>state-1}>-1</button>
+    <button $onclick={state=>state+1}>+1</button>
+  </div>;
+}
+```
+
+
+## Life Cycle Functions
+
+Life Cycle Functions are call back functions that AppRun calls during the component life cycle. They are _mounted_, _rendered_, and _unload_.
 
 ```javascript
 import { app, Component } from 'apprun';
@@ -121,7 +163,7 @@ class MyApp extends Component {
   view = state => <div></div>;
   update = {};
 
-  //optional life cycle functions
+  //life cycle functions
   mounted = (props, children, state) => state;
   rendered = state => {};
   unload = state => {};
@@ -136,6 +178,26 @@ The _mounted_ function is called after the component instance is mounted to a DO
 ```javascript
 mounted: (props: any, children: any[], state: T) => T | void;
 
+```
+> Note: the _mounted_ function is only called in the child component.
+
+```javascript
+class Child extends Component {
+  state = {} // you can define the initial state
+  view = state => <div></div>
+  update = {}
+  mounted = (props, children) => { ...state, ...props } // this will be called, you can merge props into the state
+}
+
+class Parent extends Component {
+  state = {} // you can define the initial state
+  view = state => <div>
+    <Child />
+  </div>
+  update = {}
+  mounted = () => { } // this will NOT be called when component is created using the constructor
+}
+new Parent().start(document.body);
 ```
 
 ### rendered
