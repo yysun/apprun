@@ -161,8 +161,6 @@ const view = state => <div>
 app.start(document.body, state, view);
   `
   },
-  `
-  },
   {
     name: 'Counter (Web Component)',
     code: `// Counter (Web Component)

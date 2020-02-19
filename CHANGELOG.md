@@ -1,8 +1,9 @@
 # Change Log
 
 ## Releases
-* apprun@latest: 1.x, stable, es5
-* apprun@es6: 2.x, stable, es2015, web component
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web component
+* apprun@next: 3.x, dev, es2015, lit-html
 
 
 ## 1.22 / 2.22

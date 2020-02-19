@@ -38,7 +38,7 @@ export const updateElement = render;
 export function render(element, nodes, parent = {}) {
     // console.log('render', element, node);
     // tslint:disable-next-line
-    if (nodes == null)
+    if (nodes == null || nodes === false)
         return;
     nodes = createComponent(nodes, parent);
     if (!element)
