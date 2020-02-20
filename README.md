@@ -192,7 +192,7 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2019 Yiyi Sun
+Copyright (c) 2015-2020 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master
