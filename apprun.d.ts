@@ -66,4 +66,5 @@ declare module 'apprun' {
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
+  export const html, svg: Function;
 }
