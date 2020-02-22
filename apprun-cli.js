@@ -13,6 +13,7 @@ const main_tsx = path.resolve('./src/main.tsx');
 const spa_index = path.resolve('./index.html');
 const spa_main_tsx = path.resolve('./src/main.tsx');
 const readme_md = path.resolve('./README.md');
+const jest_config = path.resolve('./jest.config.js');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
@@ -21,7 +22,7 @@ const dir_tests = './tests';
 
 let show_start = false;
 let show_test = false;
-let es6 = false;
+let es5 = false;
 
 function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
@@ -54,13 +55,13 @@ function init() {
   console.log('Installing packages. This might take a couple minutes.');
   execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
 
-  es6 ?
-    execSync('npm install apprun@es6 --save') :
+  es5 ?
+    execSync('npm install apprun@es5 --save') :
     execSync('npm install apprun --save');
 
-  es6 ?
-    write(tsconfig_json, read('tsconfig.es6.json')) :
-    write(tsconfig_json, read('tsconfig.es5.json'));
+  es5 ?
+    write(tsconfig_json, read('tsconfig.es5.json')) :
+    write(tsconfig_json, read('tsconfig.es6.json'));
 
   write(webpack_config_js, read('webpack.config.js'))
   write(index_html, read('index.html'));
@@ -103,39 +104,10 @@ function component(name) {
   show_start = true;
 }
 
-function karma_init() {
-  console.log('Installing karma');
-  execSync('npm i @types/jasmine jasmine-core karma karma-chrome-launcher karma-jasmine karma-webpack --save-dev');
-  write('karma.conf.js', read('karma.conf.js'));
-  show_test = true;
-}
-
 function jest_init() {
   console.log('Installing jest');
   execSync('npm i @types/jest jest ts-jest --save-dev');
-
-  const jest_config = {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "globals": {
-      "ts-jest": {
-        "diagnostics": true
-      }
-    }
-  }
-  delete require.cache[require.resolve(package_json)];
-  const package_info = require(package_json) || {};
-  package_info["jest"] = jest_config
-
-  package_info["scripts"]["test"] = 'jest --watch';
-  fs.writeFileSync(
-    package_json,
-    JSON.stringify(package_info, null, 2)
-  );
-
+  write(jest_config, read('jest.config.js'), 'Creating');
   show_test = true;
 }
 
@@ -159,31 +131,29 @@ function spa() {
 
 program
   .name('apprun')
-  .version('1.16.2')
+  .version('2.22.3')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
   .option('-j, --jest', 'Install jest')
-  .option('-k, --karma', 'Install karma')
   .option('-t, --test <file>', 'Generate component spec')
   .option('-s, --spa', 'Generate SPA app')
-  .option('-e, --es6', 'Use apprun@es6')
+  .option('-5, --es5', 'Use apprun@es5')
   .parse(process.argv);
 
 program._name = 'apprun';
 
 if (!program.init && !program.component && !program.git && !program.jest &&
-  !program.karma && !program.test && !program.spa) {
+  !program.test && !program.spa) {
   program.outputHelp();
   process.exit()
 }
 
-if (program.es6) es6 = true;
+if (program.es5) es5 = true;
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
 if (program.jest) jest_init();
-if (program.karma) karma_init();
 if (program.test) component_spec(program.test);
 if (program.spa) spa();
 
