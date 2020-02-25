@@ -6,6 +6,11 @@
 * apprun@next: 3.x, dev, es2015, lit-html
 
 
+## 1.23 / 2.23
+
+* CLI installs ES2015 by default
+* Fix bug: view function called twice in create component
+
 ## 1.22 / 2.22
 
 * Call ref attribute in JSX as a function
