@@ -47,9 +47,9 @@ export class Component<T=any, E=any> {
     return html;
   }
 
-  private renderState(state: T) {
+  private renderState(state: T, vdom = null) {
     if (!this.view) return;
-    const html = this._view(state);
+    const html = vdom || this._view(state);
     app['debug'] && app.run('debug', {
       component: this,
       state,
@@ -73,6 +73,7 @@ export class Component<T=any, E=any> {
             if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
               this.unload(this.state);
               this.observer.disconnect();
+              this.observer = null;
             }
           });
           this.observer.observe(document.body, {
@@ -83,7 +84,7 @@ export class Component<T=any, E=any> {
       }
       el['_component'] = this;
     }
-    this.render(el, html);
+    if (!vdom) this.render(el, html);
     this.rendered && this.rendered(this.state);
   }
 
