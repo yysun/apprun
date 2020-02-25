@@ -34,7 +34,7 @@ function render(node, parent, idx) {
         const vdom = component._view(state, props);
         const render = el => {
             component.element = el;
-            component.rendered && component.rendered(state);
+            component.renderState(state, vdom);
         };
         return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }), vdom);
     }
