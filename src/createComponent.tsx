@@ -19,12 +19,21 @@ function render(node, parent, idx) {
     const new_state = component.mounted(props, children, state);
     if (typeof new_state !== 'undefined') state = component.state = new_state;
   }
-  const vdom = state instanceof Promise ? '' : component._view(state, props);
-  const render = el => {
-    component.element = el;
-    component.setState(state)
+  if (state instanceof Promise) {
+    const render = el => {
+      component.element = el;
+      component.setState(state);
+    }
+    return <section {...props} id={id} ref={e => render(e)}></section>;
   }
-  return <section {...props} id={id} ref={e => render(e)}>{vdom}</section>;
+  else {
+    const vdom = component._view(state, props);
+    const render = el => {
+      component.element = el;
+      component.rendered && component.rendered(state)
+    }
+    return <section {...props} id={id} ref={e => render(e)}>{vdom}</section>;
+  }
 }
 
 let _idx = 0;
