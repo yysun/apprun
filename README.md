@@ -158,8 +158,8 @@ npx degit apprunjs/apprun-rollup-lit-html my-app
 npx degit apprunjs/apprun-webpack my-app
 npx degit apprunjs/apprun-parcel my-app
 npx degit apprunjs/apprun-web-components my-app
-npx degit yysun/apprun-bootstrap
-npx degit yysun/apprun-electron
+npx degit apprunjs/apprun-bootstrap my-app
+npx degit apprunjs/apprun-electron-forge my-app
 ```
 
 
