@@ -403,12 +403,16 @@ app.render(document.body, <View />);
 `
   },
   {
-    name: '@on Decorator',
-    code: `// @on Decorator
+    name: 'Decorators',
+    code: `// Decorators
+
+//@customElement decorator creates a web component
+@apprun.customElement('my-counter')
 class Counter extends Component {
   state = 0;
 
-  @on()
+  //@on decorator creates an event handler
+  @apprun.on()
   add = (state, delta) => state + delta;
 
   view = state => <>
@@ -417,7 +421,26 @@ class Counter extends Component {
     <button $onclick={['add', +1]}>+1</button>
   </>;
 }
-app.render(document.body, <Counter />);
+
+//now, create three web components
+document.body.append(document.createElement('my-counter'));
+document.body.append(document.createElement('my-counter'));
+document.body.append(document.createElement('my-counter'));
+
 `
+  },
+  {
+    name: 'Update State w/o Event',
+    code: `// Update State w/o Event
+const add = (state, delta) => state + delta;
+
+const view = state => <>
+  <h1>{state}</h1>
+  <button $onclick={[add, -1]}>-1</button>
+  <button $onclick={[add, +1]}>+1</button>
+</>;
+
+app.start(document.body, 0, view);
+  `
   }
 ];
