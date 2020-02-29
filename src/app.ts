@@ -20,7 +20,7 @@ export class App {
 
   off(name: string, fn: (...args) => void): void {
     const subscribers = this._events[name] || [];
-    
+
     this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
   }
 
@@ -29,7 +29,7 @@ export class App {
   }
 
   run(name: string, ...args): number {
-    let subscribers = this._events[name] || [];
+    const subscribers = this._events[name] || [];
 
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
 

@@ -22,6 +22,10 @@ declare module 'apprun' {
     observedAttributes?: string[]
   };
 
+  export type MountOptions = {
+    render?: boolean, history?, global_event?: boolean;
+  };
+
   export interface IApp {
     start<T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
       options?: { history?: any, rendered?: (state: T) => void }): Component<T, E>;
@@ -41,8 +45,8 @@ declare module 'apprun' {
     constructor(state?: T, view?: View<T>, update?: Update<T, E>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
-    start(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
+    mount(element?: Element, options?: MountOptions): Component<T, E>;
+    start(element?: Element, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
     rendered: (state: T, props?: any[]) => void;

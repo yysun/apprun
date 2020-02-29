@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions } from './types';
+import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
 
 const componentCache = {};
@@ -140,13 +140,11 @@ export class Component<T=any, E=any> {
     protected options?) {
   }
 
-  start = (element = null,
-    options: { render?: boolean, history?, global_event?: boolean } = { render: true }): Component<T> => {
+  start = (element = null, options?: MountOptions): Component<T, E> => {
     return this.mount(element, { ...options, render: true });
   }
 
-  public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
-
+  public mount(element = null, options?: MountOptions): Component<T, E>  {
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = { ...this.options, ...options };
     this.element = element;
