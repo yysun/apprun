@@ -22,7 +22,11 @@ const html = code => `<!DOCTYPE html>
   <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
 </head>
 <body>
-<script type="text/babel" data-presets="es2017, react">
+<script>
+  Babel.registerPlugin("d", [Babel.availablePlugins["proposal-decorators"], {legacy: true}]);
+  Babel.registerPlugin("c", [Babel.availablePlugins["proposal-class-properties"], {loose: true}]);
+</script>
+<script type="text/babel" data-presets="es2017, react" data-plugins="d, c">
   ${code}
 </script>
 </body>
