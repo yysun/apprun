@@ -401,5 +401,23 @@ const View = () => <>
 </>
 app.render(document.body, <View />);
 `
+  },
+  {
+    name: '@on Decorator',
+    code: `// @on Decorator
+class Counter extends Component {
+  state = 0;
+
+  @on()
+  add = (state, delta) => state + delta;
+
+  view = state => <>
+    <h1>{state}</h1>
+    <button $onclick={['add', -1]}>-1</button>
+    <button $onclick={['add', +1]}>+1</button>
+  </>;
+}
+app.render(document.body, <Counter />);
+`
   }
 ];
