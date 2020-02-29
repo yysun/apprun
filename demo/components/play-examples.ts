@@ -311,8 +311,13 @@ const oninput = ({value, input, done}, e) => {
       return { value: '0', input: '', done: true }
     case '=':
       input = input || 0;
+      try {
       value = eval(input).toString();
-      return { value, input: \`\${input} = \${value}\`, done: true }
+        input = \`\${input} = \${value}\`;
+      } catch {
+        input = '';
+      }
+      return { value, input, done: true }
     default:
       const isNumber = /\\d|\\./.test(c);
       if (input.indexOf('=') > 0) {
