@@ -2,7 +2,7 @@
 
 AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.
 
-> AppRun is a MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+> AppRun is an MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
 ## AppRun Benefits
 
@@ -12,7 +12,7 @@ AppRun is a JavaScript library for building reliable, high-performance web appli
 * State management and routing included
 * Run side-by-side with jQuery, chartjs, D3, lit-html ...
 
-Applications built with AppRun have **less lines of code**, **smaller js files**, and **better performance**. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
+Applications built with AppRun have ** fewer lines of code**, **smaller js files**, and **better performance**. See a comparison from [A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)](https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075). You can also see the [performance results](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) compared to other frameworks and libraries in the [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) project.
 
 ## AppRun Book from Apress
 
@@ -23,7 +23,7 @@ Applications built with AppRun have **less lines of code**, **smaller js files**
 
 ## Architecture Concept
 
-Application logic is broken down into three separated parts in the AppRun architecture.
+Application logic is broken down into three separate parts in the AppRun architecture.
 
 * State (a.k.a. Model) — the state of your application
 * View — a function to display the state
@@ -95,20 +95,20 @@ Below is a counter application using AppRun ([Online Demo](https://glitch.com/~a
 <body>
   <wc-lit-html></wc-lit-html>
   <script type="module">
-    import { app, Component } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
-    class Counter extends Component {
-      state = 0;
-      view = (state) => html`<div>
-      <h1>${state}</h1>
-        <button @click=${()=>this.run("add", -1)}>-1</button>
-        <button @click=${()=>this.run("add", +1)}>+1</button>
-      </div>`;
-      update =[
-        ['add', (state, n) => state + n]
-      ]
-    }
-    app.webComponent('wc-lit-html', Counter);
-  </script>
+    import { app, Component, html } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
+      class Counter extends Component {
+        state = 0;
+        view = (state) => html`<div>
+        <h1>${state}</h1>
+          <button @click=${()=>this.run("add", -1)}>-1</button>
+          <button @click=${()=>this.run("add", +1)}>+1</button>
+        </div>`;
+        update =[
+          ['add', (state, n) => state + n]
+        ]
+      }
+      app.webComponent('wc-lit-html', Counter);
+    </script>
 </body>
 </html>
 ```
@@ -159,19 +159,24 @@ npx degit apprunjs/apprun-webpack my-app
 npx degit apprunjs/apprun-parcel my-app
 npx degit apprunjs/apprun-web-components my-app
 npx degit apprunjs/apprun-bootstrap my-app
-npx degit apprunjs/apprun-electron-forge my-app
+npx degit apprunjs/apprun-coreui my-app
+npx degit apprunjs/apprun-pwa my-app
+npx degit apprunjs/apprun-pwa-workbox my-app
+npx degit yysun/apprun-d3 my-app
+npx degit yysun/apprun-electron my-app
+npx degit yysun/apprun-electron-forge my-app
+npx degit yysun/apprun-websockets my-app
 ```
-
 
 ## Developer Tools
 
 ### CLI in Console
 
-AppRun CLI also runs in console.
+AppRun CLI also runs in the console.
 
 ![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
 
-To use the AppRun dev-tools CLI, include the the dev-tools script.
+To use the AppRun dev-tools CLI, include the dev-tools script.
 
 ```JavaScript
 <script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
@@ -179,14 +184,14 @@ To use the AppRun dev-tools CLI, include the the dev-tools script.
 
 ### Dev-Tools Extensions
 
-AppRun support the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
+AppRun supports the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
 
 ![app-dev-tools](docs/imgs/apprun-dev-tools.gif)
 
 
 ### VS Code Extension
 
-AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts AppRun code template for application, component and event handling.
+AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts the AppRun code template for application, component and event handling.
 
 ![app-dev-tools](docs/imgs/apprun-vscode-extension.png)
 
