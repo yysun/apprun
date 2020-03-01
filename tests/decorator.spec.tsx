@@ -17,7 +17,7 @@ describe('Update decorator', () => {
       }
     }
 
-    const test = new TestComponent().mount();
+    const test = new TestComponent().mount() as any;
     const spy = spyOn(test, 'view')
     test.run('f1', 'x')
     expect(spy).toHaveBeenCalledWith('x')
@@ -43,7 +43,7 @@ describe('Update decorator', () => {
       f2 = (state, val) => val
     }
 
-    const test = new TestComponent().mount();
+    const test = new TestComponent().mount() as any;
     const spy = spyOn(test, 'view')
     test.run('f1', 'x')
     expect(spy).toHaveBeenCalledWith('x')

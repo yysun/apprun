@@ -56,8 +56,13 @@ export const onInput = ({ value, input, done }, c) => {
       return { value: '0', input: '', done: true }
     case '=':
       input = input || 0;
-      value = eval(input).toString();
-      return { value, input: `${input}=${value}`, done: true }
+      try {
+        value = eval(input).toString();
+        input = `${input}=${value}`;
+      } catch {
+        input = '';
+      }
+      return { value, input, done: true }
     default:
       const isNumber = /\d|\./.test(c);
       if (input.indexOf('=') > 0) {
