@@ -10,4 +10,4 @@ const update = {
 
 }
 
-app.start('my-app', model, view, update);
+app.start(document.body, model, view, update);

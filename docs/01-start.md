@@ -94,9 +94,10 @@ You can initialize a SPA project.
 npx apprun --init --spa
 ```
 
-To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --es6 flag:
+To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:
+
 ```sh
-npx apprun --init --spa --es6
+npx apprun --init --spa --es5
 ```
 
 After the command finishes execution, you can start the application and then navigate to https://localhost:8080 in a browser.

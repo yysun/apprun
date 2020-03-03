@@ -57,25 +57,59 @@
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<h3 id="use-typescript-and-webpack">Use TypeScript and Webpack</h3>
-<p>You can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
-<pre><code class="language-sh">npx apprun --init --spa
+<h3 id="web-component-lit-html">Web Component (lit-HTML)</h3>
+<p>Below is a counter application using AppRun (<a href="https://glitch.com/~apprun-lit-html-wc">Online Demo</a>).</p>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Counter Web Component&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;wc-lit-html&gt;&lt;/wc-lit-html&gt;
+  &lt;script type=&quot;module&quot;&gt;
+    import { app, Component } from &#39;https://unpkg.com/apprun@next/esm/apprun-html?module&#39;;
+    class Counter extends Component {
+      state = 0;
+      view = (state) =&gt; html`&lt;div&gt;
+      &lt;h1&gt;${state}&lt;/h1&gt;
+        &lt;button @click=${()=&gt;this.run(&quot;add&quot;, -1)}&gt;-1&lt;/button&gt;
+        &lt;button @click=${()=&gt;this.run(&quot;add&quot;, +1)}&gt;+1&lt;/button&gt;
+      &lt;/div&gt;`;
+      update =[
+        [&#39;add&#39;, (state, n) =&gt; state + n]
+      ]
+    }
+    app.webComponent(&#39;wc-lit-html&#39;, Counter);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2 id="apprun-playground">AppRun Playground</h2>
+<p>Try the <a href="https://apprun.js.org/#play">AppRun Playground</a> to see more examples.</p>
+<h3 id="use-jsx-directive-typescript-and-webpack">Use JSX, Directive, TypeScript and Webpack</h3>
+<p>You can use AppRun with TypeScript and Webpack. Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack (<a href="https://apprun.js.org/#play/7">Online Demo</a>).</p>
+<pre><code class="language-javascript">import app from &#39;apprun&#39;;
+const state = 0;
+const view = state =&gt; &lt;div&gt;
+  &lt;h1&gt;{state}&lt;/h1&gt;
+  &lt;button $onclick={state =&gt; state - 1}&gt;+1&lt;/button&gt;
+  &lt;button $onclick={state =&gt; state + 1}&gt;+1&lt;/button&gt;
+&lt;/div&gt;;
+app.start(document.body, state, view);</code></pre>
+<p>Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
+<pre><code class="language-sh">npx apprun --init
 npm start</code></pre>
-<p>To initialize a project that targets ES6/ES2015, use the AppRun CLI with the --es6 flag:</p>
-<pre><code class="language-sh">npx apprun --init --spa --es6
-npm start</code></pre>
-<h2 id="apprun-site-framework">AppRun Site Framework</h2>
-<p><a href="https://github.com/yysun/apprun-site">AppRun Site</a> is an framework for building AppRun applications. It has the following features:</p>
-<ul>
-<li>Progressive Web App (PWA) - support offline</li>
-<li>Single Page App (SPA) - routing using / or #</li>
-<li>4 built-in layouts and bring your own</li>
-<li>Compile html, markdown pages to AppRun components</li>
-<li>Auto generate the index of pages</li>
-<li>Build app logic using AppRun/Web components</li>
-<li>Targets ES5 or ES Module</li>
-</ul>
-<p>Please visit <a href="https://yysun.github.io/apprun-site">AppRun Site Documentations</a>.</p>
+<p>You can also initialize a SPA project.</p>
+<pre><code class="language-sh">npx apprun --init --spa</code></pre>
+<p>To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:</p>
+<pre><code class="language-sh">npx apprun --init --spa --es5</code></pre>
+<p>Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.</p>
+<pre><code class="language-sh">npx degit apprunjs/apprun-rollup my-app
+npx degit apprunjs/apprun-rollup-lit-html my-app
+npx degit apprunjs/apprun-webpack my-app
+npx degit apprunjs/apprun-parcel my-app
+npx degit apprunjs/apprun-web-components my-app
+npx degit yysun/apprun-bootstrap
+npx degit yysun/apprun-electron</code></pre>
 <h2 id="developer-tools">Developer Tools</h2>
 <h3 id="cli-in-console">CLI in Console</h3>
 <p>AppRun CLI also runs in console.</p>
@@ -100,4 +134,4 @@ npm start</code></pre>
 <p>Have fun and send pull requests.</p>
 <h2 id="license">License</h2>
 <p>MIT</p>
-<p>Copyright (c) 2015-2019 Yiyi Sun</p>
+<p>Copyright (c) 2015-2020 Yiyi Sun</p>
