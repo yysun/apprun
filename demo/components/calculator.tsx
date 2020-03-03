@@ -15,7 +15,7 @@ const state = {
 export type State = typeof state;
 
 const view = ({ _state, op, arg1, arg2, display }: State) => <>
-  <style>{`
+  <style> {`
     .calculator { width: 200px; }
     .buttons {
       display: grid;
@@ -29,7 +29,7 @@ const view = ({ _state, op, arg1, arg2, display }: State) => <>
     button:nth-of-type(16) {
       grid-column: span 2;
     }
-    `}
+  `}
   </style>
   <div class="calculator">
     <h1>{display}</h1>
@@ -54,11 +54,11 @@ const view = ({ _state, op, arg1, arg2, display }: State) => <>
       <button>=</button>
     </div>
     <small>
-      {stack.length>0 && `${stack[0][0]} ${stack[0][1]} `}
-      {_state.startsWith('FIRST_') && `${arg1}`}
-      {_state === 'OP' && `${arg1} ${op}`}
-      {_state.startsWith('SECOND_') && `${arg1} ${op} ${arg2}`}
-      {_state === 'EQ' && `${arg1} ${op} ${arg2} = ${display}`}
+      {stack.length > 0 && `${stack[0][0]} ${stack[0][1]} `}
+      {_state.startsWith("FIRST_") && `${display}`}
+      {_state === "OP" && `${arg1} ${op}`}
+      {_state.startsWith("SECOND_") && `${arg1} ${op} ${display}`}
+      {_state === "EQ" && `${arg1} ${op} ${arg2} = ${display}`}
     </small>
   </div>
 </>;
@@ -212,9 +212,6 @@ export const button_click = (state: State, e: any) => {
   const { next_state, transition } = find_transition(state_machine, _state, event);
   _state = next_state || _state;
   transition && transition();
-
-  if (_state.startsWith('FIRST_')) arg1 = parseFloat(display);
-  if (_state.startsWith('SECOND_')) arg2 = parseFloat(display);
 
   return { _state, op, arg1, arg2, display };
 };

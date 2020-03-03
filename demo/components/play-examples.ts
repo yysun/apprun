@@ -296,88 +296,46 @@ app.render(document.body, <View/>);
 `
   },
   {
-    name: 'Calculator',
-    code: `// Calculator
-const state = {
-  value: 0,
-  input: '',
-  done: true
-};
+    name: 'State Machine',
+    code: `// State Machine
+const state_machine = {
+  red: ['green', 10000],
+  green: ['yellow', 5000],
+  yellow: ['red', 15000],
+}
 
-const oninput = ({value, input, done}, e) => {
-  const c = e.target.textContent;
-  switch (c) {
-    case 'C':
-      return { value: '0', input: '', done: true }
-    case '=':
-      input = input || 0;
-      try {
-      value = eval(input).toString();
-        input = \`\${input} = \${value}\`;
-      } catch {
-        input = '';
-      }
-      return { value, input, done: true }
-    default:
-      const isNumber = /\\d|\\./.test(c);
-      if (input.indexOf('=') > 0) {
-        isNumber && (input = value = '');
-        !isNumber && (input = value || '');
-      } else if (done) {
-        isNumber && (value = '');
-        !isNumber && (input = input || value)
-      }
-      return {
-        value: isNumber ? (value || '') + c : value,
-        input: input + c, done: !isNumber
-      }
+const timer = async (state) => {
+  let {sm_state, start, delta } = state;
+  if ((new Date().getTime() - start) < delta) return state;
+  const transition = state_machine[sm_state];
+  if (transition) {
+    sm_state = transition[0];
+    start = new Date().getTime();
+    delta = transition[1];
+    return {sm_state, start, delta}
   }
 }
 
-const view = ({input, value}) => <>
-  <style>
-{\`
-.calculator { width: 200px; }
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 2px;
+const state = {
+  sm_state: 'red',
+  start: new Date().getTime(),
+  delta: 10000
 }
-button { padding: 10px; width:100%; }
-button:nth-of-type(1) {
-  grid-column: span 3;
-}
-button:nth-of-type(15) {
-  grid-column: span 2;
-}
-\`}
-  </style>
-  <div class="calculator">
-    <h1>{value}</h1>
-    <div class="buttons" $onclick={oninput}>
-      <button>C</button>
-      <button>/</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>*</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>-</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>+</button>
-      <button>0</button>
-      <button>.</button>
-      <button>=</button>
-    </div>
-    <small>{input}</small>
-  </div>
+
+const view = ({sm_state, start, delta }) => <>
+  <svg height="60" width="160">
+    <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
+    <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state==='green'?'1':'0.1'}/>
+    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state==='yellow'?'1':'0.1'}/>
+    <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
+  </svg>
+  <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>
 </>;
 
-app.start(document.body, state, view);
+update = { timer }
+
+app.start(document.body, state, view, update);
+window.setInterval(() => { app.run('timer') }, 1000);
 `
   },
   {
@@ -405,7 +363,6 @@ app.render(document.body, <View />);
   {
     name: 'Decorators',
     code: `// Decorators
-
 //@customElement decorator creates a web component
 @apprun.customElement('my-counter')
 class Counter extends Component {
