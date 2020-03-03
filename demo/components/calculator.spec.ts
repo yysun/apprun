@@ -1,15 +1,18 @@
-import { onInput } from './calculator';
+import { button_click, State } from './calculator';
 
-const state = {
-  value: '0',
-  input: '',
-  done: true
+const state: State = {
+  _state: 'START',
+  display: '0',
+  arg1: 0,
+  arg2: 0,
+  op: ''
 };
 
-const click = (keys: string[]) => {
+const click = (input: string) => {
+  const keys = [...input];
   let s = state;
   keys.forEach(key => {
-    const new_state = onInput(s, key);
+    const new_state = button_click(s, key);
     s = new_state
   })
   return s;
@@ -18,108 +21,132 @@ const click = (keys: string[]) => {
 describe('calculator', () => {
 
   it('case 1', () => {
-    const { value, input, done } = click(['0']);
-    expect(value).toBe('0');
-    expect(input).toBe('0');
-    expect(done).toBe(false);
+    const { _state, display } = click('1');
+    expect(display).toBe('1');
+    expect(_state).toBe('FIRST_ARG');
   })
 
   it('case 2', () => {
-    const { value, input, done } = click(['1']);
-    expect(value).toBe('1');
-    expect(input).toBe('1');
-    expect(done).toBe(false);
+    const { _state, display } = click('12');
+    expect(display).toBe('12');
+    expect(_state).toBe('FIRST_ARG');
   })
 
   it('case 3', () => {
-    const { value, input, done } = click(['1', '2']);
-    expect(value).toBe('12');
-    expect(input).toBe('12');
-    expect(done).toBe(false);
+    const { _state, display, arg1, arg2 } = click('1+2=');
+    expect(display).toBe('3');
+    expect(arg1).toBe(1);
+    expect(arg2).toBe(2);
+    expect(_state).toBe('EQ');
   })
 
   it('case 4', () => {
-    const { value, input, done } = click(['1', '/']);
-    expect(value).toBe('1');
-    expect(input).toBe('1/');
-    expect(done).toBe(true);
+    const { _state, display } = click('1/');
+    expect(display).toBe('1');
+    expect(_state).toBe('OP');
   })
 
   it('case 5', () => {
-    const { value, input, done } = click(['1', '/', '2']);
-    expect(value).toBe('2');
-    expect(input).toBe('1/2');
-    expect(done).toBe(false);
+    const { _state, display } = click('1/2');
+    expect(display).toBe('2');
+    expect(_state).toBe('SECOND_ARG');
   })
 
-  // it('case 6', () => {
-  //   const { value, input, done } = click(['1', '/', '/']);
-  //   expect(value).toBe('1');
-  //   expect(input).toBe('1/');
-  //   expect(done).toBe(true);
-  // })
+  it('case 6', () => {
+    const { _state, display, op } = click('1//');
+    expect(display).toBe('1');
+    expect(op).toBe('/');
+    expect(_state).toBe('OP');
+  })
 
-  // it('case 7', () => {
-  //   const { value, input, done } = click(['1', '/', '=']);
-  //   expect(value).toBe('1');
-  //   expect(input).toBe('1/1=1');
-  //   expect(done).toBe(true);
-  // })
+  it('case 7', () => {
+    const { _state, display, op } = click('1/=');
+    expect(display).toBe('1');
+    expect(op).toBe('/');
+    expect(_state).toBe('OP');
+  })
 
-  // it('case 8', () => {
-  //   const { value, input, done } = click(['1', '/', '+']);
-  //   expect(value).toBe('1');
-  //   expect(input).toBe('1+');
-  //   expect(done).toBe(true);
-  // })
+  it('case 8', () => {
+    const { _state, display, op } = click('1/+');
+    expect(display).toBe('1');
+    expect(op).toBe('+');
+    expect(_state).toBe('OP');
+  })
 
   it('case 9', () => {
-    const { value, input, done } = click(['1', '/', '1', '0']);
-    expect(value).toBe('10');
-    expect(input).toBe('1/10');
-    expect(done).toBe(false);
+    const { _state, display } = click('1/10');
+    expect(display).toBe('10');
+    expect(_state).toBe('SECOND_ARG');
   })
 
   it('case 10', () => {
-    const { value, input, done } = click(['.']);
-    expect(value).toBe('.');
-    expect(input).toBe('.');
-    expect(done).toBe(false);
+    const { _state, display } = click('1+1.');
+    expect(display).toBe('1.');
+    expect(_state).toBe('SECOND_ARG_FLOAT');
   })
 
   it('case 11', () => {
-    const { value, input, done } = click(['0', '.']);
-    expect(value).toBe('0.');
-    expect(input).toBe('0.');
-    expect(done).toBe(false);
+    const { _state, display } = click('0.');
+    expect(display).toBe('0.');
+    expect(_state).toBe('FIRST_ARG_FLOAT');
   })
 
   it('case 12', () => {
-    const { value, input, done } = click(['=']);
-    expect(value).toBe('0');
-    expect(input).toBe('0=0');
-    expect(done).toBe(true);
+    const { _state, display } = click('=');
+    expect(display).toBe('0');
+    expect(_state).toBe('START');
   })
 
   it('case 13', () => {
-    const { value, input, done } = click(['/']);
-    expect(value).toBe('0');
-    expect(input).toBe('0/');
-    expect(done).toBe(true);
+    const { _state, display } = click('/');
+    expect(display).toBe('0');
+    expect(_state).toBe('START');
   })
 
   it('case 14', () => {
-    const { value, input, done } = click(['1', '+', '2', '=', '5']);
-    expect(value).toBe('5');
-    expect(input).toBe('5');
-    expect(done).toBe(false);
+    const { _state, display } = click('1+2=5');
+    expect(display).toBe('5');
+    expect(_state).toBe('FIRST_ARG');
   })
 
   it('case 15', () => {
-    const { value, input, done } = click(['1', '+', '2', '=', '/']);
-    expect(value).toBe('3');
-    expect(input).toBe('3/');
-    expect(done).toBe(true);
+    const { _state, display } = click('1+2=/');
+    expect(display).toBe('3');
+    expect(_state).toBe('OP');
+  })
+
+  it('case 16', () => {
+    const { _state, display } = click('1/+=');
+    expect(display).toBe('1');
+    expect(_state).toBe('OP');
+  })
+
+  it('case 17', () => {
+    const { _state, display } = click('1+2=*3=');
+    expect(display).toBe('9');
+    expect(_state).toBe('EQ');
+  })
+
+  it('case 18', () => {
+    const { _state, display, arg1, arg2 } = click('1+2*3=');
+    expect(display).toBe('7');
+    expect(arg1).toBe(1);
+    expect(arg2).toBe(6);
+    expect(_state).toBe('EQ');
+  })
+
+  it('case 19', () => {
+    const { _state, display, arg1, arg2 } = click('1*2+3=');
+    expect(display).toBe('5');
+    expect(arg1).toBe(2);
+    expect(arg2).toBe(3);
+    expect(_state).toBe('EQ');
+  })
+
+  it('case 20', () => {
+    const { _state, display } = click('1+2*3*');
+    expect(display).toBe('6');
+    expect(_state).toBe('OP');
   })
 
 });
