@@ -1,4 +1,7 @@
 import app from 'apprun';
+import Home from './Home';
+import About from './About';
+import Contact from './Contact';
 
 app.on('//', route => {
   const menus = document.querySelectorAll('.navbar-nav li');
@@ -33,11 +36,7 @@ const App = () => <div class="container">
   <div class="container" id="my-app"></div>
 </div>
 
-app.render(document.getElementById('main'), <App />);
-
-import Home from './Home';
-import About from './About';
-import Contact from './Contact';
+app.render(document.body, <App />);
 
 const element = 'my-app';
 new Home().start(element);

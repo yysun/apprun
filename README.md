@@ -113,16 +113,13 @@ Below is a counter application using AppRun ([Online Demo](https://glitch.com/~a
 </html>
 ```
 
+## AppRun Playground
+
+Try the [AppRun Playground](https://apprun.js.org/#play) to see more examples.
 
 ### Use JSX, Directive, TypeScript and Webpack
 
-You can use AppRun with TypeScript and Webpack. Use the AppRun CLI to initialize a TypeScript and webpack configured project:
-```sh
-npx apprun --init
-npm start
-```
-
-Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack ([Online Demo](https://apprun.js.org/#play/7)).
+You can use AppRun with TypeScript and Webpack. Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack ([Online Demo](https://apprun.js.org/#play/7)).
 
 
 ```javascript
@@ -135,9 +132,36 @@ const view = state => <div>
 </div>;
 app.start(document.body, state, view);
 ```
-## AppRun Playground
 
-Try the [AppRun Playground](https://apprun.js.org/#play) to see more examples.
+Use the AppRun CLI to initialize a TypeScript and webpack configured project:
+```sh
+npx apprun --init
+npm start
+```
+
+You can also initialize a SPA project.
+
+```sh
+npx apprun --init --spa
+```
+
+To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:
+
+```sh
+npx apprun --init --spa --es5
+```
+
+Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.
+```sh
+npx degit apprunjs/apprun-rollup my-app
+npx degit apprunjs/apprun-rollup-lit-html my-app
+npx degit apprunjs/apprun-webpack my-app
+npx degit apprunjs/apprun-parcel my-app
+npx degit apprunjs/apprun-web-components my-app
+npx degit yysun/apprun-bootstrap
+npx degit yysun/apprun-electron
+```
+
 
 ## Developer Tools
 
@@ -187,6 +211,9 @@ npm run build
 ```
 
 Have fun and send pull requests.
+
+## Contributors
+[![](https://contributors-img.firebaseapp.com/image?repo=yysun/apprun)](https://github.com/yysun/apprun/graphs/contributors)
 
 ## License
 
