@@ -40,13 +40,13 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
   }
 
   disconnectedCallback() {
-    this._component.unload && this._component.unload();
-    this._component.unmount();
+    this._component?.unload?.();
+    this._component?.unmount?.();
     this._component = null;
   }
 
   attributeChangedCallback(...args) {
-    this._component && this._component.run('attributeChanged', ...args);
+    this._component?.run('attributeChanged', ...args);
   }
 }
 
