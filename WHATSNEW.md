@@ -2,6 +2,16 @@
 
 Recent Releases and publications
 
+### [Use State Machine in AppRun Applications](https://dev.to/yysun/use-state-machine-in-apprun-applications-odo)
+
+Published on Mar 3, 2020 ・ 6 min read
+
+### [Advanced View Features in AppRun](https://dev.to/yysun/advanced-view-features-in-apprun-17g5)
+
+This post describes the advanced usage of the AppRun _ref_, _element embedding_, and _directive_ in the JSX view.
+
+Published on Feb 28, 2020 ・ 4 min read
+
 ### [Strong Typing in AppRun](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1)
 
 This post is a complete guide for those want to opted-in TypeScript and strong typing for AppRun application development.
