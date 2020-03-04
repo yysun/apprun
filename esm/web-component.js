@@ -28,12 +28,14 @@ export const customElement = (componentClass, options = {}) => class extends HTM
         }
     }
     disconnectedCallback() {
-        this._component.unload && this._component.unload();
-        this._component.unmount();
+        var _a, _b, _c, _d;
+        (_b = (_a = this._component) === null || _a === void 0 ? void 0 : _a.unload) === null || _b === void 0 ? void 0 : _b.call(_a);
+        (_d = (_c = this._component) === null || _c === void 0 ? void 0 : _c.unmount) === null || _d === void 0 ? void 0 : _d.call(_c);
         this._component = null;
     }
     attributeChangedCallback(...args) {
-        this._component && this._component.run('attributeChanged', ...args);
+        var _a;
+        (_a = this._component) === null || _a === void 0 ? void 0 : _a.run('attributeChanged', ...args);
     }
 };
 export default (name, componentClass, options) => {

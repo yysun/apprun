@@ -33,7 +33,7 @@ export class Component {
                 this._history_idx = this._history.length - 1;
             }
         };
-        this.start = (element = null, options = { render: true }) => {
+        this.start = (element = null, options) => {
             return this.mount(element, Object.assign(Object.assign({}, options), { render: true }));
         };
     }
@@ -138,7 +138,7 @@ export class Component {
             this.on(options.history.next || 'history-next', this._history_next);
         }
         this.add_actions();
-        this.state = (_b = (_a = this.state, (_a !== null && _a !== void 0 ? _a : this['model'])), (_b !== null && _b !== void 0 ? _b : {}));
+        this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
         if (options.render) {
             this.setState(this.state, { render: true, history: true });
         }

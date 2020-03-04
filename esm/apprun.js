@@ -39,5 +39,7 @@ export default app;
 if (typeof window === 'object') {
     window['Component'] = Component;
     window['React'] = app;
+    window['on'] = on;
+    window['customElement'] = customElement;
 }
 //# sourceMappingURL=apprun.js.map
