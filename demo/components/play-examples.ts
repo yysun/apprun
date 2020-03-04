@@ -299,9 +299,11 @@ app.render(document.body, <View/>);
     name: 'State Machine',
     code: `// State Machine
 const state_machine = {
-  red: ['green', 10000],
-  green: ['yellow', 5000],
-  yellow: ['red', 15000],
+  red: ['green1', 10000],
+  green1: ['yellow1', 3000],
+  yellow1: ['green', 10000],
+  green: ['yellow2', 5000],
+  yellow2: ['red', 15000],
 }
 
 const timer = async (state) => {
@@ -325,8 +327,15 @@ const state = {
 const view = ({sm_state, start, delta }) => <>
   <svg height="60" width="160">
     <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
-    <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state==='green'?'1':'0.1'}/>
-    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state==='yellow'?'1':'0.1'}/>
+    <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state.startsWith('green')?'1':'0.1'}>
+    {sm_state==='green1' && <animate
+          attributeType="XML"
+          attributeName="fill"
+          values="lime;lightgrey;lime;lightgrey"
+          dur="0.5s"
+          repeatCount="indefinite"/>}
+    </circle>
+    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state.startsWith('yellow')?'1':'0.1'}/>
     <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
   </svg>
   <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>

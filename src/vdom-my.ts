@@ -42,11 +42,13 @@ export function render(element: Element, nodes: VDOM, parent = {}) {
 
   nodes = createComponent(nodes, parent);
 
+  const isSvg = element?.nodeName === "SVG";
+
   if (!element) return;
   if (Array.isArray(nodes)) {
-    updateChildren(element, nodes);
+    updateChildren(element, nodes, isSvg);
   } else {
-    updateChildren(element, [nodes]);
+    updateChildren(element, [nodes], isSvg);
   }
 }
 
@@ -57,23 +59,24 @@ function same(el: Element, node: VNode) {
   return key1.toUpperCase() === key2.toUpperCase();
 }
 
-function update(element: Element, node: VNode) {
+function update(element: Element, node: VNode, isSvg: boolean) {
   console.assert(!!element);
+  isSvg = isSvg || node.tag === "svg";
   //console.log('update', element, node);
   if (!same(element, node)) {
-    element.parentNode.replaceChild(create(node), element);
+    element.parentNode.replaceChild(create(node, isSvg), element);
     return;
   }
-  updateChildren(element, node.children);
+  updateChildren(element, node.children, isSvg);
   updateProps(element, node.props);
 }
 
-function updateChildren(element, children) {
+function updateChildren(element, children, isSvg: boolean) {
   const len = Math.min(element.childNodes.length, children.length);
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
-    if (child instanceof HTMLElement) {
+    if (child instanceof HTMLElement || child instanceof SVGElement) {
       element.insertBefore(child, el);
     }
     else if (typeof child === 'string') {
@@ -88,19 +91,19 @@ function updateChildren(element, children) {
       const key = child.props && child.props['key'];
       if (key) {
         if (el.key === key) {
-          update(element.childNodes[i], child);
+          update(element.childNodes[i], child, isSvg);
         } else {
           const old = keyCache[key];
           if (old) {
             element.insertBefore(old, el);
             element.appendChild(el);
-            update(element.childNodes[i], child);
+            update(element.childNodes[i], child, isSvg);
           } else {
-            element.insertBefore(create(child), el);
+            element.insertBefore(create(child, isSvg), el);
           }
         }
       } else {
-        update(element.childNodes[i], child);
+        update(element.childNodes[i], child, isSvg);
       }
     }
   }
@@ -114,7 +117,7 @@ function updateChildren(element, children) {
   if (children.length > len) {
     const d = document.createDocumentFragment();
     for (let i = len; i < children.length; i++) {
-      d.appendChild(create(children[i]));
+      d.appendChild(create(children[i], isSvg));
     }
     element.appendChild(d);
   }
@@ -130,7 +133,7 @@ function createText(node) {
   }
 }
 
-function create(node: VNode | string | HTMLElement | SVGElement, isSvg = false): Element {
+function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean): Element {
   console.assert(node !== null && node !== undefined);
   // console.log('create', node, typeof node);
   if ((node instanceof HTMLElement) || (node instanceof SVGElement)) return node;
