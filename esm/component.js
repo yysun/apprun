@@ -57,10 +57,10 @@ export class Component {
         app.createElement = h;
         return html;
     }
-    renderState(state) {
+    renderState(state, vdom = null) {
         if (!this.view)
             return;
-        const html = this._view(state);
+        const html = vdom || this._view(state);
         app['debug'] && app.run('debug', {
             component: this,
             state,
@@ -84,6 +84,7 @@ export class Component {
                             if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
                                 this.unload(this.state);
                                 this.observer.disconnect();
+                                this.observer = null;
                             }
                         });
                     this.observer.observe(document.body, {
@@ -94,7 +95,8 @@ export class Component {
             }
             el['_component'] = this;
         }
-        this.render(el, html);
+        if (!vdom)
+            this.render(el, html);
         this.rendered && this.rendered(this.state);
     }
     setState(state, options = { render: true, history: false }) {
@@ -136,7 +138,7 @@ export class Component {
             this.on(options.history.next || 'history-next', this._history_next);
         }
         this.add_actions();
-        this.state = (_b = (_a = this.state, (_a !== null && _a !== void 0 ? _a : this['model'])), (_b !== null && _b !== void 0 ? _b : {}));
+        this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
         if (options.render) {
             this.setState(this.state, { render: true, history: true });
         }

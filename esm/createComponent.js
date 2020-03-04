@@ -23,12 +23,21 @@ function render(node, parent, idx) {
         if (typeof new_state !== 'undefined')
             state = component.state = new_state;
     }
-    const vdom = state instanceof Promise ? '' : component._view(state, props);
-    const render = el => {
-        component.element = el;
-        component.setState(state);
-    };
-    return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }), vdom);
+    if (state instanceof Promise) {
+        const render = el => {
+            component.element = el;
+            component.setState(state);
+        };
+        return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }));
+    }
+    else {
+        const vdom = component._view(state, props);
+        const render = el => {
+            component.element = el;
+            component.renderState(state, vdom);
+        };
+        return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }), vdom);
+    }
 }
 let _idx = 0;
 export default function createComponent(node, parent, idx = 0) {
