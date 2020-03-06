@@ -89,16 +89,7 @@
 &lt;/html&gt;</code></pre>
 <h2 id="apprun-playground">AppRun Playground</h2>
 <p>Try the <a href="https://apprun.js.org/#play">AppRun Playground</a> to see more examples.</p>
-<h3 id="use-jsx-directive-typescript-and-webpack">Use JSX, Directive, TypeScript and Webpack</h3>
-<p>You can use AppRun with TypeScript and Webpack. Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack (<a href="https://apprun.js.org/#play/7">Online Demo</a>).</p>
-<pre><code class="language-javascript">import app from &#39;apprun&#39;;
-const state = 0;
-const view = state =&gt; &lt;div&gt;
-  &lt;h1&gt;{state}&lt;/h1&gt;
-  &lt;button $onclick={state =&gt; state - 1}&gt;+1&lt;/button&gt;
-  &lt;button $onclick={state =&gt; state + 1}&gt;+1&lt;/button&gt;
-&lt;/div&gt;;
-app.start(document.body, state, view);</code></pre>
+<h2 id="apprun-cli">AppRun CLI</h2>
 <p>Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
 <pre><code class="language-sh">npx apprun --init
 npm start</code></pre>
@@ -106,7 +97,8 @@ npm start</code></pre>
 <pre><code class="language-sh">npx apprun --init --spa</code></pre>
 <p>To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:</p>
 <pre><code class="language-sh">npx apprun --init --spa --es5</code></pre>
-<p>Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.</p>
+<h2 id="starter-templates">Starter Templates</h2>
+<p>Optionally, you can directly scaffold AppRun projects from the AppRun starter templates.</p>
 <pre><code class="language-sh">npx degit apprunjs/apprun-rollup my-app
 npx degit apprunjs/apprun-rollup-lit-html my-app
 npx degit apprunjs/apprun-webpack my-app
@@ -120,6 +112,16 @@ npx degit yysun/apprun-d3 my-app
 npx degit yysun/apprun-electron my-app
 npx degit yysun/apprun-electron-forge my-app
 npx degit yysun/apprun-websockets my-app</code></pre>
+<h2 id="es2015-by-default">ES2015 by Default</h2>
+<p>In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.</p>
+<p>On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.</p>
+<p>When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.</p>
+<p>Currently, the npm tags are as following:</p>
+<ul>
+<li>apprun@es5: 1.x, stable, es5</li>
+<li>apprun@latest: 2.x, stable, es2015, web components</li>
+<li>apprun@next: 3.x, dev, es2015, web components, lit-html</li>
+</ul>
 <h2 id="developer-tools">Developer Tools</h2>
 <h3 id="cli-in-console">CLI in Console</h3>
 <p>AppRun CLI also runs in the console.</p>

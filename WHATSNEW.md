@@ -1,5 +1,19 @@
 ### What's New
 
+## Default npm Version Change
+
+In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.
+
+On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.
+
+When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
+
+Currently, the npm tags are as following:
+
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web components
+* apprun@next: 3.x, dev, es2015, web components, lit-html
+
 Recent Releases and publications
 
 ### [Use State Machine in AppRun Applications](https://dev.to/yysun/use-state-machine-in-apprun-applications-odo)

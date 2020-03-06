@@ -117,21 +117,7 @@ Below is a counter application using AppRun ([Online Demo](https://glitch.com/~a
 
 Try the [AppRun Playground](https://apprun.js.org/#play) to see more examples.
 
-### Use JSX, Directive, TypeScript and Webpack
-
-You can use AppRun with TypeScript and Webpack. Below is a counter application using AppRun JSX and Directive that can be compiled and bundled using TypeScript and Webpack ([Online Demo](https://apprun.js.org/#play/7)).
-
-
-```javascript
-import app from 'apprun';
-const state = 0;
-const view = state => <div>
-  <h1>{state}</h1>
-  <button $onclick={state => state - 1}>+1</button>
-  <button $onclick={state => state + 1}>+1</button>
-</div>;
-app.start(document.body, state, view);
-```
+## AppRun CLI
 
 Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 ```sh
@@ -151,7 +137,10 @@ To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag
 npx apprun --init --spa --es5
 ```
 
-Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.
+## Starter Templates
+
+Optionally, you can directly scaffold AppRun projects from the AppRun starter templates.
+
 ```sh
 npx degit apprunjs/apprun-rollup my-app
 npx degit apprunjs/apprun-rollup-lit-html my-app
@@ -167,6 +156,20 @@ npx degit yysun/apprun-electron my-app
 npx degit yysun/apprun-electron-forge my-app
 npx degit yysun/apprun-websockets my-app
 ```
+
+## ES2015 by Default
+
+In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.
+
+On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.
+
+When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
+
+Currently, the npm tags are as following:
+
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web components
+* apprun@next: 3.x, dev, es2015, web components, lit-html
 
 ## Developer Tools
 
