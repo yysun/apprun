@@ -4,6 +4,7 @@ export class App {
   private _events: Object;
 
   public start;
+  public h;
   public createElement;
   public render;
   public Fragment;

@@ -12,6 +12,7 @@ export interface IApp {
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
+  h(tag: string | Function, props, ...children): VNode | VNode[];
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: HTMLElement, node: VNode): void;
   Fragment(props, ...children): any[];
@@ -19,13 +20,12 @@ export interface IApp {
   webComponent(name: string, componentClass, options?: CustomElementOptions): void;
 }
 
-app.createElement = createElement;
+app.h = app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
 
-
-app.start = <T, E=any>(element?: Element, model?: T,  view?: View<T>, update?: Update<T, E>,
+app.start = <T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
   options?: { history?, rendered?: (state: T) => void }) : Component<T, E> => {
     const opts = {...options, render: true, global_event: true };
     const component = new Component<T, E>(model, view, update);
@@ -52,7 +52,7 @@ if (typeof document === 'object') {
 }
 
 export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions }
+export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment }
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions };

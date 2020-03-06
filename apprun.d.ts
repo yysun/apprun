@@ -34,6 +34,7 @@ declare module 'apprun' {
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
+    h(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VNode): void;
     Fragment(props: any[], ...children: any[]): any[];
@@ -70,4 +71,6 @@ declare module 'apprun' {
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
+
+  export function Fragment (props, ...children): [];
 }
