@@ -84,7 +84,7 @@ Below is a counter application using AppRun ([Online Demo](https://apprun.js.org
 
 ### Web Component (lit-HTML)
 
-Below is a counter application using AppRun ([Online Demo](https://glitch.com/~apprun-lit-html-wc)).
+Below is a counter web component using AppRun as ES module ([Online Demo](https://glitch.com/~apprun-lit-html-wc)).
 
 ```html
 <html>
@@ -112,6 +112,58 @@ Below is a counter application using AppRun ([Online Demo](https://glitch.com/~a
 </body>
 </html>
 ```
+
+### TypeScript and JSX
+
+We recommend using TypeScript and JSX. TypeScript provides [strong typing](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1). JSX provides more [advanced features](https://dev.to/yysun/advanced-view-features-in-apprun-17g5). For examples:
+
+#### _ref_ function: A Map Component Using _D3.js_
+
+```javascript
+import app from 'apprun';
+import * as d3 from 'd3';
+import * as topojson from 'topojson';
+
+const map = ({ datum }) => { /* D3 logic */};
+
+const state = d3.json('world-110m.json').then(world => ({
+  datum: topojson.feature(world, world.objects.land)
+}));
+
+const view = state => <svg id="svg" ref={() => map(state)}></svg>;
+
+```
+
+#### _Embedding element_: A Chart Component Using _Chart.js_
+
+```javascript
+const view = state => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  state.chart = new Chart(ctx, state.data);
+  return (
+    <Card header={<div>Chart JS</div>}>
+      <div>{canvas}</div>
+    </Card>
+  );
+};
+```
+#### _Directive_: Animation using _animate.css_
+
+```javascript
+app.on('$', ({key, props}) => {
+  if (key === '$animation') {
+    const value = props[key];
+    if (typeof value === 'string') {
+      props.class = `animated ${value}`;
+    }
+  }
+});
+
+const view = () => <>
+  <img $animation={'bounce infinite'} src='logo.png' />
+```
+
 
 ## AppRun Playground
 
@@ -155,6 +207,7 @@ npx degit yysun/apprun-d3 my-app
 npx degit yysun/apprun-electron my-app
 npx degit yysun/apprun-electron-forge my-app
 npx degit yysun/apprun-websockets my-app
+npx degit yysun/apprun-websockets-sqlite my-app
 ```
 
 ## ES2015 by Default

@@ -16,7 +16,15 @@ Currently, the npm tags are as following:
 
 Recent Releases and publications
 
+### [Database-Driven Applications Using WebSockets](https://dev.to/yysun/database-driven-applications-using-websockets-2b9o)
+
+This post introduces a new application architecture that allows event handling between the frontend apps and the backend business logic modules without REST API.
+
+Published on Mar 9, 2020 6 min read
+
 ### [Use State Machine in AppRun Applications](https://dev.to/yysun/use-state-machine-in-apprun-applications-odo)
+
+This post describes how to create a state machine in AppRun applications to help event handling using a calculator as an example.
 
 Published on Mar 3, 2020 ・ 6 min read
 

@@ -62,7 +62,7 @@
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 <h3 id="web-component-lit-html">Web Component (lit-HTML)</h3>
-<p>Below is a counter application using AppRun (<a href="https://glitch.com/~apprun-lit-html-wc">Online Demo</a>).</p>
+<p>Below is a counter web component using AppRun as ES module (<a href="https://glitch.com/~apprun-lit-html-wc">Online Demo</a>).</p>
 <pre><code class="language-html">&lt;html&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -87,6 +87,44 @@
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+<h3 id="typescript-and-jsx">TypeScript and JSX</h3>
+<p>We recommend using TypeScript and JSX. TypeScript provides <a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">strong typing</a>. JSX provides more <a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">advanced features</a>. For examples:</p>
+<h4 id="ref-function-a-map-component-using-d3js"><em>ref</em> function: A Map Component Using <em>D3.js</em></h4>
+<pre><code class="language-javascript">import app from &#39;apprun&#39;;
+import * as d3 from &#39;d3&#39;;
+import * as topojson from &#39;topojson&#39;;
+
+const map = ({ datum }) =&gt; { /* D3 logic */};
+
+const state = d3.json(&#39;world-110m.json&#39;).then(world =&gt; ({
+  datum: topojson.feature(world, world.objects.land)
+}));
+
+const view = state =&gt; &lt;svg id=&quot;svg&quot; ref={() =&gt; map(state)}&gt;&lt;/svg&gt;;
+</code></pre>
+<h4 id="embedding-element-a-chart-component-using-chartjs"><em>Embedding element</em>: A Chart Component Using <em>Chart.js</em></h4>
+<pre><code class="language-javascript">const view = state =&gt; {
+  const canvas = document.createElement(&#39;canvas&#39;);
+  const ctx = canvas.getContext(&#39;2d&#39;);
+  state.chart = new Chart(ctx, state.data);
+  return (
+    &lt;Card header={&lt;div&gt;Chart JS&lt;/div&gt;}&gt;
+      &lt;div&gt;{canvas}&lt;/div&gt;
+    &lt;/Card&gt;
+  );
+};</code></pre>
+<h4 id="directive-animation-using-animatecss"><em>Directive</em>: Animation using <em>animate.css</em></h4>
+<pre><code class="language-javascript">app.on(&#39;$&#39;, ({key, props}) =&gt; {
+  if (key === &#39;$animation&#39;) {
+    const value = props[key];
+    if (typeof value === &#39;string&#39;) {
+      props.class = `animated ${value}`;
+    }
+  }
+});
+
+const view = () =&gt; &lt;&gt;
+  &lt;img $animation={&#39;bounce infinite&#39;} src=&#39;logo.png&#39; /&gt;</code></pre>
 <h2 id="apprun-playground">AppRun Playground</h2>
 <p>Try the <a href="https://apprun.js.org/#play">AppRun Playground</a> to see more examples.</p>
 <h2 id="apprun-cli">AppRun CLI</h2>
@@ -111,7 +149,8 @@ npx degit apprunjs/apprun-pwa-workbox my-app
 npx degit yysun/apprun-d3 my-app
 npx degit yysun/apprun-electron my-app
 npx degit yysun/apprun-electron-forge my-app
-npx degit yysun/apprun-websockets my-app</code></pre>
+npx degit yysun/apprun-websockets my-app
+npx degit yysun/apprun-websockets-sqlite my-app</code></pre>
 <h2 id="es2015-by-default">ES2015 by Default</h2>
 <p>In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.</p>
 <p>On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.</p>
