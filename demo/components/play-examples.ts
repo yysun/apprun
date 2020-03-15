@@ -369,6 +369,7 @@ const View = () => <>
 app.render(document.body, <View />);
 `
   },
+
   {
     name: 'Decorators',
     code: `// Decorators
@@ -395,18 +396,20 @@ document.body.append(document.createElement('my-counter'));
 
 `
   },
+
   {
-    name: 'Update State w/o Event',
-    code: `// Update State w/o Event
-const add = (state, delta) => state + delta;
+    name: 'Ceremony vs. Essence',
+    code: `// Ceremony vs. Essence
+const add = count => count + 1;
 
-const view = state => <>
-  <h1>{state}</h1>
-  <button $onclick={[add, -1]}>-1</button>
-  <button $onclick={[add, +1]}>+1</button>
-</>;
+const view = count => <button $onclick={add}>
+  Clicks: {count}
+</button>;
 
-app.start(document.body, 0, view);
-  `
+const rendered = count => console.log(count);
+
+app.start(document.body, 0, view, null, { rendered });
+console.log('mounted!');
+`
   }
 ];
