@@ -18,7 +18,7 @@ const html = code => `<!DOCTYPE html>
       margin: 2em;
     }
   </style>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
   <script src="dist/apprun-html.js"></script>
 </head>
 <body>

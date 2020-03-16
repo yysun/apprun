@@ -14,21 +14,13 @@ app.start(document.body, state, view);
   {
     name: 'Hello World ($on)',
     code: `// Hello World ($on)
-const state = { who: 'World' };
-const view = ({who}) => <div>
-  <h1>Hello {who}</h1>
-  <p><input $oninput value={who} /> $oninput</p>
-  <p><input $oninput="hello" value={who}/> $oninput="event"</p>
-  <p><input $oninput={["hello"]} value={who}/> $oninput=Tuple ["event", ...p]</p>
-  <p><input $oninput={hello} value={who}/> $oninput=Function Name</p>
-  <p><input $oninput={(_, e)=>({who:e.target.value})} value={who}/> $oninput=Function</p>
-</div>;
-
-const update = [
-  ['oninput, hello', (_, e) => ({who:e.target.value})]
-];
-const hello = (_, e) => ({who:e.target.value});
-app.start(document.body, state, view, update);
+const state = '';
+const view = state => <>
+  <h1>Hello {state}</h1>
+  <input $oninput={oninput}/>
+</>;
+const oninput = (_, e) => e.target.value;
+app.start(document.body, state, view);
 `
   },
 
@@ -36,14 +28,12 @@ app.start(document.body, state, view, update);
     name: 'Hello World (debounce)',
     code: `// Hello World (debounce)
 const state = '';
-const view = state => <div>
+const view = state => <>
   <h1>Hello {state}</h1>
   <input autofocus $oninput />
-</div>;
-const update = {
-  'oninput': [(_, e) => e.target.value, { delay: 300 }]
-}
-app.start(document.body, state, view, update);
+</>;
+const oninput = [(_, e) => e.target.value, { delay: 300 }];
+app.start(document.body, state, view, {oninput});
 `
   },
 
@@ -52,17 +42,15 @@ app.start(document.body, state, view, update);
     code: `// Clock
 const state = new Date();
 const view = state => <h1>{state.toLocaleTimeString()}</h1>;
-const update = {
-  'timer': state => new Date()
-}
+const timer = state => new Date();
 window.setInterval(() => { app.run('timer') }, 1000);
-app.start(document.body, state, view, update);
+app.start(document.body, state, view, {timer});
 `
   },
 
   {
-    name: 'Clock (Component)',
-    code: `// Clock (Component)
+    name: 'Clock (Component Lifecycle)',
+    code: `// Clock (Component Lifecycle)
 class Clock extends Component {
   id;
   state = new Date();
@@ -71,7 +59,7 @@ class Clock extends Component {
     <button onclick={()=>document.body.innerHTML="Clock deleted"}>delete</button>
   </>;
   update = {
-    'timer': state => new Date()
+    timer: state => new Date()
   }
   mounted = () => {
     this.id = window.setInterval(() => { this.run('timer') }, 1000);
@@ -89,27 +77,26 @@ app.render(document.body, <Clock />);
   {
     name: 'Stopwatch',
     code: `// Stopwatch
-let id;
 const state = {
+  id: null,
   start: new Date(),
   elapsed: '0'
 }
-const view = state => {
-  return <div>
-    <h1>{state.elapsed}</h1>
-    <button $onclick="start">Start</button>
-    <button $onclick="stop">Stop</button>
-  </div>;
-};
+const view = state => <div>
+  <h1>{state.elapsed}</h1>
+  <button $onclick="start">Start</button>
+  <button $onclick="stop">Stop</button>
+</div>;
+
 const update = {
-  'start':state => {
+  start:state => {
     state.start = new Date();
-    id = id || window.setInterval(() => { app.run('timer') }, 100);
+    state.id = state.id || window.setInterval(() => { app.run('timer') }, 100);
   },
-  'stop': state => {
-    id = id && window.clearInterval(id) && false;
+  stop: state => {
+    state.id = state.id && window.clearInterval(state.id) && false;
   },
-  'timer': state => {
+  timer: state => {
     state.elapsed = ((new Date() - state.start) / 1000).toFixed(3) + ' seconds';
     return state
   }
@@ -150,8 +137,8 @@ app.start(document.body, state, view, update);
 `
   },
   {
-    name: 'Counter (JSX Directive)',
-    code:`// Counter (JSX Directive)
+    name: 'Counter ($onclick)',
+    code:`// Counter ($onclick)
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
@@ -166,15 +153,14 @@ app.start(document.body, state, view);
     code: `// Counter (Web Component)
 class Counter extends Component {
   state = 0;
-  view = state => <>
-    <h1>{state}</h1>
-    <button $onclick='-1'>-1</button>
-    <button $onclick='+1'>+1</button>
-  </>;
-  update = {
-    '+1': state => state + 1,
-    '-1': state => state - 1
-  };
+  view = state => {
+    const add = (state, num) => state + num;
+    return <>
+      <h1>{state}</h1>
+      <button $onclick={[add, -1]}>-1</button>
+      <button $onclick={[add, +1]}>+1</button>
+      </>;
+  }
 }
 app.webComponent('my-app', Counter);
 app.render(document.body, <my-app />);
@@ -202,8 +188,8 @@ app.start(document.body, state, view, update);
 `
   },
   {
-    name: 'Animation Directive',
-    code: `// Animation Directive
+    name: 'Custom Directive',
+    code: `// Animation Directive Using animate.css
 app.on('$', ({key, props}) => {
   if (key === '$animation') {
     const value = props[key];
@@ -232,8 +218,8 @@ app.start(document.body, state, view);
 `
   },
   {
-    name: 'Ref - focus',
-    code: `// Ref - focus
+    name: 'Ref - Set Focus',
+    code: `// Ref - Set Focus
 const ref = e => e.focus()
 const View = () => <input ref={ref}/>
 
@@ -241,8 +227,8 @@ app.render(document.body, <View />);
 `
   },
   {
-    name: 'Child Component',
-    code: `// Child Component
+    name: 'Child Components',
+    code: `// Child Components
 
 class Counter extends Component {
   state = 0;
@@ -295,58 +281,56 @@ const View = () => {
 app.render(document.body, <View/>);
 `
   },
-  {
-    name: 'State Machine',
-    code: `// State Machine
-const state_machine = {
-  red: ['green1', 10000],
-  green1: ['yellow1', 3000],
-  yellow1: ['green', 10000],
-  green: ['yellow2', 5000],
-  yellow2: ['red', 15000],
-}
+//   {
+//     name: 'State Machine',
+//     code: `// State Machine
+// const state_machine = {
+//   red: ['green1', 10000],
+//   green1: ['yellow1', 3000],
+//   yellow1: ['green', 10000],
+//   green: ['yellow2', 5000],
+//   yellow2: ['red', 15000],
+// }
 
-const timer = async (state) => {
-  let {sm_state, start, delta } = state;
-  if ((new Date().getTime() - start) < delta) return state;
-  const transition = state_machine[sm_state];
-  if (transition) {
-    sm_state = transition[0];
-    start = new Date().getTime();
-    delta = transition[1];
-    return {sm_state, start, delta}
-  }
-}
+// const timer = async (state) => {
+//   let {sm_state, start, delta } = state;
+//   if ((new Date().getTime() - start) < delta) return state;
+//   const transition = state_machine[sm_state];
+//   if (transition) {
+//     sm_state = transition[0];
+//     start = new Date().getTime();
+//     delta = transition[1];
+//     return {sm_state, start, delta}
+//   }
+// }
 
-const state = {
-  sm_state: 'red',
-  start: new Date().getTime(),
-  delta: 10000
-}
+// const state = {
+//   sm_state: 'red',
+//   start: new Date().getTime(),
+//   delta: 10000
+// }
 
-const view = ({sm_state, start, delta }) => <>
-  <svg height="60" width="160">
-    <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
-    <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state.startsWith('green')?'1':'0.1'}>
-    {sm_state==='green1' && <animate
-          attributeType="XML"
-          attributeName="fill"
-          values="lime;lightgrey;lime;lightgrey"
-          dur="0.5s"
-          repeatCount="indefinite"/>}
-    </circle>
-    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state.startsWith('yellow')?'1':'0.1'}/>
-    <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
-  </svg>
-  <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>
-</>;
+// const view = ({sm_state, start, delta }) => <>
+//   <svg height="60" width="160">
+//     <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
+//     <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state.startsWith('green')?'1':'0.1'}>
+//     {sm_state==='green1' && <animate
+//           attributeType="XML"
+//           attributeName="fill"
+//           values="lime;lightgrey;lime;lightgrey"
+//           dur="0.5s"
+//           repeatCount="indefinite"/>}
+//     </circle>
+//     <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state.startsWith('yellow')?'1':'0.1'}/>
+//     <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
+//   </svg>
+//   <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>
+// </>;
 
-update = { timer }
-
-app.start(document.body, state, view, update);
-window.setInterval(() => { app.run('timer') }, 1000);
-`
-  },
+// app.start(document.body, state, view, { timer });
+// window.setInterval(() => { app.run('timer') }, 1000);
+// `
+//   },
   {
     name: 'Shadow DOM',
     code: `// Shadow DOM
@@ -374,18 +358,17 @@ app.render(document.body, <View />);
     name: 'Decorators',
     code: `// Decorators
 //@customElement decorator creates a web component
-@apprun.customElement('my-counter')
+@customElement('my-counter')
 class Counter extends Component {
   state = 0;
 
   //@on decorator creates an event handler
-  @apprun.on()
-  add = (state, delta) => state + delta;
+  @on('+') add = (state, delta) => state + delta;
 
   view = state => <>
     <h1>{state}</h1>
-    <button $onclick={['add', -1]}>-1</button>
-    <button $onclick={['add', +1]}>+1</button>
+    <button $onclick={['+', -1]}>-1</button>
+    <button $onclick={['+', +1]}>+1</button>
   </>;
 }
 
@@ -393,23 +376,50 @@ class Counter extends Component {
 document.body.append(document.createElement('my-counter'));
 document.body.append(document.createElement('my-counter'));
 document.body.append(document.createElement('my-counter'));
-
 `
   },
 
   {
-    name: 'Ceremony vs. Essence',
-    code: `// Ceremony vs. Essence
-const add = count => count + 1;
+    name: 'Reactive',
+    code: `// Reactive
+const state = {
+  a: 1,
+  b: 2,
+};
+const view = ({a, b}) => <>
+  <input type="number" $bind="a" />
+  <input type="number" $bind="b" />
+  <p>{a} + {b} = { a + b }</p>
+</>;
+app.start(document.body, state, view);
+`
+  },
 
-const view = count => <button $onclick={add}>
-  Clicks: {count}
-</button>;
+  {
+    name: 'Routing',
+    code: `// Routing to Components Using Events
+class Home extends Component {
+  view = () => <div>Home</div>;
+  update = {'#, #home': state => state };
+}
 
-const rendered = count => console.log(count);
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+  update = {'#contact': state => state };
+}
 
-app.start(document.body, 0, view, null, { rendered });
-console.log('mounted!');
+class About extends Component {
+  view = () => <div>About</div>;
+  update = {'#about': state => state };
+}
+
+const App = () => <>
+  <div id="menus"><a href="#home">Home</a> | <a href="#contact">Contact</a> | <a href="#about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[About, Contact, Home].map(C => new C().start('pages'));
 `
   }
 ];

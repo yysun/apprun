@@ -11,10 +11,11 @@ const state = {
   arg1: 0,
   arg2: 0,
   op: '',
+  stack: []
 };
 export type State = typeof state;
 
-const view = ({ _state, op, arg1, arg2, display }: State) => <>
+const view = ({ _state, op, arg1, arg2, display, stack }: State) => <>
   <style> {`
     .calculator { width: 200px; }
     .buttons {
@@ -63,7 +64,6 @@ const view = ({ _state, op, arg1, arg2, display }: State) => <>
   </div>
 </>;
 
-const stack = [];
 export const button_click = (state: State, e: any) => {
 
   const priority = {
@@ -91,7 +91,7 @@ export const button_click = (state: State, e: any) => {
   const key = e.target?.textContent || e;
   const event = getEvent(key);
 
-  let { _state, op, arg1, arg2, display } = state;
+  let { _state, op, arg1, arg2, display, stack } = state;
 
   const clear = () => {
     display = '0';
@@ -213,7 +213,7 @@ export const button_click = (state: State, e: any) => {
   _state = next_state || _state;
   transition && transition();
 
-  return { _state, op, arg1, arg2, display };
+  return { _state, op, arg1, arg2, display, stack };
 };
 
 const update = {
