@@ -12,7 +12,7 @@ function _render(element, vdom, parent?) {
   }
 }
 
-const run = directive((event) => (part) => {
+const run = directive((event, ...args) => (part) => {
   if (!(part instanceof EventPart)) {
     throw new Error('${run} can only be used in event handlers');
   }
@@ -27,16 +27,9 @@ const run = directive((event) => (part) => {
     return component;
   }
   if (typeof event === 'string') {
-    element[`on${eventName}`] = e => getComponent().run(event, e);
+    element[`on${eventName}`] = e => getComponent().run(event, ...args, e);
   } else if (typeof event === 'function') {
-    element[`on${eventName}`] = e => event(e);
-  } else if (Array.isArray(event)) {
-    const [handler, ...p] = event;
-    if (typeof handler === 'string') {
-      element[`on${eventName}`] = e => getComponent().run(handler, ...p, e);
-    } else if (typeof handler === 'function') {
-      element[`on${eventName}`] = e => getComponent().setState(handler(getComponent().state, ...p, e));
-    }
+    element[`on${eventName}`] = e => getComponent().setState(event(getComponent().state, ...args, e));
   }
 });
 
