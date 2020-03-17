@@ -1,5 +1,27 @@
 <h3 id="whats-new">What&#39;s New</h3>
+<h2 id="default-npm-version-change">Default npm Version Change</h2>
+<p>In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.</p>
+<p>On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.</p>
+<p>When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.</p>
+<p>Currently, the npm tags are as following:</p>
+<ul>
+<li>apprun@es5: 1.x, stable, es5</li>
+<li>apprun@latest: 2.x, stable, es2015, web components</li>
+<li>apprun@next: 3.x, dev, es2015, web components, lit-html</li>
+</ul>
 <p>Recent Releases and publications</p>
+<h3 id="database-driven-applications-using-websockets"><a href="https://dev.to/yysun/database-driven-applications-using-websockets-2b9o">Database-Driven Applications Using WebSockets</a></h3>
+<p>This post introduces a new application architecture that allows event handling between the frontend apps and the backend business logic modules without REST API.</p>
+<p><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--ydBm2YgN--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://github.com/yysun/apprun-websockets-sqlite/raw/master/architecture-new.png" alt=""></p>
+<p>Published on Mar 9, 2020 6 min read</p>
+<h3 id="use-state-machine-in-apprun-applications"><a href="https://dev.to/yysun/use-state-machine-in-apprun-applications-odo">Use State Machine in AppRun Applications</a></h3>
+<p>This post describes how to create a state machine in AppRun applications to help event handling using a calculator as an example.</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/i/fp4aodv0sdnbkosvuxgt.png" alt=""></p>
+<p>Published on Mar 3, 2020 ・ 6 min read</p>
+<h3 id="advanced-view-features-in-apprun"><a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">Advanced View Features in AppRun</a></h3>
+<p>This post describes the advanced usage of the AppRun <em>ref</em>, <em>element embedding</em>, and <em>directive</em> in the JSX view.</p>
+<p><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--YeOauRHU--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/a4opk3gkre18w2bhc4id.png" alt=""></p>
+<p>Published on Feb 28, 2020 ・ 4 min read</p>
 <h3 id="strong-typing-in-apprun"><a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">Strong Typing in AppRun</a></h3>
 <p>This post is a complete guide for those want to opted-in TypeScript and strong typing for AppRun application development.</p>
 <p><img src="https://cdn-images-1.medium.com/max/1600/1*RY-DEfVgOjj_clIEW4HeTA.png" alt=""></p>

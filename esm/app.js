@@ -14,7 +14,7 @@ export class App {
         return this._events[name];
     }
     run(name, ...args) {
-        let subscribers = this._events[name] || [];
+        const subscribers = this._events[name] || [];
         console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
         // Update the list of subscribers by pulling out those which will run once.
         // We must do this update prior to running any of the events in case they

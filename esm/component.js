@@ -33,7 +33,7 @@ export class Component {
                 this._history_idx = this._history.length - 1;
             }
         };
-        this.start = (element = null, options = { render: true }) => {
+        this.start = (element = null, options) => {
             return this.mount(element, Object.assign(Object.assign({}, options), { render: true }));
         };
     }
