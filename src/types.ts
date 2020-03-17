@@ -1,3 +1,5 @@
+export type Element = HTMLElement | string;
+
 export type VNode = {
   tag: string | Function,
   props: {},
@@ -15,4 +17,8 @@ export type ActionOptions = {
 export type EventOptions = {
   once?: boolean;
   delay?: number;
+};
+
+export type MountOptions = {
+  render?: boolean, history?, global_event?: boolean;
 };

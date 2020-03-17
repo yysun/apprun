@@ -1,5 +1,5 @@
 import app from '../src/apprun';
-const h = app.createElement;
+const h = app.h;
 import { VNode } from '../src/types';
 
 describe('hyperscript', () => {
@@ -38,6 +38,6 @@ describe('hyperscript', () => {
     expect((vdom.children[0] as VNode).children.length).toBe(1);
     app.start('my-app', 0, view, {});
   })
-  
+
 })
 

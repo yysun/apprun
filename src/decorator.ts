@@ -30,7 +30,7 @@ export function update<E=string>(events?: E, options: any = {}) {
   }
 }
 
-export function on<E>(events?: E, options: any = {}) {
+export function on<E = string>(events?: E, options: any = {}) {
   return function (target: any, key: string) {
     const name = events ? events.toString() : key;
     Reflect.defineMetadata(`apprun-update:${name}`,

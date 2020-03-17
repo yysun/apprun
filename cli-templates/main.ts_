@@ -8,6 +8,6 @@ const view = (state) => <div>
 
 const update = {
 
-}
+};
 
 app.start(document.body, model, view, update);
