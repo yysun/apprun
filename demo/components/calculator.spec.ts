@@ -5,7 +5,8 @@ const state: State = {
   display: '0',
   arg1: 0,
   arg2: 0,
-  op: ''
+  op: '',
+  stack: []
 };
 
 const click = (input: string) => {

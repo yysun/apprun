@@ -4,7 +4,7 @@ import { Component } from './component';
 import { on, update, customElement } from './decorator';
 import webComponent from './web-component';
 import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
-app.createElement = createElement;
+app.h = app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
@@ -31,7 +31,7 @@ if (typeof document === 'object') {
         }
     });
 }
-export { app, Component, on, update };
+export { app, Component, on, update, Fragment };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };
