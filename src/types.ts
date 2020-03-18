@@ -21,3 +21,10 @@ export type EventOptions = {
 export type MountOptions = {
   render?: boolean, history?, global_event?: boolean, route?: string
 };
+
+export type AppStartOptions<T> = {
+  render?: boolean;
+  history?;
+  route?: string;
+  rendered?: (state: T) => void
+};

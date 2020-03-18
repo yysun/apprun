@@ -26,9 +26,16 @@ declare module 'apprun' {
     render?: boolean, history?, global_event?: boolean, route?: string
   };
 
+  export type AppStartOptions<T> = {
+    render?: boolean;
+    history?;
+    route?: string;
+    rendered?: (state: T) => void
+  };
+
   export interface IApp {
     start<T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
-      options?: { history?: any, rendered?: (state: T) => void }): Component<T, E>;
+      options?: AppStartOptions<T>): Component<T, E>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
