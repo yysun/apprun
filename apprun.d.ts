@@ -23,7 +23,7 @@ declare module 'apprun' {
   };
 
   export type MountOptions = {
-    render?: boolean, history?, global_event?: boolean;
+    render?: boolean, history?, global_event?: boolean, route?: string
   };
 
   export interface IApp {

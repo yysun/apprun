@@ -39,6 +39,6 @@ const App = () => <div class="container">
 app.render(document.body, <App />);
 
 const element = 'my-app';
-new Home().start(element);
-new About().mount(element);
-new Contact().mount(element);
+new Home().start(element, {route: '#, #Home'});
+new About().mount(element, {route: '#Contact'});
+new Contact().mount(element, {route: '#About'});
