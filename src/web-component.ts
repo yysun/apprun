@@ -29,7 +29,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
 
       // add getters/ setters to allow observation on observedAttributes
       (opts.observedAttributes || []).forEach(name => {
-        props[name] = this[name];
+        if (this[name] !== undefined) props[name] = this[name];
         Object.defineProperty(this, name, {
           get(): any {
             return props[name];
@@ -48,6 +48,8 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
       this._component = new componentClass({ ...props, children }).mount(this._shadowRoot, opts);
       // attach props to component
       this._component._props = props;
+      // expose dispatchEvent
+      this._component.dispatchEvent = this.dispatchEvent.bind(this)
       if (this._component.mounted) {
         const new_state = this._component.mounted(props, children, this._component.state);
         if (typeof new_state !== 'undefined') this._component.state = new_state;
@@ -67,7 +69,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
   attributeChangedCallback(name, oldValue, value) {
     this._component?.run('attributeChanged', name, oldValue, value);
     // store the new property/ attribute
-    this._component._props[name] = value
+    this._component && (this._component._props[name] = value)
     if (value !== oldValue && !(options.render === false)) {
       window.requestAnimationFrame(() => {
         // re-render state with new combined props on next animation frame
