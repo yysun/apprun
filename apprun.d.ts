@@ -18,8 +18,11 @@ declare module 'apprun' {
     delay?: number;
   };
   export type CustomElementOptions = {
-    render?, shadow?, history?, global_event?: boolean;
-    observedAttributes?: string[]
+    render?: boolean;
+    shadow?: boolean;
+    history?: boolean;
+    global_event?: boolean;
+    observedAttributes?: string[];
   };
 
   export type MountOptions = {

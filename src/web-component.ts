@@ -1,8 +1,11 @@
 declare var customElements;
 
 export type CustomElementOptions = {
-  render?, shadow?, history?, global_event?: boolean;
-  observedAttributes?: string[]
+  render?: boolean;
+  shadow?: boolean;
+  history?: boolean;
+  global_event?: boolean;
+  observedAttributes?: string[];
 };
 
 export const customElement = (componentClass, options: CustomElementOptions = {}) => class CustomElement extends HTMLElement {
