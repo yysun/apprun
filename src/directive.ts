@@ -6,7 +6,7 @@ const getStateValue = (component, name) => {
 
 const setStateValue = (component, name, value) => {
   if (name) {
-    const state = { ...component['state'] };
+    const state = component['state'] || {};
     state[name] = value;
     component.setState(state);
   } else {
@@ -65,6 +65,9 @@ export default (key: string, props: [], tag, component) => {
     } else if (tag === 'option') {
       props['selected'] = getStateValue(component, name);
       props['onclick'] = e => setStateValue(component, name || e.target.name, e.target.selected);
+    } else if (tag === 'textarea') {
+      props['innerHTML'] = getStateValue(component, name);
+      props['oninput'] = e => setStateValue(component, name || e.target.name, e.target.value);
     }
   } else {
     app.run('$', { key, tag, props, component });
