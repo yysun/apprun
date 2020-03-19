@@ -15,7 +15,8 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
             Array.from(this.attributes).forEach(item => props[item.name] = item.value);
             // add getters/ setters to allow observation on observedAttributes
             (opts.observedAttributes || []).forEach(name => {
-                props[name] = this[name];
+                if (this[name] !== undefined)
+                    props[name] = this[name];
                 Object.defineProperty(this, name, {
                     get() {
                         return props[name];
@@ -33,6 +34,8 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
             this._component = new componentClass(Object.assign(Object.assign({}, props), { children })).mount(this._shadowRoot, opts);
             // attach props to component
             this._component._props = props;
+            // expose dispatchEvent
+            this._component.dispatchEvent = this.dispatchEvent.bind(this);
             if (this._component.mounted) {
                 const new_state = this._component.mounted(props, children, this._component.state);
                 if (typeof new_state !== 'undefined')
@@ -54,7 +57,7 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
         var _a;
         (_a = this._component) === null || _a === void 0 ? void 0 : _a.run('attributeChanged', name, oldValue, value);
         // store the new property/ attribute
-        this._component._props[name] = value;
+        this._component && (this._component._props[name] = value);
         if (value !== oldValue && !(options.render === false)) {
             window.requestAnimationFrame(() => {
                 var _a;
