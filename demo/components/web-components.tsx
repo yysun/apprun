@@ -11,7 +11,7 @@ button { width: 6em }`
     const { name, value, handleClick } = props
     return (
       <>
-        <style innerHTML={this.css} />
+        <style>{this.css}</style>
         <section>
           <span>{name}</span>
           <button $onclick='inc'>
@@ -126,7 +126,7 @@ const style = `html { font-family: sans-serif; }
 
 const view = () => (
   <>
-    <style innerHTML={style} />
+    <style>{style}</style>
     <div>
       <h2>Web-Components Demo</h2>
       <p>This Demo passes properties from a container to the web-component <code>&lt;my-webcomp&gt;</code>.</p>
