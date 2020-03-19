@@ -380,31 +380,35 @@ document.body.append(document.createElement('my-counter'));
   },
 
   {
-    name: 'Reactive - $bind',
-    code: `// Reactive - $bind
+    name: 'Reactivity - getter',
+    code: `// Reactivity - getter
 const state = {
   a: 1,
   b: 2,
+  get c() {
+    return this.a + this.b;
+  }
 };
-const view = ({a, b}) => <>
+const view = ({a, b, c}) => <>
   <input type="number" $bind="a" />
   <input type="number" $bind="b" />
-  <p>{a} + {b} = { a + b }</p>
+  <p>{a} + {b} = { c }</p>
 </>;
 app.start(document.body, state, view);
 `
   },
 
   {
-    name: 'Reactive - Proxy',
-    code: `// Reactive - Proxy
+    name: 'Reactivity - Proxy',
+    code: `// Reactivity - Proxy
 const handler = {
   get: (target, name) => {
     const text = target.text || '';
     switch (name) {
       case 'text': return target.text;
       case 'characters': return text.replace(/\s/g, '').length;
-      case 'words': return !text ? 0 :target.text?.split(' ').length;
+      case 'words': return !text ? 0 : text.split(' ').length;
+      case 'lines': return text.split('\\n').length;
       default: return null
     }
   }
@@ -415,7 +419,7 @@ const state = new Proxy(
 );
 const view = state => <div>
   <textarea rows="10" cols="50" $bind="text"></textarea>
-  <div>{state.characters} {state.words}</div>
+  <div>chars: {state.characters} words: {state.words} lines: {state.lines}</div>
   {state.text}
 </div>;
 app.start(document.body, state, view);
