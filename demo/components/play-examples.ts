@@ -380,8 +380,8 @@ document.body.append(document.createElement('my-counter'));
   },
 
   {
-    name: 'Reactive',
-    code: `// Reactive
+    name: 'Reactive - $bind',
+    code: `// Reactive - $bind
 const state = {
   a: 1,
   b: 2,
@@ -391,6 +391,33 @@ const view = ({a, b}) => <>
   <input type="number" $bind="b" />
   <p>{a} + {b} = { a + b }</p>
 </>;
+app.start(document.body, state, view);
+`
+  },
+
+  {
+    name: 'Reactive - Proxy',
+    code: `// Reactive - Proxy
+const handler = {
+  get: (target, name) => {
+    const text = target.text || '';
+    switch (name) {
+      case 'text': return target.text;
+      case 'characters': return text.replace(/\s/g, '').length;
+      case 'words': return !text ? 0 :target.text?.split(' ').length;
+      default: return null
+    }
+  }
+};
+const state = new Proxy(
+  { text: "let's count" },
+  handler
+);
+const view = state => <div>
+  <textarea rows="10" cols="50" $bind="text"></textarea>
+  <div>{state.characters} {state.words}</div>
+  {state.text}
+</div>;
 app.start(document.body, state, view);
 `
   },
@@ -456,5 +483,6 @@ app.render(document.body, <App />);
   [Home, '#, #home'],
 ].map(([C, route]) => new C().start('pages', {route}));
 `
-  }
+  },
+
 ];
