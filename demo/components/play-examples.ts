@@ -396,8 +396,8 @@ app.start(document.body, state, view);
   },
 
   {
-    name: 'Routing',
-    code: `// Routing to Components Using Events
+    name: 'Routing (component event)',
+    code: `// Routing (component event)
 class Home extends Component {
   view = () => <div>Home</div>;
   update = {'#, #home': state => state };
@@ -414,12 +414,47 @@ class About extends Component {
 }
 
 const App = () => <>
-  <div id="menus"><a href="#home">Home</a> | <a href="#contact">Contact</a> | <a href="#about">About</a></div>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
   <div id="pages"></div>
 </>
 
 app.render(document.body, <App />);
 [About, Contact, Home].map(C => new C().start('pages'));
+`
+  },
+
+  {
+    name: 'Routing (mount options)',
+    code: `// Routing (mount options)
+class Home extends Component {
+  view = () => <div>Home</div>;
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[
+  [About, '#about'],
+  [Contact, '#contact'],
+  [Home, '#, #home'],
+].map(([C, route]) => new C().start('pages', {route}));
 `
   }
 ];
