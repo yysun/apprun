@@ -170,23 +170,26 @@ function updateProps(element: Element, props: {}) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
-    if (name === 'style') {
-      if (element.style.cssText) element.style.cssText = '';
-      for (const s in value) {
-        if (element.style[s] !== value[s]) element.style[s] = value[s];
-      }
-    } else if (name.startsWith('data-')) {
+    if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
       if (element.dataset[cname] !== value) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-      element instanceof SVGElement) {
+    } else if (/id|class|role|-/g.test(name) || element instanceof SVGElement) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
+      }
+    }
+    else if (name === 'style') {
+      if (element.style.cssText) element.style.cssText = '';
+      if (typeof value === 'string') element.style.cssText = value;
+      else {
+        for (const s in value) {
+          if (element.style[s] !== value[s]) element.style[s] = value[s];
+        }
       }
     } else if (element[name] !== value) {
         element[name] = value;
