@@ -235,11 +235,10 @@ describe('vdom-my', () => {
   });
 
   it('it should allow to update DOM custom attribute', () => {
-    let element = render(createElement('div', { "my": "a" }, ""));
-    expect(element["my"]).toBe('a');
-    element = render(createElement('div', { "my": "b" }, ""));
-    expect(element["my"]).toBe('b');
-
+    let element = render(createElement('div', { "my-a": "a" }, ""));
+    expect(element.getAttribute("my-a")).toBe('a');
+    element = render(createElement('div', { "my-a": "b" }, ""));
+    expect(element.getAttribute("my-a")).toBe('b');
   });
 
   it('it should support class attribute', () => {

@@ -177,13 +177,12 @@ function updateProps(element: Element, props: {}) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (/id|class|role|-/g.test(name) || element instanceof SVGElement) {
-      if (element.getAttribute(name) !== value) {
-        if (value) element.setAttribute(name, value);
-        else element.removeAttribute(name);
-      }
-    }
-    else if (name === 'style') {
+    // } else if (/id|class|role|-/g.test(name) || element instanceof SVGElement) {
+    //   if (element.getAttribute(name) !== value) {
+    //     if (value) element.setAttribute(name, value);
+    //     else element.removeAttribute(name);
+    //   }
+    } else if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
       if (typeof value === 'string') element.style.cssText = value;
       else {
@@ -191,8 +190,14 @@ function updateProps(element: Element, props: {}) {
           if (element.style[s] !== value[s]) element.style[s] = value[s];
         }
       }
-    } else if (element[name] !== value) {
-        element[name] = value;
+    } else if ((name.startsWith('on') || name==='value') && element[name] !== value) {
+      element[name] = value;
+    }
+    else {
+      if (element.getAttribute(name) !== value) {
+        if (value) element.setAttribute(name, value);
+        else element.removeAttribute(name);
+      }
     }
     if (name === 'key' && value) keyCache[value] = element;
   }
