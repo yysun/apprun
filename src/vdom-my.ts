@@ -192,8 +192,14 @@ function updateProps(element: Element, props: {}) {
       }
     } else if ((name.startsWith('on') || name==='value') && element[name] !== value) {
       element[name] = value;
-    }
-    else {
+    } else if (name.startsWith('xlink')) {
+      const xname = name.replace('xlink', '').toLowerCase();
+      if (value == null || value === false) {
+        element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
+      } else {
+        element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+      }
+    } else {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
