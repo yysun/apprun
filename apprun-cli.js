@@ -12,6 +12,7 @@ const index_html = path.resolve('./index.html');
 const main_tsx = path.resolve('./src/main.tsx');
 const spa_index = path.resolve('./index.html');
 const spa_main_tsx = path.resolve('./src/main.tsx');
+const spa_layout_tsx = path.resolve('./src/Layout.tsx');
 const readme_md = path.resolve('./README.md');
 const jest_config = path.resolve('./jest.config.js');
 const execSync = require('child_process').execSync;
@@ -121,6 +122,7 @@ function component_spec(name) {
 function spa() {
   write(spa_index, read('spa_index.html'), 'Creating', true);
   write(spa_main_tsx, read('spa_main.ts_'), 'Creating', true);
+  write(spa_layout_tsx, read('Layout.ts_'), 'Creating', true);
   component('Home');
   component('About');
   component('Contact');
@@ -129,7 +131,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('2.23.2')
+  .version('2.23.5')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
