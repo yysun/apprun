@@ -26,7 +26,7 @@ const html = code => `<!DOCTYPE html>
   Babel.registerPlugin("d", [Babel.availablePlugins["proposal-decorators"], {legacy: true}]);
   Babel.registerPlugin("c", [Babel.availablePlugins["proposal-class-properties"], {loose: true}]);
 </script>
-<script type="text/babel" data-presets="es2017, react" data-plugins="d, c">
+<script type="text/babel" data-plugins="d, c">
   ${code}
 </script>
 </body>

@@ -281,56 +281,7 @@ const View = () => {
 app.render(document.body, <View/>);
 `
   },
-//   {
-//     name: 'State Machine',
-//     code: `// State Machine
-// const state_machine = {
-//   red: ['green1', 10000],
-//   green1: ['yellow1', 3000],
-//   yellow1: ['green', 10000],
-//   green: ['yellow2', 5000],
-//   yellow2: ['red', 15000],
-// }
 
-// const timer = async (state) => {
-//   let {sm_state, start, delta } = state;
-//   if ((new Date().getTime() - start) < delta) return state;
-//   const transition = state_machine[sm_state];
-//   if (transition) {
-//     sm_state = transition[0];
-//     start = new Date().getTime();
-//     delta = transition[1];
-//     return {sm_state, start, delta}
-//   }
-// }
-
-// const state = {
-//   sm_state: 'red',
-//   start: new Date().getTime(),
-//   delta: 10000
-// }
-
-// const view = ({sm_state, start, delta }) => <>
-//   <svg height="60" width="160">
-//     <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
-//     <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state.startsWith('green')?'1':'0.1'}>
-//     {sm_state==='green1' && <animate
-//           attributeType="XML"
-//           attributeName="fill"
-//           values="lime;lightgrey;lime;lightgrey"
-//           dur="0.5s"
-//           repeatCount="indefinite"/>}
-//     </circle>
-//     <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state.startsWith('yellow')?'1':'0.1'}/>
-//     <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
-//   </svg>
-//   <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>
-// </>;
-
-// app.start(document.body, state, view, { timer });
-// window.setInterval(() => { app.run('timer') }, 1000);
-// `
-//   },
   {
     name: 'Shadow DOM',
     code: `// Shadow DOM
@@ -406,8 +357,8 @@ const handler = {
     const text = target.text || '';
     switch (name) {
       case 'text': return target.text;
-      case 'characters': return text.replace(/\s/g, '').length;
-      case 'words': return !text ? 0 : text.split(' ').length;
+      case 'characters': return text.replace(/\\s/g, '').length;
+      case 'words': return !text ? 0 : text.split(/\\s/).length;
       case 'lines': return text.split('\\n').length;
       default: return null
     }
@@ -488,5 +439,52 @@ app.render(document.body, <App />);
 ].map(([C, route]) => new C().start('pages', {route}));
 `
   },
+
+  {
+    name: 'SVG - animation',
+    code: `// SVG - animation
+const view = () => <>
+  <svg height="60" width="160">
+    <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
+    <circle cx="30" cy="30" r="20" fill='lime'>
+    <animate
+          attributeType="XML"
+          attributeName="fill"
+          values="lime;lightgrey;lime;lightgrey"
+          dur="0.5s"
+          repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity='0.2'/>
+    <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity='0.2' />
+  </svg>
+</>;
+
+app.start(document.body, {}, view);
+`
+  },
+
+  {
+    name: 'SVG - xlink',
+    code: `// SVG - xlink
+const view = () => <svg viewBox="0 0 150 20">
+  <a xlinkHref="https://apprun.js.org/">
+    <text x="10" y="10" font-size="5">Click => AppRun</text></a>
+</svg>
+
+app.start(document.body, {}, view);
+`
+  },
+
+  {
+    name: 'Content Editable',
+    code: `// Content Editable
+const view = () => <div contenteditable
+  style="height:100px; width:100%">
+  This text is editable. Click to edit.
+</div>
+
+app.start(document.body, {}, view);
+`
+  }
 
 ];
