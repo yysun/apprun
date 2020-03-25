@@ -297,5 +297,4 @@ describe('vdom-my', () => {
     render(createElement('div'));
     expect(element.id).toBe('');
   });
-
 });
