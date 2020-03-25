@@ -10,7 +10,6 @@
 
 * Support style attribute using string
 * Support xlink:href in SVG
-* Use setAttribute by default in vdom
 * Add _route_ to mount options
 * Add app start options type
 * PR #90 - observable properties on web-component, thanks to @spurreiter

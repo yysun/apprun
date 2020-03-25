@@ -475,16 +475,16 @@ app.start(document.body, {}, view);
 `
   },
 
-  {
-    name: 'Content Editable',
-    code: `// Content Editable
-const view = () => <div contenteditable
-  style="height:100px; width:100%">
-  This text is editable. Click to edit.
-</div>
+//   {
+//     name: 'Content Editable',
+//     code: `// Content Editable
+// const view = () => <div contenteditable
+//   style="height:100px; width:100%">
+//   This text is editable. Click to edit.
+// </div>
 
-app.start(document.body, {}, view);
-`
-  }
+// app.start(document.body, {}, view);
+// `
+//   }
 
 ];

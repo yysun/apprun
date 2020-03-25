@@ -166,6 +166,7 @@ function updateProps(element, props) {
     const cached = element[ATTR_PROPS] || {};
     props = mergeProps(cached, props || {});
     element[ATTR_PROPS] = props;
+    const isSvg = element instanceof SVGElement;
     for (const name in props) {
         const value = props[name];
         // if (cached[name] === value) continue;
@@ -179,11 +180,6 @@ function updateProps(element, props) {
                 else
                     delete element.dataset[cname];
             }
-            // } else if (/id|class|role|-/g.test(name) || element instanceof SVGElement) {
-            //   if (element.getAttribute(name) !== value) {
-            //     if (value) element.setAttribute(name, value);
-            //     else element.removeAttribute(name);
-            //   }
         }
         else if (name === 'style') {
             if (element.style.cssText)
@@ -197,9 +193,6 @@ function updateProps(element, props) {
                 }
             }
         }
-        else if ((name.startsWith('on') || name === 'value') && element[name] !== value) {
-            element[name] = value;
-        }
         else if (name.startsWith('xlink')) {
             const xname = name.replace('xlink', '').toLowerCase();
             if (value == null || value === false) {
@@ -209,12 +202,17 @@ function updateProps(element, props) {
                 element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
             }
         }
-        else {
+        else if (/id|class|role|-/g.test(name) || isSvg) {
             if (element.getAttribute(name) !== value) {
                 if (value)
                     element.setAttribute(name, value);
                 else
                     element.removeAttribute(name);
+            }
+        }
+        else {
+            if (element[name] !== value) {
+                element[name] = value;
             }
         }
         if (name === 'key' && value)
