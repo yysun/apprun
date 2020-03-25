@@ -186,21 +186,34 @@ function updateProps(element: Element, props: {}) {
           if (element.style[s] !== value[s]) element.style[s] = value[s];
         }
       }
-    } else if (isSvg && name.startsWith('xlink')) {
-      const xname = name.replace('xlink', '').toLowerCase();
-      if (value == null || value === false) {
-        element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
-      } else {
-        element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
-      }
-    } else if (/id|class|role|-/g.test(name) || isSvg) {
-      if (element.getAttribute(name) !== value) {
-        if (value) element.setAttribute(name, value);
-        else element.removeAttribute(name);
-      }
+    } else if (!isSvg &&
+      name !== 'list' &&
+      name !== 'tagName' &&
+      name !== 'form' &&
+      name !== 'type' &&
+      name !== 'size' &&
+      name in element
+    ) {
+      element[name] = value == null ? '' : value;
     } else {
-      if (element[name] !== value) {
-        element[name] = value;
+      if (name.startsWith('xlink:')) {
+        const xname = name.replace('xlink', '').toLowerCase();
+        if (value == null || value === false) {
+          element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
+        } else {
+          element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+        }
+      } else if (value == null || (value === false && !/^ar/.test(name))) {
+        // Form preact:
+        // ARIA-attributes have a different notion of boolean values.
+				// The value `false` is different from the attribute not
+				// existing on the DOM, so we can't remove it. For non-boolean
+				// ARIA-attributes we could treat false as a removal, but the
+				// amount of exceptions would cost us too many bytes. On top of
+				// that other VDOM frameworks also always stringify `false`.
+        element.removeAttribute(name);
+      } else {
+        element.setAttribute(name, value);
       }
     }
     if (name === 'key' && value) keyCache[value] = element;

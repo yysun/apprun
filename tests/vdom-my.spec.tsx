@@ -298,4 +298,9 @@ describe('vdom-my', () => {
     expect(element.id).toBe('');
   });
 
+  it('it should set contenteditable', () => {
+    const element = render(createElement('div', { contenteditable: 'contenteditable' }));
+    expect(element.getAttribute('contenteditable')).toBe('contenteditable');
+  });
+
 });
