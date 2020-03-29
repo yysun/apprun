@@ -68,7 +68,7 @@ function update(element: Element, node: VNode, isSvg: boolean) {
     return;
   }
   updateChildren(element, node.children, isSvg);
-  updateProps(element, node.props);
+  updateProps(element, node.props, isSvg);
 }
 
 function updateChildren(element, children, isSvg: boolean) {
@@ -144,7 +144,7 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
     : document.createElement(node.tag);
 
-  updateProps(element, node.props);
+  updateProps(element, node.props, isSvg);
 
   if (node.children) node.children.forEach(child => element.appendChild(create(child, isSvg)));
 
@@ -160,13 +160,13 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
   return props;
 }
 
-function updateProps(element: Element, props: {}) {
+function updateProps(element: Element, props: {}, isSvg) {
   console.assert(!!element);
   // console.log('updateProps', element, props);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
   element[ATTR_PROPS] = props;
-  const isSvg = element instanceof SVGElement;
+
   for (const name in props) {
     const value = props[name];
     // if (cached[name] === value) continue;
@@ -198,10 +198,8 @@ function updateProps(element: Element, props: {}) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
-    } else {
-      if (element[name] !== value) {
+    } else if (element[name] !== value) {
         element[name] = value;
-      }
     }
     if (name === 'key' && value) keyCache[value] = element;
   }
