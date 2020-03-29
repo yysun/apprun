@@ -218,10 +218,17 @@ app.start(document.body, state, view);
 `
   },
   {
-    name: 'Ref - Set Focus',
-    code: `// Ref - Set Focus
-const ref = e => e.focus()
-const View = () => <input ref={ref}/>
+    name: 'Ref - Examples',
+    code: `// Ref - Examples
+const focus = e => e.focus()
+const edit = e => e.setAttribute('contenteditable', 'true');
+const View = () => <>
+  <input ref={focus}/>
+  <hr />
+  <div ref={edit} style="height:100px; width:100%">
+    This text is editable. Click to edit.
+  </div>
+</>;
 
 app.render(document.body, <View />);
 `
