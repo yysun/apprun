@@ -38,7 +38,6 @@ const update = {
   select(store, id) {
     if (store.selected) {
       document.getElementById(store.selected).className = '';
-      store.selected = null;
     }
     store.select(id);
     document.getElementById(id).className = 'danger';
@@ -56,7 +55,8 @@ const update = {
 
   clear(store) {
     store.clear();
-    return store;
+    document.getElementById("main-table").innerHTML = "";
+    //return store;
   },
 
   swaprows(store) {
@@ -132,4 +132,7 @@ const click = (e) => {
 
 const component = new Component(store, view, update);
 component.unload = () => { console.log('benchmark.unload') };
+component.rendered = () => {
+  store.selected && (document.getElementById(store.selected).className = 'danger');
+}
 export default (element) => component.mount(element);
