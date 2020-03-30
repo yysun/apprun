@@ -46,7 +46,7 @@ declare module 'apprun' {
     run(name: string, ...args: any[]): number;
     h(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
-    render(element: HTMLElement, node: VNode): void;
+    render(element: HTMLElement, node: VDOM): void;
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
@@ -66,8 +66,6 @@ declare module 'apprun' {
     unload: (state: T) => void;
     render(element: HTMLElement, node: any): void;
   }
-
-  export type StatelessComponent<T = {}> = (args: T) => VNode | void;
 
   export function on<E>(name?: E, options?: EventOptions): any;
   // obsolete
