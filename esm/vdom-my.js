@@ -33,7 +33,7 @@ export function createElement(tag, props, ...children) {
         throw new Error(`Unknown tag in vdom ${tag}`);
 }
 ;
-const keyCache = {};
+const keyCache = new WeakMap();
 export const updateElement = render;
 export function render(element, nodes, parent = {}) {
     // console.log('render', element, node);
@@ -58,55 +58,57 @@ function same(el, node) {
     return key1.toUpperCase() === key2.toUpperCase();
 }
 function update(element, node, isSvg) {
-    console.assert(!!element);
+    // console.assert(!!element);
     isSvg = isSvg || node.tag === "svg";
-    //console.log('update', element, node);
-    if (!same(element, node)) {
-        element.parentNode.replaceChild(create(node, isSvg), element);
-        return;
+    if (node instanceof HTMLElement || node instanceof SVGElement) {
+        element.parentNode.replaceChild(node, element);
     }
-    updateChildren(element, node.children, isSvg);
-    updateProps(element, node.props);
+    else if (typeof node === 'string') {
+        if (element.textContent !== node) {
+            if (element.nodeType === 3) {
+                element.textContent = node;
+            }
+            else {
+                element.parentNode.replaceChild(createText(node), element);
+            }
+        }
+    }
+    else if (!node.tag || (typeof node.tag === 'function')) {
+        element.parentNode.replaceChild(createText(JSON.stringify(node)), element);
+    }
+    else if (!same(element, node)) {
+        element.parentNode.replaceChild(create(node, isSvg), element);
+    }
+    else {
+        updateProps(element, node.props, isSvg);
+        node.children && updateChildren(element, node.children, isSvg);
+    }
 }
 function updateChildren(element, children, isSvg) {
     const len = Math.min(element.childNodes.length, children.length);
     for (let i = 0; i < len; i++) {
         const child = children[i];
         const el = element.childNodes[i];
-        if (child instanceof HTMLElement || child instanceof SVGElement) {
-            element.insertBefore(child, el);
-        }
-        else if (typeof child === 'string') {
-            if (el.textContent !== child) {
-                if (el.nodeType === 3) {
-                    el.textContent = child;
+        const key = child.props && child.props['key'];
+        if (key) {
+            if (el.key === key) {
+                update(element.childNodes[i], child, isSvg);
+            }
+            else {
+                const old = keyCache[key];
+                if (old) {
+                    element.insertBefore(old, el);
+                    element.appendChild(el);
+                    update(element.childNodes[i], child, isSvg);
                 }
                 else {
-                    element.replaceChild(createText(child), el);
+                    const new_element = create(child, isSvg);
+                    element.insertBefore(new_element, el);
                 }
             }
         }
         else {
-            const key = child.props && child.props['key'];
-            if (key) {
-                if (el.key === key) {
-                    update(element.childNodes[i], child, isSvg);
-                }
-                else {
-                    const old = keyCache[key];
-                    if (old) {
-                        element.insertBefore(old, el);
-                        element.appendChild(el);
-                        update(element.childNodes[i], child, isSvg);
-                    }
-                    else {
-                        element.insertBefore(create(child, isSvg), el);
-                    }
-                }
-            }
-            else {
-                update(element.childNodes[i], child, isSvg);
-            }
+            update(element.childNodes[i], child, isSvg);
         }
     }
     let n = element.childNodes.length;
@@ -133,8 +135,7 @@ function createText(node) {
     }
 }
 function create(node, isSvg) {
-    console.assert(node !== null && node !== undefined);
-    // console.log('create', node, typeof node);
+    // console.assert(node !== null && node !== undefined);
     if ((node instanceof HTMLElement) || (node instanceof SVGElement))
         return node;
     if (typeof node === "string")
@@ -145,9 +146,8 @@ function create(node, isSvg) {
     const element = isSvg
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag);
-    updateProps(element, node.props);
-    if (node.children)
-        node.children.forEach(child => element.appendChild(create(child, isSvg)));
+    updateProps(element, node.props, isSvg);
+    node.children && updateChildren(element, node.children, isSvg);
     return element;
 }
 function mergeProps(oldProps, newProps) {
@@ -160,13 +160,11 @@ function mergeProps(oldProps, newProps) {
         Object.keys(newProps).forEach(p => props[p] = newProps[p]);
     return props;
 }
-function updateProps(element, props) {
-    console.assert(!!element);
-    // console.log('updateProps', element, props);
+function updateProps(element, props, isSvg) {
+    // console.assert(!!element);
     const cached = element[ATTR_PROPS] || {};
     props = mergeProps(cached, props || {});
     element[ATTR_PROPS] = props;
-    const isSvg = element instanceof SVGElement;
     for (const name in props) {
         const value = props[name];
         // if (cached[name] === value) continue;
@@ -210,10 +208,8 @@ function updateProps(element, props) {
                     element.removeAttribute(name);
             }
         }
-        else {
-            if (element[name] !== value) {
-                element[name] = value;
-            }
+        else if (element[name] !== value) {
+            element[name] = value;
         }
         if (name === 'key' && value)
             keyCache[value] = element;

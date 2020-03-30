@@ -17,7 +17,7 @@
 * Export Fragment and app.h
 * Add more examples to play-ground
 * CLI installs ES2015 by default
-* fix vdom update for child svg
+* fix vdom update for child svg, remove console.assert
 * Fix bug: view function called twice in create component
 
 ## 1.22 / 2.22 / 3.22
