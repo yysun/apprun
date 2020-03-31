@@ -78,12 +78,14 @@ function update(element: Element, node: VNode, isSvg: boolean) {
     element.parentNode.replaceChild(create(node, isSvg), element);
   } else {
     updateProps(element, node.props, isSvg);
-    node.children && updateChildren(element, node.children, isSvg);
+    updateChildren(element, node.children, isSvg);
   }
 }
 
 function updateChildren(element, children, isSvg: boolean) {
-  const len = Math.min(element.childNodes.length, children.length);
+  const old_len = element.childNodes?.length || 0;
+  const new_len = children?.length || 0;
+  const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
@@ -113,7 +115,7 @@ function updateChildren(element, children, isSvg: boolean) {
     n--;
   }
 
-  if (children.length > len) {
+  if (new_len > len) {
     const d = document.createDocumentFragment();
     for (let i = len; i < children.length; i++) {
       d.appendChild(create(children[i], isSvg));
