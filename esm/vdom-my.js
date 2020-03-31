@@ -81,11 +81,14 @@ function update(element, node, isSvg) {
     }
     else {
         updateProps(element, node.props, isSvg);
-        node.children && updateChildren(element, node.children, isSvg);
+        updateChildren(element, node.children, isSvg);
     }
 }
 function updateChildren(element, children, isSvg) {
-    const len = Math.min(element.childNodes.length, children.length);
+    var _a;
+    const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
+    const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
+    const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const child = children[i];
         const el = element.childNodes[i];
@@ -116,7 +119,7 @@ function updateChildren(element, children, isSvg) {
         element.removeChild(element.lastChild);
         n--;
     }
-    if (children.length > len) {
+    if (new_len > len) {
         const d = document.createDocumentFragment();
         for (let i = len; i < children.length; i++) {
             d.appendChild(create(children[i], isSvg));
