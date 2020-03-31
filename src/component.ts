@@ -155,6 +155,12 @@ export class Component<T=any, E=any> {
       this.on(options.history.prev || 'history-prev', this._history_prev);
       this.on(options.history.next || 'history-next', this._history_next);
     }
+
+    if (options.route) {
+      this.update = this.update || {};
+      this.update[options.route] = REFRESH;
+    }
+
     this.add_actions();
     this.state = this.state ?? this['model'] ?? {};
     if (options.render) {

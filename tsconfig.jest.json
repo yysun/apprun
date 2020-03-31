@@ -10,6 +10,7 @@
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"downlevelIteration": true,
-		"allowJs": true
+		"allowJs": true,
+		"outDir": "coverage/src"
 	}
 }

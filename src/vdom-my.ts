@@ -31,7 +31,7 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   else throw new Error(`Unknown tag in vdom ${tag}`);
 };
 
-const keyCache = {};
+const keyCache = new WeakMap();
 
 export const updateElement = render;
 
@@ -60,51 +60,52 @@ function same(el: Element, node: VNode) {
 }
 
 function update(element: Element, node: VNode, isSvg: boolean) {
-  console.assert(!!element);
+  // console.assert(!!element);
   isSvg = isSvg || node.tag === "svg";
-  //console.log('update', element, node);
-  if (!same(element, node)) {
+  if (node instanceof HTMLElement || node instanceof SVGElement) {
+    element.parentNode.replaceChild(node, element);
+  } else if (typeof node === 'string') {
+    if (element.textContent !== node) {
+      if (element.nodeType === 3) {
+        element.textContent = node
+      } else {
+        element.parentNode.replaceChild(createText(node), element);
+      }
+    }
+  } else if (!node.tag || (typeof node.tag === 'function')) {
+    element.parentNode.replaceChild(createText(JSON.stringify(node)), element);
+  } else if (!same(element, node)) {
     element.parentNode.replaceChild(create(node, isSvg), element);
-    return;
+  } else {
+    updateProps(element, node.props, isSvg);
+    updateChildren(element, node.children, isSvg);
   }
-  updateChildren(element, node.children, isSvg);
-  updateProps(element, node.props);
 }
 
 function updateChildren(element, children, isSvg: boolean) {
-  const len = Math.min(element.childNodes.length, children.length);
+  const old_len = element.childNodes?.length || 0;
+  const new_len = children?.length || 0;
+  const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
-    if (child instanceof HTMLElement || child instanceof SVGElement) {
-      element.insertBefore(child, el);
-    }
-    else if (typeof child === 'string') {
-      if (el.textContent !== child) {
-        if (el.nodeType === 3) {
-          el.textContent = child
+    const key = child.props && child.props['key'];
+    if (key) {
+      if (el.key === key) {
+        update(element.childNodes[i], child, isSvg);
+      } else {
+        const old = keyCache[key];
+        if (old) {
+          element.insertBefore(old, el);
+          element.appendChild(el);
+          update(element.childNodes[i], child, isSvg);
         } else {
-          element.replaceChild(createText(child), el);
+          const new_element = create(child, isSvg);
+          element.insertBefore(new_element, el);
         }
       }
     } else {
-      const key = child.props && child.props['key'];
-      if (key) {
-        if (el.key === key) {
-          update(element.childNodes[i], child, isSvg);
-        } else {
-          const old = keyCache[key];
-          if (old) {
-            element.insertBefore(old, el);
-            element.appendChild(el);
-            update(element.childNodes[i], child, isSvg);
-          } else {
-            element.insertBefore(create(child, isSvg), el);
-          }
-        }
-      } else {
-        update(element.childNodes[i], child, isSvg);
-      }
+      update(element.childNodes[i], child, isSvg);
     }
   }
 
@@ -114,7 +115,7 @@ function updateChildren(element, children, isSvg: boolean) {
     n--;
   }
 
-  if (children.length > len) {
+  if (new_len > len) {
     const d = document.createDocumentFragment();
     for (let i = len; i < children.length; i++) {
       d.appendChild(create(children[i], isSvg));
@@ -134,8 +135,7 @@ function createText(node) {
 }
 
 function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean): Element {
-  console.assert(node !== null && node !== undefined);
-  // console.log('create', node, typeof node);
+  // console.assert(node !== null && node !== undefined);
   if ((node instanceof HTMLElement) || (node instanceof SVGElement)) return node;
   if (typeof node === "string") return createText(node);
   if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
@@ -144,10 +144,8 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
     : document.createElement(node.tag);
 
-  updateProps(element, node.props);
-
-  if (node.children) node.children.forEach(child => element.appendChild(create(child, isSvg)));
-
+  updateProps(element, node.props, isSvg);
+  node.children && updateChildren(element, node.children, isSvg);
   return element
 }
 
@@ -160,30 +158,39 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
   return props;
 }
 
-function updateProps(element: Element, props: {}) {
-  console.assert(!!element);
-  // console.log('updateProps', element, props);
+function updateProps(element: Element, props: {}, isSvg) {
+  // console.assert(!!element);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
   element[ATTR_PROPS] = props;
+
   for (const name in props) {
     const value = props[name];
     // if (cached[name] === value) continue;
     // console.log('updateProps', name, value);
-    if (name === 'style') {
-      if (element.style.cssText) element.style.cssText = '';
-      for (const s in value) {
-        if (element.style[s] !== value[s]) element.style[s] = value[s];
-      }
-    } else if (name.startsWith('data-')) {
+    if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
       if (element.dataset[cname] !== value) {
         if (value || value === "") element.dataset[cname] = value;
         else delete element.dataset[cname];
       }
-    } else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-      element instanceof SVGElement) {
+    } else if (name === 'style') {
+      if (element.style.cssText) element.style.cssText = '';
+      if (typeof value === 'string') element.style.cssText = value;
+      else {
+        for (const s in value) {
+          if (element.style[s] !== value[s]) element.style[s] = value[s];
+        }
+      }
+    } else if (name.startsWith('xlink')) {
+      const xname = name.replace('xlink', '').toLowerCase();
+      if (value == null || value === false) {
+        element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
+      } else {
+        element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+      }
+    } else if (/id|class|role|-/g.test(name) || isSvg) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);

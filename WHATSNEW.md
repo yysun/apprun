@@ -14,7 +14,19 @@ Currently, the npm tags are as following:
 * apprun@latest: 2.x, stable, es2015, web components
 * apprun@next: 3.x, dev, es2015, web components, lit-html
 
-Recent Releases and publications
+## Recent Posts and Publications
+
+## [Observerble HQ Notebooks](https://observablehq.com/@yysun)
+
+* [AppRun Events Evolved](https://observablehq.com/@yysun/apprun-events-evolved)
+
+* [State Machine - Traffic Lights](https://observablehq.com/@yysun/state-machine-traffic-lights)
+
+* [Introducing AppRun](https://observablehq.com/@yysun/introducing-apprun)
+
+### [AppRun Event Directives](https://dev.to/yysun/apprun-events-directives-4jph)
+
+### [Ceremony vs. Essence Revisited](https://dev.to/yysun/ceremony-vs-essence-revisited-5e77)
 
 ### [Database-Driven Applications Using WebSockets](https://dev.to/yysun/database-driven-applications-using-websockets-2b9o)
 
@@ -36,8 +48,6 @@ Published on Mar 3, 2020 ・ 6 min read
 
 This post describes the advanced usage of the AppRun _ref_, _element embedding_, and _directive_ in the JSX view.
 
-![](https://res.cloudinary.com/practicaldev/image/fetch/s--YeOauRHU--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/a4opk3gkre18w2bhc4id.png)
-
 Published on Feb 28, 2020 ・ 4 min read
 
 ### [Strong Typing in AppRun](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1)
@@ -51,8 +61,6 @@ Published on May 17, 2019 · 8 min read
 ### [Announcing AppRun Directives](https://medium.com/@yiyisun/announcing-apprun-directives-6a063f88379c)
 
 This post introduces the two built-in directives and then describes how to create custom directives.
-
-![](https://cdn-images-1.medium.com/max/1600/0*yd9d2brLtXEukKw0.png)
 
 Published on May 12, 2019 · 3 min read
 

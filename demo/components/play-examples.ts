@@ -137,28 +137,12 @@ app.start(document.body, state, view, update);
 `
   },
   {
-    name: 'Counter (lit-html)',
-    code: `// Counter (lit-html)
-const state = 0;
-const view = state => html\`<div>
-  <h1>\${state}</h1>
-  <button @click=\${()=>app.run("-1")}>-1</button>
-  <button @click=\${()=>app.run("+1")}>+1</button>
-</div>\`;
-const update = {
-  '+1': state => state + 1,
-  '-1': state => state - 1
-};
-app.start(document.body, state, view, update);
-`
-  },
-  {
     name: 'Counter ($onclick)',
     code:`// Counter ($onclick)
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
-  <button $onclick={state => state - 1}>-1</button>
+  <button $onclick={state => state - 1}>+1</button>
   <button $onclick={state => state + 1}>+1</button>
 </div>;
 app.start(document.body, state, view);
@@ -234,10 +218,17 @@ app.start(document.body, state, view);
 `
   },
   {
-    name: 'Ref - Set Focus',
-    code: `// Ref - Set Focus
-const ref = e => e.focus()
-const View = () => <input ref={ref}/>
+    name: 'Ref - Examples',
+    code: `// Ref - Examples
+const focus = e => e.focus()
+const edit = e => e.setAttribute('contenteditable', 'true');
+const View = () => <>
+  <input ref={focus}/>
+  <hr />
+  <div ref={edit} style="height:100px; width:100%">
+    This text is editable. Click to edit.
+  </div>
+</>;
 
 app.render(document.body, <View />);
 `
@@ -297,56 +288,7 @@ const View = () => {
 app.render(document.body, <View/>);
 `
   },
-//   {
-//     name: 'State Machine',
-//     code: `// State Machine
-// const state_machine = {
-//   red: ['green1', 10000],
-//   green1: ['yellow1', 3000],
-//   yellow1: ['green', 10000],
-//   green: ['yellow2', 5000],
-//   yellow2: ['red', 15000],
-// }
 
-// const timer = async (state) => {
-//   let {sm_state, start, delta } = state;
-//   if ((new Date().getTime() - start) < delta) return state;
-//   const transition = state_machine[sm_state];
-//   if (transition) {
-//     sm_state = transition[0];
-//     start = new Date().getTime();
-//     delta = transition[1];
-//     return {sm_state, start, delta}
-//   }
-// }
-
-// const state = {
-//   sm_state: 'red',
-//   start: new Date().getTime(),
-//   delta: 10000
-// }
-
-// const view = ({sm_state, start, delta }) => <>
-//   <svg height="60" width="160">
-//     <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
-//     <circle cx="30" cy="30" r="20" fill='lime' fill-opacity={sm_state.startsWith('green')?'1':'0.1'}>
-//     {sm_state==='green1' && <animate
-//           attributeType="XML"
-//           attributeName="fill"
-//           values="lime;lightgrey;lime;lightgrey"
-//           dur="0.5s"
-//           repeatCount="indefinite"/>}
-//     </circle>
-//     <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity={sm_state.startsWith('yellow')?'1':'0.1'}/>
-//     <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity={sm_state==='red'?'1':'0.1'} />
-//   </svg>
-//   <h1>{((delta - new Date() + start) / 1000).toFixed(0)}</h1>
-// </>;
-
-// app.start(document.body, state, view, { timer });
-// window.setInterval(() => { app.run('timer') }, 1000);
-// `
-//   },
   {
     name: 'Shadow DOM',
     code: `// Shadow DOM
@@ -396,24 +338,55 @@ document.body.append(document.createElement('my-counter'));
   },
 
   {
-    name: 'Reactive',
-    code: `// Reactive
+    name: 'Reactivity - getter',
+    code: `// Reactivity - getter
 const state = {
   a: 1,
   b: 2,
+  get c() {
+    return this.a + this.b;
+  }
 };
-const view = ({a, b}) => <>
+const view = ({a, b, c}) => <>
   <input type="number" $bind="a" />
   <input type="number" $bind="b" />
-  <p>{a} + {b} = { a + b }</p>
+  <p>{a} + {b} = { c }</p>
 </>;
 app.start(document.body, state, view);
 `
   },
 
   {
-    name: 'Routing',
-    code: `// Routing to Components Using Events
+    name: 'Reactivity - Proxy',
+    code: `// Reactivity - Proxy
+const handler = {
+  get: (target, name) => {
+    const text = target.text || '';
+    switch (name) {
+      case 'text': return target.text;
+      case 'characters': return text.replace(/\\s/g, '').length;
+      case 'words': return !text ? 0 : text.split(/\\s/).length;
+      case 'lines': return text.split('\\n').length;
+      default: return null
+    }
+  }
+};
+const state = new Proxy(
+  { text: "let's count" },
+  handler
+);
+const view = state => <div>
+  <textarea rows="10" cols="50" $bind="text"></textarea>
+  <div>chars: {state.characters} words: {state.words} lines: {state.lines}</div>
+  {state.text}
+</div>;
+app.start(document.body, state, view);
+`
+  },
+
+  {
+    name: 'Routing (component event)',
+    code: `// Routing (component event)
 class Home extends Component {
   view = () => <div>Home</div>;
   update = {'#, #home': state => state };
@@ -430,12 +403,95 @@ class About extends Component {
 }
 
 const App = () => <>
-  <div id="menus"><a href="#home">Home</a> | <a href="#contact">Contact</a> | <a href="#about">About</a></div>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
   <div id="pages"></div>
 </>
 
 app.render(document.body, <App />);
 [About, Contact, Home].map(C => new C().start('pages'));
 `
-  }
+  },
+
+  {
+    name: 'Routing (mount options)',
+    code: `// Routing (mount options)
+class Home extends Component {
+  view = () => <div>Home</div>;
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[
+  [About, '#about'],
+  [Contact, '#contact'],
+  [Home, '#, #home'],
+].map(([C, route]) => new C().start('pages', {route}));
+`
+  },
+
+  {
+    name: 'SVG - animation',
+    code: `// SVG - animation
+const view = () => <>
+  <svg height="60" width="160">
+    <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
+    <circle cx="30" cy="30" r="20" fill='lime'>
+    <animate
+          attributeType="XML"
+          attributeName="fill"
+          values="lime;lightgrey;lime;lightgrey"
+          dur="0.5s"
+          repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity='0.2'/>
+    <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity='0.2' />
+  </svg>
+</>;
+
+app.start(document.body, {}, view);
+`
+  },
+
+  {
+    name: 'SVG - xlink',
+    code: `// SVG - xlink
+const view = () => <svg viewBox="0 0 150 20">
+  <a xlinkHref="https://apprun.js.org/">
+    <text x="10" y="10" font-size="5">Click => AppRun</text></a>
+</svg>
+
+app.start(document.body, {}, view);
+`
+  },
+
+//   {
+//     name: 'Content Editable',
+//     code: `// Content Editable
+// const view = () => <div contenteditable
+//   style="height:100px; width:100%">
+//   This text is editable. Click to edit.
+// </div>
+
+// app.start(document.body, {}, view);
+// `
+//   }
+
 ];
