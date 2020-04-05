@@ -378,7 +378,7 @@ const state = new Proxy(
 const view = state => <div>
   <textarea rows="10" cols="50" $bind="text"></textarea>
   <div>chars: {state.characters} words: {state.words} lines: {state.lines}</div>
-  {state.text}
+  <pre>{state.text}</pre>
 </div>;
 app.start(document.body, state, view);
 `

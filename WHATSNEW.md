@@ -18,11 +18,18 @@ Currently, the npm tags are as following:
 
 ## [Observerble HQ Notebooks](https://observablehq.com/@yysun)
 
-* [AppRun Events Evolved](https://observablehq.com/@yysun/apprun-events-evolved)
-
-* [State Machine - Traffic Lights](https://observablehq.com/@yysun/state-machine-traffic-lights)
-
 * [Introducing AppRun](https://observablehq.com/@yysun/introducing-apprun)
+
+
+### [Rust WebAssembly and AppRun](https://dev.to/yysun/rust-webassembly-and-apprun-3bei)
+
+### [Serverless App Using Firebase and AppRun](https://dev.to/yysun/serverless-app-on-firebase-using-apprun-1k46)
+
+### [Avoid Spaghetti Code using AppRun](https://dev.to/yysun/apprun-helps-to-avoid-spaghetti-code-1835)
+
+### [Create a Phoenix LiveView Like App in JS with AppRun](https://dev.to/yysun/create-a-phoenix-liveview-like-app-in-js-with-apprun-dc8)
+
+### [Reactivity in AppRun](https://dev.to/yysun/reactivity-in-apprun-31po)
 
 ### [AppRun Event Directives](https://dev.to/yysun/apprun-events-directives-4jph)
 

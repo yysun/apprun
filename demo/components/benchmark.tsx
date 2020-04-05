@@ -67,7 +67,7 @@ const update = {
 
 const view = (model) => {
   const rows = model.data.map((curr) => {
-    const selected = curr.id === model.selected ? 'danger' : '';
+    const selected = curr.id === model.selected ? 'danger' : undefined;
     const id = curr.id;
     return <tr class={selected} id={id} key={id}>
     <td class="col-md-1">{id}</td>
@@ -113,17 +113,14 @@ const click = (e) => {
   const t = e.target as HTMLElement;
   if (!t) return;
   if (t.tagName === 'BUTTON' && t.id) {
-    e.preventDefault();
     startMeasure(t.id);
     component.run(t.id);
     stopMeasure();
   } else if (t.matches('.remove')) {
-    e.preventDefault();
     startMeasure('remove');
     component.run('remove', getId(t));
     stopMeasure();
   } else if (t.matches('.lbl')) {
-    e.preventDefault();
     startMeasure('select');
     component.run('select', getId(t));
     stopMeasure();
@@ -131,7 +128,7 @@ const click = (e) => {
 };
 
 const component = new Component(store, view, update);
-component.unload = () => { console.log('benchmark.unload') };
+component.unload = () => { store.clear(); console.log('benchmark.unload') };
 component.rendered = () => {
   store.selected && (document.getElementById(store.selected).className = 'danger');
 }
