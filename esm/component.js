@@ -1,6 +1,7 @@
 import app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
+import patch from './vdom-patch';
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 const REFRESH = state => state;
@@ -60,7 +61,7 @@ export class Component {
     renderState(state, vdom = null) {
         if (!this.view)
             return;
-        const html = vdom || this._view(state);
+        let html = vdom || this._view(state);
         app['debug'] && app.run('debug', {
             component: this,
             state,
@@ -85,6 +86,7 @@ export class Component {
                                 this.unload(this.state);
                                 this.observer.disconnect();
                                 this.observer = null;
+                                this.save_vdom = null;
                             }
                         });
                     this.observer.observe(document.body, {
@@ -93,10 +95,15 @@ export class Component {
                     });
                 }
             }
+            if (el['_component'] === this && this.save_vdom) {
+                patch([this.save_vdom], [html]);
+            }
             el['_component'] = this;
         }
-        if (!vdom)
+        if (!vdom) {
             this.render(el, html);
+            this.save_vdom = html;
+        }
         this.rendered && this.rendered(this.state);
     }
     setState(state, options = { render: true, history: false }) {

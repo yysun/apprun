@@ -60,29 +60,12 @@ function same(el, node) {
 function update(element, node, isSvg) {
     // console.assert(!!element);
     isSvg = isSvg || node.tag === "svg";
-    if (node instanceof HTMLElement || node instanceof SVGElement) {
-        element.parentNode.replaceChild(node, element);
-    }
-    else if (typeof node === 'string') {
-        if (element.textContent !== node) {
-            if (element.nodeType === 3) {
-                element.textContent = node;
-            }
-            else {
-                element.parentNode.replaceChild(createText(node), element);
-            }
-        }
-    }
-    else if (!node.tag || (typeof node.tag === 'function')) {
-        element.parentNode.replaceChild(createText(JSON.stringify(node)), element);
-    }
-    else if (!same(element, node)) {
+    if (!same(element, node)) {
         element.parentNode.replaceChild(create(node, isSvg), element);
+        return;
     }
-    else {
-        updateProps(element, node.props, isSvg);
-        updateChildren(element, node.children, isSvg);
-    }
+    !(node['_op'] & 2) && updateChildren(element, node.children, isSvg);
+    !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
     var _a;
@@ -92,26 +75,40 @@ function updateChildren(element, children, isSvg) {
     for (let i = 0; i < len; i++) {
         const child = children[i];
         const el = element.childNodes[i];
-        const key = child.props && child.props['key'];
-        if (key) {
-            if (el.key === key) {
-                update(element.childNodes[i], child, isSvg);
-            }
-            else {
-                const old = keyCache[key];
-                if (old) {
-                    element.insertBefore(old, el);
-                    element.appendChild(el);
-                    update(element.childNodes[i], child, isSvg);
+        if (typeof child === 'string') {
+            if (el.textContent !== child) {
+                if (el.nodeType === 3) {
+                    el.textContent = child;
                 }
                 else {
-                    const new_element = create(child, isSvg);
-                    element.insertBefore(new_element, el);
+                    element.replaceChild(createText(child), el);
                 }
             }
         }
+        else if (child instanceof HTMLElement || child instanceof SVGElement) {
+            element.insertBefore(child, el);
+        }
         else {
-            update(element.childNodes[i], child, isSvg);
+            const key = child.props && child.props['key'];
+            if (key) {
+                if (el.key === key) {
+                    update(element.childNodes[i], child, isSvg);
+                }
+                else {
+                    const old = keyCache[key];
+                    if (old) {
+                        element.insertBefore(old, el);
+                        element.appendChild(el);
+                        update(element.childNodes[i], child, isSvg);
+                    }
+                    else {
+                        element.insertBefore(create(child, isSvg), el);
+                    }
+                }
+            }
+            else {
+                update(element.childNodes[i], child, isSvg);
+            }
         }
     }
     let n = element.childNodes.length;
@@ -150,7 +147,8 @@ function create(node, isSvg) {
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag);
     updateProps(element, node.props, isSvg);
-    node.children && updateChildren(element, node.children, isSvg);
+    if (node.children)
+        node.children.forEach(child => element.appendChild(create(child, isSvg)));
     return element;
 }
 function mergeProps(oldProps, newProps) {
