@@ -66,8 +66,8 @@ function update(element: Element, node: VNode, isSvg: boolean) {
     element.parentNode.replaceChild(create(node, isSvg), element);
     return;
   }
-  updateChildren(element, node.children, isSvg);
-  updateProps(element, node.props, isSvg);
+  !(node['_op'] & 2) && updateChildren(element, node.children, isSvg);
+  !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 
 function updateChildren(element, children, isSvg: boolean) {
@@ -161,10 +161,6 @@ function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
-  if (props === {}) return;
-  if (Object.keys(props).filter(p=>p.startsWith('on')).length === 0 &&
-    JSON.stringify(cached) === JSON.stringify(props)) return;
-  // console.log(JSON.stringify(cached) , JSON.stringify(props), Object.keys(cached), Object.keys(props));
   element[ATTR_PROPS] = props;
 
   for (const name in props) {

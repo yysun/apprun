@@ -3,6 +3,7 @@ import app, { App } from './app';
 import { Reflect } from './decorator'
 import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
+import patch from './vdom-patch';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
@@ -25,6 +26,7 @@ export class Component<T=any, E=any> {
   public unload;
   private tracking_id;
   private observer;
+  private save_vdom;
 
   render(element: HTMLElement, node) {
     app.render(element, node, this);
@@ -49,7 +51,7 @@ export class Component<T=any, E=any> {
 
   private renderState(state: T, vdom = null) {
     if (!this.view) return;
-    const html = vdom || this._view(state);
+    let html = vdom || this._view(state);
     app['debug'] && app.run('debug', {
       component: this,
       state,
@@ -74,6 +76,7 @@ export class Component<T=any, E=any> {
               this.unload(this.state);
               this.observer.disconnect();
               this.observer = null;
+              this.save_vdom = null;
             }
           });
           this.observer.observe(document.body, {
@@ -82,9 +85,15 @@ export class Component<T=any, E=any> {
           });
         }
       }
+      if (el['_component'] === this && this.save_vdom) {
+        patch([this.save_vdom], [html]);
+      }
       el['_component'] = this;
     }
-    if (!vdom) this.render(el, html);
+    if (!vdom) {
+      this.render(el, html);
+      this.save_vdom = html;
+    }
     this.rendered && this.rendered(this.state);
   }
 
