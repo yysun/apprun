@@ -62,24 +62,12 @@ function same(el: Element, node: VNode) {
 function update(element: Element, node: VNode, isSvg: boolean) {
   // console.assert(!!element);
   isSvg = isSvg || node.tag === "svg";
-  if (node instanceof HTMLElement || node instanceof SVGElement) {
-    element.parentNode.replaceChild(node, element);
-  } else if (typeof node === 'string') {
-    if (element.textContent !== node) {
-      if (element.nodeType === 3) {
-        element.textContent = node
-      } else {
-        element.parentNode.replaceChild(createText(node), element);
-      }
-    }
-  } else if (!node.tag || (typeof node.tag === 'function')) {
-    element.parentNode.replaceChild(createText(JSON.stringify(node)), element);
-  } else if (!same(element, node)) {
+  if (!same(element, node)) {
     element.parentNode.replaceChild(create(node, isSvg), element);
-  } else {
-    updateProps(element, node.props, isSvg);
-    updateChildren(element, node.children, isSvg);
+    return;
   }
+  updateChildren(element, node.children, isSvg);
+  updateProps(element, node.props, isSvg);
 }
 
 function updateChildren(element, children, isSvg: boolean) {
@@ -89,23 +77,34 @@ function updateChildren(element, children, isSvg: boolean) {
   for (let i = 0; i < len; i++) {
     const child = children[i];
     const el = element.childNodes[i];
-    const key = child.props && child.props['key'];
-    if (key) {
-      if (el.key === key) {
-        update(element.childNodes[i], child, isSvg);
-      } else {
-        const old = keyCache[key];
-        if (old) {
-          element.insertBefore(old, el);
-          element.appendChild(el);
-          update(element.childNodes[i], child, isSvg);
+    if (typeof child === 'string') {
+      if (el.textContent !== child) {
+        if (el.nodeType === 3) {
+          el.textContent = child
         } else {
-          const new_element = create(child, isSvg);
-          element.insertBefore(new_element, el);
+          element.replaceChild(createText(child), el);
         }
       }
+    } else if (child instanceof HTMLElement || child instanceof SVGElement) {
+        element.insertBefore(child, el);
     } else {
-      update(element.childNodes[i], child, isSvg);
+      const key = child.props && child.props['key'];
+      if (key) {
+        if (el.key === key) {
+          update(element.childNodes[i], child, isSvg);
+        } else {
+          const old = keyCache[key];
+          if (old) {
+            element.insertBefore(old, el);
+            element.appendChild(el);
+            update(element.childNodes[i], child, isSvg);
+          } else {
+            element.insertBefore(create(child, isSvg), el);
+          }
+        }
+      } else {
+        update(element.childNodes[i], child, isSvg);
+      }
     }
   }
 
@@ -145,7 +144,7 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
     : document.createElement(node.tag);
 
   updateProps(element, node.props, isSvg);
-  node.children && updateChildren(element, node.children, isSvg);
+  if (node.children) node.children.forEach(child => element.appendChild(create(child, isSvg)));
   return element
 }
 
@@ -162,6 +161,10 @@ function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
+  if (props === {}) return;
+  if (Object.keys(props).filter(p=>p.startsWith('on')).length === 0 &&
+    JSON.stringify(cached) === JSON.stringify(props)) return;
+  // console.log(JSON.stringify(cached) , JSON.stringify(props), Object.keys(cached), Object.keys(props));
   element[ATTR_PROPS] = props;
 
   for (const name in props) {
