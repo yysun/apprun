@@ -95,7 +95,7 @@ export class Component {
                     });
                 }
             }
-            if (el['_component'] === this && this.save_vdom) {
+            if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
                 patch([this.save_vdom], [html]);
             }
             el['_component'] = this;

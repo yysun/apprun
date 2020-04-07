@@ -10,6 +10,7 @@
 
 * Support style attribute using string
 * Support xlink:href in SVG
+* Add -patch-vdom-on flag on component for patching vdom before rendering
 * Add _route_ to mount options
 * Add app start options type
 * PR #90 - observable properties on web-component, thanks to @spurreiter
