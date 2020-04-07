@@ -76,7 +76,7 @@ export class Component<T=any, E=any> {
               this.unload(this.state);
               this.observer.disconnect();
               this.observer = null;
-              this.save_vdom = null;
+              this.save_vdom = [];
             }
           });
           this.observer.observe(document.body, {
