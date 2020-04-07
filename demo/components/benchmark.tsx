@@ -128,6 +128,7 @@ const click = (e) => {
 };
 
 const component = new Component(store, view, update);
+component['-patch-vdom-on'] = true;
 component.unload = () => { store.clear(); console.log('benchmark.unload') };
 component.rendered = () => {
   store.selected && (document.getElementById(store.selected).className = 'danger');
