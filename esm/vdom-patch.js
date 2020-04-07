@@ -4,13 +4,15 @@ var CHANGES;
     CHANGES[CHANGES["NO_TREE_CHANGE"] = 2] = "NO_TREE_CHANGE";
 })(CHANGES || (CHANGES = {}));
 function patch(vdom1, vdom2) {
+    if (!(vdom1 === null || vdom1 === void 0 ? void 0 : vdom1.length) || !(vdom2 === null || vdom2 === void 0 ? void 0 : vdom2.length))
+        return;
     const old_len = vdom1.length;
     const new_len = vdom2.length;
     const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const node1 = vdom1[i];
         const node2 = vdom2[i];
-        if (typeof node2 !== 'object')
+        if (!node2 || typeof node2 !== 'object')
             continue;
         if (_areEquals(node1, node2)) {
             node2._op = CHANGES.NO_ATTR_CHANGE | CHANGES.NO_TREE_CHANGE;
