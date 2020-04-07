@@ -189,7 +189,7 @@ function updateProps(element: Element, props: {}, isSvg) {
       } else {
         element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
       }
-    } else if (/id|class|role|-/g.test(name) || isSvg) {
+    } else if (/^id$|^class$|^role|-/g.test(name) || isSvg) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
