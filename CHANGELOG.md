@@ -9,6 +9,7 @@
 ## 1.23 / 2.23 / 3.23
 
 * Support style attribute using string
+* Support element event handler using string
 * Support xlink:href in SVG
 * Add -patch-vdom-on flag on component for patching vdom before rendering
 * Add _route_ to mount options

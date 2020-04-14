@@ -482,16 +482,35 @@ app.start(document.body, {}, view);
 `
   },
 
-//   {
-//     name: 'Content Editable',
-//     code: `// Content Editable
-// const view = () => <div contenteditable
-//   style="height:100px; width:100%">
-//   This text is editable. Click to edit.
-// </div>
+  {
+    name: 'SVG - $onclick',
+    code: `// SVG - $onclick
+const view = state => <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="90" height="40" fill="#aaa"
+    $onclick="test"/>
+  <rect x="10" y="80" width="90" height="40" fill="#bbb"
+    onclick="alert('You have clicked the rect.')"/>
+</svg>
 
-// app.start(document.body, {}, view);
-// `
-//   }
+const update = {
+  test: (state, evt) => alert("You have clicked the " + evt.target.tagName)
+}
+app.start(document.body, '', view, update);
+`
+  },
+    {
+    name: 'Content Editable',
+    code: `// Content Editable
+const view = () => <>
+  <div contenteditable
+    style="height:100px; width:100%">
+    This text is editable. Click to edit.
+  </div>
+  <input readonly value="This text is readonly."/>
+  <button onclick="alert(0)">event handler as string</button>
+</>
+app.start(document.body, {}, view);
+`
+  }
 
 ];
