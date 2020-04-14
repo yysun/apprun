@@ -1,8 +1,9 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions } from './types';
+import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
+import patch from './vdom-patch';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
@@ -25,6 +26,7 @@ export class Component<T=any, E=any> {
   public unload;
   private tracking_id;
   private observer;
+  private save_vdom;
 
   render(element: HTMLElement, node) {
     app.render(element, node, this);
@@ -49,7 +51,7 @@ export class Component<T=any, E=any> {
 
   private renderState(state: T, vdom = null) {
     if (!this.view) return;
-    const html = vdom || this._view(state);
+    let html = vdom || this._view(state);
     app['debug'] && app.run('debug', {
       component: this,
       state,
@@ -74,6 +76,7 @@ export class Component<T=any, E=any> {
               this.unload(this.state);
               this.observer.disconnect();
               this.observer = null;
+              this.save_vdom = [];
             }
           });
           this.observer.observe(document.body, {
@@ -82,9 +85,15 @@ export class Component<T=any, E=any> {
           });
         }
       }
+      if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
+        patch([this.save_vdom], [html]);
+      }
       el['_component'] = this;
     }
-    if (!vdom) this.render(el, html);
+    if (!vdom) {
+      this.render(el, html);
+      this.save_vdom = html;
+    }
     this.rendered && this.rendered(this.state);
   }
 
@@ -98,7 +107,7 @@ export class Component<T=any, E=any> {
       }).catch(err => {
         console.error(err);
         throw err;
-      })
+      });
       this._state = state;
     } else {
       this._state = state;
@@ -140,13 +149,11 @@ export class Component<T=any, E=any> {
     protected options?) {
   }
 
-  start = (element = null,
-    options: { render?: boolean, history?, global_event?: boolean } = { render: true }): Component<T> => {
+  start = (element = null, options?: MountOptions): Component<T, E> => {
     return this.mount(element, { ...options, render: true });
   }
 
-  public mount(element = null, options?: { render?: boolean, history?, global_event?: boolean}) {
-
+  public mount(element = null, options?: MountOptions): Component<T, E>  {
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = { ...this.options, ...options };
     this.element = element;
@@ -157,6 +164,12 @@ export class Component<T=any, E=any> {
       this.on(options.history.prev || 'history-prev', this._history_prev);
       this.on(options.history.next || 'history-next', this._history_next);
     }
+
+    if (options.route) {
+      this.update = this.update || {};
+      this.update[options.route] = REFRESH;
+    }
+
     this.add_actions();
     this.state = this.state ?? this['model'] ?? {};
     if (options.render) {

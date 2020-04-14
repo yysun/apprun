@@ -74,7 +74,7 @@ const viewEvents = state => {
       .map(({ event, components }) => <li>
         <div>{event}</div>
         <Components components={components} />
-    </li>)}
+      </li>)}
   </ul>;
 
   return <div>
@@ -82,7 +82,7 @@ const viewEvents = state => {
     <Events events={state} global={true} />
     <div>LOCAL EVENTS</div>
     <Events events={state} global={false} />
-    </div>
+  </div>
 }
 
 const _events = (print?) => {
@@ -109,10 +109,10 @@ const _events = (print?) => {
     newWin(toHTML(vdom));
   } else {
     console.log('=== GLOBAL EVENTS ===')
-    data.filter(event=>event.global)
+    data.filter(event => event.global)
       .forEach(({ event, components }) => console.log({ event }, components));
     console.log('=== LOCAL EVENTS ===')
-    data.filter(event=>!event.global)
+    data.filter(event => !event.global)
       .forEach(({ event, components }) => console.log({ event }, components));
   }
 
@@ -169,7 +169,7 @@ window['_apprun-log'] = ['log [event|view] on|off', (a1?, a2?) => {
       debugging &= ~2;
     }
   }
-  console.log(`* log ${a1} ${a2||''}`)
+  console.log(`* log ${a1} ${a2 || ''}`)
 }];
 
 window['_apprun-create-event-tests'] = ['create-event-tests',

@@ -14,21 +14,13 @@ app.start(document.body, state, view);
   {
     name: 'Hello World ($on)',
     code: `// Hello World ($on)
-const state = { who: 'World' };
-const view = ({who}) => <div>
-  <h1>Hello {who}</h1>
-  <p><input $oninput value={who} /> $oninput</p>
-  <p><input $oninput="hello" value={who}/> $oninput="event"</p>
-  <p><input $oninput={["hello"]} value={who}/> $oninput=Tuple ["event", ...p]</p>
-  <p><input $oninput={hello} value={who}/> $oninput=Function Name</p>
-  <p><input $oninput={(_, e)=>({who:e.target.value})} value={who}/> $oninput=Function</p>
-</div>;
-
-const update = [
-  ['oninput, hello', (_, e) => ({who:e.target.value})]
-];
-const hello = (_, e) => ({who:e.target.value});
-app.start(document.body, state, view, update);
+const state = '';
+const view = state => <>
+  <h1>Hello {state}</h1>
+  <input $oninput={oninput}/>
+</>;
+const oninput = (_, e) => e.target.value;
+app.start(document.body, state, view);
 `
   },
 
@@ -36,14 +28,12 @@ app.start(document.body, state, view, update);
     name: 'Hello World (debounce)',
     code: `// Hello World (debounce)
 const state = '';
-const view = state => <div>
+const view = state => <>
   <h1>Hello {state}</h1>
   <input autofocus $oninput />
-</div>;
-const update = {
-  'oninput': [(_, e) => e.target.value, { delay: 300 }]
-}
-app.start(document.body, state, view, update);
+</>;
+const oninput = [(_, e) => e.target.value, { delay: 300 }];
+app.start(document.body, state, view, {oninput});
 `
   },
 
@@ -52,17 +42,15 @@ app.start(document.body, state, view, update);
     code: `// Clock
 const state = new Date();
 const view = state => <h1>{state.toLocaleTimeString()}</h1>;
-const update = {
-  'timer': state => new Date()
-}
+const timer = state => new Date();
 window.setInterval(() => { app.run('timer') }, 1000);
-app.start(document.body, state, view, update);
+app.start(document.body, state, view, {timer});
 `
   },
 
   {
-    name: 'Clock (Component)',
-    code: `// Clock (Component)
+    name: 'Clock (Component Lifecycle)',
+    code: `// Clock (Component Lifecycle)
 class Clock extends Component {
   id;
   state = new Date();
@@ -71,7 +59,7 @@ class Clock extends Component {
     <button onclick={()=>document.body.innerHTML="Clock deleted"}>delete</button>
   </>;
   update = {
-    'timer': state => new Date()
+    timer: state => new Date()
   }
   mounted = () => {
     this.id = window.setInterval(() => { this.run('timer') }, 1000);
@@ -89,27 +77,26 @@ app.render(document.body, <Clock />);
   {
     name: 'Stopwatch',
     code: `// Stopwatch
-let id;
 const state = {
+  id: null,
   start: new Date(),
   elapsed: '0'
 }
-const view = state => {
-  return <div>
-    <h1>{state.elapsed}</h1>
-    <button $onclick="start">Start</button>
-    <button $onclick="stop">Stop</button>
-  </div>;
-};
+const view = state => <div>
+  <h1>{state.elapsed}</h1>
+  <button $onclick="start">Start</button>
+  <button $onclick="stop">Stop</button>
+</div>;
+
 const update = {
-  'start':state => {
+  start:state => {
     state.start = new Date();
-    id = id || window.setInterval(() => { app.run('timer') }, 100);
+    state.id = state.id || window.setInterval(() => { app.run('timer') }, 100);
   },
-  'stop': state => {
-    id = id && window.clearInterval(id) && false;
+  stop: state => {
+    state.id = state.id && window.clearInterval(state.id) && false;
   },
-  'timer': state => {
+  timer: state => {
     state.elapsed = ((new Date() - state.start) / 1000).toFixed(3) + ' seconds';
     return state
   }
@@ -150,8 +137,8 @@ app.start(document.body, state, view, update);
 `
   },
   {
-    name: 'Counter (JSX Directive)',
-    code:`// Counter (JSX Directive)
+    name: 'Counter ($onclick)',
+    code:`// Counter ($onclick)
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
@@ -166,15 +153,14 @@ app.start(document.body, state, view);
     code: `// Counter (Web Component)
 class Counter extends Component {
   state = 0;
-  view = state => <>
-    <h1>{state}</h1>
-    <button $onclick='-1'>-1</button>
-    <button $onclick='+1'>+1</button>
-  </>;
-  update = {
-    '+1': state => state + 1,
-    '-1': state => state - 1
-  };
+  view = state => {
+    const add = (state, num) => state + num;
+    return <>
+      <h1>{state}</h1>
+      <button $onclick={[add, -1]}>-1</button>
+      <button $onclick={[add, +1]}>+1</button>
+      </>;
+  }
 }
 app.webComponent('my-app', Counter);
 app.render(document.body, <my-app />);
@@ -202,8 +188,8 @@ app.start(document.body, state, view, update);
 `
   },
   {
-    name: 'Animation Directive',
-    code: `// Animation Directive
+    name: 'Custom Directive',
+    code: `// Animation Directive Using animate.css
 app.on('$', ({key, props}) => {
   if (key === '$animation') {
     const value = props[key];
@@ -232,17 +218,24 @@ app.start(document.body, state, view);
 `
   },
   {
-    name: 'Ref - focus',
-    code: `// Ref - focus
-const ref = e => e.focus()
-const View = () => <input ref={ref}/>
+    name: 'Ref - Examples',
+    code: `// Ref - Examples
+const focus = e => e.focus()
+const edit = e => e.setAttribute('contenteditable', 'true');
+const View = () => <>
+  <input ref={focus}/>
+  <hr />
+  <div ref={edit} style="height:100px; width:100%">
+    This text is editable. Click to edit.
+  </div>
+</>;
 
 app.render(document.body, <View />);
 `
   },
   {
-    name: 'Child Component',
-    code: `// Child Component
+    name: 'Child Components',
+    code: `// Child Components
 
 class Counter extends Component {
   state = 0;
@@ -295,86 +288,7 @@ const View = () => {
 app.render(document.body, <View/>);
 `
   },
-  {
-    name: 'Calculator',
-    code: `// Calculator
-const state = {
-  value: 0,
-  input: '',
-  done: true
-};
 
-const oninput = ({value, input, done}, e) => {
-  const c = e.target.textContent;
-  switch (c) {
-    case 'C':
-      return { value: '0', input: '', done: true }
-    case '=':
-      input = input || 0;
-      value = eval(input).toString();
-      return { value, input: \`\${input} = \${value}\`, done: true }
-    default:
-      const isNumber = /\\d|\\./.test(c);
-      if (input.indexOf('=') > 0) {
-        isNumber && (input = value = '');
-        !isNumber && (input = value || '');
-      } else if (done) {
-        isNumber && (value = '');
-        !isNumber && (input = input || value)
-      }
-      return {
-        value: isNumber ? (value || '') + c : value,
-        input: input + c, done: !isNumber
-      }
-  }
-}
-
-const view = ({input, value}) => <>
-  <style>
-{\`
-.calculator { width: 200px; }
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 2px;
-}
-button { padding: 10px; width:100%; }
-button:nth-of-type(1) {
-  grid-column: span 3;
-}
-button:nth-of-type(15) {
-  grid-column: span 2;
-}
-\`}
-  </style>
-  <div class="calculator">
-    <h1>{value}</h1>
-    <div class="buttons" $onclick={oninput}>
-      <button>C</button>
-      <button>/</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>*</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>-</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>+</button>
-      <button>0</button>
-      <button>.</button>
-      <button>=</button>
-    </div>
-    <small>{input}</small>
-  </div>
-</>;
-
-app.start(document.body, state, view);
-`
-  },
   {
     name: 'Shadow DOM',
     code: `// Shadow DOM
@@ -396,5 +310,207 @@ const View = () => <>
 </>
 app.render(document.body, <View />);
 `
+  },
+
+  {
+    name: 'Decorators',
+    code: `// Decorators
+//@customElement decorator creates a web component
+@customElement('my-counter')
+class Counter extends Component {
+  state = 0;
+
+  //@on decorator creates an event handler
+  @on('+') add = (state, delta) => state + delta;
+
+  view = state => <>
+    <h1>{state}</h1>
+    <button $onclick={['+', -1]}>-1</button>
+    <button $onclick={['+', +1]}>+1</button>
+  </>;
+}
+
+//now, create three web components
+document.body.append(document.createElement('my-counter'));
+document.body.append(document.createElement('my-counter'));
+document.body.append(document.createElement('my-counter'));
+`
+  },
+
+  {
+    name: 'Reactivity - getter',
+    code: `// Reactivity - getter
+const state = {
+  a: 1,
+  b: 2,
+  get c() {
+    return this.a + this.b;
   }
+};
+const view = ({a, b, c}) => <>
+  <input type="number" $bind="a" />
+  <input type="number" $bind="b" />
+  <p>{a} + {b} = { c }</p>
+</>;
+app.start(document.body, state, view);
+`
+  },
+
+  {
+    name: 'Reactivity - Proxy',
+    code: `// Reactivity - Proxy
+const handler = {
+  get: (target, name) => {
+    const text = target.text || '';
+    switch (name) {
+      case 'text': return target.text;
+      case 'characters': return text.replace(/\\s/g, '').length;
+      case 'words': return !text ? 0 : text.split(/\\s/).length;
+      case 'lines': return text.split('\\n').length;
+      default: return null
+    }
+  }
+};
+const state = new Proxy(
+  { text: "let's count" },
+  handler
+);
+const view = state => <div>
+  <textarea rows="10" cols="50" $bind="text"></textarea>
+  <div>chars: {state.characters} words: {state.words} lines: {state.lines}</div>
+  <pre>{state.text}</pre>
+</div>;
+app.start(document.body, state, view);
+`
+  },
+
+  {
+    name: 'Routing (component event)',
+    code: `// Routing (component event)
+class Home extends Component {
+  view = () => <div>Home</div>;
+  update = {'#, #home': state => state };
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+  update = {'#contact': state => state };
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+  update = {'#about': state => state };
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[About, Contact, Home].map(C => new C().start('pages'));
+`
+  },
+
+  {
+    name: 'Routing (mount options)',
+    code: `// Routing (mount options)
+class Home extends Component {
+  view = () => <div>Home</div>;
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="#home">Home</a>{' | '}
+    <a href="#contact">Contact</a>{' | '}
+    <a href="#about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[
+  [About, '#about'],
+  [Contact, '#contact'],
+  [Home, '#, #home'],
+].map(([C, route]) => new C().start('pages', {route}));
+`
+  },
+
+  {
+    name: 'SVG - animation',
+    code: `// SVG - animation
+const view = () => <>
+  <svg height="60" width="160">
+    <rect width="100%" height="100%" rx="10" ry="10" fill="lightgrey" />
+    <circle cx="30" cy="30" r="20" fill='lime'>
+    <animate
+          attributeType="XML"
+          attributeName="fill"
+          values="lime;lightgrey;lime;lightgrey"
+          dur="0.5s"
+          repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="30" r="20" fill='yellow' fill-opacity='0.2'/>
+    <circle cx="130" cy="30" r="20" fill='orangered' fill-opacity='0.2' />
+  </svg>
+</>;
+
+app.start(document.body, {}, view);
+`
+  },
+
+  {
+    name: 'SVG - xlink',
+    code: `// SVG - xlink
+const view = () => <svg viewBox="0 0 150 20">
+  <a xlinkHref="https://apprun.js.org/">
+    <text x="10" y="10" font-size="5">Click => AppRun</text></a>
+</svg>
+
+app.start(document.body, {}, view);
+`
+  },
+
+  {
+    name: 'SVG - $onclick',
+    code: `// SVG - $onclick
+const view = state => <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="90" height="40" fill="#aaa"
+    $onclick="test"/>
+  <rect x="10" y="80" width="90" height="40" fill="#bbb"
+    onclick="alert('You have clicked the rect.')"/>
+</svg>
+
+const update = {
+  test: (state, evt) => alert("You have clicked the " + evt.target.tagName)
+}
+app.start(document.body, '', view, update);
+`
+  },
+    {
+    name: 'Content Editable',
+    code: `// Content Editable
+const view = () => <>
+  <div contenteditable
+    style="height:100px; width:100%">
+    This text is editable. Click to edit.
+  </div>
+  <input readonly value="This text is readonly."/>
+  <button onclick="alert(0)">event handler as string</button>
+</>
+app.start(document.body, {}, view);
+`
+  }
+
 ];

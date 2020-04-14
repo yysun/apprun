@@ -1,6 +1,61 @@
 ### What's New
 
-Recent Releases and publications
+## Default npm Version Change
+
+In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.
+
+On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.
+
+When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
+
+Currently, the npm tags are as following:
+
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web components
+* apprun@next: 3.x, dev, es2015, web components, lit-html
+
+## Recent Posts and Publications
+
+## [Observerble HQ Notebooks](https://observablehq.com/@yysun)
+
+* [Introducing AppRun](https://observablehq.com/@yysun/introducing-apprun)
+
+
+### [Rust WebAssembly and AppRun](https://dev.to/yysun/rust-webassembly-and-apprun-3bei)
+
+### [Serverless App Using Firebase and AppRun](https://dev.to/yysun/serverless-app-on-firebase-using-apprun-1k46)
+
+### [Avoid Spaghetti Code using AppRun](https://dev.to/yysun/apprun-helps-to-avoid-spaghetti-code-1835)
+
+### [Create a Phoenix LiveView Like App in JS with AppRun](https://dev.to/yysun/create-a-phoenix-liveview-like-app-in-js-with-apprun-dc8)
+
+### [Reactivity in AppRun](https://dev.to/yysun/reactivity-in-apprun-31po)
+
+### [AppRun Event Directives](https://dev.to/yysun/apprun-events-directives-4jph)
+
+### [Ceremony vs. Essence Revisited](https://dev.to/yysun/ceremony-vs-essence-revisited-5e77)
+
+### [Database-Driven Applications Using WebSockets](https://dev.to/yysun/database-driven-applications-using-websockets-2b9o)
+
+This post introduces a new application architecture that allows event handling between the frontend apps and the backend business logic modules without REST API.
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--ydBm2YgN--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://github.com/yysun/apprun-websockets-sqlite/raw/master/architecture-new.png)
+
+Published on Mar 9, 2020 6 min read
+
+### [Use State Machine in AppRun Applications](https://dev.to/yysun/use-state-machine-in-apprun-applications-odo)
+
+This post describes how to create a state machine in AppRun applications to help event handling using a calculator as an example.
+
+![](https://dev-to-uploads.s3.amazonaws.com/i/fp4aodv0sdnbkosvuxgt.png)
+
+Published on Mar 3, 2020 ・ 6 min read
+
+### [Advanced View Features in AppRun](https://dev.to/yysun/advanced-view-features-in-apprun-17g5)
+
+This post describes the advanced usage of the AppRun _ref_, _element embedding_, and _directive_ in the JSX view.
+
+Published on Feb 28, 2020 ・ 4 min read
 
 ### [Strong Typing in AppRun](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1)
 
@@ -13,8 +68,6 @@ Published on May 17, 2019 · 8 min read
 ### [Announcing AppRun Directives](https://medium.com/@yiyisun/announcing-apprun-directives-6a063f88379c)
 
 This post introduces the two built-in directives and then describes how to create custom directives.
-
-![](https://cdn-images-1.medium.com/max/1600/0*yd9d2brLtXEukKw0.png)
 
 Published on May 12, 2019 · 3 min read
 

@@ -1,4 +1,4 @@
-import app, { Component, on, update, event } from '../src/apprun';
+import app, { Component, on, update, event, customElement } from '../src/apprun';
 
 describe('Update decorator', () => {
 
@@ -17,7 +17,7 @@ describe('Update decorator', () => {
       }
     }
 
-    const test = new TestComponent().mount();
+    const test = new TestComponent().mount() as any;
     const spy = spyOn(test, 'view')
     test.run('f1', 'x')
     expect(spy).toHaveBeenCalledWith('x')
@@ -43,7 +43,7 @@ describe('Update decorator', () => {
       f2 = (state, val) => val
     }
 
-    const test = new TestComponent().mount();
+    const test = new TestComponent().mount() as any;
     const spy = spyOn(test, 'view')
     test.run('f1', 'x')
     expect(spy).toHaveBeenCalledWith('x')
@@ -99,6 +99,12 @@ describe('Update decorator', () => {
     const test = new TestComponent().mount();
     test.run('test');
   })
+
+  it('should support this in @customElement', () => {
+    @customElement('my-app')
+    class TestComponent extends Component {
+    }
+  });
 
 
 })

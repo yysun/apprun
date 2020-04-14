@@ -1,64 +1,77 @@
-import app from '../../src/apprun'
+import app from 'apprun';
 
-const model = {
-  $id: '',
+const state = {
   input: '',
   selectIdx: -1,
   options: []
 }
 
-const view = (model) => <div className='typeahead'>
-  <input value={model.input}
-    oninput={e=>app.run(`input${model.$id}`, e)}
-    onkeyup={e=>app.run(`keyup${model.$id}`, e)}/>
-  <ul className='options'>{
-    model.options.map((option, idx)=><li
-      className={(idx === model.selectIdx) ? 'selected': ''}
-      onclick={()=>app.run(`select${model.$id}`, option)}>{option}
+const view = (state) => <>
+  <style>{`
+.typeahead input {
+  width: 100%;
+}
+.typeahead .options li {
+  padding: 4px;
+}
+.typeahead .options li:hover {
+  background-color: #eeeeee;
+}
+.typeahead .options li.selected {
+  background-color: #ffffaa;
+}
+  `}</style>
+  <div class='typeahead'>
+  <input $oninput={['input']} $onkeyup={['keyup']}/>
+  <ul class='options'>{
+    state.options.map((option, idx)=><li
+      class={(idx === state.selectIdx) ? 'selected': ''}
+      $onclick={['select', option]}>{option}
     </li>)
   }
   </ul>
-</div>;
+  </div>
+</>;
 
-const select = (model, idx) => {
+const select = (state, idx) => {
   if (idx<0) idx = 0;
-  if (idx >= model.options.length) idx = model.options.length - 1;
-  return ({...model,
+  if (idx >= state.options.length) idx = state.options.length - 1;
+  return ({...state,
     selectIdx: idx,
-    input: model.options[idx]
+    input: state.options[idx]
   })
 }
 
-const selected = (model, option) => {
+const selected = (state, option) => {
   app.run('selected', option);
-  return {...model, input: option, options: []};
+  alert(option);
+  return {...state, input: option, options: []};
 }
 
-const update = ($id) => ({
-  '#typeahead': (model) => model,
-  [`input${$id}`]: (model, e) => ({ ...model,
+const update = {
+  input: async (state, e) => ({ ...state,
     input: e.target.value,
     selectIdx: -1,
-    options: getOptions(e.target.value)
+    options: await getOptions(e.target.value)
   }),
-  [`keyup${$id}`]: (model, e) => {
+  keyup: (state, e) => {
     switch(e.keyCode) {
       case 38:
-        return select(model, model.selectIdx - 1);
+        return select(state, state.selectIdx - 1);
       case 40:
-        return select(model, model.selectIdx + 1);
+        return select(state, state.selectIdx + 1);
       case 13:
-        return selected(model, e.target.value);
+        return selected(state, e.target.value);
       default:
-        return model;
+        return state;
     }
   },
-  [`select${$id}`]:(model, option) => selected(model, option)
-})
+  select: (state, option) => selected(state, option)
+}
 
-const getOptions = text => text ?
+const getOptions = async (text) => text ?
   [1, 2, 3, 4, 5].map(n=>text + n) : []
 
 app.on('selected', (text) => { console.log(text) });
 
-export default (element, $id = '_') => app.start(element, {...model, $id}, view, update($id));
+app.start(document.body, state, view, update);

@@ -337,6 +337,20 @@ describe('Component', () => {
     expect(div.innerHTML).toBe('<div>a</div>');
 
   })
+
+
+  it('should route in mount option', () => {
+    class Test extends Component {
+      state = 'ab'
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().mount(div, {route: '#test'});
+    app.run('#test');
+    expect(div.innerHTML).toBe('<div>ab</div>');
+
+  })
+
 });
 
 

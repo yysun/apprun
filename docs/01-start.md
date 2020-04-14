@@ -110,11 +110,19 @@ npm start
 
 Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.
 ```sh
-npx degit apprunjs/apprun-webpack my-app
 npx degit apprunjs/apprun-rollup my-app
+npx degit apprunjs/apprun-rollup-lit-html my-app
+npx degit apprunjs/apprun-webpack my-app
 npx degit apprunjs/apprun-parcel my-app
 npx degit apprunjs/apprun-web-components my-app
-
+npx degit apprunjs/apprun-bootstrap my-app
+npx degit apprunjs/apprun-coreui my-app
+npx degit apprunjs/apprun-pwa my-app
+npx degit apprunjs/apprun-pwa-workbox my-app
+npx degit yysun/apprun-d3 my-app
+npx degit yysun/apprun-electron my-app
+npx degit yysun/apprun-electron-forge my-app
+npx degit yysun/apprun-websockets my-app
 ```
 
 AppRun is so flexible that you can choose your favorite ways of using it.

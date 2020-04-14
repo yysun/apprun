@@ -17,27 +17,47 @@ declare module 'apprun' {
     once?: boolean;
     delay?: number;
   };
+  export type CustomElementOptions = {
+    render?: boolean;
+    shadow?: boolean;
+    history?: boolean;
+    global_event?: boolean;
+    observedAttributes?: string[];
+  };
+
+  export type MountOptions = {
+    render?: boolean, history?, global_event?: boolean, route?: string
+  };
+
+  export type AppStartOptions<T> = {
+    render?: boolean;
+    history?;
+    route?: string;
+    rendered?: (state: T) => void
+  };
 
   export interface IApp {
     start<T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
-      options?: { history?: any, rendered?: (state: T) => void }): Component<T, E>;
+      options?: AppStartOptions<T>): Component<T, E>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
+    h(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
-    render(element: HTMLElement, node: VNode): void;
+    render(element: HTMLElement, node: VDOM): void;
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
+    webComponent(name: string, componentClass, options?: CustomElementOptions): void;
   }
 
   export class Component<T = any, E = any> {
     constructor(state?: T, view?: View<T>, update?: Update<T, E>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
-    start(element?: Element, options?: { render?: boolean, history?: any, global_event?: boolean }): Component<T>;
+    mount(element?: Element, options?: MountOptions): Component<T, E>;
+    start(element?: Element, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
     rendered: (state: T, props?: any[]) => void;
@@ -47,16 +67,18 @@ declare module 'apprun' {
     render(element: HTMLElement, node: any): void;
   }
 
-  export type StatelessComponent<T = {}> = (args: T) => VNode | void;
-
   export function on<E>(name?: E, options?: EventOptions): any;
   // obsolete
   export function update<E>(name?: E, options?: EventOptions): any;
   export function event<E>(name?: E, options?: EventOptions): any;
+  export function customElement(name: string, options?: CustomElementOptions):
+    <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
   export const app: IApp
   export default app;
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
+
+  export function Fragment (props, ...children): [];
 }

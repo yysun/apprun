@@ -1,6 +1,7 @@
 import app from './apprun'
 export {
   app, Component, View, Action, Update, on, update, event, EventOptions,
+  customElement, CustomElementOptions,
   ROUTER_404_EVENT, ROUTER_EVENT
 } from './apprun'
 import { createElement, render, Fragment } from './vdom-html';

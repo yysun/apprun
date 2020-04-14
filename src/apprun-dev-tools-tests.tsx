@@ -63,7 +63,7 @@ export const _createStateTests = (s) => {
     }
     openWin('');
     events.forEach((event, idx) => {
-      write(`  it ('view snapshot: #${idx+1}', ()=>{`);
+      write(`  it ('view snapshot: #${idx + 1}', ()=>{`);
       write(`    const component = ${event.component.constructor.name};`);
       write(`    const state = ${JSON.stringify(event.state, undefined, 2)};`);
       write(`    const vdom = component['view'](state);`);

@@ -1,16 +1,28 @@
 # Change Log
 
 ## Releases
-* apprun@latest: 1.x, stable, es5
-* apprun@es6: 2.x, stable, es2015, web component
+* apprun@es5: 1.x, stable, es5
+* apprun@latest: 2.x, stable, es2015, web component
+* apprun@next: 3.x, dev, es2015, lit-html
 
 
-## 1.23 / 2.23
+## 1.23 / 2.23 / 3.23
 
+* Support style attribute using string
+* Support element event handler using string
+* Support xlink:href in SVG
+* Add -patch-vdom-on flag on component for patching vdom before rendering
+* Add _route_ to mount options
+* Add app start options type
+* PR #90 - observable properties on web-component, thanks to @spurreiter
+* Add @on and @customElement to window
+* Export Fragment and app.h
+* Add more examples to play-ground
 * CLI installs ES2015 by default
+* fix vdom update for child svg, remove console.assert
 * Fix bug: view function called twice in create component
 
-## 1.22 / 2.22
+## 1.22 / 2.22 / 3.22
 
 * Call ref attribute in JSX as a function
 * Allow event to be turned or off inside a run call
@@ -18,12 +30,13 @@
 * Pass _state_ to mounted function
 * Merge dev-tools into one file: apprun-dev-tools.js
 
-## 1.21 / 2.21
+
+## 1.21 / 2.21 / 3.21
 
 * Allow embedding elements in JSX
 * Use app['debug'] to turn on/off debug events and component cache
 
-## 1.20 / 2.20
+## 1.20 / 2.20 / 3.20
 
 * Add . event to Component,a.k.s the refresh event
 * Add ES6 module build: apprun.esm.js (2.20+)
@@ -33,8 +46,9 @@
 
 ## 1.19 / 2.19
 
+* $on directive use tuple for event parameters
 * Add event type to app, component and decorators
-* Support update as array of tuple to enforce the event type
+* Support _Update_ as array of tuple to enforce the event type
 * Set window['React']=app for using babel in browser
 * $bind to function and tuple
 

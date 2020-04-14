@@ -1,3 +1,6 @@
+import webComponent, { CustomElementOptions } from './web-component';
+
+// tslint:disable:no-invalid-this
 export const Reflect = {
 
   meta: new WeakMap(),
@@ -27,10 +30,18 @@ export function update<E=string>(events?: E, options: any = {}) {
   }
 }
 
-export function on<E>(events?: E, options: any = {}) {
+export function on<E = string>(events?: E, options: any = {}) {
   return function (target: any, key: string) {
     const name = events ? events.toString() : key;
     Reflect.defineMetadata(`apprun-update:${name}`,
-        { name, key, options }, target)
+      { name, key, options }, target)
   }
 }
+
+export function customElement(name: string, options?: CustomElementOptions) {
+  return function _customElement<T extends { new(...args: any[]): {} }>(constructor: T) {
+    webComponent(name, constructor, options);
+    return constructor;
+  }
+}
+
