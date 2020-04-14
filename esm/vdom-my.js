@@ -201,7 +201,18 @@ function updateProps(element, props, isSvg) {
                 element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
             }
         }
-        else if (/^id$|^class$|^role|-/g.test(name) || isSvg) {
+        else if (name.startsWith('on')) {
+            if (!value || typeof value === 'function') {
+                element[name] = value;
+            }
+            else if (typeof value === 'string') {
+                if (value)
+                    element.setAttribute(name, value);
+                else
+                    element.removeAttribute(name);
+            }
+        }
+        else if (/^id$|^class$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
             if (element.getAttribute(name) !== value) {
                 if (value)
                     element.setAttribute(name, value);
