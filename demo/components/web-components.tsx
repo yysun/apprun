@@ -51,22 +51,23 @@ button { width: 6em }`
 
 app.webComponent('my-webcomp', MyWebcomp, {
   shadow: true,
-  observedAttributes: ['name', 'value', 'handleClick']
+  observedAttributes: ['name', 'value', 'valueCamelCase', 'handleClick']
 })
 
 // ---- a web-component container for my-webcomp ----
 
 class MyContainer extends HTMLElement {
   state = 2
-  update = (n) => {
+  update = (n: number) => {
     this.$state.textContent = this.$el.value = n
+    this.$el.setAttribute('valueCamelCase', n + 5)
   }
   handleClick = () => this.update(this.state = 0)
   connectedCallback () {
     this.innerHTML = `<div class='box app'>
       <h4>A Web-Component Container</h4>
       <button>reset: <span>${this.state}</span></button>
-      <my-webcomp name='name: wc'/>
+      <my-webcomp name='name: wc' valueCamelCase="${this.state + 5}" />
     </div>`
     this.$reset = this.querySelector('button')
     this.$state = this.querySelector('span')
