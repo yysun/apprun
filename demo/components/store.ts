@@ -1,4 +1,6 @@
-function _random(max) {
+import { Update } from '../../src/apprun';
+
+function _random(max: number) {
   return Math.round(Math.random()*1000)%max;
 }
 
@@ -6,18 +8,35 @@ const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", 
 const colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
 const nouns = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
 
+export type Data = {
+  id: number
+  label: string
+}
+
+export type State = {
+  data: Array<Data>;
+  selected: number;
+}
+
+export type Events = 'run' | 'runlost' | 'add' | 'udate' | 'swaprows' | 'clear' | 'delete' | 'select';
+
+export const state: State = {
+  data: [],
+  selected: 0
+}
+
 let id = 1
-function buildData(count) {
+function buildData(count: number): Array<Data> {
   return new Array(count).fill(0).map(_ => ({
     id: id++,
     label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}`
   }))
 }
 
-export default {
+export const update: Update<State, Events> = {
   run: () => ({
     data: buildData(1000),
-    selected: null
+    selected: 0
   }),
 
   add: state => ({
@@ -25,14 +44,14 @@ export default {
     selected: state.selected,
   }),
 
-  runLots: () => ({
+  runlots: () => ({
     data: buildData(10000),
-    selected: null
+    selected: 0
   }),
 
   clear: () => ({
     data: [],
-    selected: null
+    selected: 0
   }),
 
   update: state => ({
@@ -45,7 +64,7 @@ export default {
     selected: state.selected
   }),
 
-  swapRows: state => {
+  swaprows: state => {
     if (state.data.length > 4) {
       const idx = state.data.length - 2;
       const a = state.data[1];
@@ -55,14 +74,12 @@ export default {
     return state;
   },
 
-  select: (state, id) => ({
-    data: state.data,
-    selected: id
-  }),
+  select: (state, id) => {
+    state.selected = id
+  },
 
-  delete: (state, id) => ({
-    selected: id === state.selected ? null : state.selected,
-    data: state.data.filter(d => d.id != id)
-  })
+  delete: (state, id) => {
+    state.selected === state.selected ? null : state.selected;
+    state.data = state.data.filter(d => d.id != id);
+  }
 }
-

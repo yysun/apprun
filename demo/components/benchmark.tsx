@@ -1,64 +1,54 @@
-import app, { Component } from '../../src/apprun'
-import actions from './store';
-const { run, runLots, add, update, swapRows, clear } = actions;
-
-const state = {
-  data: [],
-  selected: null
-}
-
-type State = typeof state;
-type Events = 'delete'| 'select';
+import { app, Component, View } from '../../src/apprun'
+import { state, update, State, Events } from './store';
 
 let startTime;
-const startMeasure = function () {
+let lastName;
+
+const startMeasure = function (name: string) {
+  lastName = name
   startTime = performance.now();
 }
-  const stopMeasure = function () {
-    window.setTimeout(function () {
-      const stop = performance.now();
-      console.log(stop - startTime);
-    }, 0);
-  }
 
-const Row = ({ selected, id, label }) => <tr class={selected} id={id} key={id}>
-  <td class="col-md-1">{id}</td>
-  <td class="col-md-4">
-    <a class="lbl">{label}</a>
-  </td>
-  <td class="col-md-1">
-    <a class="remove">
-      <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
-    </a>
-  </td>
-  <td class="col-md-6"></td>
-</tr>;
-
-const view = state => {
-  startMeasure();
-  return <div id="benchmark">
-    <div>
-      <button $onclick={run}>Create 1,000 rows</button>
-      <button $onclick={runLots}>Create 10,000 rows</button>
-      <button $onclick={add}>Append 1,000 rows</button>
-      <button $onclick={update}>Update every 10th row</button>
-      <button $onclick={clear}>Clear</button>
-      <button $onclick={swapRows}>Swap Rows</button>
-    </div>
-    <br />
-    <table class="table table-hover table-striped test-data" id="main-table" onclick={click}>
-      <tbody>
-        {state.data.map(item => {
-          const selected = item.id == state.selected ? 'danger' : undefined;
-          return <Row {...{ selected, ...item }} />;
-        })}
-      </tbody>
-    </table>
-    <span class="preloadicon glyphicon glyphicon-remove hidden" aria-hidden="true"></span>
-  </div>
+const stopMeasure = function () {
+  window.setTimeout(function () {
+    const stop = performance.now();
+    console.log(lastName + ' took ' + (stop - startTime));
+  }, 0);
 }
 
-const getId = (elem) => {
+const view: View<State> = state => <div class="container" $onclick={click}>
+  <div>
+    <button id="run">Create 1,000 rows</button>
+    <button id="runlots">Create 10,000 rows</button>
+    <button id="add">Append 1,000 rows</button>
+    <button id="update">Update every 10th row</button>
+    <button id="clear">Clear</button>
+    <button id="swaprows">Swap Rows</button>
+  </div>
+  <br />
+  <table class="table table-hover table-striped test-data" id="main-table">
+    <tbody>
+      {state.data.map(item => {
+        const selected = item.id == state.selected ? 'danger' : undefined;
+        return <tr class={selected} id={item.id} key={item.id}>
+          <td class="col-md-1">{item.id}</td>
+          <td class="col-md-4">
+            <a class="lbl">{item.label}</a>
+          </td>
+          <td class="col-md-1">
+            <a class="remove">
+              <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
+            </a>
+          </td>
+          <td class="col-md-6"></td>
+        </tr>;
+      })}
+    </tbody>
+  </table>
+  <span class="preloadicon glyphicon glyphicon-remove hidden" aria-hidden="true"></span>
+</div>;
+
+const getId = (elem: any) => {
   while (elem) {
     if (elem.tagName === "TR") {
       return elem.id;
@@ -68,21 +58,38 @@ const getId = (elem) => {
   return undefined;
 }
 
-const click = e => {
+const click = (state: State, e: Event) => {
   const t = e.target as HTMLElement;
   if (!t) return;
-  if (t.matches('.remove')) {
-    startMeasure();
-    component.run('delete', getId(t));
-  } else if (t.matches('.lbl')) {
-    startMeasure();
-    component.run('select', getId(t));
-  }
-};
+  e.preventDefault();
 
-const component = new Component<State, Events>(state, view, actions);
-component['-patch-vdom-on'] = true;
-component.unload = () => { actions.clear(); console.log('benchmark.unload') };
-component.rendered = () => stopMeasure();
+  if (t.tagName === 'BUTTON' && t.id) {
+    startMeasure(t.id);
+    component.run(t.id as Events);
+    stopMeasure();
+  } else if (t.matches('.remove')) {
+    startMeasure('delete');
+    const id = getId(t);
+    component.run('delete', id);
+    document.getElementById(id)?.remove();
+    stopMeasure();
+  } else if (t.matches('.lbl')) {
+    startMeasure('select');
+    const id = getId(t);
+    let el;
+    if (state.selected) {
+      el = document.getElementById(`${state.selected}`);
+      el && (el.className = '');
+    }
+    component.run('select', id);
+    el = document.getElementById(id);
+    el && (el.className = 'danger');
+  }
+  stopMeasure();
+}
+
+const component = new Component(state, view, update);
+component.unload = () => { component.run('clear'); console.log('benchmark.unload') };
+(component as any)['-patch-vdom-on'] = true;
 
 export default (element) => component.mount(element, {route: '#benchmark'});
