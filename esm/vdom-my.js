@@ -58,6 +58,8 @@ function same(el, node) {
     return key1.toUpperCase() === key2.toUpperCase();
 }
 function update(element, node, isSvg) {
+    if (node['_op'] === 3)
+        return;
     // console.assert(!!element);
     isSvg = isSvg || node.tag === "svg";
     if (!same(element, node)) {
@@ -74,6 +76,8 @@ function updateChildren(element, children, isSvg) {
     const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const child = children[i];
+        if (child['_op'] === 3)
+            continue;
         const el = element.childNodes[i];
         if (typeof child === 'string') {
             if (el.textContent !== child) {
@@ -91,6 +95,7 @@ function updateChildren(element, children, isSvg) {
         else {
             const key = child.props && child.props['key'];
             if (key) {
+                // console.log(el.key, key);
                 if (el.key === key) {
                     update(element.childNodes[i], child, isSvg);
                 }
@@ -102,7 +107,8 @@ function updateChildren(element, children, isSvg) {
                         update(element.childNodes[i], child, isSvg);
                     }
                     else {
-                        element.insertBefore(create(child, isSvg), el);
+                        // element.insertBefore(create(child, isSvg), el);
+                        update(element.childNodes[i], child, isSvg);
                     }
                 }
             }
