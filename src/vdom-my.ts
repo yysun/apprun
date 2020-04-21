@@ -60,6 +60,7 @@ function same(el: Element, node: VNode) {
 }
 
 function update(element: Element, node: VNode, isSvg: boolean) {
+  if (node['_op'] === 3) return;
   // console.assert(!!element);
   isSvg = isSvg || node.tag === "svg";
   if (!same(element, node)) {
@@ -76,6 +77,7 @@ function updateChildren(element, children, isSvg: boolean) {
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
+    if (child['_op'] === 3) continue;
     const el = element.childNodes[i];
     if (typeof child === 'string') {
       if (el.textContent !== child) {
@@ -86,10 +88,11 @@ function updateChildren(element, children, isSvg: boolean) {
         }
       }
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
-        element.insertBefore(child, el);
+      element.insertBefore(child, el);
     } else {
       const key = child.props && child.props['key'];
       if (key) {
+        // console.log(el.key, key);
         if (el.key === key) {
           update(element.childNodes[i], child, isSvg);
         } else {
@@ -99,7 +102,8 @@ function updateChildren(element, children, isSvg: boolean) {
             element.appendChild(el);
             update(element.childNodes[i], child, isSvg);
           } else {
-            element.insertBefore(create(child, isSvg), el);
+            // element.insertBefore(create(child, isSvg), el);
+            update(element.childNodes[i], child, isSvg);
           }
         }
       } else {
@@ -189,18 +193,25 @@ function updateProps(element: Element, props: {}, isSvg) {
       } else {
         element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
       }
-    } else if (/id|class|role|-/g.test(name) || isSvg) {
+    } else if (name.startsWith('on')) {
+      if (!value || typeof value === 'function') {
+        element[name] = value;
+      } else if (typeof value === 'string') {
+        if (value) element.setAttribute(name, value);
+        else element.removeAttribute(name);
+      }
+    } else if (/^id$|^class$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
     } else if (element[name] !== value) {
-        element[name] = value;
+      element[name] = value;
     }
     if (name === 'key' && value) keyCache[value] = element;
   }
   if (props && typeof props['ref'] === 'function') {
-    window.requestAnimationFrame(()=>props['ref'](element));
+    window.requestAnimationFrame(() => props['ref'](element));
   }
 }
 

@@ -76,7 +76,7 @@ export class Component<T=any, E=any> {
               this.unload(this.state);
               this.observer.disconnect();
               this.observer = null;
-              this.save_vdom = null;
+              this.save_vdom = [];
             }
           });
           this.observer.observe(document.body, {
@@ -85,7 +85,7 @@ export class Component<T=any, E=any> {
           });
         }
       }
-      if (el['_component'] === this && this.save_vdom) {
+      if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
         patch([this.save_vdom], [html]);
       }
       el['_component'] = this;

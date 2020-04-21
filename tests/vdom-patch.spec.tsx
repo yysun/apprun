@@ -47,4 +47,11 @@ describe('vdom', () => {
     expect(vdom2[1]._op).toBe(1);
   })
 
+  it('should patch null vdom', () => {
+    patch(null, null);
+    patch([null], [null]);
+    patch({}, [{}]);
+    patch(null, [[]]);
+  })
+
 })

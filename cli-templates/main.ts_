@@ -1,6 +1,6 @@
 import app from 'apprun';
 
-const model = 'Hello world - AppRun !';
+const state = 'Hello world - AppRun !';
 
 const view = (state) => <div>
   <h1>{state}</h1>
@@ -10,4 +10,4 @@ const update = {
 
 };
 
-app.start(document.body, model, view, update);
+app.start(document.body, state, view, update);
