@@ -1,29 +1,16 @@
 import { app, Component, View } from '../../src/apprun'
-import { state, update, State, Events } from './store';
-
-let startTime;
-let lastName;
-
-const startMeasure = function (name: string) {
-  lastName = name
-  startTime = performance.now();
-}
-
-const stopMeasure = function () {
-  window.setTimeout(function () {
-    const stop = performance.now();
-    console.log(lastName + ' took ' + (stop - startTime));
-  }, 0);
-}
+import { startMeasure, stopMeasure, state, update, State, Events } from './store';
 
 const view: View<State> = state => <div class="container" $onclick={click}>
-  <div>
+  <div class="row">JSX</div>
+  <div class="row">
     <button id="run">Create 1,000 rows</button>
     <button id="runlots">Create 10,000 rows</button>
     <button id="add">Append 1,000 rows</button>
     <button id="update">Update every 10th row</button>
     <button id="clear">Clear</button>
     <button id="swaprows">Swap Rows</button>
+    <span class="pull-right" id="measure"></span>
   </div>
   <br />
   <table class="table table-hover table-striped test-data" id="main-table">
@@ -88,8 +75,8 @@ const click = (state: State, e: Event) => {
   stopMeasure();
 }
 
-const component = new Component(state, view, update);
-component.unload = () => { component.run('clear'); console.log('benchmark.unload') };
-(component as any)['-patch-vdom-on'] = true;
+class Benchmark extends Component<State, Events> {}
+const component = new Benchmark(state, view, { ...update });
+// (component as any)['-patch-vdom-on'] = true;
 
-export default (element) => component.mount(element, {route: '#benchmark'});
+export default (element) => component.mount(element, { route: '#benchmark' });

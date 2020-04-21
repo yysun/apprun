@@ -13,6 +13,7 @@ import counters from './components/counters';
 import dragdrop from './components/dragdrop';
 import calculator from './components/calculator';
 import todo from './components/todo';
+import benchmark_lit from './components/benchmark-lit-html';
 import benchmark from './components/benchmark';
 import hello from './components/hello';
 import svg from './components/svg';
@@ -22,4 +23,6 @@ import test from './components/dev';
 import webcomponents from './components/web-components';
 
 const element = document.getElementById('my-app');
-[home, hello, counter, counters, todo, calculator, dragdrop, svg, animation, benchmark, play, webcomponents, test].forEach(c => c(element));
+[home, hello, counter, counters, todo, calculator, dragdrop, svg, animation,
+  benchmark, benchmark_lit,
+  play, webcomponents, test].forEach(c => c(element));
