@@ -3,7 +3,7 @@ var CHANGES;
     CHANGES[CHANGES["NO_ATTR_CHANGE"] = 1] = "NO_ATTR_CHANGE";
     CHANGES[CHANGES["NO_TREE_CHANGE"] = 2] = "NO_TREE_CHANGE";
 })(CHANGES || (CHANGES = {}));
-function patch(vdom1, vdom2) {
+export function patch(vdom1, vdom2) {
     if (!(vdom1 === null || vdom1 === void 0 ? void 0 : vdom1.length) || !(vdom2 === null || vdom2 === void 0 ? void 0 : vdom2.length))
         return;
     const old_len = vdom1.length;
@@ -29,6 +29,24 @@ function patch(vdom1, vdom2) {
             }
         }
     }
+}
+export function get_vdom(node) {
+    if (!node)
+        return null;
+    if (node.nodeType === 3)
+        return node.nodeValue;
+    const children = [];
+    if (node.childNodes) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            children.push(get_vdom(node.childNodes[i]));
+        }
+    }
+    const tag = node['tagName'] ? node['tagName'].toLocaleLowerCase() : node;
+    return {
+        tag,
+        props: node['_props'],
+        children
+    };
 }
 // based on https://github.com/epoberezkin/fast-deep-equal
 // MIT License

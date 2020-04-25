@@ -10,12 +10,8 @@ function render(node, parent, idx) {
     if (!parent.__componentCache)
         parent.__componentCache = {};
     let component = parent.__componentCache[key];
-    if (!component) {
+    if (!component || !(component instanceof tag)) {
         component = parent.__componentCache[key] = new tag(Object.assign(Object.assign({}, props), { children })).mount(id);
-        component['__eid'] = id;
-    }
-    else {
-        id = component['__eid'];
     }
     let state = component.state;
     if (component.mounted) {
@@ -28,7 +24,7 @@ function render(node, parent, idx) {
             component.element = el;
             component.setState(state);
         };
-        return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }));
+        return app.createElement("section", Object.assign({}, props, { ref: e => render(e), _component: component }));
     }
     else {
         const vdom = component._view(state, props);
@@ -36,22 +32,29 @@ function render(node, parent, idx) {
             component.element = el;
             component.renderState(state, vdom);
         };
-        return app.createElement("section", Object.assign({}, props, { id: id, ref: e => render(e) }), vdom);
+        return app.createElement("section", Object.assign({}, props, { ref: e => render(e), _component: component }), vdom);
     }
 }
-let _idx = 0;
 export default function createComponent(node, parent, idx = 0) {
-    if (idx === 0)
-        _idx = 0;
+    var _a;
     if (typeof node === 'string')
         return node;
     if (Array.isArray(node))
-        return node.map(child => createComponent(child, parent, _idx));
+        return node.map(child => createComponent(child, parent, idx++));
     let vdom = node;
-    if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent)
-        vdom = render(node, parent, _idx++);
-    if (vdom && Array.isArray(vdom.children))
-        vdom.children = vdom.children.map(child => createComponent(child, parent, _idx));
+    if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) {
+        vdom = render(node, parent, idx);
+    }
+    if (vdom && Array.isArray(vdom.children)) {
+        const new_parent = (_a = vdom.props) === null || _a === void 0 ? void 0 : _a._component;
+        if (new_parent) {
+            let i = 0;
+            vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));
+        }
+        else {
+            vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
+        }
+    }
     return vdom;
 }
 //# sourceMappingURL=createComponent.js.map

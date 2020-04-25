@@ -1,7 +1,6 @@
 import app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
-import patch from './vdom-patch';
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 const REFRESH = state => state;
@@ -95,14 +94,10 @@ export class Component {
                     });
                 }
             }
-            if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
-                patch([this.save_vdom], [html]);
-            }
             el['_component'] = this;
         }
         if (!vdom) {
             this.render(el, html);
-            this.save_vdom = html;
         }
         this.rendered && this.rendered(this.state);
     }
