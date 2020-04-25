@@ -82,7 +82,7 @@ function updateChildren(element, children, isSvg: boolean) {
     if (typeof child === 'string') {
       if (el.textContent !== child) {
         if (el.nodeType === 3) {
-          el.textContent = child
+          el.nodeValue = child
         } else {
           element.replaceChild(createText(child), el);
         }
@@ -92,19 +92,17 @@ function updateChildren(element, children, isSvg: boolean) {
     } else {
       const key = child.props && child.props['key'];
       if (key) {
-        // console.log(el.key, key);
         if (el.key === key) {
           update(element.childNodes[i], child, isSvg);
         } else {
+          // console.log(el.key, key);
           const old = keyCache[key];
           if (old) {
+            const temp = old.nextSibling;
             element.insertBefore(old, el);
-            element.appendChild(el);
-            update(element.childNodes[i], child, isSvg);
-          } else {
-            // element.insertBefore(create(child, isSvg), el);
-            update(element.childNodes[i], child, isSvg);
+            temp ? element.insertBefore(el, temp) : element.appendChild(el);
           }
+          update(element.childNodes[i], child, isSvg);
         }
       } else {
         update(element.childNodes[i], child, isSvg);
