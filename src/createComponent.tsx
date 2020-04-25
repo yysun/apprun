@@ -8,11 +8,8 @@ function render(node, parent, idx) {
   else key = id;
   if (!parent.__componentCache) parent.__componentCache = {};
   let component = parent.__componentCache[key];
-  if (!component) {
+  if (!component || !(component instanceof tag)) {
     component = parent.__componentCache[key] = new tag({ ...props, children }).mount(id);
-    component['__eid'] = id;
-  } else {
-    id = component['__eid'];
   }
   let state = component.state;
   if (component.mounted) {
@@ -24,7 +21,7 @@ function render(node, parent, idx) {
       component.element = el;
       component.setState(state);
     }
-    return <section {...props} id={id} ref={e => render(e)}></section>;
+    return <section {...props} ref={e => render(e)} _component={component}></section>;
   }
   else {
     const vdom = component._view(state, props);
@@ -32,19 +29,25 @@ function render(node, parent, idx) {
       component.element = el;
       component.renderState(state, vdom);
     }
-    return <section {...props} id={id} ref={e => render(e)}>{vdom}</section>;
+    return <section {...props} ref={e => render(e)} _component={component}>{vdom}</section>;
   }
 }
 
-let _idx = 0;
 export default function createComponent(node, parent, idx = 0) {
-  if (idx === 0) _idx = 0;
   if (typeof node === 'string') return node;
-  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, _idx));
+  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
   let vdom = node;
-  if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent)
-    vdom = render(node, parent, _idx++);
-  if (vdom && Array.isArray(vdom.children))
-    vdom.children = vdom.children.map(child => createComponent(child, parent, _idx));
+  if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) {
+    vdom = render(node, parent, idx);
+  }
+  if (vdom && Array.isArray(vdom.children)) {
+    const new_parent = vdom.props?._component;
+    if (new_parent) {
+      let i = 0;
+      vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));
+    } else {
+      vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
+    }
+  }
   return vdom;
 }
