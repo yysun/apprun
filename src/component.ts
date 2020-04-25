@@ -3,7 +3,7 @@ import app, { App } from './app';
 import { Reflect } from './decorator'
 import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
-import patch from './vdom-patch';
+import { get_vdom, patch } from './vdom-patch';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
@@ -85,14 +85,14 @@ export class Component<T=any, E=any> {
           });
         }
       }
-      if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
-        patch([this.save_vdom], [html]);
+      if (this['-patch-vdom-on']) {
+        const current_vdom = get_vdom(el);
+        if(typeof current_vdom !== 'string') patch(current_vdom.children, [html]);
       }
       el['_component'] = this;
     }
     if (!vdom) {
       this.render(el, html);
-      this.save_vdom = html;
     }
     this.rendered && this.rendered(this.state);
   }
