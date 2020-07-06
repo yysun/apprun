@@ -147,8 +147,7 @@ window['_apprun-log'] = ['log [event|view] on|off', (a1, a2) => {
 window['_apprun-create-event-tests'] = ['create-event-tests',
     () => _createEventTests()
 ];
-window['_apprun-create-state-tests'] = ['create-state-tests <start|stop>',
-    (p) => _createStateTests(p)
+window['_apprun-create-state-tests'] = ['create-state-tests <start|stop>', (p) => _createStateTests(p)
 ];
 window['_apprun'] = (strings) => {
     const [cmd, ...p] = strings[0].split(' ').filter(c => !!c);

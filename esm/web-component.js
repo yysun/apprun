@@ -5,16 +5,26 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
     get component() { return this._component; }
     get state() { return this._component.state; }
     static get observedAttributes() {
-        return options.observedAttributes;
+        // attributes need to be set to lowercase in order to get observed
+        return (options.observedAttributes || []).map(attr => attr.toLowerCase());
     }
     connectedCallback() {
         if (this.isConnected && !this._component) {
             const opts = options || {};
             this._shadowRoot = opts.shadow ? this.attachShadow({ mode: 'open' }) : this;
+            const observedAttributes = (opts.observedAttributes || []);
+            const attrMap = observedAttributes.reduce((map, name) => {
+                const lc = name.toLowerCase();
+                if (lc !== name) {
+                    map[lc] = name;
+                }
+                return map;
+            }, {});
+            this._attrMap = (name) => attrMap[name] || name;
             const props = {};
-            Array.from(this.attributes).forEach(item => props[item.name] = item.value);
+            Array.from(this.attributes).forEach(item => props[this._attrMap(item.name)] = item.value);
             // add getters/ setters to allow observation on observedAttributes
-            (opts.observedAttributes || []).forEach(name => {
+            observedAttributes.forEach(name => {
                 if (this[name] !== undefined)
                     props[name] = this[name];
                 Object.defineProperty(this, name, {
@@ -54,16 +64,18 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
         this._component = null;
     }
     attributeChangedCallback(name, oldValue, value) {
-        var _a;
-        (_a = this._component) === null || _a === void 0 ? void 0 : _a.run('attributeChanged', name, oldValue, value);
-        // store the new property/ attribute
-        this._component && (this._component._props[name] = value);
-        if (value !== oldValue && !(options.render === false)) {
-            window.requestAnimationFrame(() => {
-                var _a;
-                // re-render state with new combined props on next animation frame
-                (_a = this._component) === null || _a === void 0 ? void 0 : _a.run('.');
-            });
+        if (this._component) {
+            // camelCase attributes arrive only in lowercase
+            const mappedName = this._attrMap(name);
+            // store the new property/ attribute
+            this._component._props[mappedName] = value;
+            this._component.run('attributeChanged', mappedName, oldValue, value);
+            if (value !== oldValue && !(options.render === false)) {
+                window.requestAnimationFrame(() => {
+                    // re-render state with new combined props on next animation frame
+                    this._component.run('.');
+                });
+            }
         }
     }
 };
