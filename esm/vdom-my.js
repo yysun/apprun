@@ -215,7 +215,7 @@ function updateProps(element, props, isSvg) {
                     element.removeAttribute(name);
             }
         }
-        else if (/^id$|^class$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
+        else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
             if (element.getAttribute(name) !== value) {
                 if (value)
                     element.setAttribute(name, value);
