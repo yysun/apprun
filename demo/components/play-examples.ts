@@ -511,6 +511,25 @@ const view = () => <>
 </>
 app.start(document.body, {}, view);
 `
+  },
+
+  {
+    name: 'List attribute',
+    code: `// List attribute
+const view = () => <>
+  <input list="browsers"/>
+  <datalist id="browsers">
+    <option value="Internet Explorer"/>
+    <option value="Firefox"/>
+    <option value="Google Chrome"/>
+    <option value="Opera"/>
+    <option value="Safari"/>
+  </datalist>
+</>
+app.start(document.body, {}, view);
+`
   }
 
 ];
+
+
