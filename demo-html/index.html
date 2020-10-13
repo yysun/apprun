@@ -9,15 +9,18 @@
   <div id="my-app"></div>
   <script>
     const state = 0;
-    const add = (state, delta) => state + delta;
     const view = state => {
-      return html`<div>
+      return `<div>
         <h1>${state}</h1>
-        <button @click=${run('add', -1)}>-1</button>
-        <button @click=${run(add, 1)}>+1</button>
+        <button onclick='app.run("-1")'>-1</button>
+        <button onclick='app.run("+1")'>+1</button>
       </div>`;
     };
-    app.start('my-app', state, view, {add});
+    const update = {
+      '+1': state => state + 1,
+      '-1': state => state - 1
+    };
+    app.start('my-app', state, view, update);
   </script>
 </body>
 </html>

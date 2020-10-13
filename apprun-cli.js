@@ -12,6 +12,7 @@ const index_html = path.resolve('./index.html');
 const main_tsx = path.resolve('./src/main.tsx');
 const spa_index = path.resolve('./index.html');
 const spa_main_tsx = path.resolve('./src/main.tsx');
+const spa_layout_tsx = path.resolve('./src/Layout.tsx');
 const readme_md = path.resolve('./README.md');
 const jest_config = path.resolve('./jest.config.js');
 const execSync = require('child_process').execSync;
@@ -28,7 +29,7 @@ function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
 }
 
-function write(file_name, text, title = 'Creating', overwrite = false) {
+function write(file_name, text, title = ' * Creating', overwrite = false) {
   const file = path.resolve(file_name);
   if (!fs.existsSync(file) || overwrite) {
     process.stdout.write(`${title}: ${file} ... `);
@@ -38,7 +39,7 @@ function write(file_name, text, title = 'Creating', overwrite = false) {
     );
     process.stdout.write('Done\n');
   } else {
-    process.stdout.write(`No change made. File exists: ${file}\n`);
+    process.stdout.write(` *  No change made. File exists: ${file}\n`);
   }
 }
 
@@ -46,29 +47,27 @@ function init() {
   RegExp.prototype.toJSON = RegExp.prototype.toString;
 
   if (!fs.existsSync(package_json)) {
-    console.log('Initializing package.json');
+    console.log(' * Initializing package.json');
     execSync('npm init -y');
   }
 
   if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
 
-  console.log('Installing packages. This might take a couple minutes.');
-  execSync('npm install webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
+  console.log(' * Installing packages. This might take a couple minutes.');
+  execSync('npm install apprun webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
+
+  if (es5) execSync('npm install apprun@es5 --save');
 
   es5 ?
-    execSync('npm install apprun@es5 --save') :
-    execSync('npm install apprun --save');
-
-  es5 ?
-    write(tsconfig_json, read('tsconfig.es5.json')) :
-    write(tsconfig_json, read('tsconfig.es6.json'));
+    write(tsconfig_json, read('tsconfig.es5.json'), ' * Configuring typescript - es5', true) :
+    write(tsconfig_json, read('tsconfig.es6.json'), ' * Configuring typescript - es2015', true);
 
   write(webpack_config_js, read('webpack.config.js'))
   write(index_html, read('index.html'));
   write(main_tsx, read('main.ts_'));
   write(readme_md, read('readme.md'));
 
-  console.log('Adding npm scripts');
+  console.log(' * Adding npm scripts');
   const package_info = require(package_json);
   if (!package_info.scripts) package_info["scripts"] = {}
   if (!package_info.scripts['start']) {
@@ -82,16 +81,16 @@ function init() {
     JSON.stringify(package_info, null, 2)
   );
   git_init();
-  jest_init();
+  // jest_init();
   show_start = true;
 }
 
 function git_init() {
   if (!fs.existsSync('.git')) {
-    console.log('Initializing git');
+    console.log(' * Initializing git');
     execSync('git init');
   } else {
-    console.log('Skip git init. .git exsits');
+    console.log(' * Skip git init. .git exsits');
   }
   write(git_ignore_file, read('_gitignore'));
 }
@@ -105,7 +104,7 @@ function component(name) {
 }
 
 function jest_init() {
-  console.log('Installing jest');
+  console.log(' * Installing jest');
   execSync('npm i @types/jest jest ts-jest --save-dev');
   write(jest_config, read('jest.config.js'), 'Creating');
   show_test = true;
@@ -123,6 +122,7 @@ function component_spec(name) {
 function spa() {
   write(spa_index, read('spa_index.html'), 'Creating', true);
   write(spa_main_tsx, read('spa_main.ts_'), 'Creating', true);
+  write(spa_layout_tsx, read('Layout.ts_'), 'Creating', true);
   component('Home');
   component('About');
   component('Contact');
@@ -131,7 +131,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('2.22.3')
+  .version('3.24.0')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')

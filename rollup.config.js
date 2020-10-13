@@ -1,10 +1,11 @@
-import filesize from 'rollup-plugin-filesize';
 import { terser } from 'rollup-plugin-terser';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 const plugins = [
   resolve(),
+  commonjs(),
   terser({
     warnings: true,
     module: true,
@@ -14,7 +15,6 @@ const plugins = [
       },
     },
   }),
-  filesize(),
   sourcemaps()
 ];
 
