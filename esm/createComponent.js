@@ -13,12 +13,12 @@ function render(node, parent, idx) {
     if (!component || !(component instanceof tag)) {
         component = parent.__componentCache[key] = new tag(Object.assign(Object.assign({}, props), { children })).mount(id);
     }
-    let state = component.state;
     if (component.mounted) {
-        const new_state = component.mounted(props, children, state);
+        const new_state = component.mounted(props, children, component.state);
         if (typeof new_state !== 'undefined')
-            state = component.state = new_state;
+            component.state = new_state;
     }
+    let state = component.state;
     if (state instanceof Promise) {
         const render = el => {
             component.element = el;
