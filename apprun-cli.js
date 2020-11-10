@@ -72,10 +72,10 @@ function init() {
   const package_info = require(package_json);
   if (!package_info.scripts) package_info["scripts"] = {}
   if (!package_info.scripts['start']) {
-    package_info["scripts"]["start"] = 'webpack-dev-server --mode development';
+    package_info["scripts"]["start"] = 'webpack serve --mode development';
   }
   if (!package_info.scripts['build']) {
-    package_info["scripts"]["build"] = 'webpack -p --mode production';
+    package_info["scripts"]["build"] = 'webpack --mode production';
   }
   fs.writeFileSync(
     package_json,
@@ -131,7 +131,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('2.22.3')
+  .version('2.25')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
