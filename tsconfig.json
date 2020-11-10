@@ -2,11 +2,13 @@
 	"compilerOptions": {
 		"target": "es5",
 		"jsx": "react",
-		"reactNamespace": "app",
+		"jsxFactory": "app.h",
+		"jsxFragmentFactory": "app.Fragment",
 		"lib": ["dom", "es2015", "es5"],
 		"experimentalDecorators": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
-		"downlevelIteration": true
+		"downlevelIteration": true,
+		"skipLibCheck": true
 	}
 }
