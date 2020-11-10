@@ -33,29 +33,29 @@ const get_components = () => {
     return components;
 };
 const viewComponents = state => {
-    const Events = ({ events }) => app.createElement("ul", null, events && events.map(event => app.createElement("li", null, event.name)));
-    const Components = ({ components }) => app.createElement("ul", null, components.map(component => app.createElement("li", null,
-        app.createElement("div", null, component.constructor.name),
-        app.createElement(Events, { events: component['_actions'] }))));
-    return app.createElement("ul", null, Object.keys(state).map(name => app.createElement("li", null,
-        app.createElement("div", null,
+    const Events = ({ events }) => app.h("ul", null, events && events.map(event => app.h("li", null, event.name)));
+    const Components = ({ components }) => app.h("ul", null, components.map(component => app.h("li", null,
+        app.h("div", null, component.constructor.name),
+        app.h(Events, { events: component['_actions'] }))));
+    return app.h("ul", null, Object.keys(state).map(name => app.h("li", null,
+        app.h("div", null,
             "#",
             name),
-        app.createElement(Components, { components: state[name] }))));
+        app.h(Components, { components: state[name] }))));
 };
 const viewEvents = state => {
-    const Components = ({ components }) => app.createElement("ul", null, components.map(component => app.createElement("li", null,
-        app.createElement("div", null, component.constructor.name))));
-    const Events = ({ events, global }) => app.createElement("ul", null, events && events
+    const Components = ({ components }) => app.h("ul", null, components.map(component => app.h("li", null,
+        app.h("div", null, component.constructor.name))));
+    const Events = ({ events, global }) => app.h("ul", null, events && events
         .filter(event => event.global === global)
-        .map(({ event, components }) => app.createElement("li", null,
-        app.createElement("div", null, event),
-        app.createElement(Components, { components: components }))));
-    return app.createElement("div", null,
-        app.createElement("div", null, "GLOBAL EVENTS"),
-        app.createElement(Events, { events: state, global: true }),
-        app.createElement("div", null, "LOCAL EVENTS"),
-        app.createElement(Events, { events: state, global: false }));
+        .map(({ event, components }) => app.h("li", null,
+        app.h("div", null, event),
+        app.h(Components, { components: components }))));
+    return app.h("div", null,
+        app.h("div", null, "GLOBAL EVENTS"),
+        app.h(Events, { events: state, global: true }),
+        app.h("div", null, "LOCAL EVENTS"),
+        app.h(Events, { events: state, global: false }));
 };
 const _events = (print) => {
     const global_events = app['_events'];

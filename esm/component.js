@@ -44,7 +44,7 @@ export class Component {
         if (!this.view)
             return;
         const h = app.createElement;
-        app.createElement = (tag, props, ...children) => {
+        app.h = app.createElement = (tag, props, ...children) => {
             props && Object.keys(props).forEach(key => {
                 if (key.startsWith('$')) {
                     directive(key, props, tag, this);
@@ -54,7 +54,7 @@ export class Component {
             return h(tag, props, ...children);
         };
         const html = p ? this.view(state, p) : this.view(state);
-        app.createElement = h;
+        app.h = app.createElement = h;
         return html;
     }
     renderState(state, vdom = null) {

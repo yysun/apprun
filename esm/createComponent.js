@@ -24,7 +24,7 @@ function render(node, parent, idx) {
             component.element = el;
             component.setState(state);
         };
-        return app.createElement("section", Object.assign({}, props, { ref: e => render(e), _component: component }));
+        return app.h("section", Object.assign({}, props, { ref: e => render(e), _component: component }));
     }
     else {
         const vdom = component._view(state, props);
@@ -32,7 +32,7 @@ function render(node, parent, idx) {
             component.element = el;
             component.renderState(state, vdom);
         };
-        return app.createElement("section", Object.assign({}, props, { ref: e => render(e), _component: component }), vdom);
+        return app.h("section", Object.assign({}, props, { ref: e => render(e), _component: component }), vdom);
     }
 }
 export default function createComponent(node, parent, idx = 0) {
