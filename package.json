@@ -8,11 +8,11 @@
   "bin": "apprun-cli.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc -p src && rollup -c && webpack -p --mode production",
+    "build": "tsc -p src && rollup -c && webpack --mode production",
     "test": "jest --watch",
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack serve --mode development",
     "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html",
     "rollup": "tsc -p src && rollup -c"
   },
@@ -37,24 +37,24 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "commander": "^5.1.0"
+    "commander": "^6.2.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^15.0.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "@types/jest": "^26.0.13",
-    "jest": "^26.4.2",
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "@types/jest": "^26.0.15",
+    "jest": "^26.6.3",
     "json-loader": "^0.5.7",
-    "marked": "^1.1.1",
+    "marked": "^1.2.3",
     "morphdom": "^2.6.1",
-    "rollup": "^2.26.11",
-    "rollup-plugin-sourcemaps": "^0.6.2",
+    "rollup": "^2.33.1",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^26.3.0",
-    "ts-loader": "^8.0.3",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
+    "ts-jest": "^26.4.4",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.0.5",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0"
   },
   "jest": {
