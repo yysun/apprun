@@ -35,7 +35,7 @@ export class Component<T=any, E=any> {
   private _view(state, p = null) {
     if (!this.view) return;
     const h = app.createElement;
-    app.createElement = (tag, props, ...children) => {
+    app.h = app.createElement = (tag, props, ...children) => {
       props && Object.keys(props).forEach(key => {
         if (key.startsWith('$')) {
           directive(key, props, tag, this);
@@ -45,7 +45,7 @@ export class Component<T=any, E=any> {
       return h(tag, props, ...children);
     }
     const html = p ? this.view(state, p) : this.view(state);
-    app.createElement = h;
+    app.h = app.createElement = h;
     return html;
   }
 
