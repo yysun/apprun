@@ -14,7 +14,7 @@ const setStateValue = (component, name, value) => {
   }
 }
 
-export default (key: string, props: [], tag, component) => {
+export default (key: string, props: {}, tag, component) => {
   if (key.startsWith('$on')) {
     const event = props[key];
     key = key.substring(1)
