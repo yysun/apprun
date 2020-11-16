@@ -1,3 +1,4 @@
+import { TemplateResult } from 'lit-html';
 function getProp(prop) {
     if (typeof prop === 'object') {
         return Object.keys(prop).map(name => `${name}:${prop[name]}`).join(';');
@@ -26,6 +27,9 @@ function clean(obj) {
 function toHTML(vdom) {
     if (!vdom)
         return '';
+    if (vdom instanceof TemplateResult) {
+        return vdom.toString();
+    }
     clean(vdom);
     if (Array.isArray(vdom))
         return toHTMLArray(vdom);

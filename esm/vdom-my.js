@@ -33,7 +33,7 @@ export function createElement(tag, props, ...children) {
         throw new Error(`Unknown tag in vdom ${tag}`);
 }
 ;
-const keyCache = {};
+const keyCache = new WeakMap();
 export const updateElement = render;
 export function render(element, nodes, parent = {}) {
     // console.log('render', element, node);
@@ -58,33 +58,39 @@ function same(el, node) {
     return key1.toUpperCase() === key2.toUpperCase();
 }
 function update(element, node, isSvg) {
-    console.assert(!!element);
+    if (node['_op'] === 3)
+        return;
+    // console.assert(!!element);
     isSvg = isSvg || node.tag === "svg";
-    //console.log('update', element, node);
     if (!same(element, node)) {
         element.parentNode.replaceChild(create(node, isSvg), element);
         return;
     }
-    updateChildren(element, node.children, isSvg);
-    updateProps(element, node.props);
+    !(node['_op'] & 2) && updateChildren(element, node.children, isSvg);
+    !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
-    const len = Math.min(element.childNodes.length, children.length);
+    var _a;
+    const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
+    const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
+    const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const child = children[i];
+        if (child['_op'] === 3)
+            continue;
         const el = element.childNodes[i];
-        if (child instanceof HTMLElement || child instanceof SVGElement) {
-            element.insertBefore(child, el);
-        }
-        else if (typeof child === 'string') {
+        if (typeof child === 'string') {
             if (el.textContent !== child) {
                 if (el.nodeType === 3) {
-                    el.textContent = child;
+                    el.nodeValue = child;
                 }
                 else {
                     element.replaceChild(createText(child), el);
                 }
             }
+        }
+        else if (child instanceof HTMLElement || child instanceof SVGElement) {
+            element.insertBefore(child, el);
         }
         else {
             const key = child.props && child.props['key'];
@@ -93,15 +99,14 @@ function updateChildren(element, children, isSvg) {
                     update(element.childNodes[i], child, isSvg);
                 }
                 else {
+                    // console.log(el.key, key);
                     const old = keyCache[key];
                     if (old) {
+                        const temp = old.nextSibling;
                         element.insertBefore(old, el);
-                        element.appendChild(el);
-                        update(element.childNodes[i], child, isSvg);
+                        temp ? element.insertBefore(el, temp) : element.appendChild(el);
                     }
-                    else {
-                        element.insertBefore(create(child, isSvg), el);
-                    }
+                    update(element.childNodes[i], child, isSvg);
                 }
             }
             else {
@@ -114,7 +119,7 @@ function updateChildren(element, children, isSvg) {
         element.removeChild(element.lastChild);
         n--;
     }
-    if (children.length > len) {
+    if (new_len > len) {
         const d = document.createDocumentFragment();
         for (let i = len; i < children.length; i++) {
             d.appendChild(create(children[i], isSvg));
@@ -133,8 +138,7 @@ function createText(node) {
     }
 }
 function create(node, isSvg) {
-    console.assert(node !== null && node !== undefined);
-    // console.log('create', node, typeof node);
+    // console.assert(node !== null && node !== undefined);
     if ((node instanceof HTMLElement) || (node instanceof SVGElement))
         return node;
     if (typeof node === "string")
@@ -145,7 +149,7 @@ function create(node, isSvg) {
     const element = isSvg
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag);
-    updateProps(element, node.props);
+    updateProps(element, node.props, isSvg);
     if (node.children)
         node.children.forEach(child => element.appendChild(create(child, isSvg)));
     return element;
@@ -160,9 +164,8 @@ function mergeProps(oldProps, newProps) {
         Object.keys(newProps).forEach(p => props[p] = newProps[p]);
     return props;
 }
-function updateProps(element, props) {
-    console.assert(!!element);
-    // console.log('updateProps', element, props);
+function updateProps(element, props, isSvg) {
+    // console.assert(!!element);
     const cached = element[ATTR_PROPS] || {};
     props = mergeProps(cached, props || {});
     element[ATTR_PROPS] = props;
@@ -170,15 +173,7 @@ function updateProps(element, props) {
         const value = props[name];
         // if (cached[name] === value) continue;
         // console.log('updateProps', name, value);
-        if (name === 'style') {
-            if (element.style.cssText)
-                element.style.cssText = '';
-            for (const s in value) {
-                if (element.style[s] !== value[s])
-                    element.style[s] = value[s];
-            }
-        }
-        else if (name.startsWith('data-')) {
+        if (name.startsWith('data-')) {
             const dname = name.substring(5);
             const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
             if (element.dataset[cname] !== value) {
@@ -188,8 +183,39 @@ function updateProps(element, props) {
                     delete element.dataset[cname];
             }
         }
-        else if (name === 'id' || name === 'class' || name.startsWith("role") || name.indexOf("-") > 0 ||
-            element instanceof SVGElement) {
+        else if (name === 'style') {
+            if (element.style.cssText)
+                element.style.cssText = '';
+            if (typeof value === 'string')
+                element.style.cssText = value;
+            else {
+                for (const s in value) {
+                    if (element.style[s] !== value[s])
+                        element.style[s] = value[s];
+                }
+            }
+        }
+        else if (name.startsWith('xlink')) {
+            const xname = name.replace('xlink', '').toLowerCase();
+            if (value == null || value === false) {
+                element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
+            }
+            else {
+                element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+            }
+        }
+        else if (name.startsWith('on')) {
+            if (!value || typeof value === 'function') {
+                element[name] = value;
+            }
+            else if (typeof value === 'string') {
+                if (value)
+                    element.setAttribute(name, value);
+                else
+                    element.removeAttribute(name);
+            }
+        }
+        else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
             if (element.getAttribute(name) !== value) {
                 if (value)
                     element.setAttribute(name, value);

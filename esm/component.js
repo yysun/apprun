@@ -44,7 +44,7 @@ export class Component {
         if (!this.view)
             return;
         const h = app.createElement;
-        app.createElement = (tag, props, ...children) => {
+        app.h = app.createElement = (tag, props, ...children) => {
             props && Object.keys(props).forEach(key => {
                 if (key.startsWith('$')) {
                     directive(key, props, tag, this);
@@ -54,13 +54,13 @@ export class Component {
             return h(tag, props, ...children);
         };
         const html = p ? this.view(state, p) : this.view(state);
-        app.createElement = h;
+        app.h = app.createElement = h;
         return html;
     }
     renderState(state, vdom = null) {
         if (!this.view)
             return;
-        const html = vdom || this._view(state);
+        let html = vdom || this._view(state);
         app['debug'] && app.run('debug', {
             component: this,
             state,
@@ -85,6 +85,7 @@ export class Component {
                                 this.unload(this.state);
                                 this.observer.disconnect();
                                 this.observer = null;
+                                this.save_vdom = [];
                             }
                         });
                     this.observer.observe(document.body, {
@@ -95,8 +96,9 @@ export class Component {
             }
             el['_component'] = this;
         }
-        if (!vdom)
+        if (!vdom) {
             this.render(el, html);
+        }
         this.rendered && this.rendered(this.state);
     }
     setState(state, options = { render: true, history: false }) {
@@ -136,6 +138,10 @@ export class Component {
         if (this.enable_history) {
             this.on(options.history.prev || 'history-prev', this._history_prev);
             this.on(options.history.next || 'history-next', this._history_next);
+        }
+        if (options.route) {
+            this.update = this.update || {};
+            this.update[options.route] = REFRESH;
         }
         this.add_actions();
         this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
