@@ -1,13 +1,13 @@
 import { html } from 'lit-html/lit-html.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 
-import { app, run, Component, View } from '../../src/apprun-html'
+import { run, Component, View } from '../../src/apprun-html'
 import { startMeasure, stopMeasure, state, update, Data, State, Events } from './store';
 
 const view: View<State> = state => {
-  const selected = state.selected; // TODO: still not working
+  const selected = state.selected;
   return html`<div class="container" @click=${run(click)}>
-  <div class="row">lit-html - refresh before start</div>
+  <div class="row">lit-html</div>
   <div class="row">
     <button id="run">Create 1,000 rows</button>
     <button id="runlots">Create 10,000 rows</button>
@@ -39,13 +39,8 @@ const view: View<State> = state => {
 }
 
 const getId = (elem: any) => {
-  while (elem) {
-    if (elem.tagName === "TR") {
-      return elem.id;
-    }
-    elem = elem.parentNode;
-  }
-  return undefined;
+  const tr = elem.closest('tr');
+  return parseInt(tr.id);
 }
 
 const click = (state: State, e: Event) => {
@@ -61,17 +56,14 @@ const click = (state: State, e: Event) => {
     startMeasure('delete');
     const id = getId(t);
     component.run('delete', id);
-    component.run('.');
-    stopMeasure();
-  } else if (t.matches('.lbl')) {
+  } else if (t.matches('td')) {
     startMeasure('select');
     const id = getId(t);
     component.run('select', id);
-    component.run('.');
   }
   stopMeasure();
 }
-class Lit extends Component<State, Events> {}
-const component = new Lit(state, view, { ...update });
+
+const component = new Component<State, Events>(state, view, update);
 export default (element) => component.mount(element, { route: '#benchmark-lit-html' });
 

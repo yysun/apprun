@@ -58,25 +58,13 @@ const click = (state: State, e: Event) => {
     startMeasure('delete');
     const id = getId(t);
     component.run('delete', id);
-    document.getElementById(id)?.remove();
-    stopMeasure();
-  } else if (t.matches('.lbl')) {
+  } else if (t.matches('td')) {
     startMeasure('select');
     const id = getId(t);
-    let el;
-    if (state.selected) {
-      el = document.getElementById(`${state.selected}`);
-      el && (el.className = '');
-    }
     component.run('select', id);
-    el = document.getElementById(id);
-    el && (el.className = 'danger');
   }
   stopMeasure();
 }
 
-class Benchmark extends Component<State, Events> {}
-const component = new Benchmark(state, view, { ...update });
-// (component as any)['-patch-vdom-on'] = true;
-
+const component = new Component<State, Events>(state, view, update);
 export default (element) => component.mount(element, { route: '#benchmark' });
