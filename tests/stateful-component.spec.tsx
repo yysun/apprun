@@ -126,6 +126,24 @@ describe('Stateful Component', () => {
     component.run('+1');
   });
 
+  it('should allow mounted function to call this.run', () => {
+    class Main extends Component {
+      state = 0
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+      mounted = () => {
+        this.run('+1');
+      }
+    }
+    const element = document.createElement("div");
+    app.render(element, <Main />);
+    expect(element.textContent).toBe("1");
+  });
+
   it('should allow async event inside the mounted function', (done) => {
     class Child3 extends Component {
       view = (state) => {
