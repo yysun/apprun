@@ -14,7 +14,6 @@ const spa_index = path.resolve('./index.html');
 const spa_main_tsx = path.resolve('./src/main.tsx');
 const spa_layout_tsx = path.resolve('./src/Layout.tsx');
 const readme_md = path.resolve('./README.md');
-const jest_config = path.resolve('./jest.config.js');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
@@ -106,7 +105,19 @@ function component(name) {
 function jest_init() {
   console.log(' * Installing jest');
   execSync('npm i @types/jest jest ts-jest --save-dev');
-  write(jest_config, read('jest.config.js'), 'Creating');
+  const jest_config = {
+    "preset": "ts-jest",
+  }
+
+  const package_info = require(package_json) || {};
+  package_info["jest"] = jest_config
+
+  package_info["scripts"]["test"] = 'jest --watch';
+  fs.writeFileSync(
+    package_json,
+    JSON.stringify(package_info, null, 2)
+  );
+
   show_test = true;
 }
 
@@ -131,7 +142,7 @@ function spa() {
 
 program
   .name('apprun')
-  .version('2.25')
+  .version('2.26')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
