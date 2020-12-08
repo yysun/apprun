@@ -19,7 +19,10 @@ function render(node, parent, idx) {
   if (state instanceof Promise) {
     const render = el => {
       component.element = el;
-      component.setState(state);
+      Promise.all([state]).then(v => {
+        if (v[0]) component.setState(v[0]);
+        else component.setState(component.state);
+      })
     }
     return <section {...props} ref={e => render(e)} _component={component}></section>;
   }

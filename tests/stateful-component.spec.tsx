@@ -226,7 +226,7 @@ describe('Stateful Component', () => {
     }, 100)
   });
 
-  it('should allow Promise returned from the mounted function and retain state after events', (done) => {
+  it('should allow async mounted function and retain state after parent refresh', (done) => {
     class Child extends Component {
       state = 0
       view = (state) => {
@@ -235,9 +235,9 @@ describe('Stateful Component', () => {
       update = {
         '@child_event': () => { app.run('@@_pranet_event') }
       }
-      mounted = () => {
+      mounted = async () => {
         if (this.state == 0) return new Promise(resolve =>
-            setTimeout(() => resolve(100)))
+          setTimeout(() => resolve(100)))
       }
     }
 
@@ -249,16 +249,12 @@ describe('Stateful Component', () => {
     }
     const element = document.createElement("div");
     app.render(element, <Main />);
-
+    app.run('@child_event');
     setTimeout(() => {
-      expect(element.textContent).toBe("100");
-      app.run('@child_event');
-      expect(element.textContent).toBe("100");
-      done();
-    }, 20);
+        expect(element.textContent).toBe("100");
+        done();
+      }, 20);
   });
-
-
 
   it('should off all events after unmount', () => {
     class Ch extends Component {
