@@ -5,6 +5,19 @@
 * apprun@latest: 2.x, stable, es2015, web component
 * apprun@next: 3.x, dev, es2015, lit-html
 
+## 1.26/ 2.26 / 3.26
+
+* Support initial state as a function or an sync function
+* Use Jest preset: ts-jest
+
+## 1.24 / 2.25 / 3.25
+
+* Support the list attribute
+* Support webpack 5
+* Set jsxFactory to app.h for TypeScript 4
+## 1.24 / 2.24 / 3.24
+
+* Support the list attribute
 
 ## 1.23 / 2.23 / 3.23
 

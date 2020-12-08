@@ -528,8 +528,23 @@ const view = () => <>
 </>
 app.start(document.body, {}, view);
 `
-  }
+  },
+  {
+    name: 'Init State as an Async Function',
+    code: `// Init State as an Async Function
+const state = async () => {
+  const response = await fetch('https://xkcd-imgs.herokuapp.com/');
+  const comic = await response.json();
+  return { comic };
+};
 
+const view = state => <>
+  { state.comic && <img src={ state.comic.url } />}
+</>;
+
+app.start(document.body, state, view);
+`
+  }
 ];
 
 
