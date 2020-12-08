@@ -13,16 +13,20 @@ function render(node, parent, idx) {
     if (!component || !(component instanceof tag)) {
         component = parent.__componentCache[key] = new tag(Object.assign(Object.assign({}, props), { children })).mount(id);
     }
+    let state = component.state;
     if (component.mounted) {
         const new_state = component.mounted(props, children, component.state);
-        if (typeof new_state !== 'undefined')
-            component.state = new_state;
+        state = (typeof new_state !== 'undefined') ? state = new_state : component.state;
     }
-    let state = component.state;
     if (state instanceof Promise) {
         const render = el => {
             component.element = el;
-            component.setState(state);
+            Promise.all([state]).then(v => {
+                if (v[0])
+                    component.setState(v[0]);
+                else
+                    component.setState(component.state);
+            });
         };
         return app.h("section", Object.assign({}, props, { ref: e => render(e), _component: component }));
     }

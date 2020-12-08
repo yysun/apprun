@@ -145,6 +145,8 @@ export class Component {
         }
         this.add_actions();
         this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
+        if (typeof this.state === 'function')
+            this.state = this.state();
         if (options.render) {
             this.setState(this.state, { render: true, history: true });
         }
