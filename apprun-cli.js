@@ -8,6 +8,7 @@ const package_json = path.resolve('./package.json');
 const tsconfig_json = path.resolve('./tsconfig.json');
 const webpack_config_js = path.resolve('./webpack.config.js');
 const git_ignore_file = path.resolve('./.gitignore');
+const eslint_file = path.resolve('./.eslintrc.js');
 const index_html = path.resolve('./index.html');
 const main_tsx = path.resolve('./src/main.tsx');
 const spa_index = path.resolve('./index.html');
@@ -52,9 +53,8 @@ function init() {
 
   if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
 
-  console.log(' * Installing packages. This might take a couple minutes.');
+  console.log(' * Installing packages. This might take a few minutes.');
   execSync('npm install apprun webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
-
   if (es5) execSync('npm install apprun@es5 --save');
 
   es5 ?
@@ -75,13 +75,17 @@ function init() {
   if (!package_info.scripts['build']) {
     package_info["scripts"]["build"] = 'webpack --mode production';
   }
+  save_package_json(package_info);
+  git_init();
+  // jest_init();
+  show_start = true;
+}
+
+function save_package_json(package_info) {
   fs.writeFileSync(
     package_json,
     JSON.stringify(package_info, null, 2)
   );
-  git_init();
-  // jest_init();
-  show_start = true;
 }
 
 function git_init() {
@@ -113,12 +117,20 @@ function jest_init() {
   package_info["jest"] = jest_config
 
   package_info["scripts"]["test"] = 'jest --watch';
-  fs.writeFileSync(
-    package_json,
-    JSON.stringify(package_info, null, 2)
-  );
-
+  save_package_json(package_info);
   show_test = true;
+}
+
+function lint_init() {
+  console.log(' * Installing ESLint');
+  execSync('npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin');
+
+  const package_info = require(package_json) || {};
+  package_info["scripts"]["lint"] = 'eslint src';
+  package_info["scripts"]["lint:fix"] = 'eslint src --fix';
+  save_package_json(package_info);
+
+  write(eslint_file, read('_eslintrc.js'));
 }
 
 function component_spec(name) {
@@ -142,11 +154,12 @@ function spa() {
 
 program
   .name('apprun')
-  .version('2.26')
+  .version('2.27')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <file>', 'Generate AppRun component')
   .option('-g, --git', 'Initialize git repository')
   .option('-j, --jest', 'Install jest')
+  .option('-l, --lint', 'Install ESLint')
   .option('-t, --test <file>', 'Generate component spec')
   .option('-s, --spa', 'Generate SPA app')
   .option('-5, --es5', 'Use apprun@es5')
@@ -165,6 +178,7 @@ if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
 if (program.jest) jest_init();
+if (program.lint) lint_init();
 if (program.test) component_spec(program.test);
 if (program.spa) spa();
 
