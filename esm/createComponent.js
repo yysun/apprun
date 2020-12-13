@@ -30,13 +30,17 @@ function render(node, parent, idx) {
         };
         return app.h("section", Object.assign({}, props, { ref: e => render(e), _component: component }));
     }
-    else {
+    else if (state != null) {
         const vdom = component._view(state, props);
         const render = el => {
             component.element = el;
+            component.state = state;
             component.renderState(state, vdom);
         };
         return app.h("section", Object.assign({}, props, { ref: e => render(e), _component: component }), vdom);
+    }
+    else {
+        return app.h("section", Object.assign({}, props, { _component: component }));
     }
 }
 export default function createComponent(node, parent, idx = 0) {
