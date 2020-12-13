@@ -1,11 +1,13 @@
 {
   "name": "apprun",
-  "version": "2.26.0",
+  "version": "2.26.1",
   "description": "JavaScript library that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
   "module": "dist/apprun.esm.js",
   "types": "apprun.d.ts",
-  "bin": "apprun-cli.js",
+  "bin": {
+    "apprun": "apprun-cli.js"
+  },
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc -p src && rollup -c && webpack --mode production",
