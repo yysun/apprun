@@ -25,14 +25,16 @@ function render(node, parent, idx) {
       })
     }
     return <section {...props} ref={e => render(e)} _component={component}></section>;
-  }
-  else {
+  } else if (state != null) {
     const vdom = component._view(state, props);
     const render = el => {
       component.element = el;
+      component.state = state;
       component.renderState(state, vdom);
     }
     return <section {...props} ref={e => render(e)} _component={component}>{vdom}</section>;
+  } else {
+    return <section {...props} _component={component}></section>;
   }
 }
 

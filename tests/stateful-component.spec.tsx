@@ -178,6 +178,26 @@ describe('Stateful Component', () => {
     },10)
   });
 
+  it('should allow mounted function return a new state', (done) => {
+    class Main extends Component {
+      state = 10
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+      mounted = () => 0
+    }
+    const element = document.createElement("div");
+    app.render(element, <Main />);
+    setTimeout(() => {
+      expect(element.textContent).toBe("0");
+      expect(element.firstChild['_component'].state).toBe(0);
+      done();
+    })
+  });
+
   it('should allow mounted function return void', () => {
     class Main extends Component {
       state = 0
