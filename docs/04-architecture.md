@@ -102,4 +102,4 @@ Events can be strongly typed using TypeScript Discriminated Unions. If you are i
 
 ## Event Scope
 
-So far, the AppRun events we see are global events, which means that the events are published and handled globally by all modules. Sometime, you may want to limit the events to a certain scope. You then can use [components](04-component).
+So far, the AppRun events we see are global events, which means that the events are published and handled globally by all modules. Sometime, you may want to limit the events to a certain scope. You then can use [components](05-component).
