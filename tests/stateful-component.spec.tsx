@@ -196,7 +196,7 @@ describe('Stateful Component', () => {
       expect(element.firstChild['_component'].state).toBe(0);
       done();
     })
-  });
+  }, 50);
 
   it('should allow mounted function return void', () => {
     class Main extends Component {
