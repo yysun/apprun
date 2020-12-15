@@ -75,6 +75,9 @@ function init() {
   if (!package_info.scripts['build']) {
     package_info["scripts"]["build"] = 'webpack --mode production';
   }
+  if (!package_info.scripts['tsc:watch']) {
+    package_info['scripts']['tsc:watch'] = 'tsc -w';
+  }
   save_package_json(package_info);
   git_init();
   // jest_init();
