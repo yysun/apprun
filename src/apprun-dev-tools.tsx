@@ -137,7 +137,7 @@ const _components = (print?) => {
   }
 }
 
-let debugging = 0;
+let debugging = Number(window?.localStorage?.getItem('__apprun_debugging__')) || 0;
 app.on('debug', p => {
   if (debugging & 1 && p.event) console.log(p);
   if (debugging & 2 && p.vdom) console.log(p);
@@ -169,7 +169,8 @@ window['_apprun-log'] = ['log [event|view] on|off', (a1?, a2?) => {
       debugging &= ~2;
     }
   }
-  console.log(`* log ${a1} ${a2 || ''}`)
+  console.log(`* log ${a1} ${a2 || ''}`);
+  window?.localStorage?.setItem('__apprun_debugging__', `${debugging}`)
 }];
 
 window['_apprun-create-event-tests'] = ['create-event-tests',
@@ -187,31 +188,48 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 0.4: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 2.26.2: type "_apprun `help`" to list all available commands.');
 
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
   let devTools_running = false;
   const devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
   if (devTools) {
+    const hash = location.hash || '#';
+    devTools.send(hash, '' );
+    const buf = [{ component:null, state:''}];
     console.info('Connected to the Redux DevTools');
     devTools.subscribe((message) => {
       if (message.type === 'START') devTools_running = true;
       else if (message.type === 'STOP') devTools_running = false;
       else if (message.type === 'DISPATCH') {
-        //console.log('DevTools: ', message);
+        // console.log('From Redux DevTools: ', message);
+        const idx = message.payload.index;
+        if (idx === 0) { app.run(hash) }
+        else {
+          const { component, state } = buf[idx];
+          component?.setState(state);
+        }
       }
     });
+
+    const send = (component, action, state) => {
+      if (state == null) return;
+      buf.push({ component, state });
+      devTools.send(action, state);
+    }
+
     app.on('debug', p => {
       if (devTools_running && p.event) {
         const state = p.newState;
         const type = p.event;
-        const payload = p.e;
+        const payload = p.p;
         const action = { type, payload };
+        const component = p.component;
         if (state instanceof Promise) {
-          state.then(s => devTools.send(action, s));
+          state.then(s => send(component, action, s));
         } else {
-          devTools.send(action, state);
+          send(component, action, state);
         }
       }
     });

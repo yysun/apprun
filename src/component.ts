@@ -192,16 +192,25 @@ export class Component<T=any, E=any> {
     if (!action || typeof action !== 'function') return;
     if (options.global) this. _global_events.push(name);
     this.on(name as any, (...p) => {
+
+      app['debug'] && app.run('debug', {
+        component: this,
+        _: '>',
+        event: name, p,
+        current_state: this.state,
+        options
+      });
+
       const newState = action(this.state, ...p);
 
       app['debug'] && app.run('debug', {
         component: this,
-        'event': name,
-        e: p,
-        state: this.state,
+        _: '<',
+        event: name, p,
         newState,
+        state: this.state,
         options
-      })
+      });
 
       this.setState(newState, options)
     }, options);
