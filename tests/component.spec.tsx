@@ -374,6 +374,21 @@ describe('Component', () => {
     });
   })
 
+  it('should wait existing promise state to be resolve', (done) => {
+    class Test extends Component {
+    state = async () => new Promise(resolve => setTimeout(() => resolve('old'), 150));
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().start(div);
+    t.setState(new Promise(resolve => setTimeout(() => resolve('new'), 50)));
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('<div>new</div>');
+      done();
+    }, 200);
+
+  })
+
 });
 
 
