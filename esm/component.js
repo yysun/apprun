@@ -63,8 +63,10 @@ export class Component {
         let html = vdom || this._view(state);
         app['debug'] && app.run('debug', {
             component: this,
+            _: html ? '.' : '-',
             state,
-            vdom: html || '[vdom is null - no render]',
+            vdom: html,
+            el: this.element
         });
         if (typeof document !== 'object')
             return;
@@ -85,7 +87,6 @@ export class Component {
                                 this.unload(this.state);
                                 this.observer.disconnect();
                                 this.observer = null;
-                                this.save_vdom = [];
                             }
                         });
                     this.observer.observe(document.body, {
@@ -105,8 +106,10 @@ export class Component {
         if (state instanceof Promise) {
             // Promise will not be saved or rendered
             // state will be saved and rendered when promise is resolved
-            state.then(s => {
-                this.setState(s, options);
+            // Wait for previous promise to complete first
+            Promise.all([state, this._state]).then(v => {
+                if (v[0])
+                    this.setState(v[0]);
             }).catch(err => {
                 console.error(err);
                 throw err;
@@ -171,13 +174,20 @@ export class Component {
         if (options.global)
             this._global_events.push(name);
         this.on(name, (...p) => {
+            app['debug'] && app.run('debug', {
+                component: this,
+                _: '>',
+                event: name, p,
+                current_state: this.state,
+                options
+            });
             const newState = action(this.state, ...p);
             app['debug'] && app.run('debug', {
                 component: this,
-                'event': name,
-                e: p,
-                state: this.state,
+                _: '<',
+                event: name, p,
                 newState,
+                state: this.state,
                 options
             });
             this.setState(newState, options);
