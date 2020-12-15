@@ -14,7 +14,7 @@ function render(node, parent, idx) {
   let state = component.state;
   if (component.mounted) {
     const new_state = component.mounted(props, children, component.state);
-    state = (typeof new_state !== 'undefined') ? state = new_state : component.state;
+    state = (typeof new_state !== 'undefined') ?  new_state : component.state;
   }
   if (state instanceof Promise) {
     const render = el => {
