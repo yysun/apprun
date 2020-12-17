@@ -89,7 +89,7 @@ const click = (state: State, e: Event) => {
 }
 
 const component = new Component(state, view, update);
-component.unload = () => { component.run('clear'); console.log('benchmark.unload') };
+component.unload = () => { console.log('benchmark.unload') };
 (component as any)['-patch-vdom-on'] = true;
 
 export default (element) => component.mount(element, {route: '#benchmark'});
