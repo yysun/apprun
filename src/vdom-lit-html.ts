@@ -1,14 +1,15 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-import { html, render, TemplateResult, svg, directive, EventPart } from 'lit-html';
+import { html, render, TemplateResult, svg, directive, EventPart, parts } from 'lit-html';
 import { unsafeHTML } from "lit-html/directives/unsafe-html";
 
 function _render(element, vdom, parent?) {
   if (typeof vdom === 'string') {
     render(html`${unsafeHTML(vdom)}`, element);
   } else if (vdom instanceof TemplateResult) {
-    render(vdom, element)
+    render(vdom, element);
   } else {
     updateElement(element, vdom, parent);
+    parts.delete(element);
   }
 }
 
@@ -33,5 +34,5 @@ const run = directive((event, ...args) => (part) => {
   }
 });
 
-export { createElement, Fragment, html, svg, _render as render , run};
+export { createElement, Fragment, html, svg, _render as render, run };
 
