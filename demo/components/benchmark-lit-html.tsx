@@ -64,6 +64,10 @@ const click = (state: State, e: Event) => {
   stopMeasure();
 }
 
-const component = new Component<State, Events>(state, view, update);
-export default (element) => component.mount(element, { route: '#benchmark-lit-html' });
+const my_update = {
+  '#benchmark-lit-html': state => state,
+  ...update,
+}
+const component = new Component<State, Events>(state, view, my_update);
+export default (element) => component.mount(element, { route: '' });
 
