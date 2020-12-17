@@ -5,6 +5,28 @@
 * apprun@latest: 2.x, stable, es2015, web component
 * apprun@next: 3.x, dev, es2015, lit-html
 
+## 1.26/ 2.26 / 3.26
+
+* Support initial state as a function or an sync function
+* Support promise returned from the _mounted_ function
+* Wait for all promises before set new state
+* Dev Tools: save debugging flag to local storage
+* Dev Tools: handle messages from redux devtools
+* Dev Tools: improve debugging event content
+* Dev Tools: publish two debugging events for each event
+* CLI: Support the unbundled development experiences with [esm-server](https://github.com/yysun/apprun-esm-server)
+* CLI: add -e option for adding ESLint
+* CLI: use Jest preset: ts-jest
+* CLI: use jsxFactory to app.h
+
+## 1.24 / 2.25 / 3.25
+
+* Support the list attribute
+* Support webpack 5
+* Set jsxFactory to app.h for TypeScript 4
+## 1.24 / 2.24 / 3.24
+
+* Support the list attribute
 
 ## 1.23 / 2.23 / 3.23
 

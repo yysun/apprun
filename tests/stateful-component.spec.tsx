@@ -178,6 +178,44 @@ describe('Stateful Component', () => {
     },10)
   });
 
+  it('should allow mounted function return a new state', (done) => {
+    class Main extends Component {
+      state = 10
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+      mounted = () => 0
+    }
+    const element = document.createElement("div");
+    app.render(element, <Main />);
+    setTimeout(() => {
+      expect(element.textContent).toBe("0");
+      expect(element.firstChild['_component'].state).toBe(0);
+      done();
+    }, 20)
+  });
+
+  it('should allow mounted function return void', () => {
+    class Main extends Component {
+      state = 0
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      update = {
+        '+1': state => state + 1
+      }
+      mounted = () => {
+
+      }
+    }
+    const element = document.createElement("div");
+    app.render(element, <Main />);
+    expect(element.textContent).toBe("0");
+  });
+
 
   it('should allow Promise returned from the mounted function', (done) => {
     class Child4 extends Component {
@@ -208,6 +246,35 @@ describe('Stateful Component', () => {
     }, 100)
   });
 
+  it('should allow async mounted function and retain state after parent refresh', (done) => {
+    class Child extends Component {
+      state = 0
+      view = (state) => {
+        return <div>{state}</div>
+      }
+      update = {
+        '@child_event': () => { app.run('@@_pranet_event') }
+      }
+      mounted = async () => {
+        if (this.state == 0) return new Promise(resolve =>
+          setTimeout(() => resolve(100)))
+      }
+    }
+
+    class Main extends Component {
+      view = () => <Child />;
+      update = {
+        '@@_pranet_event': state => state
+      }
+    }
+    const element = document.createElement("div");
+    app.render(element, <Main />);
+    app.run('@child_event');
+    setTimeout(() => {
+        expect(element.textContent).toBe("100");
+        done();
+      }, 20);
+  });
 
   it('should off all events after unmount', () => {
     class Ch extends Component {

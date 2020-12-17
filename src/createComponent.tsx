@@ -11,25 +11,30 @@ function render(node, parent, idx) {
   if (!component || !(component instanceof tag)) {
     component = parent.__componentCache[key] = new tag({ ...props, children }).mount(id);
   }
+  let state = component.state;
   if (component.mounted) {
     const new_state = component.mounted(props, children, component.state);
-    if (typeof new_state !== 'undefined') component.state = new_state;
+    state = (typeof new_state !== 'undefined') ?  new_state : component.state;
   }
-  let state = component.state;
   if (state instanceof Promise) {
     const render = el => {
       component.element = el;
-      component.setState(state);
+      Promise.all([state]).then(v => {
+        if (v[0] != null) component.setState(v[0]);
+        else component.setState(component.state);
+      })
     }
     return <section {...props} ref={e => render(e)} _component={component}></section>;
-  }
-  else {
+  } else if (state != null) {
     const vdom = component._view(state, props);
     const render = el => {
       component.element = el;
+      component.state = state;
       component.renderState(state, vdom);
     }
     return <section {...props} ref={e => render(e)} _component={component}>{vdom}</section>;
+  } else {
+    return <section {...props} _component={component}></section>;
   }
 }
 

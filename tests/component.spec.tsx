@@ -351,6 +351,44 @@ describe('Component', () => {
 
   })
 
+  it('should allow initial state as a function', () => {
+    class Test extends Component {
+      state = () => 'abc'
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().start(div);
+    expect(div.innerHTML).toBe('<div>abc</div>');
+  })
+
+  it('should allow initial state as an async function', (done) => {
+    class Test extends Component {
+      state = async () => new Promise(resolve => setTimeout(() => resolve(100)));
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().start(div);
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('<div>100</div>');
+      done();
+    });
+  })
+
+  it('should wait existing promise state to be resolve', (done) => {
+    class Test extends Component {
+    state = async () => new Promise(resolve => setTimeout(() => resolve('old'), 150));
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().start(div);
+    t.setState(new Promise(resolve => setTimeout(() => resolve('new'), 50)));
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('<div>new</div>');
+      done();
+    }, 200);
+
+  })
+
 });
 
 

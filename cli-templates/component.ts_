@@ -3,7 +3,7 @@ import { app, Component } from 'apprun';
 export default class #nameComponent extends Component {
   state = '#name';
 
-  view = (state) => <div>
+  view = state => <div>
     <h1>{state}</h1>
   </div>;
 
