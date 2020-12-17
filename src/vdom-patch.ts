@@ -3,7 +3,7 @@ enum CHANGES {
   NO_TREE_CHANGE = 2,
 }
 
-function patch(vdom1, vdom2) {
+export function patch(vdom1, vdom2) {
   if (!vdom1?.length || !vdom2?.length) return;
   const old_len = vdom1.length;
   const new_len = vdom2.length;
@@ -24,6 +24,23 @@ function patch(vdom1, vdom2) {
         patch(node1.children, node2.children);
       }
     }
+  }
+}
+
+export function get_vdom(node: Node) {
+  if (!node) return null;
+  if (node.nodeType === 3) return node.nodeValue;
+  const children = [];
+  if (node.childNodes) {
+    for (let i = 0; i < node.childNodes.length; i++) {
+      children.push(get_vdom(node.childNodes[i]));
+    }
+  }
+  const tag = node['tagName'] ? node['tagName'].toLocaleLowerCase() : node;
+  return {
+    tag,
+    props: node['_props'],
+    children
   }
 }
 

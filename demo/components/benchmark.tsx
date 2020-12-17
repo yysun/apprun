@@ -1,105 +1,54 @@
-import app, { Component } from '../../src/apprun'
-import Store from './store';
+import { app, Component, View } from '../../src/apprun'
+import { state, update, State, Events } from './store';
 
 let startTime;
-let lastMeasure;
+let lastName;
 
-const startMeasure = function (name) {
+const startMeasure = function (name: string) {
+  lastName = name
   startTime = performance.now();
-  lastMeasure = name;
 }
+
 const stopMeasure = function () {
   window.setTimeout(function () {
     const stop = performance.now();
-    console.log(lastMeasure + " took " + (stop - startTime));
+    console.log(lastName + ' took ' + (stop - startTime));
   }, 0);
 }
 
-const store = new Store();
-
-const update = {
-  '#benchmark': (store) => store,
-
-  run(store) {
-    store.run();
-    return store;
-  },
-
-  add(store) {
-    store.add();
-    return store;
-  },
-
-  remove(store, id) {
-    store.delete(id);
-    document.getElementById(id).remove();
-  },
-
-  select(store, id) {
-    if (store.selected) {
-      document.getElementById(store.selected).className = '';
-    }
-    store.select(id);
-    document.getElementById(id).className = 'danger';
-  },
-
-  updaterow(store) {
-    store.update();
-    return store;
-  },
-
-  runlots(store) {
-    store.runLots();
-    return store;
-  },
-
-  clear(store) {
-    store.clear();
-    document.getElementById("main-table").innerHTML = "";
-    //return store;
-  },
-
-  swaprows(store) {
-    store.swapRows();
-    return store;
-  }
-}
-
-const view = (model) => {
-  const rows = model.data.map((curr) => {
-    const selected = curr.id === model.selected ? 'danger' : undefined;
-    const id = curr.id;
-    return <tr class={selected} id={id} key={id}>
-    <td class="col-md-1">{id}</td>
-      <td class="col-md-4">
-        <a class="lbl">{curr.label}</a>
-      </td>
-      <td class="col-md-1">
-        <a class="remove">
-          <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
-        </a>
-      </td>
-      <td class="col-md-6"></td>
-    </tr>;
-  });
-
-  return <div id="benchmark" onclick={click}>
-    <div>
-      <button type='button' id='run'>Create 1,000 rows</button>
-      <button type='button' id='runlots'>Create 10,000 rows</button>
-      <button type='button' id='add'>Append 1,000 rows</button>
-      <button type='button' id='updaterow'>Update every 10th row</button>
-      <button type='button' id='clear'>Clear</button>
-      <button type='button' id='swaprows'>Swap Rows</button>
-    </div>
-    <br />
-    <table class="table table-hover table-striped test-data" id="main-table">
-      <tbody>{rows}</tbody>
-    </table>
+const view: View<State> = state => <div class="container" $onclick={click}>
+  <div>
+    <button id="run">Create 1,000 rows</button>
+    <button id="runlots">Create 10,000 rows</button>
+    <button id="add">Append 1,000 rows</button>
+    <button id="update">Update every 10th row</button>
+    <button id="clear">Clear</button>
+    <button id="swaprows">Swap Rows</button>
   </div>
-}
+  <br />
+  <table class="table table-hover table-striped test-data" id="main-table">
+    <tbody>
+      {state.data.map(item => {
+        const selected = item.id == state.selected ? 'danger' : undefined;
+        return <tr class={selected} id={item.id} key={item.id}>
+          <td class="col-md-1">{item.id}</td>
+          <td class="col-md-4">
+            <a class="lbl">{item.label}</a>
+          </td>
+          <td class="col-md-1">
+            <a class="remove">
+              <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
+            </a>
+          </td>
+          <td class="col-md-6"></td>
+        </tr>;
+      })}
+    </tbody>
+  </table>
+  <span class="preloadicon glyphicon glyphicon-remove hidden" aria-hidden="true"></span>
+</div>;
 
-const getId = (elem) => {
+const getId = (elem: any) => {
   while (elem) {
     if (elem.tagName === "TR") {
       return elem.id;
@@ -109,28 +58,38 @@ const getId = (elem) => {
   return undefined;
 }
 
-const click = (e) => {
+const click = (state: State, e: Event) => {
   const t = e.target as HTMLElement;
   if (!t) return;
+  e.preventDefault();
+
   if (t.tagName === 'BUTTON' && t.id) {
     startMeasure(t.id);
-    component.run(t.id);
+    component.run(t.id as Events);
     stopMeasure();
   } else if (t.matches('.remove')) {
-    startMeasure('remove');
-    component.run('remove', getId(t));
+    startMeasure('delete');
+    const id = getId(t);
+    component.run('delete', id);
+    document.getElementById(id)?.remove();
     stopMeasure();
   } else if (t.matches('.lbl')) {
     startMeasure('select');
-    component.run('select', getId(t));
-    stopMeasure();
+    const id = getId(t);
+    let el;
+    if (state.selected) {
+      el = document.getElementById(`${state.selected}`);
+      el && (el.className = '');
+    }
+    component.run('select', id);
+    el = document.getElementById(id);
+    el && (el.className = 'danger');
   }
-};
-
-const component = new Component(store, view, update);
-component['-patch-vdom-on'] = true;
-component.unload = () => { store.clear(); console.log('benchmark.unload') };
-component.rendered = () => {
-  store.selected && (document.getElementById(store.selected).className = 'danger');
+  stopMeasure();
 }
-export default (element) => component.mount(element);
+
+const component = new Component(state, view, update);
+component.unload = () => { console.log('benchmark.unload') };
+(component as any)['-patch-vdom-on'] = true;
+
+export default (element) => component.mount(element, {route: '#benchmark'});

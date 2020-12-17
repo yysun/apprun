@@ -3,14 +3,13 @@ import app, { App } from './app';
 import { Reflect } from './decorator'
 import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
-import patch from './vdom-patch';
 
 const componentCache = {};
 app.on('get-components', o => o.components = componentCache);
 
 const REFRESH = state => state;
 
-export class Component<T=any, E=any> {
+export class Component<T = any, E = any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
@@ -26,7 +25,6 @@ export class Component<T=any, E=any> {
   public unload;
   private tracking_id;
   private observer;
-  private save_vdom;
 
   render(element: HTMLElement, node) {
     app.render(element, node, this);
@@ -52,10 +50,13 @@ export class Component<T=any, E=any> {
   private renderState(state: T, vdom = null) {
     if (!this.view) return;
     let html = vdom || this._view(state);
+
     app['debug'] && app.run('debug', {
       component: this,
+      _: html ? '.' : '-',
       state,
-      vdom: html || '[vdom is null - no render]',
+      vdom: html,
+      el: this.element
     });
 
     if (typeof document !== 'object') return;
@@ -71,12 +72,11 @@ export class Component<T=any, E=any> {
         this.tracking_id = new Date().valueOf().toString();
         el.setAttribute(tracking_attr, this.tracking_id);
         if (typeof MutationObserver !== 'undefined') {
-          if(!this.observer)  this.observer = new MutationObserver(changes => {
+          if (!this.observer) this.observer = new MutationObserver(changes => {
             if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
               this.unload(this.state);
               this.observer.disconnect();
               this.observer = null;
-              this.save_vdom = [];
             }
           });
           this.observer.observe(document.body, {
@@ -85,25 +85,22 @@ export class Component<T=any, E=any> {
           });
         }
       }
-      if (el['_component'] === this && this.save_vdom && this['-patch-vdom-on']) {
-        patch([this.save_vdom], [html]);
-      }
       el['_component'] = this;
     }
     if (!vdom) {
       this.render(el, html);
-      this.save_vdom = html;
     }
     this.rendered && this.rendered(this.state);
   }
 
   public setState(state: T, options: ActionOptions
-    = { render: true, history: false}) {
+    = { render: true, history: false }) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
       // state will be saved and rendered when promise is resolved
-      state.then(s => {
-        this.setState(s, options)
+      // Wait for previous promise to complete first
+      Promise.all([state, this._state]).then(v => {
+        if (v[0]) this.setState(v[0]);
       }).catch(err => {
         console.error(err);
         throw err;
@@ -153,7 +150,7 @@ export class Component<T=any, E=any> {
     return this.mount(element, { ...options, render: true });
   }
 
-  public mount(element = null, options?: MountOptions): Component<T, E>  {
+  public mount(element = null, options?: MountOptions): Component<T, E> {
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = { ...this.options, ...options };
     this.element = element;
@@ -172,6 +169,7 @@ export class Component<T=any, E=any> {
 
     this.add_actions();
     this.state = this.state ?? this['model'] ?? {};
+    if (typeof this.state === 'function') this.state = this.state();
     if (options.render) {
       this.setState(this.state, { render: true, history: true });
     } else {
@@ -194,18 +192,27 @@ export class Component<T=any, E=any> {
 
   add_action(name: string, action, options: ActionOptions = {}) {
     if (!action || typeof action !== 'function') return;
-    if (options.global) this. _global_events.push(name);
+    if (options.global) this._global_events.push(name);
     this.on(name as any, (...p) => {
+
+      app['debug'] && app.run('debug', {
+        component: this,
+        _: '>',
+        event: name, p,
+        current_state: this.state,
+        options
+      });
+
       const newState = action(this.state, ...p);
 
       app['debug'] && app.run('debug', {
         component: this,
-        'event': name,
-        e: p,
-        state: this.state,
+        _: '<',
+        event: name, p,
         newState,
+        state: this.state,
         options
-      })
+      });
 
       this.setState(newState, options)
     }, options);

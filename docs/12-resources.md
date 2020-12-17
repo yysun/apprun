@@ -9,6 +9,13 @@ AppRun book published by Apress.
 
 [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
+## Blogs and Demos
+
+* https://dev.to/@yysun
+* https://glitch.com/@yysun
+* https://observablehq.com/@yysun
+* https://apprun.js.org/#play
+
 
 ## Posts
 

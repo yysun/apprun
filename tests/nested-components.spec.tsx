@@ -81,4 +81,37 @@ describe('Nested Stateful Component', () => {
 
   })
 
+
+  it('should not match component', () => {
+
+    class A extends Component {
+      view = () => <div>A</div>
+    }
+
+    class B extends Component {
+      view = () => <div>B</div>
+    }
+
+    class Main extends Component {
+      state = false;
+      view = state => <>
+        {state ? <A />: <div>aa</div>}
+        <B />
+      </>
+
+      update = {
+        a: state => !state
+      }
+    }
+
+    const el = document.createElement('div');
+    const main = new Main().start(el);
+    expect(el.innerHTML).toBe('<div>aa</div><section><div>B</div></section>');
+    main.run('a');
+    expect(el.innerHTML).toBe('<section><div>A</div></section><section><div>B</div></section>');
+    main.run('a');
+    expect(el.innerHTML).toBe('<div>aa</div><section><div>B</div></section>');
+
+  })
+
 })

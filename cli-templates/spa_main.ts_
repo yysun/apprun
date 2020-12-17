@@ -7,6 +7,6 @@ import Layout from './Layout';
 app.render(document.body, <Layout />);
 
 const element = 'my-app';
-new Home().start(element, {route: '#, #Home'});
-new About().mount(element, {route: '#About'});
-new Contact().mount(element, {route: '#Contact'});
+new Home().start(element);
+new About().mount(element);
+new Contact().mount(element);

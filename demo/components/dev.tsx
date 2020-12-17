@@ -1,24 +1,30 @@
-import app from '../../src/apprun';
+import { app, Component } from '../../src/apprun';
 
-const view = state => <>
-  <button $onclick="test">$onclick</button>
-  <button onclick="alert('You have clicked the button.')">onclick</button>
-  <button onclick="this.run('test', event)">this.run</button>
-  <button onclick="app.run('test', event)">app.run</button>
-  <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="90" height="40" fill="#aaa" $onclick="test" />
-    <rect x="10" y="80" width="90" height="40" fill="#aaa" onclick="alert('You have clicked the rect.')" />
-    <rect x="10" y="150" width="90" height="40" fill="#aaa" onclick="this.run('test', event)" />
-    <rect x="10" y="220" width="90" height="40" fill="#aaa" onclick="app.run('test', event)" />
-  </svg>
-</>
+class A extends Component {
+  view = () => <div>A</div>
+}
 
-const update = {
-  "#test": state => state,
-  "test": (state, evt) => {
-    alert("You have clicked the " + evt.target.tagName);
-    return state;
+class B extends Component {
+  state = 0
+
+  mounted = (props) => props;
+
+  view = ({ n }) => <div>{n}</div>
+}
+
+class Main extends Component {
+  state = false;
+  view = state => <>
+    <B n="1" />
+    {state ? <A />: <div>aa</div>}
+    <B n="2" />
+    <B n="3" />
+    <button $onclick='a'>a</button>
+  </>
+
+  update = {
+    a: state => !state
   }
 }
 
-export default (element) => app.start(element, '', view, update);
+export default (element) => new Main().start(element, {route: '#test'});

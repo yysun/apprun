@@ -4,9 +4,11 @@
     "module": "es2015",
     "moduleResolution": "node",
     "jsx": "react",
-    "reactNamespace": "app",
+    "jsxFactory": "app.h",
+    "jsxFragmentFactory": "app.Fragment",
     "lib": ["dom", "es2015", "es5"],
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "dist"
   }
 }

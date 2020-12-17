@@ -6,11 +6,11 @@
   "types": "apprun.d.ts",
   "bin": "apprun-cli.js",
   "scripts": {
-    "build": "webpack -p --mode production",
+    "build": "webpack --mode production",
     "test": "jest --watch",
     "jest": "jest",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack serve --mode development",
     "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html"
   },
   "keywords": [
@@ -34,19 +34,19 @@
   },
   "homepage": "https://github.com/yysun/apprun#readme",
   "dependencies": {
-    "commander": "^6.2.0"
+    "commander": "^6.2.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.19",
     "jest": "^26.6.3",
     "json-loader": "^0.5.7",
-    "marked": "^1.2.3",
+    "marked": "^1.2.7",
     "morphdom": "^2.6.1",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.0.5",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
+    "ts-loader": "^8.0.12",
+    "typescript": "^4.1.3",
+    "webpack": "^5.10.3",
+    "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0"
   },
   "jest": {

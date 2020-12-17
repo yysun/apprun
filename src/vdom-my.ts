@@ -60,6 +60,7 @@ function same(el: Element, node: VNode) {
 }
 
 function update(element: Element, node: VNode, isSvg: boolean) {
+  if (node['_op'] === 3) return;
   // console.assert(!!element);
   isSvg = isSvg || node.tag === "svg";
   if (!same(element, node)) {
@@ -76,31 +77,32 @@ function updateChildren(element, children, isSvg: boolean) {
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
+    if (child['_op'] === 3) continue;
     const el = element.childNodes[i];
     if (typeof child === 'string') {
       if (el.textContent !== child) {
         if (el.nodeType === 3) {
-          el.textContent = child
+          el.nodeValue = child
         } else {
           element.replaceChild(createText(child), el);
         }
       }
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
-        element.insertBefore(child, el);
+      element.insertBefore(child, el);
     } else {
       const key = child.props && child.props['key'];
       if (key) {
         if (el.key === key) {
           update(element.childNodes[i], child, isSvg);
         } else {
+          // console.log(el.key, key);
           const old = keyCache[key];
           if (old) {
+            const temp = old.nextSibling;
             element.insertBefore(old, el);
-            element.appendChild(el);
-            update(element.childNodes[i], child, isSvg);
-          } else {
-            element.insertBefore(create(child, isSvg), el);
+            temp ? element.insertBefore(el, temp) : element.appendChild(el);
           }
+          update(element.childNodes[i], child, isSvg);
         }
       } else {
         update(element.childNodes[i], child, isSvg);
@@ -202,12 +204,12 @@ function updateProps(element: Element, props: {}, isSvg) {
         else element.removeAttribute(name);
       }
     } else if (element[name] !== value) {
-        element[name] = value;
+      element[name] = value;
     }
     if (name === 'key' && value) keyCache[value] = element;
   }
   if (props && typeof props['ref'] === 'function') {
-    window.requestAnimationFrame(()=>props['ref'](element));
+    window.requestAnimationFrame(() => props['ref'](element));
   }
 }
 
