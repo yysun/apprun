@@ -1,5 +1,5 @@
 <h1 id="apprun-build-npm-version-downloads-license-twitter-discord-chat">AppRun <a href="https://travis-ci.org/yysun/apprun"><img src="https://travis-ci.org/yysun/apprun.svg?branch=master" alt="Build"></a> <a href="https://npmjs.org/package/apprun"><img src="https://img.shields.io/npm/v/apprun.svg" alt="NPM version"></a> <a href="https://npmjs.org/package/apprun"><img src="http://img.shields.io/npm/dm/apprun.svg" alt="Downloads"></a> <a href="LICENSE.md"><img src="https://img.shields.io/:license-mit-blue.svg" alt="License"></a> <a href="https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs"><img src="https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social" alt="twitter"></a> <a href="https://discord.gg/M5EDsj"><img src="https://img.shields.io/discord/476903999023480842.svg" alt="Discord Chat"></a></h1>
-<p>AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired Architecture, events, and components.</p>
+<p>AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired architecture, events, and components.</p>
 <blockquote>
 <p>AppRun is an MIT-licensed open source project. Please consider <a href="https://www.patreon.com/apprun">supporting the project on Patreon</a>. 👍❤️🙏</p>
 </blockquote>
@@ -11,21 +11,6 @@
 <li>State management and routing included</li>
 <li>Run side-by-side with jQuery, chartjs, D3, lit-html ...</li>
 </ul>
-<p>Applications built with AppRun have ** fewer lines of code<strong>, **smaller js files</strong>, and <strong>better performance</strong>. See a comparison from <a href="https://medium.freecodecamp.org/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075">A Real-World Comparison of Front-End Frameworks with Benchmarks (2019 update)</a>. You can also see the <a href="https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html">performance results</a> compared to other frameworks and libraries in the <a href="https://github.com/krausest/js-framework-benchmark">js-framework-benchmark</a> project.</p>
-<h2 id="apprun-book-from-apress">AppRun Book from Apress</h2>
-<p><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/"><img src="https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067" alt="Order from Amazon"></a></p>
-<ul>
-<li><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">Order from Amazon</a></li>
-</ul>
-<h2 id="architecture-concept">Architecture Concept</h2>
-<p>Application logic is broken down into three separate parts in the AppRun architecture.</p>
-<ul>
-<li>State (a.k.a. Model) — the state of your application</li>
-<li>View — a function to display the state</li>
-<li>Update — a collection of event handlers to update the state</li>
-</ul>
-<p>AppRun ties the three parts together and drives the applications using events.</p>
-<h2 id="quick-start">Quick Start</h2>
 <p>AppRun is distributed on npm.</p>
 <pre><code class="language-sh">npm install apprun</code></pre>
 <p>You can also load AppRun directly from the unpkg.com CDN:</p>
@@ -34,100 +19,18 @@
 <pre><code class="language-javascript">&lt;script type=&quot;module&quot;&gt;
   import { app, Component } from &#39;https://unpkg.com/apprun@next/esm/apprun-html?module&#39;;
 &lt;/script&gt;</code></pre>
-<h2 id="examples">Examples</h2>
-<h3 id="use-apprun-in-browsers-html">Use AppRun in Browsers (HTML)</h3>
-<p>Below is a counter application using AppRun (<a href="https://apprun.js.org/#play/6">Online Demo</a>).</p>
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot;&gt;
-  &lt;title&gt;Counter&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
-  &lt;script&gt;
-    const state = 0;
-    const view = state =&gt; {
-      return `&lt;div&gt;
-        &lt;h1&gt;${state}&lt;/h1&gt;
-        &lt;button onclick=&#39;app.run(&quot;-1&quot;)&#39;&gt;-1&lt;/button&gt;
-        &lt;button onclick=&#39;app.run(&quot;+1&quot;)&#39;&gt;+1&lt;/button&gt;
-      &lt;/div&gt;`;
-    };
-    const update = {
-      &#39;+1&#39;: state =&gt; state + 1,
-      &#39;-1&#39;: state =&gt; state - 1
-    };
-    app.start(document.body, state, view, update);
-  &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-<h3 id="web-component-lit-html">Web Component (lit-HTML)</h3>
-<p>Below is a counter web component using AppRun as ES module (<a href="https://glitch.com/~apprun-lit-html-wc">Online Demo</a>).</p>
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot;&gt;
-  &lt;title&gt;Counter Web Component&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;wc-lit-html&gt;&lt;/wc-lit-html&gt;
-  &lt;script type=&quot;module&quot;&gt;
-    import { app, Component, html } from &#39;https://unpkg.com/apprun@next/esm/apprun-html?module&#39;;
-      class Counter extends Component {
-        state = 0;
-        view = (state) =&gt; html`&lt;div&gt;
-        &lt;h1&gt;${state}&lt;/h1&gt;
-          &lt;button @click=${()=&gt;this.run(&quot;add&quot;, -1)}&gt;-1&lt;/button&gt;
-          &lt;button @click=${()=&gt;this.run(&quot;add&quot;, +1)}&gt;+1&lt;/button&gt;
-        &lt;/div&gt;`;
-        update =[
-          [&#39;add&#39;, (state, n) =&gt; state + n]
-        ]
-      }
-      app.webComponent(&#39;wc-lit-html&#39;, Counter);
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-<h3 id="typescript-and-jsx">TypeScript and JSX</h3>
-<p>We recommend using TypeScript and JSX. TypeScript provides <a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">strong typing</a>. JSX provides more <a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">advanced features</a>. For examples:</p>
-<h4 id="ref-function-a-map-component-using-d3js"><em>ref</em> function: A Map Component Using <em>D3.js</em></h4>
-<pre><code class="language-javascript">import app from &#39;apprun&#39;;
-import * as d3 from &#39;d3&#39;;
-import * as topojson from &#39;topojson&#39;;
-
-const map = ({ datum }) =&gt; { /* D3 logic */};
-
-const state = d3.json(&#39;world-110m.json&#39;).then(world =&gt; ({
-  datum: topojson.feature(world, world.objects.land)
-}));
-
-const view = state =&gt; &lt;svg id=&quot;svg&quot; ref={() =&gt; map(state)}&gt;&lt;/svg&gt;;
-</code></pre>
-<h4 id="embedding-element-a-chart-component-using-chartjs"><em>Embedding element</em>: A Chart Component Using <em>Chart.js</em></h4>
-<pre><code class="language-javascript">const view = state =&gt; {
-  const canvas = document.createElement(&#39;canvas&#39;);
-  const ctx = canvas.getContext(&#39;2d&#39;);
-  state.chart = new Chart(ctx, state.data);
-  return (
-    &lt;Card header={&lt;div&gt;Chart JS&lt;/div&gt;}&gt;
-      &lt;div&gt;{canvas}&lt;/div&gt;
-    &lt;/Card&gt;
-  );
-};</code></pre>
-<h4 id="directive-animation-using-animatecss"><em>Directive</em>: Animation using <em>animate.css</em></h4>
-<pre><code class="language-javascript">app.on(&#39;$&#39;, ({key, props}) =&gt; {
-  if (key === &#39;$animation&#39;) {
-    const value = props[key];
-    if (typeof value === &#39;string&#39;) {
-      props.class = `animated ${value}`;
-    }
-  }
-});
-
-const view = () =&gt; &lt;&gt;
-  &lt;img $animation={&#39;bounce infinite&#39;} src=&#39;logo.png&#39; /&gt;</code></pre>
-<h2 id="apprun-playground">AppRun Playground</h2>
-<p>Try the <a href="https://apprun.js.org/#play">AppRun Playground</a> to see more examples.</p>
+<h2 id="architecture-concept">Architecture Concept</h2>
+<p><img src="docs/imgs/apprun-demo.gif" alt="apprun-demo"></p>
+<p><a href="https://apprun.js.org/#play/6">Try it in AppRun Playground</a>.</p>
+<p>You can build applications using <a href="docs/#/05-component">Component</a> that also have <em>state</em>, <em>view</em>, and <em>update</em>.</p>
+<h2 id="apprun-book-from-apress">AppRun Book from Apress</h2>
+<p><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/"><img src="https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067" alt="Order from Amazon"></a></p>
+<ul>
+<li><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">Order from Amazon</a></li>
+</ul>
 <h2 id="apprun-cli">AppRun CLI</h2>
+<p>We recommend using TypeScript and JSX. TypeScript provides <a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">strong typing</a>. JSX provides more <a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">advanced features</a>.</p>
+<p>We recommend using webpack for building production code. However, you can also have fast and productive <a href="https://dev.to/yysun/a-dev-server-supports-esm-3cea">development experiences with esm-server</a>.</p>
 <p>Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
 <pre><code class="language-sh">npx apprun --init
 npm start</code></pre>
@@ -163,10 +66,9 @@ npx degit yysun/apprun-websockets-sqlite my-app</code></pre>
 </ul>
 <h2 id="developer-tools">Developer Tools</h2>
 <h3 id="cli-in-console">CLI in Console</h3>
-<p>AppRun CLI also runs in the console.</p>
-<p><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png" alt=""></p>
 <p>To use the AppRun dev-tools CLI, include the dev-tools script.</p>
 <pre><code class="language-JavaScript">&lt;script src=&quot;https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;</code></pre>
+<p>See <a href="https://dev.to/yysun/make-cli-run-in-the-console-42ho">AppRun CLI Run in the Console</a></p>
 <h3 id="dev-tools-extensions">Dev-Tools Extensions</h3>
 <p>AppRun supports the Redux DevTools Extension. To use the dev-tools, install the <a href="https://github.com/zalmoxisus/redux-devtools-extension">Redux DevTools Extension</a>. You can monitor the events and states in the devtools.</p>
 <p><img src="docs/imgs/apprun-dev-tools.gif" alt="app-dev-tools"></p>

@@ -1,5 +1,5 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-import { html, render, TemplateResult, svg, directive, EventPart } from 'lit-html';
+import { html, render, TemplateResult, svg, directive, EventPart, parts } from 'lit-html';
 import { unsafeHTML } from "lit-html/directives/unsafe-html";
 function _render(element, vdom, parent) {
     if (typeof vdom === 'string') {
@@ -10,6 +10,7 @@ function _render(element, vdom, parent) {
     }
     else {
         updateElement(element, vdom, parent);
+        parts.delete(element);
     }
 }
 const run = directive((event, ...args) => (part) => {
