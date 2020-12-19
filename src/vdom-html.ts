@@ -2,6 +2,7 @@ import { createElement, updateElement, Fragment } from './vdom-my';
 import morphdom from 'morphdom';
 
 export function render(element, html, parent?) {
+  if (!element) return;
   if (typeof html === 'string') {
     html = html.trim();
     if (element.firstChild) {
