@@ -24,6 +24,7 @@ const dir_tests = './tests';
 let show_start = false;
 let show_test = false;
 let es5 = false;
+let no_webpack = false;
 
 function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
@@ -54,8 +55,11 @@ function init() {
   if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
 
   console.log(' * Installing packages. This might take a few minutes.');
-  execSync('npm install apprun webpack webpack-cli webpack-dev-server ts-loader typescript source-map-loader --save-dev');
-  if (es5) execSync('npm install apprun@es5 --save');
+  if (!no_webpack) {
+    execSync('npm install webpack webpack-cli webpack-dev-server ts-loader source-map-loader --save-dev');
+  }
+  if (!es5) execSync('npm install apprun typescript --save-dev');
+  else execSync('npm install apprun@es5 typescript --save-dev');
 
   es5 ?
     write(tsconfig_json, read('tsconfig.es5.json'), ' * Configuring typescript - es5', true) :
@@ -166,17 +170,19 @@ program
   .option('-t, --test <file>', 'Generate component spec')
   .option('-s, --spa', 'Generate SPA app')
   .option('-5, --es5', 'Use apprun@es5')
+  .option('-0, --no_webpack', 'Don\'t install webpack')
   .parse(process.argv);
 
 program._name = 'apprun';
 
 if (!program.init && !program.component && !program.git && !program.jest &&
-  !program.test && !program.spa) {
+  !program.test && !program.spa && !program.lint) {
   program.outputHelp();
   process.exit()
 }
 
 if (program.es5) es5 = true;
+if (program.no_webpack) no_webpack = true;
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();
