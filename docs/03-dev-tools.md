@@ -16,17 +16,21 @@ To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag
 npx apprun --init --spa --es5
 ```
 
-After the command finishes execution, you can start the application and then navigate to https://localhost:8080 in a browser.
+## AppRun Dev Tools
 
-```sh
-npm start
+To use the AppRun dev-tools, include the dev-tools script.
+
+```JavaScript
+<script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
 ```
 
-## CLI in Console
+AppRun Dev Tools allows you to watch events and states in the console.
 
-In addition to the AppRun CLI, AppRun has a script that you can include in the HTML file. It brings up a CLI in the console.
+<video width="100%" controls loop>
+  <source src="imgs/apprun-debug-log.mp4" type="video/mp4">
+</video>
 
-![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
+
 
 To learn the AppRun CLI in Console, please read [the post](https://dev.to/yysun/make-cli-run-in-the-console-42ho).
 

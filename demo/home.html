@@ -28,7 +28,7 @@
 <ul>
 <li><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">Order from Amazon</a></li>
 </ul>
-<h2 id="apprun-cli">AppRun CLI</h2>
+<h2 id="create-apprun-apps">Create AppRun Apps</h2>
 <p>We recommend using TypeScript and JSX. TypeScript provides <a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">strong typing</a>. JSX provides more <a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">advanced features</a>.</p>
 <p>We recommend using webpack for building production code. However, you can also have fast and productive <a href="https://dev.to/yysun/a-dev-server-supports-esm-3cea">development experiences with esm-server</a>.</p>
 <p>Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
@@ -54,27 +54,12 @@ npx degit yysun/apprun-electron my-app
 npx degit yysun/apprun-electron-forge my-app
 npx degit yysun/apprun-websockets my-app
 npx degit yysun/apprun-websockets-sqlite my-app</code></pre>
-<h2 id="es2015-by-default">ES2015 by Default</h2>
-<p>In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.</p>
-<p>On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.</p>
-<p>When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.</p>
-<p>Currently, the npm tags are as following:</p>
-<ul>
-<li>apprun@es5: 1.x, stable, es5</li>
-<li>apprun@latest: 2.x, stable, es2015, web components</li>
-<li>apprun@next: 3.x, dev, es2015, web components, lit-html</li>
-</ul>
-<h2 id="developer-tools">Developer Tools</h2>
-<h3 id="cli-in-console">CLI in Console</h3>
-<p>To use the AppRun dev-tools CLI, include the dev-tools script.</p>
-<pre><code class="language-JavaScript">&lt;script src=&quot;https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;</code></pre>
+<h2 id="apprun-developer-tools">AppRun Developer Tools</h2>
+<p>To use the AppRun dev-tools, include the dev-tools script.</p>
+<pre><code class="language-JavaScript">&lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;</code></pre>
 <p>See <a href="https://dev.to/yysun/make-cli-run-in-the-console-42ho">AppRun CLI Run in the Console</a></p>
-<h3 id="dev-tools-extensions">Dev-Tools Extensions</h3>
-<p>AppRun supports the Redux DevTools Extension. To use the dev-tools, install the <a href="https://github.com/zalmoxisus/redux-devtools-extension">Redux DevTools Extension</a>. You can monitor the events and states in the devtools.</p>
+<p>AppRun Dev Tools connects to the Redux DevTools Extension. To use the dev-tools, install the <a href="https://github.com/zalmoxisus/redux-devtools-extension">Redux DevTools Extension</a>. You can monitor the events and states.</p>
 <p><img src="docs/imgs/apprun-dev-tools.gif" alt="app-dev-tools"></p>
-<h3 id="vs-code-extension">VS Code Extension</h3>
-<p>AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts the AppRun code template for application, component and event handling.</p>
-<p><img src="docs/imgs/apprun-vscode-extension.png" alt="app-dev-tools"></p>
 <h2 id="contribute">Contribute</h2>
 <p>You can launch the webpack dev-server and the demo app from the <em>demo</em> folder with the following npm commands:</p>
 <pre><code class="language-sh">npm install

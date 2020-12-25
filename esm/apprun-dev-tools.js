@@ -48,7 +48,7 @@ const viewEvents = state => {
     const Components = ({ components }) => app.h("ul", null, components.map(component => app.h("li", null,
         app.h("div", null, component.constructor.name))));
     const Events = ({ events, global }) => app.h("ul", null, events && events
-        .filter(event => event.global === global)
+        .filter(event => event.global === global && event.name !== '.')
         .map(({ event, components }) => app.h("li", null,
         app.h("div", null, event),
         app.h(Components, { components: components }))));
@@ -160,7 +160,7 @@ window['_apprun'] = (strings) => {
     else
         window['_apprun-help'][1]();
 };
-console.info('AppRun DevTools 2.26.2: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 2.26.3: type "_apprun `help`" to list all available commands.');
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
     let devTools_running = false;
