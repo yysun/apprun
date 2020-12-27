@@ -20,6 +20,7 @@ const program = require('commander');
 
 const dir_src = './src';
 const dir_tests = './tests';
+const dir_stories = './stories'
 
 let show_start = false;
 let show_test = false;
@@ -106,6 +107,7 @@ function git_init() {
 }
 
 function component(name) {
+  if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
   const fn = path.resolve(dir_src + '/' + name + '.tsx');
   const component_template = read('component.ts_');
   write(fn, component_template.replace(/\#name/g, name),
@@ -149,6 +151,14 @@ function component_spec(name) {
   show_test = true;
 }
 
+function component_story(name) {
+  if (!fs.existsSync(dir_stories)) fs.mkdirSync(dir_stories);
+  const fn = path.resolve(dir_stories + '/' + name + '.stories.js');
+  const story_template = read('stories.js_');
+  write(fn, story_template.replace(/\#name/g, name),
+    `Creating component stories ${name}`);
+}
+
 function spa() {
   write(spa_index, read('spa_index.html'), 'Creating', true);
   write(spa_main_tsx, read('spa_main.ts_'), 'Creating', true);
@@ -168,6 +178,7 @@ program
   .option('-j, --jest', 'Install jest')
   .option('-l, --lint', 'Install ESLint')
   .option('-t, --test <file>', 'Generate component spec')
+  .option('-o, --story <file>', 'Generate component stories')
   .option('-s, --spa', 'Generate SPA app')
   .option('-5, --es5', 'Use apprun@es5')
   .option('-0, --no_webpack', 'Don\'t install webpack')
@@ -176,7 +187,7 @@ program
 program._name = 'apprun';
 
 if (!program.init && !program.component && !program.git && !program.jest &&
-  !program.test && !program.spa && !program.lint) {
+  !program.test && !program.spa && !program.lint && !program.story) {
   program.outputHelp();
   process.exit()
 }
@@ -189,6 +200,7 @@ if (program.git) git_init();
 if (program.jest) jest_init();
 if (program.lint) lint_init();
 if (program.test) component_spec(program.test);
+if (program.story) component_story(program.story);
 if (program.spa) spa();
 
 console.log('\r');

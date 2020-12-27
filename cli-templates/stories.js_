@@ -1,0 +1,14 @@
+import #name from '../dist/#name';
+
+export default {
+  title: '#name',
+  // argTypes: {
+  // },
+};
+
+export const #namePage = (args) => {
+  const div = document.createElement('div');
+  new #name().start(div);
+  return div;
+};
+// #namePage.args = {};
