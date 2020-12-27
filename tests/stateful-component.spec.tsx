@@ -391,4 +391,17 @@ describe('Stateful Component', () => {
     app.render(element, <Main />);
   });
 
+  it("should support as prop", () => {
+    class Child extends Component {
+      view = state => state;
+    }
+    class Main extends Component {
+      view = _ => <Child as="h3" />
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main as="h2"/>);
+    expect(element.firstElementChild.tagName).toBe('H2');
+    expect(element.firstElementChild.firstElementChild.tagName).toBe('H3');
+  });
+
 });

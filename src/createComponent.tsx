@@ -11,6 +11,11 @@ function render(node, parent, idx) {
   if (!component || !(component instanceof tag)) {
     component = parent.__componentCache[key] = new tag({ ...props, children }).mount(id);
   }
+  let asTag = 'section';
+  if (props && props['as']) {
+    asTag = props['as'];
+    delete props['as'];
+  }
   let state = component.state;
   if (component.mounted) {
     const new_state = component.mounted(props, children, component.state);
@@ -24,7 +29,7 @@ function render(node, parent, idx) {
         else component.setState(component.state);
       })
     }
-    return <section {...props} ref={e => render(e)} _component={component}></section>;
+    return app.h(asTag, { ...props,  ref: e => render(e), _component: component });
   } else if (state != null) {
     const vdom = component._view(state, props);
     const render = el => {
@@ -32,9 +37,9 @@ function render(node, parent, idx) {
       component.state = state;
       component.renderState(state, vdom);
     }
-    return <section {...props} ref={e => render(e)} _component={component}>{vdom}</section>;
+    return app.h(asTag, { ...props,  ref: e => render(e), _component: component }, vdom);
   } else {
-    return <section {...props} _component={component}></section>;
+    return app.h(asTag, { ...props, _component: component });
   }
 }
 
