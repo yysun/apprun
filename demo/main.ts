@@ -18,8 +18,10 @@ import hello from './components/hello';
 import svg from './components/svg';
 import animation from './components/animation';
 import play from './components/play';
-import test from './components/dev';
 import webcomponents from './components/web-components';
 
 const element = document.getElementById('my-app');
-[home, hello, counter, counters, todo, calculator, dragdrop, svg, animation, benchmark, play, webcomponents, test].forEach(c => c(element));
+[home, hello, counter, counters, todo, calculator, dragdrop, svg, animation, benchmark, play, webcomponents].forEach(c => c(element));
+
+// trigger the initial route to demo apprun-no-init in html head
+app.route(location.hash);
