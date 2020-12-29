@@ -378,18 +378,19 @@ describe('Stateful Component', () => {
     expect((main.children[3] as HTMLDivElement).dataset.a).toBe("a");
   });
 
-  it("should get props in view function", () => {
-    class Child extends Component {
-      view = (_, props) => {
-        expect(props['class']).toBe('c1');
-      }
-    }
-    class Main extends Component {
-      view = _ => <Child class="c1" id="c1" />
-    }
-    const element = document.createElement('div');
-    app.render(element, <Main />);
-  });
+  // deprecated props should only be in mounted
+  // it("should get props in view function", () => {
+  //   class Child extends Component {
+  //     view = (_, props) => {
+  //       expect(props['class']).toBe('c1');
+  //     }
+  //   }
+  //   class Main extends Component {
+  //     view = _ => <Child class="c1" id="c1" />
+  //   }
+  //   const element = document.createElement('div');
+  //   app.render(element, <Main />);
+  // });
 
   it("should support as prop", () => {
     class Child extends Component {
@@ -402,6 +403,23 @@ describe('Stateful Component', () => {
     app.render(element, <Main as="h2"/>);
     expect(element.firstElementChild.tagName).toBe('H2');
     expect(element.firstElementChild.firstElementChild.tagName).toBe('H3');
+  });
+
+  it("should refresh", () => {
+    class Child extends Component {
+      state = 0;
+      view = state => state;
+      update = {
+        '@refresh': (_, state) => state
+      }
+    }
+    class Main extends Component {
+      view = _ => <Child />
+    }
+    const element = document.createElement('div');
+    app.render(element, <Main />);
+    app.run('@refresh', 'aaa')
+    expect(element.firstElementChild.firstElementChild.innerHTML).toBe('aaa');
   });
 
 });
