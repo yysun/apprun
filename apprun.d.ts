@@ -8,7 +8,7 @@ declare module 'apprun' {
     children: Array<VNode | string>
   };
   export type VDOM = false | string | VNode | Array<VNode | string>;
-  export type View<T> = (state: T, props?) => VDOM | void;
+  export type View<T> = (state: T) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
@@ -44,8 +44,8 @@ declare module 'apprun' {
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
-    h(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
-    createElement(tag: string | Function, props?: any[], ...children: any[]): VNode | VNode[];
+    h(tag: string | F: any[], ...children: any[]): VNode | VNode[];
+    createElement(tag: string | F: any[], ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VDOM): void;
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
@@ -60,7 +60,7 @@ declare module 'apprun' {
     start(element?: Element, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
-    rendered: (state: T, props?: any[]) => void;
+    rendered: (s: any[]) => void;
     mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
     unload: (state: T) => void;
