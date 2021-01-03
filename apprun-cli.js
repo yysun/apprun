@@ -58,7 +58,7 @@ function init() {
   const packages_es5 = 'npm install -D apprun@es5 typescript webpack webpack-cli webpack-dev-server ts-loader source-map-loader';
   const packages_es6 = 'npm install -D apprun typescript webpack webpack-cli webpack-dev-server ts-loader source-map-loader';
   console.log(' * Installing packages. This might take a few minutes.');
-  if (!!no_package) {
+  if (!no_package) {
     if (!es5) execSync(packages_es5);
     else execSync(packages_es6);
   }
