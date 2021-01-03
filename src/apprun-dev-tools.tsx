@@ -40,7 +40,7 @@ const get_components = () => {
 const viewComponents = state => {
 
   const Events = ({ events }) => <ul>
-    {events && events.map(event => <li>
+    {events && events.filter(event => event.name !== '.').map(event => <li>
       {event.name}
     </li>)}
   </ul>;
@@ -70,7 +70,7 @@ const viewEvents = state => {
 
   const Events = ({ events, global }) => <ul>
     {events && events
-      .filter(event => event.global === global && event.name !== '.')
+      .filter(event => event.global === global && event !== '.')
       .map(({ event, components }) => <li>
         <div>{event}</div>
         <Components components={components} />
