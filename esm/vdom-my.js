@@ -128,13 +128,13 @@ function updateChildren(element, children, isSvg) {
     }
 }
 function createText(node) {
-    if (node.indexOf('_html:') === 0) { // ?
+    if ((node === null || node === void 0 ? void 0 : node.indexOf('_html:')) === 0) { // ?
         const div = document.createElement('div');
         div.insertAdjacentHTML('afterbegin', node.substring(6));
         return div;
     }
     else {
-        return document.createTextNode(node);
+        return document.createTextNode(node !== null && node !== void 0 ? node : '');
     }
 }
 function create(node, isSvg) {
@@ -164,7 +164,7 @@ function mergeProps(oldProps, newProps) {
         Object.keys(newProps).forEach(p => props[p] = newProps[p]);
     return props;
 }
-function updateProps(element, props, isSvg) {
+export function updateProps(element, props, isSvg) {
     // console.assert(!!element);
     const cached = element[ATTR_PROPS] || {};
     props = mergeProps(cached, props || {});

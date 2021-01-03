@@ -21,43 +21,30 @@
 &lt;/script&gt;</code></pre>
 <h2 id="architecture-concept">Architecture Concept</h2>
 <p><img src="docs/imgs/apprun-demo.gif" alt="apprun-demo"></p>
-<p><a href="https://apprun.js.org/#play/6">Try it in AppRun Playground</a>.</p>
-<p>You can build applications using <a href="docs/#/05-component">Component</a> that also have <em>state</em>, <em>view</em>, and <em>update</em>.</p>
+<ul>
+<li>AppRun architecure has <em>state</em>, <em>view</em>, and <em>update</em>.</li>
+<li>AppRun is event-driven.</li>
+<li>AppRun is <a href="docs/#/05-component">Component</a> based.</li>
+</ul>
+<p><a href="https://apprun.js.org/#play">Try the AppRun Playground</a>.</p>
 <h2 id="apprun-book-from-apress">AppRun Book from Apress</h2>
 <p><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/"><img src="https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067" alt="Order from Amazon"></a></p>
 <ul>
 <li><a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">Order from Amazon</a></li>
 </ul>
 <h2 id="create-apprun-apps">Create AppRun Apps</h2>
-<p>We recommend using TypeScript and JSX. TypeScript provides <a href="https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1">strong typing</a>. JSX provides more <a href="https://dev.to/yysun/advanced-view-features-in-apprun-17g5">advanced features</a>.</p>
-<p>We recommend using webpack for building production code. However, you can also have fast and productive <a href="https://dev.to/yysun/a-dev-server-supports-esm-3cea">development experiences with esm-server</a>.</p>
 <p>Use the AppRun CLI to initialize a TypeScript and webpack configured project:</p>
-<pre><code class="language-sh">npx apprun --init
-npm start</code></pre>
-<p>You can also initialize a SPA project.</p>
 <pre><code class="language-sh">npx apprun --init --spa</code></pre>
 <p>To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:</p>
 <pre><code class="language-sh">npx apprun --init --spa --es5</code></pre>
-<h2 id="starter-templates">Starter Templates</h2>
-<p>Optionally, you can directly scaffold AppRun projects from the AppRun starter templates.</p>
-<pre><code class="language-sh">npx degit apprunjs/apprun-rollup my-app
-npx degit apprunjs/apprun-rollup-lit-html my-app
-npx degit apprunjs/apprun-webpack my-app
-npx degit apprunjs/apprun-parcel my-app
-npx degit apprunjs/apprun-web-components my-app
-npx degit apprunjs/apprun-bootstrap my-app
-npx degit apprunjs/apprun-coreui my-app
-npx degit apprunjs/apprun-pwa my-app
-npx degit apprunjs/apprun-pwa-workbox my-app
-npx degit yysun/apprun-d3 my-app
-npx degit yysun/apprun-electron my-app
-npx degit yysun/apprun-electron-forge my-app
-npx degit yysun/apprun-websockets my-app
-npx degit yysun/apprun-websockets-sqlite my-app</code></pre>
-<h2 id="apprun-developer-tools">AppRun Developer Tools</h2>
+<h2 id="apprun-dev-server">AppRun Dev Server</h2>
+<p>AppRun now has a dev server. It is base on the <em>live-server</em> and supports ES Modules.</p>
+<p>To use the AppRun dev server:</p>
+<pre><code class="language-sh">npx apprun-dev-server</code></pre>
+<p>See the annoucement: <a href="https://dev.to/yysun/a-dev-server-supports-esm-3cea">A Dev Server Supports ESM</a></p>
 <p>To use the AppRun dev-tools, include the dev-tools script.</p>
 <pre><code class="language-JavaScript">&lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;</code></pre>
-<p>See <a href="https://dev.to/yysun/make-cli-run-in-the-console-42ho">AppRun CLI Run in the Console</a></p>
+<p>See the annoucement: <a href="https://dev.to/yysun/make-cli-run-in-the-console-42ho">AppRun Dev Tools</a></p>
 <p>AppRun Dev Tools connects to the Redux DevTools Extension. To use the dev-tools, install the <a href="https://github.com/zalmoxisus/redux-devtools-extension">Redux DevTools Extension</a>. You can monitor the events and states.</p>
 <p><img src="docs/imgs/apprun-dev-tools.gif" alt="app-dev-tools"></p>
 <h2 id="contribute">Contribute</h2>
