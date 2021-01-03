@@ -1,14 +1,47 @@
-import #name from '../dist/#name';
+import #name from '../#name';
 
 export default {
   title: '#name',
-  // argTypes: {
-  // },
+  argTypes: {
+    event: {
+      name: 'event',
+      type: { name: 'string', required: false },
+      description: 'event',
+      control: {
+        type: 'text'
+      }
+    },
+
+    route: {
+      name: 'route',
+      type: { name: 'string', required: false },
+      description: 'route',
+      control: {
+        type: 'text'
+      }
+    }
+  },
 };
 
-export const #namePage = (args) => {
+export const #name_Event = ({ event }) => {
   const div = document.createElement('div');
-  new #name().start(div);
+  const component = new #name().mount(div);
+  const e = JSON.parse(event);
+  const [name, ...params] = e;
+  component.run(name, ...params);
   return div;
 };
-// #namePage.args = {};
+#name_Event.args = {
+  event: '["."]',
+};
+
+export const #name_Route = ({ route }) => {
+  const div = document.createElement('div');
+  new #name().mount(div);
+  app.route(route);
+  return div;
+};
+
+#name_Route.args = {
+  route: '##name',
+};

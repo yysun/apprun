@@ -20,7 +20,7 @@ const program = require('commander');
 
 const dir_src = './src';
 const dir_tests = './tests';
-const dir_stories = './stories'
+const dir_stories = './src/stories'
 
 let show_start = false;
 let show_test = false;
@@ -153,7 +153,7 @@ function component_spec(name) {
 
 function component_story(name) {
   if (!fs.existsSync(dir_stories)) fs.mkdirSync(dir_stories);
-  const fn = path.resolve(dir_stories + '/' + name + '.stories.js');
+  const fn = path.resolve(dir_stories + '/' + name + '.stories.tsx');
   const story_template = read('stories.js_');
   write(fn, story_template.replace(/\#name/g, name),
     `Creating component stories ${name}`);
