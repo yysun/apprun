@@ -18,7 +18,7 @@ Currently, the npm tags are as following:
 
 ### [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
 
-This post introduces [esm-server](https://dev.to/yysun/a-dev-server-supports-esm-3cea) that cans provide fast and productive experiences to AppRun application development, so called unbundled development.
+This post introduces [apprun-dev-server](https://dev.to/yysun/a-dev-server-supports-esm-3cea), a dev server that provides fast and productive experiences to AppRun application development, so-called unbundled development.
 
 ## [Observerble HQ Notebooks](https://observablehq.com/@yysun)
 
@@ -82,7 +82,7 @@ Published on Jan 9, 2019
 
 ### [Make CLI Run in the Console](https://dev.to/yysun/make-cli-run-in-the-console-42ho)
 
-We have been using the command line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser's developer tool?
+We have been using the command-line interface (CLI) in the terminal window and the command prompt. Have you thought of a CLI in the console of the browser's developer tool?
 
 ![](https://res.cloudinary.com/practicaldev/image/fetch/s--5p8ESaes--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/khumq8np94i5uwo9bwn1.png)
 

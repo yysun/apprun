@@ -7,7 +7,7 @@ import webComponent, { CustomElementOptions } from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export interface IApp {
-  start<T, E=any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+  start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): Component<T, E>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
@@ -26,12 +26,12 @@ app.Fragment = Fragment;
 app.webComponent = webComponent;
 
 app.start = <T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
-  options?: AppStartOptions<T>) : Component<T, E> => {
-    const opts = {...options, render: true, global_event: true };
-    const component = new Component<T, E>(model, view, update);
-    if (options && options.rendered) component.rendered = options.rendered;
-    component.mount(element, opts);
-    return component;
+  options?: AppStartOptions<T>): Component<T, E> => {
+  const opts = { ...options, render: true, global_event: true };
+  const component = new Component<T, E>(model, view, update);
+  if (options && options.rendered) component.rendered = options.rendered;
+  component.mount(element, opts);
+  return component;
 };
 
 const NOOP = _ => {/* Intentionally empty */ }
@@ -46,12 +46,12 @@ if (typeof document === 'object') {
   document.addEventListener("DOMContentLoaded", () => {
     if (app['route'] === route) {
       window.onpopstate = () => route(location.hash);
-      route(location.hash);
+      if (!document.body.hasAttribute('apprun-no-init')) route(location.hash);
     }
   });
 }
 
-export type StatelessComponent<T={}> = (args: T) => string | VNode | void;
+export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
 export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment }
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };

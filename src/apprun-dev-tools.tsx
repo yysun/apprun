@@ -40,7 +40,7 @@ const get_components = () => {
 const viewComponents = state => {
 
   const Events = ({ events }) => <ul>
-    {events && events.map(event => <li>
+    {events && events.filter(event => event.name !== '.').map(event => <li>
       {event.name}
     </li>)}
   </ul>;
@@ -70,7 +70,7 @@ const viewEvents = state => {
 
   const Events = ({ events, global }) => <ul>
     {events && events
-      .filter(event => event.global === global)
+      .filter(event => event.global === global && event !== '.')
       .map(({ event, components }) => <li>
         <div>{event}</div>
         <Components components={components} />
@@ -115,7 +115,6 @@ const _events = (print?) => {
     data.filter(event => !event.global)
       .forEach(({ event, components }) => console.log({ event }, components));
   }
-
 }
 
 const _components = (print?) => {
@@ -188,7 +187,7 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 2.26.2: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 2.26.3: type "_apprun `help`" to list all available commands.');
 
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {

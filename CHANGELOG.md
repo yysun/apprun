@@ -5,13 +5,22 @@
 * apprun@latest: 2.x, stable, es2015, web component
 * apprun@next: 3.x, dev, es2015, lit-html
 
+## 1.27/ 2.27 / 3.27
+
+* BREAKING CHANGES: New logic for creating stateful components
+* BREAKING CHANGES: remove props from the view function call
+* Support _as_ prop for naming the root element of components
+* Support prop _apprun-no-init_ in _body_ to skip the init route call
+* CLI: -0 option to skip npm install
+* CLI: -o option to generate stories for a component
+
 ## 1.26/ 2.26 / 3.26
 
-* Support initial state as a function or an sync function
+* Support initial state as a function or an async function
 * Support promise returned from the _mounted_ function
 * Wait for all promises before set new state
 * Dev Tools: save debugging flag to local storage
-* Dev Tools: handle messages from redux devtools
+* Dev Tools: handle messages from redux dev tools
 * Dev Tools: improve debugging event content
 * Dev Tools: publish two debugging events for each event
 * CLI: Support the unbundled development experiences with [esm-server](https://github.com/yysun/apprun-esm-server)

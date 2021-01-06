@@ -126,12 +126,12 @@ function updateChildren(element, children, isSvg: boolean) {
 }
 
 function createText(node) {
-  if (node.indexOf('_html:') === 0) { // ?
+  if (node?.indexOf('_html:') === 0) { // ?
     const div = document.createElement('div');
     div.insertAdjacentHTML('afterbegin', node.substring(6))
     return div;
   } else {
-    return document.createTextNode(node);
+    return document.createTextNode(node??'');
   }
 }
 
@@ -159,7 +159,7 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
   return props;
 }
 
-function updateProps(element: Element, props: {}, isSvg) {
+export function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});

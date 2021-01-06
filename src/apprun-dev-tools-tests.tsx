@@ -30,13 +30,19 @@ export const _createEventTests = () => {
   openWin('');
   Object.keys(components).forEach(el => {
     components[el].forEach(component => {
-      write(`const component = ${component.constructor.name};`);
+      write(`import ${component.constructor.name} from '../src/${component.constructor.name}'`);
       write(`describe('${component.constructor.name}', ()=>{`);
       component._actions.forEach(action => {
-        write(`  it ('should handle event: ${action.name}', ()=>{`);
-        write(`    component.run('${action.name}');`);
-        write(`    expect(component.state).toBeTruthy();`);
-        write(`  })`);
+        if (action.name !== '.') {
+          write(`  it ('should handle event: ${action.name}', (done)=>{`);
+          write(`    const component = new ${component.constructor.name}().mount();`);
+          write(`    component.run('${action.name}');`);
+          write(`    setTimeout(() => {`);
+          write(`      \/\/expect(?).toHaveBeenCalled();`);
+          write(`      \/\/expect(component.state).toBe(?);`);
+          write(`    done();`);
+          write(`  })`);
+        }
       });
       write(`});`);
     });
@@ -64,7 +70,7 @@ export const _createStateTests = (s) => {
     openWin('');
     events.forEach((event, idx) => {
       write(`  it ('view snapshot: #${idx + 1}', ()=>{`);
-      write(`    const component = ${event.component.constructor.name};`);
+      write(`    const component = new ${event.component.constructor.name}()`);
       write(`    const state = ${JSON.stringify(event.state, undefined, 2)};`);
       write(`    const vdom = component['view'](state);`);
       write(`    expect(JSON.stringify(vdom)).toMatchSnapshot();`);
@@ -86,11 +92,3 @@ export const _createStateTests = (s) => {
     console.log('create-state-tests <start|stop>');
   }
 }
-
-// window['_apprun-create-event-tests'] = ['create-event-tests',
-//   () => _createEventTests()
-// ]
-
-// window['_apprun-create-state-tests'] = ['create-state-tests <start|stop>',
-//   (p?) => _createStateTests(p)
-// ]

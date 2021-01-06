@@ -32,9 +32,11 @@ Or use it as ES module from unpkg.com:
 
 ![apprun-demo](docs/imgs/apprun-demo.gif)
 
-[Try it in AppRun Playground](https://apprun.js.org/#play/6).
+* AppRun architecure has _state_, _view_, and _update_.
+* AppRun is event-driven.
+* AppRun is [Component](docs/#/05-component) based.
 
-You can build applications using [Component](docs/#/05-component) that also have _state_, _view_, and _update_.
+[Try the AppRun Playground](https://apprun.js.org/#play).
 
 ## AppRun Book from Apress
 
@@ -42,19 +44,9 @@ You can build applications using [Component](docs/#/05-component) that also have
 
 * [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
-## AppRun CLI
-
-We recommend using TypeScript and JSX. TypeScript provides [strong typing](https://medium.com/@yiyisun/strong-typing-in-apprun-78520be329c1). JSX provides more [advanced features](https://dev.to/yysun/advanced-view-features-in-apprun-17g5).
-
-We recommend using webpack for building production code. However, you can also have fast and productive [development experiences with esm-server](https://dev.to/yysun/a-dev-server-supports-esm-3cea).
+## Create AppRun Apps
 
 Use the AppRun CLI to initialize a TypeScript and webpack configured project:
-```sh
-npx apprun --init
-npm start
-```
-
-You can also initialize a SPA project.
 
 ```sh
 npx apprun --init --spa
@@ -66,65 +58,29 @@ To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag
 npx apprun --init --spa --es5
 ```
 
-## Starter Templates
+## AppRun Dev Server
 
-Optionally, you can directly scaffold AppRun projects from the AppRun starter templates.
+AppRun now has a dev server. It is base on the _live-server_ and supports ES Modules.
+
+To use the AppRun dev server:
 
 ```sh
-npx degit apprunjs/apprun-rollup my-app
-npx degit apprunjs/apprun-rollup-lit-html my-app
-npx degit apprunjs/apprun-webpack my-app
-npx degit apprunjs/apprun-parcel my-app
-npx degit apprunjs/apprun-web-components my-app
-npx degit apprunjs/apprun-bootstrap my-app
-npx degit apprunjs/apprun-coreui my-app
-npx degit apprunjs/apprun-pwa my-app
-npx degit apprunjs/apprun-pwa-workbox my-app
-npx degit yysun/apprun-d3 my-app
-npx degit yysun/apprun-electron my-app
-npx degit yysun/apprun-electron-forge my-app
-npx degit yysun/apprun-websockets my-app
-npx degit yysun/apprun-websockets-sqlite my-app
+npx apprun-dev-server
 ```
 
-## ES2015 by Default
+See the annoucement: [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
 
-In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.
-
-On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.
-
-When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
-
-Currently, the npm tags are as following:
-
-* apprun@es5: 1.x, stable, es5
-* apprun@latest: 2.x, stable, es2015, web components
-* apprun@next: 3.x, dev, es2015, web components, lit-html
-
-## Developer Tools
-
-### CLI in Console
-
-To use the AppRun dev-tools CLI, include the dev-tools script.
+To use the AppRun dev-tools, include the dev-tools script.
 
 ```JavaScript
-<script src="https://unpkg.com/apprun@latest/dist/apprun-dev-tools.js"></script>
+<script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
 ```
 
-See [AppRun CLI Run in the Console](https://dev.to/yysun/make-cli-run-in-the-console-42ho)
-### Dev-Tools Extensions
+See the annoucement: [AppRun Dev Tools](https://dev.to/yysun/make-cli-run-in-the-console-42ho)
 
-AppRun supports the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states in the devtools.
+AppRun Dev Tools connects to the Redux DevTools Extension. To use the dev-tools, install the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). You can monitor the events and states.
 
 ![app-dev-tools](docs/imgs/apprun-dev-tools.gif)
-
-
-### VS Code Extension
-
-AppRun has a code snippet extension for VS Code that you can install from the extension marketplace. It inserts the AppRun code template for application, component and event handling.
-
-![app-dev-tools](docs/imgs/apprun-vscode-extension.png)
-
 
 ## Contribute
 

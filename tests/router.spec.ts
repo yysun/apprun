@@ -211,5 +211,10 @@ describe('router', () => {
     expect(fn4).not.toHaveBeenCalled();
   });
 
+  it('should allow to disable the init route call', () => {
+    app.route = jest.fn(() => { });
+    document.body.setAttribute('apprun-no-init', 'apprun-no-init');
+    expect(app.route).not.toHaveBeenCalled();
+  });
 
 });

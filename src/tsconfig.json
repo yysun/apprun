@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
+		"target": "es5",
 		"module": "es2015",
 		"moduleResolution": "node",
 		"jsx": "react",
 		"jsxFactory": "app.h",
 		"jsxFragmentFactory": "app.Fragment",
-		"lib": ["esnext","dom"],
+		"lib": ["dom", "esnext", "es5"],
 		"experimentalDecorators": true,
 		"esModuleInterop": true,
 		"outDir": "../esm",
