@@ -26,11 +26,11 @@ export const _createEventTests = () => {
     Object.keys(components).forEach(el => {
         components[el].forEach(component => {
             write(`import ${component.constructor.name} from '../src/${component.constructor.name}'`);
-            write(`const component = new ${component.constructor.name}();`);
             write(`describe('${component.constructor.name}', ()=>{`);
             component._actions.forEach(action => {
                 if (action.name !== '.') {
                     write(`  it ('should handle event: ${action.name}', (done)=>{`);
+                    write(`    const component = new ${component.constructor.name}().mount();`);
                     write(`    component.run('${action.name}');`);
                     write(`    setTimeout(() => {`);
                     write(`      \/\/expect(?).toHaveBeenCalled();`);
