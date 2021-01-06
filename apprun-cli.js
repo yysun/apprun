@@ -59,12 +59,13 @@ function init() {
   const packages_es6 = 'npm install -D apprun typescript webpack webpack-cli webpack-dev-server ts-loader source-map-loader';
   console.log(' * Installing packages. This might take a few minutes.');
   if (!no_package) {
-    if (!es5) execSync(packages_es5);
-    else execSync(packages_es6);
+    es5
+      ? execSync(packages_es5)
+      : execSync(packages_es6);
   }
-  es5 ?
-    write(tsconfig_json, read('tsconfig.es5.json'), ' * Configuring typescript - es5', true) :
-    write(tsconfig_json, read('tsconfig.es6.json'), ' * Configuring typescript - es2015', true);
+  es5
+    ? write(tsconfig_json, read('tsconfig.es5.json'), ' * Configuring typescript - es5', true)
+    : write(tsconfig_json, read('tsconfig.es6.json'), ' * Configuring typescript - es2015', true);
 
   write(webpack_config_js, read('webpack.config.js'))
   write(index_html, read('index.html'));
