@@ -40,7 +40,7 @@ export class Component {
     render(element, node) {
         app.render(element, node, this);
     }
-    _view(state, p = null) {
+    _view(state) {
         if (!this.view)
             return;
         const h = app.createElement;
@@ -53,7 +53,7 @@ export class Component {
             });
             return h(tag, props, ...children);
         };
-        const html = p ? this.view(state, p) : this.view(state);
+        const html = this.view(state);
         app.h = app.createElement = h;
         return html;
     }
