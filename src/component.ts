@@ -4,7 +4,7 @@ import { Reflect } from './decorator'
 import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
 
-const componentCache = {};
+const componentCache = new Map();
 app.on('get-components', o => o.components = componentCache);
 
 const REFRESH = state => state;
@@ -176,9 +176,8 @@ export class Component<T = any, E = any> {
       this.setState(this.state, { render: false, history: true });
     }
     if (app['debug']) {
-      const id = typeof element === 'string' ? element : element.id;
-      componentCache[id] = componentCache[id] || [];
-      componentCache[id].push(this);
+      if (componentCache.get(element)) { componentCache.get(element).push(this) }
+      else { componentCache.set(element, [this])}
     }
     return this;
   }

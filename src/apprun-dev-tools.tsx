@@ -36,6 +36,11 @@ const get_components = () => {
   const { components } = o;
   return components;
 }
+const viewElement = element => <div>
+  {element.tagName.toLowerCase()}{element.id ? '#' + element.id : ''}
+  {' '}
+  {element.className && element.className.split(' ').map(c => '.' + c).join() }
+</div>;
 
 const viewComponents = state => {
 
@@ -53,9 +58,9 @@ const viewComponents = state => {
   </ul>;
 
   return <ul>
-    {Object.keys(state).map(name => <li>
-      <div>#{name}</div>
-      <Components components={state[name]} />
+    {state.map(({ element, comps}) => <li>
+      <div>{viewElement(element)}</div>
+      <Components components={comps} />
     </li>)}
   </ul>
 }
@@ -70,7 +75,8 @@ const viewEvents = state => {
 
   const Events = ({ events, global }) => <ul>
     {events && events
-      .filter(event => event.global === global && event !== '.')
+      .filter(event =>
+        event.global === global && event.event !== '.')
       .map(({ event, components }) => <li>
         <div>{event}</div>
         <Components components={components} />
@@ -89,14 +95,21 @@ const _events = (print?) => {
   const global_events = app['_events']
   const events = {};
   const cache = get_components();
-  Object.keys(cache).forEach(el => {
-    cache[el].forEach(component => {
-      component['_actions'].forEach(event => {
-        events[event.name] = events[event.name] || [];
-        events[event.name].push(component);
-      })
-    });
+
+  const add_component = component => component['_actions'].forEach(event => {
+    events[event.name] = events[event.name] || [];
+    events[event.name].push(component);
   });
+
+  if (cache instanceof Map) {
+    for (let [key, comps] of cache) {
+      comps.forEach(add_component);
+    }
+  } else {
+    Object.keys(cache).forEach(el =>
+      cache[el].forEach(add_component)
+    );
+  }
   const data = [];
   Object.keys(events).forEach(event => {
     data.push({ event, components: events[event], global: global_events[event] ? true : false });
@@ -109,10 +122,10 @@ const _events = (print?) => {
     newWin(toHTML(vdom));
   } else {
     console.log('=== GLOBAL EVENTS ===')
-    data.filter(event => event.global)
+    data.filter(event => event.global && event.event !== '.')
       .forEach(({ event, components }) => console.log({ event }, components));
     console.log('=== LOCAL EVENTS ===')
-    data.filter(event => !event.global)
+    data.filter(event => !event.global && event.event !== '.')
       .forEach(({ event, components }) => console.log({ event }, components));
   }
 }
@@ -120,16 +133,20 @@ const _events = (print?) => {
 const _components = (print?) => {
   const components = get_components();
   const data = [];
-  Object.keys(components).forEach(el => {
-    const element = typeof el === 'string' ? document.getElementById(el) : el;
-    const comps = components[el].map(component => ({
-      component,
-      events: component['_actions']
-    }));
-    data.push({ element, comps });
-  });
+
+  if (components instanceof Map) {
+    for (let [key, comps] of components) {
+      const element = typeof key === 'string' ? document.getElementById(key) : key;
+      data.push({ element, comps });
+    }
+  } else {
+    Object.keys(components).forEach(el => {
+      const element = typeof el === 'string' ? document.getElementById(el) : el;
+      data.push({ element, comps: components[el] });
+    });
+  }
   if (print) {
-    const vdom = viewComponents(components);
+    const vdom = viewComponents(data);
     newWin(toHTML(vdom));
   } else {
     data.forEach(({ element, comps }) => console.log(element, comps));
@@ -187,7 +204,7 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 2.26.3: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 2.27: type "_apprun `help`" to list all available commands.');
 
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
