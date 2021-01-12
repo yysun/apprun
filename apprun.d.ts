@@ -60,7 +60,7 @@ declare module 'apprun' {
     start(element?: Element, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
-    rendered: (s: any[]) => void;
+    rendered: (state: T) => void;
     mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
     unload: (state: T) => void;
