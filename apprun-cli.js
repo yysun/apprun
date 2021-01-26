@@ -161,6 +161,7 @@ function component_story(name) {
 }
 
 function spa() {
+  if (!fs.existsSync(dir_src)) fs.mkdirSync(dir_src);
   write(spa_index, read('spa_index.html'), 'Creating', true);
   write(spa_main_tsx, read('spa_main.ts_'), 'Creating', true);
   write(spa_layout_tsx, read('Layout.ts_'), 'Creating', true);
