@@ -15,6 +15,7 @@ const spa_index = path.resolve('./index.html');
 const spa_main_tsx = path.resolve('./src/main.tsx');
 const spa_layout_tsx = path.resolve('./src/Layout.tsx');
 const readme_md = path.resolve('./README.md');
+const build_js = path.resolve('./_build.js');
 const execSync = require('child_process').execSync;
 const program = require('commander');
 
@@ -25,7 +26,7 @@ const dir_stories = './src/stories'
 let show_start = false;
 let show_test = false;
 let es5 = false;
-let no_package = false;
+let esbuild = false;
 
 function read(name) {
   return fs.readFileSync(path.resolve(__dirname + '/cli-templates', name), 'utf8');
@@ -58,16 +59,19 @@ function init() {
   const packages_es5 = 'npm install -D apprun@es5 typescript webpack webpack-cli webpack-dev-server ts-loader source-map-loader';
   const packages_es6 = 'npm install -D apprun typescript webpack webpack-cli webpack-dev-server ts-loader source-map-loader';
   console.log(' * Installing packages. This might take a few minutes.');
-  if (!no_package) {
+  if (!esbuild) {
     es5
       ? execSync(packages_es5)
       : execSync(packages_es6);
+  } else {
+    es5
+      ? execSync('npm install -D apprun@es5 apprun-dev-server esbuild')
+      : execSync('npm install -D apprun apprun-dev-server esbuild');
   }
   es5
     ? write(tsconfig_json, read('tsconfig.es5.json'), ' * Configuring typescript - es5', true)
     : write(tsconfig_json, read('tsconfig.es6.json'), ' * Configuring typescript - es2015', true);
 
-  write(webpack_config_js, read('webpack.config.js'))
   write(index_html, read('index.html'));
   write(main_tsx, read('main.ts_'));
   write(readme_md, read('readme.md'));
@@ -75,11 +79,22 @@ function init() {
   console.log(' * Adding npm scripts');
   const package_info = require(package_json);
   if (!package_info.scripts) package_info["scripts"] = {}
-  if (!package_info.scripts['start']) {
-    package_info["scripts"]["start"] = 'webpack serve --mode development';
-  }
-  if (!package_info.scripts['build']) {
-    package_info["scripts"]["build"] = 'webpack --mode production';
+  if (!esbuild) {
+    if (!package_info.scripts['start']) {
+      package_info["scripts"]["start"] = 'webpack serve --mode development';
+    }
+    if (!package_info.scripts['build']) {
+      package_info["scripts"]["build"] = 'webpack --mode production';
+    }
+    write(webpack_config_js, read('webpack.config.js'))
+  } else {
+    write(build_js, read('_build.js'));
+    if (!package_info.scripts['start']) {
+      package_info["scripts"]["start"] = 'node _build start';
+    }
+    if (!package_info.scripts['build']) {
+      package_info["scripts"]["build"] = 'node _build';
+    }
   }
   if (!package_info.scripts['tsc:watch']) {
     package_info['scripts']['tsc:watch'] = 'tsc -w';
@@ -183,7 +198,7 @@ program
   .option('-o, --story <file>', 'Generate component stories')
   .option('-s, --spa', 'Generate SPA app')
   .option('-5, --es5', 'Use apprun@es5')
-  .option('-0, --no_package', 'Don\'t install packages')
+  .option('-e, --esbuild', 'Use esbuild')
   .parse(process.argv);
 
 program._name = 'apprun';
@@ -195,7 +210,7 @@ if (!program.init && !program.component && !program.git && !program.jest &&
 }
 
 if (program.es5) es5 = true;
-if (program.no_package) no_package = true;
+if (program.esbuild) esbuild = true;
 if (program.init) init();
 if (program.component) component(program.component);
 if (program.git) git_init();

@@ -11,8 +11,8 @@
 * BREAKING CHANGES: remove props from the view function call
 * Support _as_ prop for naming the root element of components
 * Support prop _apprun-no-init_ in _body_ to skip the init route call
-* CLI: -0 option to skip npm install
-* CLI: -o option to generate stories for a component
+* CLI: -e, --esbuild option to use esbuild instead of webpack
+* CLI: -o, --story option to generate stories for a component
 
 ## 1.26/ 2.26 / 3.26
 
