@@ -95,7 +95,7 @@ But, you are not forced into the nested component structure. Sometimes, mounting
 
 ## Component Events
 
-Component provides a local scope for events. The _update_ registers the local events in the component. The _this.run_ function fires local events that can only be picked up inside the component.
+A Component provides a local scope for events. The _update_ registers the local events in the component. The _this.run_ function fires local events that can only be picked up inside the component.
 
 > You can prefix the event name with #, / or @ to make it global.
 
@@ -219,7 +219,7 @@ You can see, the component life cycle functions are useful for integrating [3rd 
 
 ## Web Components
 
-Using **apprun@es6**, you can convert AppRun components into [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun.js.org/#play/7)).
+You can convert AppRun components into [web components/custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events ([Online Demo](https://apprun.js.org/#play/7)).
 
 ```html
 <html>
@@ -230,7 +230,7 @@ Using **apprun@es6**, you can convert AppRun components into [web components](ht
 <body>
   <my-app id='counter'></my-app>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
   <script>
     class Counter extends Component {
       constructor() {

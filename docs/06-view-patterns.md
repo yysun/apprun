@@ -1,20 +1,32 @@
 # View Patterns
 
-AppRun allows you to choose your favorite technology to create user interfaces in the _view_ function.
+AppRun supports creating the HTML string from the _view_ function. Sometimes it may be easy for quick prototyping.
+
+```javascript
+const view = state => `<div>
+  <h1>${state}</h1>
+  <button onclick="app.run('-1')">-1</button>
+  <button onclick="app.run('+1')">+1</button>
+</div>`;
+```
+Although HTML string is easy to understand and useful for trying out ideas, it takes time to parse it into virtual DOM at run time, which may cause performance issues.
+
+>AppRun uses virtual DOM technology (VDOM). The VDOM is the data representing a DOM structure. AppRun compares the VDOM with the real DOM and updates only the changed elements and element properties. It provides high performance.
+
+AppRun allows you to choose your favorite virtual DOM technology to create user interfaces in the _view_ function.
 
 * JSX
 * [lit-html](https://github.com/Polymer/lit-html)
-* HTML string
+* [µhtml](https://github.com/WebReflection/uhtml)
 
-We recommend using JSX. Some advanced features apply to JSX only.
+We recommend using JSX. Some advanced features only apply to JSX.
 
 ## JSX
 
 JSX is a syntax sugar of function calls. You can compose the functions and apply dynamic and conditional rendering without the run-time cost of parsing the HTML string.
 
->AppRun uses virtual DOM technology (VDOM). The VDOM is the data representing a DOM structure. AppRun compares the VDOM with the real DOM and updates only the changed elements and element properties. It provides high performance.
 
-You can use the JSX view patterns, and features describe below.
+You can use the JSX features described below.
 
 ### JSX fragments
 
@@ -29,7 +41,7 @@ const view = <>
 
 ### Function Calls
 
-We can also use the capitalized JSX tag to call JavaScript functions with capitalized the function names. The functions are also known as the Pure Function Component.
+We can also use the capitalized JSX tag to call JavaScript functions with capitalized function names. The functions are also known as the Pure Function Component.
 
 E.g., To render the todo item list, You can call the Todo function in an array.map function.
 
@@ -86,7 +98,7 @@ We can use _ref_ function to update the HTML element, e.g., [set focus to an inp
 
 _ref_ is a better method to update the element than using the _rendered_ lifecycle function.
 
->Please think of using _ref_ function, before you use the _rendered_ function.
+>Please think of using the _ref_ function before you use the _rendered_ function.
 
 
 ### Element embedding
@@ -112,7 +124,7 @@ Just create the HTML element and add it to the AppRun _view_.
 
 ### Directive
 
-The directive is the special property that looks like $xxx. When AppRun is processing the JSX code and finds the properties of $xxx, it publishes the $ event. The event parameters contain the directive key, properties, and tag Name of the HTML element, and component instance.
+The directive is the special property that looks like $xxx. When AppRun is processing the JSX code and finds the properties of $xxx, it publishes the $ event. The event parameters contain the directive key, properties, and tag Name of the HTML element and component instance.
 
 ```javascript
 const view = <div $myDirective></div>;
@@ -144,42 +156,74 @@ Below is the Counter code of [using lit-html in the browser](https://apprun-lit-
   </head>
   <body>
   <script type="module">
-    import { app, Component, html } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
-      class Counter extends Component {
-        state = 0;
-        view = (state) => html`<div>
-        <h1>${state}</h1>
-          <button @click=${()=>this.run("add", -1)}>-1</button>
-          <button @click=${()=>this.run("add", +1)}>+1</button>
-        </div>`;
-        update =[
-          ['add', (state, n) => state + n]
-        ]
-      }
-      new Counter().start(document.body);
+    import app from 'https://unpkg.com/apprun?module';
+    import { render, html } from 'https://unpkg.com/lit-html?module';
+    app.render = (e, vdom) => render(vdom, e);
+    class Counter extends Component {
+      state = 0;
+      view = (state) => html`<div>
+      <h1>${state}</h1>
+        <button @click=${()=>this.run("add", -1)}>-1</button>
+        <button @click=${()=>this.run("add", +1)}>+1</button>
+      </div>`;
+      update =[
+        ['add', (state, n) => state + n]
+      ]
+    }
+    new Counter().start(document.body);
   </script>
   </body>
 </html>
 ```
 
+### Use µhtml
 
-## HTML String
+[µhtml](https://github.com/WebReflection/uhtml) (micro html) is a ~2.5K lighterhtml subset to build declarative and reactive UI via template literals tags.
 
-
-Although HTML string is easy to understand and useful for trying out ideas, it takes time to parse it into VDOM at run time, which may cause performance issues.
-It also has some problems that have been documented by the Facebook React team: [Why not template literals](http://facebook.github.io/jsx/#why-not-template-literals).
-
-AppRun supports creating the HTML string from the _view_ function. Sometimes it may be easy for quick prototyping.
-
-```javascript
-const view = state => `<div>
-  <h1>${state}</h1>
-  <button onclick="app.run('-1')">-1</button>
-  <button onclick="app.run('+1')">+1</button>
-</div>`;
+```html
+<html lang="en">
+<head>
+  <title>AppRun App</title>
+</head>
+<body>
+  <script type="module">
+    import app from 'https://unpkg.com/apprun?module';
+    import { render, html } from 'https://unpkg.com/uhtml?module';
+    app.render = render;
+    class Counter extends Component {
+      state = 0;
+      view = (state) => html`<div>
+      <h1>${state}</h1>
+        <button onclick=${() => this.run("add", -1)}>-1</button>
+        <button onclick=${() => this.run("add", +1)}>+1</button>
+      </div>`;
+      update = [
+        ['add', (state, n) => state + n]
+      ]
+    }
+    new Counter().start(document.body);
+  </script>
+</body>
+</html>
 ```
 
+## HTML string and Components
 
+Unlike JSX that you can embedd component class into JSX, when using component in HTML string, you can make a web component / custom element. Then you can embedd the component.
+
+```javascript
+import app from 'apprun';
+import MyComponent from './MyComponent';
+
+app.webComponent('my-component', MyComponent);
+
+const view = state => {
+  return `<div>
+    <my-component />
+  </div>`;
+};
+app.start('my-app', state, view);
+```
 
 Next, you will need to learn how to handle users' navigation and activate the components, which is also known as [routing](07-routing).
 
