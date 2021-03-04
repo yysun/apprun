@@ -48,15 +48,7 @@ const view: View<State> = state => <div class="container" $onclick={click}>
   <span class="preloadicon glyphicon glyphicon-remove hidden" aria-hidden="true"></span>
 </div>;
 
-const getId = (elem: any) => {
-  while (elem) {
-    if (elem.tagName === "TR") {
-      return elem.id;
-    }
-    elem = elem.parentNode;
-  }
-  return undefined;
-}
+const getId = (elem: any) => elem.closest('tr').id;
 
 const click = (state: State, e: Event) => {
   const t = e.target as HTMLElement;
@@ -66,30 +58,54 @@ const click = (state: State, e: Event) => {
   if (t.tagName === 'BUTTON' && t.id) {
     startMeasure(t.id);
     component.run(t.id as Events);
-    stopMeasure();
   } else if (t.matches('.remove')) {
     startMeasure('delete');
     const id = getId(t);
     component.run('delete', id);
-    document.getElementById(id)?.remove();
-    stopMeasure();
   } else if (t.matches('.lbl')) {
     startMeasure('select');
     const id = getId(t);
-    let el;
-    if (state.selected) {
-      el = document.getElementById(`${state.selected}`);
-      el && (el.className = '');
-    }
     component.run('select', id);
-    el = document.getElementById(id);
-    el && (el.className = 'danger');
   }
   stopMeasure();
 }
 
 const component = new Component(state, view, update);
 component.unload = () => { console.log('benchmark.unload') };
-(component as any)['-patch-vdom-on'] = true;
 
+component.rendered = () => {
+  let nonKeyedDetector_tradded = [];
+  let nonKeyedDetector_trremoved = [];
+  let nonKeyedDetector_removedStoredTr = [];
+
+  const target = document.querySelector('#main-table');
+
+  function filterTRInNodeList(nodeList) {
+    let trs = [];
+    nodeList.forEach(n => {
+      if (n.tagName === 'TR') {
+        trs.push(n);
+        trs = trs.concat(filterTRInNodeList(n.childNodes));
+      }
+    });
+    return trs;
+  }
+
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.type === 'childList') {
+        nonKeyedDetector_tradded = nonKeyedDetector_tradded.concat(filterTRInNodeList(mutation.addedNodes));
+        nonKeyedDetector_trremoved = nonKeyedDetector_trremoved.concat(filterTRInNodeList(mutation.removedNodes));
+      }
+      // console.log(mutation.type, mutation.addedNodes.length, mutation.removedNodes.length, mutation);
+    });
+    console.log('tr addded: ', nonKeyedDetector_tradded.length, 'tr removed: ', nonKeyedDetector_trremoved.length);
+  });
+  var config = { childList: true, attributes: true, subtree: true, characterData: true };
+
+  if (!target['observed']) {
+    observer.observe(target, config);
+    target['observed'] = true;
+  }
+}
 export default (element) => component.mount(element, {route: '#benchmark'});
