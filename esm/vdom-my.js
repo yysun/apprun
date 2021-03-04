@@ -107,8 +107,11 @@ function updateChildren(element, children, isSvg) {
                         const temp = old.nextSibling;
                         element.insertBefore(old, el);
                         temp ? element.insertBefore(el, temp) : element.appendChild(el);
+                        update(element.childNodes[i], child, isSvg);
                     }
-                    update(element.childNodes[i], child, isSvg);
+                    else {
+                        element.replaceChild(create(child, isSvg), el);
+                    }
                 }
             }
             else {
