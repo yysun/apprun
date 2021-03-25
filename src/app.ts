@@ -65,6 +65,16 @@ export class App {
       fn.apply(this, args);
     }, options.delay);
   }
+
+  ask(name: string, ...args): Promise<any> {
+    const subscribers = this._events[name] || [];
+    console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
+    const promises = subscribers.map(sub => {
+      const { fn } = sub;
+      return fn.apply(this, args);
+    });
+    return Promise.all(promises);
+  }
 }
 
 const AppRunVersions = 'AppRun-2';
