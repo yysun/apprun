@@ -44,6 +44,7 @@ declare module 'apprun' {
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
+    query(name: string, ...args): Promise<any[]>;
     h(tag: string | Function, ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VDOM): void;

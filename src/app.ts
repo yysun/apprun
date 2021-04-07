@@ -66,7 +66,7 @@ export class App {
     }, options.delay);
   }
 
-  ask(name: string, ...args): Promise<any> {
+  query(name: string, ...args): Promise<any[]> {
     const subscribers = this._events[name] || [];
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {

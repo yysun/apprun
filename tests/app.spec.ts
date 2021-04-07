@@ -185,12 +185,12 @@ describe('app events', () => {
     expect(has).toBeUndefined();
   });
 
-  it('.ask should return promise', (done) => {
+  it('.query should return promise', (done) => {
     const app = new App();
     app.on('0', _ => 10);
     app.on('0', n => n * 10);
 
-    app.ask('0', 5).then(a => {
+    app.query('0', 5).then(a => {
       expect(a[0]).toBe(10);
       expect(a[1]).toBe(50);
       done();
