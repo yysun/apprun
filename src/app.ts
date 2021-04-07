@@ -30,7 +30,7 @@ export class App {
   }
 
   run(name: string, ...args): number {
-    const subscribers = this._events[name] || [];
+    const subscribers = this.getSubscribers(name, this._events);
 
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
 
@@ -67,13 +67,21 @@ export class App {
   }
 
   query(name: string, ...args): Promise<any[]> {
-    const subscribers = this._events[name] || [];
+    const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
       const { fn } = sub;
       return fn.apply(this, args);
     });
     return Promise.all(promises);
+  }
+
+  private getSubscribers(name: string, events) {
+    const subscribers = this._events[name] || [];
+    Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
+      .sort((a, b) => b.length - a.length)
+      .forEach(evt => subscribers.push(...events[evt]));
+    return subscribers;
   }
 }
 

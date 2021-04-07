@@ -197,4 +197,20 @@ describe('app events', () => {
     });
   });
 
+  it('event should should match pattern', (done) => {
+    const app = new App();
+    app.on('*', _ => 0);
+    app.on('1*', _ => 10);
+    app.on('12*', _ => 20);
+    app.on('12', _ => 30);
+
+    app.query('12').then(a => {
+      expect(a[0]).toBe(30);
+      expect(a[1]).toBe(20);
+      expect(a[2]).toBe(10);
+      expect(a[3]).toBe(0);
+      done();
+    });
+  });
+
 });
