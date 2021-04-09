@@ -16,7 +16,7 @@ declare module 'apprun' {
   export type EventOptions<T = any> = {
     once?: boolean;
     delay?: number;
-  };
+  } | any;
   export type CustomElementOptions = {
     render?: boolean;
     shadow?: boolean;

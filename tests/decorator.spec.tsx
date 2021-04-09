@@ -106,5 +106,19 @@ describe('Update decorator', () => {
     }
   });
 
-
+  it('should support context - @on decorator', done => {
+    class TestComponent extends Component {
+      state = 1;
+      
+      @on('test', {n: 100})
+      f1 = (state, p, {n}) => {
+        expect(state).toBe(1);
+        expect(p).toBe(10);
+        expect(n).toBe(100);
+        done();
+      }
+    }
+    const test = new TestComponent().mount();
+    test.run('test', 10);
+  })
 })

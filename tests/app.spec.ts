@@ -213,4 +213,24 @@ describe('app events', () => {
     });
   });
 
+  it('should pass event options as context', (done) => {
+    const app = new App();
+    app.on('0', (m, { n }) => n * m, { n: 10 });
+
+    app.query('0', 5).then(a => {
+      expect(a[0]).toBe(50);
+      done();
+    });
+  });
+
+  it('should pass event name in the context', (done) => {
+    const app = new App();
+    app.on('0*', (_, { event }) => event);
+
+    app.query('000', 5).then(a => {
+      expect(a[0]).toBe('000');
+      done();
+    });
+  });
+
 });

@@ -46,7 +46,7 @@ export class App {
       if (options.delay) {
         this.delay(name, fn, args, options);
       } else {
-        fn.apply(this, args);
+        Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
       }
       return !sub.options.once;
     });
@@ -62,7 +62,7 @@ export class App {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
-      fn.apply(this, args);
+      Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
     }, options.delay);
   }
 
@@ -70,17 +70,23 @@ export class App {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
-      const { fn } = sub;
-      return fn.apply(this, args);
+      const { fn, options } = sub;
+      return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
     });
     return Promise.all(promises);
   }
 
   private getSubscribers(name: string, events) {
     const subscribers = this._events[name] || [];
+    const p = subscribers.length;
     Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
       .sort((a, b) => b.length - a.length)
-      .forEach(evt => subscribers.push(...events[evt]));
+      .forEach(evt => subscribers.push(...events[evt].map(
+        sub => {
+          sub.options = {...sub.options, event: name };
+          return sub;
+        })));
+
     return subscribers;
   }
 }
