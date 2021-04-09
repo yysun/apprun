@@ -5,6 +5,23 @@
 * apprun@latest: 2.x, stable, es2015, web component
 * apprun@next: 3.x, dev, es2015, lit-html
 
+## 1.28/ 2.28 / 3.28
+
+* New app.query function that returns the returned values of all then event handlers
+  ```ts
+  app.query(name: string, ...args): Promise<any[]>;
+  ```
+* Event pattern matching
+  ```ts
+  app.on('ws:*', _ => 0); // handles all events that have name start with ws:
+  ```
+* Event context
+  ```ts
+  @on('event', {c:1})  // define the context
+  fn = ({c}) => {...}; // get the context in the handler
+
+  ```
+
 ## 1.27/ 2.27 / 3.27
 
 * BREAKING CHANGES: New logic for creating stateful components
@@ -33,6 +50,7 @@
 * Support the list attribute
 * Support webpack 5
 * Set jsxFactory to app.h for TypeScript 4
+
 ## 1.24 / 2.24 / 3.24
 
 * Support the list attribute
