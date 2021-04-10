@@ -31,16 +31,7 @@ export class App {
 
   run(name: string, ...args): number {
     const subscribers = this.getSubscribers(name, this._events);
-
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
-
-    // Update the list of subscribers by pulling out those which will run once.
-    // We must do this update prior to running any of the events in case they
-    // cause additional events to be turned off or on.
-    this._events[name] = subscribers.filter((sub) => {
-      return !sub.options.once;
-    });
-
     subscribers.forEach((sub) => {
       const { fn, options } = sub;
       if (options.delay) {
@@ -77,16 +68,22 @@ export class App {
   }
 
   private getSubscribers(name: string, events) {
-    const subscribers = this._events[name] || [];
-    const p = subscribers.length;
+    const subscribers = events[name] || [];
+
+    // Update the list of subscribers by pulling out those which will run once.
+    // We must do this update prior to running any of the events in case they
+    // cause additional events to be turned off or on.
+    if (name.indexOf('*') < 0) {
+      events[name] = subscribers.filter((sub) => {
+        return !sub.options.once;
+      });
+    }
     Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
       .sort((a, b) => b.length - a.length)
-      .forEach(evt => subscribers.push(...events[evt].map(
-        sub => {
-          sub.options = {...sub.options, event: name };
-          return sub;
-        })));
-
+      .forEach(evt => subscribers.push(...events[evt].map(sub => ({
+        ...sub,
+        options: { ...sub.options, event: name }
+      }))));
     return subscribers;
   }
 }
