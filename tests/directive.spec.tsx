@@ -1,6 +1,30 @@
 import app, { Component, on, event } from '../src/apprun';
+import directive from '../src/directive';
 
 describe('Directive', () => {
+  it('should apply $on', () => {
+    let vdom = {
+      tag: 'div',
+      props: {
+        "$onclick": 'a'
+      }
+    };
+    vdom = directive(vdom, {});
+    expect(vdom.props['$onclick']).toBeUndefined();
+    expect(vdom.props['onclick']).not.toBeUndefined();
+
+    let vdom2 = [{
+      tag: 'div',
+      props: {
+        "$onclick": 'a'
+      }
+    }];
+
+    vdom = directive(vdom2, {});
+    expect(vdom[0].props['$onclick']).toBeUndefined();
+    expect(vdom[0].props['onclick']).not.toBeUndefined();
+  });
+
   it('should trigger event - $on', () => {
     class Test extends Component {
       state = 0;

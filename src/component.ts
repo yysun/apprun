@@ -26,31 +26,10 @@ export class Component<T = any, E = any> {
   private tracking_id;
   private observer;
 
-  render(element: HTMLElement, node) {
-    app.render(element, node, this);
-  }
-
-  private _view(state) {
-    if (!this.view) return;
-    const h = app.createElement;
-    app.h = app.createElement = (tag, props, ...children) => {
-      props && Object.keys(props).forEach(key => {
-        if (key.startsWith('$')) {
-          directive(key, props, tag, this);
-          delete props[key];
-        }
-      });
-      return h(tag, props, ...children);
-    }
-    const html = this.view(state);
-    app.h = app.createElement = h;
-    return html;
-  }
 
   private renderState(state: T, vdom = null) {
     if (!this.view) return;
-    let html = vdom || this._view(state);
-
+    let html = vdom || this.view(state);
     app['debug'] && app.run('debug', {
       component: this,
       _: html ? '.' : '-',
@@ -87,8 +66,9 @@ export class Component<T = any, E = any> {
       }
       el['_component'] = this;
     }
-    if (!vdom) {
-      this.render(el, html);
+    if (!vdom && html) {
+      html = directive(html, this);
+      app.render(el, html, this);
     }
     this.rendered && this.rendered(this.state);
   }
