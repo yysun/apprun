@@ -37,30 +37,10 @@ export class Component {
             return this.mount(element, Object.assign(Object.assign({}, options), { render: true }));
         };
     }
-    render(element, node) {
-        app.render(element, node, this);
-    }
-    _view(state) {
-        if (!this.view)
-            return;
-        const h = app.createElement;
-        app.h = app.createElement = (tag, props, ...children) => {
-            props && Object.keys(props).forEach(key => {
-                if (key.startsWith('$')) {
-                    directive(key, props, tag, this);
-                    delete props[key];
-                }
-            });
-            return h(tag, props, ...children);
-        };
-        const html = this.view(state);
-        app.h = app.createElement = h;
-        return html;
-    }
     renderState(state, vdom = null) {
         if (!this.view)
             return;
-        let html = vdom || this._view(state);
+        let html = vdom || this.view(state);
         app['debug'] && app.run('debug', {
             component: this,
             _: html ? '.' : '-',
@@ -97,8 +77,9 @@ export class Component {
             }
             el['_component'] = this;
         }
-        if (!vdom) {
-            this.render(el, html);
+        if (!vdom && html) {
+            html = directive(html, this);
+            app.render(el, html, this);
         }
         this.rendered && this.rendered(this.state);
     }
