@@ -4,8 +4,8 @@ const model = 0;
 
 const view = (model) => <div>
     <h1>{model}</h1>
-    <button onclick={()=>app.run("DECREASE")}>-1</button>
-    <button onclick={()=>app.run("INCREASE")}>+1</button>
+    <button $onclick="DECREASE">-1</button>
+    <button $onclick="INCREASE">+1</button>
   </div>;
 ;
 

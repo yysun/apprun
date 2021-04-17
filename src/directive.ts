@@ -79,8 +79,8 @@ const directive = (vdom, component) => {
     return vdom.map(element => directive(element, component));
   } else {
     let { tag, props, children } = vdom;
-    if (tag && props) {
-      Object.keys(props).forEach(key => {
+    if (tag) {
+      if (props) Object.keys(props).forEach(key => {
         if (key.startsWith('$')) {
           apply_directive(key, props, tag, component);
           delete props[key];

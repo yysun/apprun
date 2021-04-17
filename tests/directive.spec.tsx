@@ -23,6 +23,21 @@ describe('Directive', () => {
     vdom = directive(vdom2, {});
     expect(vdom[0].props['$onclick']).toBeUndefined();
     expect(vdom[0].props['onclick']).not.toBeUndefined();
+
+    let vdom3 = [{
+      tag: 'div',
+      props: null,
+      children: [{
+        tag: 'div',
+        props: {
+          "$onclick": 'a'
+        }
+      }]
+    }];
+
+    vdom = directive(vdom3, {});
+    expect(vdom[0].children[0].props['$onclick']).toBeUndefined();
+    expect(vdom[0].children[0].props['onclick']).not.toBeUndefined();
   });
 
   it('should trigger event - $on', () => {
