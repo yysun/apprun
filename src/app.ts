@@ -73,11 +73,9 @@ export class App {
     // Update the list of subscribers by pulling out those which will run once.
     // We must do this update prior to running any of the events in case they
     // cause additional events to be turned off or on.
-    if (name.indexOf('*') < 0) {
-      events[name] = subscribers.filter((sub) => {
-        return !sub.options.once;
-      });
-    }
+    events[name] = subscribers.filter((sub) => {
+      return !sub.options.once;
+    });
     Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
       .sort((a, b) => b.length - a.length)
       .forEach(evt => subscribers.push(...events[evt].map(sub => ({
