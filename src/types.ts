@@ -17,7 +17,7 @@ export type ActionOptions = {
 export type EventOptions = {
   once?: boolean;
   delay?: number;
-};
+} | any;
 export type MountOptions = {
   render?: boolean, history?, global_event?: boolean, route?: string
 };

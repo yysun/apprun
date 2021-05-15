@@ -15,7 +15,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 
 ## Use in Browser
 
-### Use ES5
+### Use Global AppRun app
 
 ```html
 <html lang="en">
@@ -26,29 +26,12 @@ You can also load AppRun directly from the unpkg.com CDN:
 <body>
 <script>
   const view = state => `<div>${state}</div>`;
-  app.start(document.body, 0, view);
+  app.start(document.body, 'hello world', view);
 </script>
 </body>
 </html>
 ```
 
-### Use JSX
-
-```html
-<html lang="en">
-<head>
-  <title>AppRun App</title>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/apprun@es6/dist/apprun-html.js"></script>
-</head>
-<body>
-<script type="text/babel" data-presets="es2017, react">
-  const view = state => <div>${state}</div>;
-  app.start(document.body, 0, view);
-</script>
-</body>
-</html>
-```
 
 ### Use ES Module
 
@@ -59,15 +42,37 @@ You can also load AppRun directly from the unpkg.com CDN:
 </head>
 <body>
 <script type="module">
-  import { app } from 'https://unpkg.com/apprun@es6/esm/apprun-html?module';
+  import { app } from 'https://unpkg.com/apprun/esm/apprun-html?module';
   const view = state => `<div>${state}</div>`;
-  app.start(document.body, 0, view);
+  app.start(document.body, 'hello world', view);
 </script>
 </body>
 </html>
 ```
 
 ### Use lit-html
+
+[lit-html](https://lit-html.polymer-project.org/) is an efficient, expressive, extensible HTML templating library for JavaScript from the Polumer project.
+```html
+<html lang="en">
+<head>
+  <title>AppRun App</title>
+</head>
+<body>
+<script type="module">
+  import app from 'https://unpkg.com/apprun?module';
+  import { render, html } from 'https://unpkg.com/lit-html?module';
+  app.render = (e, vdom) => render(vdom, e);
+  const view = state => html`<div>${state}</div>`;
+  app.start(document.body, 'hello world', view);
+</script>
+</body>
+</html>
+```
+
+### Use µhtml
+
+[µhtml](https://github.com/WebReflection/uhtml) (micro html) is a ~2.5K lighterhtml subset to build declarative and reactive UI via template literals tags.
 
 ```html
 <html lang="en">
@@ -76,19 +81,54 @@ You can also load AppRun directly from the unpkg.com CDN:
 </head>
 <body>
 <script type="module">
-  import { app, html } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
+  import app from 'https://unpkg.com/apprun?module';
+  import { render, html } from 'https://unpkg.com/uhtml?module';
+  app.render = render;
   const view = state => html`<div>${state}</div>`;
-  app.start(document.body, 0, view);
+  app.start(document.body, 'hello world', view);
 </script>
 </body>
 </html>
 ```
 
-## TypeScript and Webpack
+### Use JSX
+
+[JSX](https://reactjs.org/docs/introducing-jsx.html) is a syntax exntension to JavaScript. It makes JavaScript functions look like HTML.
+
+You can use JSX in the browser or compile JSX ahead of time. See AppRun CLI below.
+
+```html
+<html lang="en">
+<head>
+  <title>AppRun App</title>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+</head>
+<body>
+<script type="text/babel" data-presets="es2017, react">
+  const view = state => <div>${state}</div>;
+  app.start(document.body, 'hello world', view);
+</script>
+</body>
+</html>
+```
+
+## AppRun CLI
+
 
 AppRun includes a command-line tool (CLI) for creating a TypeScript and webpack configured project.
 
-You can initialize a SPA project.
+### esbuild
+
+You can initialize a SPA project that uses [esbuild](https://esbuild.github.io/).
+
+```sh
+npx apprun --init --spa --esbuild
+```
+
+### TypeScript and Webpack
+
+You can initialize a SPA project that uses TypeScript and WebPack.
 
 ```sh
 npx apprun --init --spa
@@ -100,6 +140,7 @@ To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag
 npx apprun --init --spa --es5
 ```
 
+
 After the command finishes execution, you can start the application and then navigate to https://localhost:8080 in a browser.
 
 ```sh
@@ -110,6 +151,7 @@ npm start
 
 Optionally, if not using the CLI you can directly scaffold AppRun project from the AppRun starter templates.
 ```sh
+npx degit apprunjs/apprun-esbuild my-app
 npx degit apprunjs/apprun-rollup my-app
 npx degit apprunjs/apprun-rollup-lit-html my-app
 npx degit apprunjs/apprun-webpack my-app
@@ -127,25 +169,5 @@ npx degit yysun/apprun-websockets my-app
 
 AppRun is so flexible that you can choose your favorite ways of using it.
 
-
-## AppRun Site Framework
-
-[AppRun Site](https://github.com/yysun/apprun-site) is a framework for building AppRun applications. It has the following features:
-
-* Progressive Web App (PWA) - support offline
-* Single Page App (SPA) - routing using / or #
-* four built-in layouts and bring your own
-* Compile HTML, markdown pages to AppRun components
-* Auto generate the index of pages
-* Build app logic using AppRun/Web components
-* Targets ES5 or ES Module
-
-You can create AppRun Site apps using the apprun-site package.
-
-```sh
-npx apprun-site init my-app
-```
-
-Please visit [AppRun Site Documentations](https://yysun.github.io/apprun-site).
 
 Next, you will see the [tutorial](02-tutorial) of creating AppRun apps.

@@ -26,3 +26,6 @@ const element = document.getElementById('my-app');
 [home, hello, counter, counters, todo, calculator, dragdrop, svg, animation,
   benchmark, benchmark_lit,
   play, webcomponents, test].forEach(c => c(element));
+
+// trigger the initial route to demo apprun-no-init in html head
+app.route(location.hash);

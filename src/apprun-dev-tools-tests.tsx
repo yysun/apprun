@@ -23,30 +23,37 @@ function closeWin() {
   win.document.close();
 }
 
+const print_component_test = component => {
+  write(`import ${component.constructor.name} from '../src/${component.constructor.name}'`);
+  write(`describe('${component.constructor.name}', ()=>{`);
+  component._actions.forEach(action => {
+    if (action.name !== '.') {
+      write(`  it ('should handle event: ${action.name}', (done)=>{`);
+      write(`    const component = new ${component.constructor.name}().mount();`);
+      write(`    component.run('${action.name}');`);
+      write(`    setTimeout(() => {`);
+      write(`      \/\/expect(?).toHaveBeenCalled();`);
+      write(`      \/\/expect(component.state).toBe(?);`);
+      write(`    done();`);
+      write(`  })`);
+    }
+  });
+  write(`});`);
+};
 export const _createEventTests = () => {
   const o = { components: {} };
   app.run('get-components', o);
   const { components } = o;
   openWin('');
-  Object.keys(components).forEach(el => {
-    components[el].forEach(component => {
-      write(`import ${component.constructor.name} from '../src/${component.constructor.name}'`);
-      write(`describe('${component.constructor.name}', ()=>{`);
-      component._actions.forEach(action => {
-        if (action.name !== '.') {
-          write(`  it ('should handle event: ${action.name}', (done)=>{`);
-          write(`    const component = new ${component.constructor.name}().mount();`);
-          write(`    component.run('${action.name}');`);
-          write(`    setTimeout(() => {`);
-          write(`      \/\/expect(?).toHaveBeenCalled();`);
-          write(`      \/\/expect(component.state).toBe(?);`);
-          write(`    done();`);
-          write(`  })`);
-        }
-      });
-      write(`});`);
+  if (components instanceof Map) {
+    for (let [key, comps] of components) {
+      comps.forEach(print_component_test);
+    }
+  } else {
+    Object.keys(components).forEach(el => {
+      components[el].forEach(print_component_test);
     });
-  });
+  }
   closeWin();
 }
 

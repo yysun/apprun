@@ -14,7 +14,7 @@ const setStateValue = (component, name, value) => {
   }
 }
 
-export default (key: string, props: {}, tag, component) => {
+const apply_directive = (key: string, props: {}, tag, component) => {
   if (key.startsWith('$on')) {
     const event = props[key];
     key = key.substring(1)
@@ -73,3 +73,25 @@ export default (key: string, props: {}, tag, component) => {
     app.run('$', { key, tag, props, component });
   }
 }
+
+const directive = (vdom, component) => {
+  if (Array.isArray(vdom)) {
+    return vdom.map(element => directive(element, component));
+  } else {
+    let { tag, props, children } = vdom;
+    if (tag) {
+      if (props) Object.keys(props).forEach(key => {
+        if (key.startsWith('$')) {
+          apply_directive(key, props, tag, component);
+          delete props[key];
+        }
+      });
+      if (children) children = directive(children, component);
+      return { tag, props, children };
+    } else {
+      return vdom;
+    }
+  }
+}
+
+export default directive;

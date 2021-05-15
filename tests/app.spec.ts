@@ -185,4 +185,60 @@ describe('app events', () => {
     expect(has).toBeUndefined();
   });
 
+  it('.query should return promise', (done) => {
+    const app = new App();
+    app.on('0', _ => 10);
+    app.on('0', n => n * 10);
+
+    app.query('0', 5).then(a => {
+      expect(a[0]).toBe(10);
+      expect(a[1]).toBe(50);
+      done();
+    });
+  });
+
+  it('event should should match pattern', (done) => {
+    const app = new App();
+    app.on('*', _ => 0);
+    app.on('1*', _ => 10);
+    app.on('12*', _ => 20);
+    app.on('12', _ => 30);
+
+    app.query('12').then(a => {
+      expect(a[0]).toBe(30);
+      expect(a[1]).toBe(20);
+      expect(a[2]).toBe(10);
+      expect(a[3]).toBe(0);
+      done();
+    });
+  });
+
+  it('should pass event options as context', (done) => {
+    const app = new App();
+    app.on('0', (m, { n }) => n * m, { n: 10 });
+    app.query('0', 5).then(a => {
+      expect(a[0]).toBe(50);
+      done();
+    });
+  });
+
+  it('should pass event name in the context', (done) => {
+    const app = new App();
+    app.on('0*', (_, { event }) => event);
+    app.query('000', 5).then(a => {
+      expect(a[0]).toBe('000');
+      done();
+    });
+  });
+
+  it('should not create extra handlers', (done) => {
+    const app = new App();
+    app.on('0*', (_, { event }) => event);
+    app.query('000', 5).then(a => {
+      expect(a[0]).toBe('000');
+      done();
+    });
+    expect(app.find('000').length).toBe(0);
+  });
+
 });

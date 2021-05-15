@@ -16,6 +16,13 @@ To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag
 npx apprun --init --spa --es5
 ```
 
+
+You can initialize a SPA project that uses [esbuild](https://esbuild.github.io/).
+
+```sh
+npx apprun --init --spa --esbuild
+```
+
 ## AppRun Dev Tools
 
 To use the AppRun dev-tools, include the dev-tools script.

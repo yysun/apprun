@@ -8,15 +8,15 @@ describe('Component', () => {
 
       update = [
         ['+1', state => ++state, { once: true }],
-        ['+1*', state => ++state],
+        ['+1a', state => ++state],
       ];
     }
 
     const t = new Test().start() as any;
     t.run('+1');
     t.run('+1');
-    t.run('+1*');
-    expect(t.state).toEqual(2);
+    t.run('+1a');
+    expect(t.state).toEqual(2); 
   })
 
   it('should support state-typed update tuple and event alias', () => {

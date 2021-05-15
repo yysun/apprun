@@ -16,7 +16,7 @@ declare module 'apprun' {
   export type EventOptions<T = any> = {
     once?: boolean;
     delay?: number;
-  };
+  } | any;
   export type CustomElementOptions = {
     render?: boolean;
     shadow?: boolean;
@@ -44,6 +44,7 @@ declare module 'apprun' {
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
+    query(name: string, ...args): Promise<any[]>;
     h(tag: string | Function, ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
     render(element: HTMLElement, node: VDOM): void;
@@ -60,7 +61,7 @@ declare module 'apprun' {
     start(element?: Element, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
-    rendered: (s: any[]) => void;
+    rendered: (state: T) => void;
     mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
     unload: (state: T) => void;

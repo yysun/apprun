@@ -1,6 +1,6 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm inspired architecture, events, and components.
+AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm-inspired architecture, events, and components.
 
 > AppRun is an MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
@@ -25,7 +25,7 @@ You can also load AppRun directly from the unpkg.com CDN:
 Or use it as ES module from unpkg.com:
 ```javascript
 <script type="module">
-  import { app, Component } from 'https://unpkg.com/apprun@next/esm/apprun-html?module';
+  import { app, Component } from 'https://unpkg.com/apprun/esm/apprun-html?module';
 </script>
 ```
 ## Architecture Concept
@@ -45,6 +45,12 @@ Or use it as ES module from unpkg.com:
 * [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 ## Create AppRun Apps
+
+Use the AppRun CLI to initialize an esbuild configured project:
+
+```sh
+npx apprun --init --spa --esbuild
+```
 
 Use the AppRun CLI to initialize a TypeScript and webpack configured project:
 
@@ -68,8 +74,10 @@ To use the AppRun dev server:
 npx apprun-dev-server
 ```
 
-See the annoucement: [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
+See the announcement: [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
 
+
+## AppRun Dev Tools
 To use the AppRun dev-tools, include the dev-tools script.
 
 ```JavaScript
@@ -110,7 +118,7 @@ Have fun and send pull requests.
 
 MIT
 
-Copyright (c) 2015-2020 Yiyi Sun
+Copyright (c) 2015-2021 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master
@@ -119,11 +127,11 @@ Copyright (c) 2015-2020 Yiyi Sun
 [npm-url]: https://npmjs.org/package/apprun
 [license-image]: https://img.shields.io/:license-mit-blue.svg
 [license-url]: LICENSE.md
-[downloads-image]: http://img.shields.io/npm/dm/apprun.svg
+[downloads-image]: https://img.shields.io/npm/dm/apprun.svg
 [downloads-url]: https://npmjs.org/package/apprun
 
 [twitter]: https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social
 
 [discord-image]: https://img.shields.io/discord/476903999023480842.svg
-[discord-invite]: https://discord.gg/M5EDsj
+[discord-invite]: https://discord.gg/CETyUdx

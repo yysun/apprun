@@ -5,14 +5,31 @@
 * apprun@latest: 2.x, stable, es2015, web component
 * apprun@next: 3.x, dev, es2015, lit-html
 
+## 1.28/ 2.28 / 3.28
+
+* New app.query function that returns the returned values of all then event handlers
+  ```ts
+  app.query(name: string, ...args): Promise<any[]>;
+  ```
+* Event pattern matching
+  ```ts
+  app.on('ws:*', _ => 0); // handles all events that have name start with ws:
+  ```
+* Event context
+  ```ts
+  @on('event', {c:1})  // define the context
+  fn = ({c}) => {...}; // get the context in the handler
+
+  ```
+
 ## 1.27/ 2.27 / 3.27
 
 * BREAKING CHANGES: New logic for creating stateful components
 * BREAKING CHANGES: remove props from the view function call
 * Support _as_ prop for naming the root element of components
 * Support prop _apprun-no-init_ in _body_ to skip the init route call
-* CLI: -0 option to skip npm install
-* CLI: -o option to generate stories for a component
+* CLI: -e, --esbuild option to use esbuild instead of webpack
+* CLI: -o, --story option to generate stories for a component
 
 ## 1.26/ 2.26 / 3.26
 
@@ -33,6 +50,7 @@
 * Support the list attribute
 * Support webpack 5
 * Set jsxFactory to app.h for TypeScript 4
+
 ## 1.24 / 2.24 / 3.24
 
 * Support the list attribute
