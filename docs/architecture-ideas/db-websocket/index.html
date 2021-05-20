@@ -1,0 +1,1181 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This post introduces a new application architecture that allows event handling between the frontend apps and the backend business logic modules without REST API">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+    
+    
+      
+        <title>Database-Driven Applications Using WebSockets - AppRun Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/vendor/codemirror/codemirror.css">
+    
+      <link rel="stylesheet" href="../../assets/style.css">
+    
+      <link rel="stylesheet" href="../..">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-123786786-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AppRun Docs" class="md-header__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AppRun Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Database-Driven Applications Using WebSockets
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AppRun Docs" class="md-nav__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    AppRun Docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Concepts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Concepts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      <label class="md-nav__link" for="__nav_1_1">
+        Architecture
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Architecture" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../state-management/" class="md-nav__link">
+        State Management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../event-pubsub/" class="md-nav__link">
+        Event Pubsub
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../component/" class="md-nav__link">
+        Component
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reactivity/" class="md-nav__link">
+        Reactivity
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      <label class="md-nav__link" for="__nav_1_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dapr/" class="md-nav__link">
+        Microservice wirh Dapr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firebase-app/" class="md-nav__link">
+        Serverless App Using Firebase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Database and Websocket
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Database and Websocket
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture" class="md-nav__link">
+    The Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-application" class="md-nav__link">
+    An Example Application
+  </a>
+  
+    <nav class="md-nav" aria-label="An Example Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#send-events-to-server-through-websocket" class="md-nav__link">
+    Send Events to Server Through WebSocket
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#receiving-events-from-frontend" class="md-nav__link">
+    Receiving Events from Frontend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-events-in-business-logic-module" class="md-nav__link">
+    Handle Events in Business Logic Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#receiving-events-from-backend" class="md-nav__link">
+    Receiving Events from Backend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-frontend-application" class="md-nav__link">
+    The Frontend Application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-the-demo" class="md-nav__link">
+    Run the Demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rust-app/" class="md-nav__link">
+        Webassembly app with Rust
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../state-machine/" class="md-nav__link">
+        State Machine
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Quick Start
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Single Page Apps
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Single Page Apps" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Single Page Apps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spa/" class="md-nav__link">
+        Creating Project
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        View Pattern
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="View Pattern" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          View Pattern
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../view-patterns/" class="md-nav__link">
+        JSX
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../directive/" class="md-nav__link">
+        Directive
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3rd-party-libs/" class="md-nav__link">
+        3rd Party Intergration
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli-in-console/" class="md-nav__link">
+        CLI in Console
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev-server/" class="md-nav__link">
+        Dev Server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ssr/" class="md-nav__link">
+        Server Side Rendering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strong-typing/" class="md-nav__link">
+        Strong Typing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../unit-testing/" class="md-nav__link">
+        Unit Testing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/" class="md-nav__link">
+        Resources
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture" class="md-nav__link">
+    The Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-application" class="md-nav__link">
+    An Example Application
+  </a>
+  
+    <nav class="md-nav" aria-label="An Example Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#send-events-to-server-through-websocket" class="md-nav__link">
+    Send Events to Server Through WebSocket
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#receiving-events-from-frontend" class="md-nav__link">
+    Receiving Events from Frontend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-events-in-business-logic-module" class="md-nav__link">
+    Handle Events in Business Logic Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#receiving-events-from-backend" class="md-nav__link">
+    Receiving Events from Backend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-frontend-application" class="md-nav__link">
+    The Frontend Application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-the-demo" class="md-nav__link">
+    Run the Demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/architecture-ideas/db-websocket.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Database and Websocket</h1>
+                
+                <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>The database is a specific technology for storing, managing, and processing data. In the real-world, web sites, mobile apps, and business applications that serve dynamic content all have a backend database.</p>
+<p>Started being popular in the web and mobile apps, moving to the business applications, nowadays most of the database-driven applications use a REST API based architecture. The REST API provides flexibility, scalability, and simplicity over other traditional web services architectures.</p>
+<p><img alt="REST Architecture" src="https://github.com/yysun/apprun-websockets-sqlite/raw/master/architecture-old.png" /></p>
+<p>However, the primary purpose of the REST API is to decouple the backend and frontend, which assumes backend and frontend know nothing about each other. Even in case we know and own both backend and frontend, such as in many business applications, we still have to develop the backend API endpoints first. And then, we develop the frontend API clients. Developing backend and frontend separately is tedious and error-prone.</p>
+<p>Also, If we want to publish events from the frontend to be handled in the backend business logic modules, we cannot do it directly. Furthermore, the REST API is not a duplex protocol. Only the frontend can call the API. The backend cannot call the frontend. Therefore sometimes, the REST API has become a barrier between frontend and backend that costs us extra time and effort to overcome.</p>
+<p>In this post, I will introduce a new application architecture that allows us to send events back and forth between the frontend apps to the backend business logic modules using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSocket API</a> and <a href="https://github.com/yysun/apprun">AppRun</a> without REST API.</p>
+<blockquote>
+<p>The WebSocket API is a duplex communication channel. It works well with an event-driven framework, such as AppRun.</p>
+</blockquote>
+<h2 id="the-architecture">The Architecture<a class="headerlink" href="#the-architecture" title="Permanent link">&para;</a></h2>
+<p>The new architecture uses the WebSocket API and AppRun event system.</p>
+<p>AppRun has two important functions: <em>app.run</em> and <em>app.on</em>. <em>app.run</em> fires events. <em>app.on</em> handles events. E.g.:</p>
+<p>Module A handles the <em>print</em> event:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span> <span class="nx">e</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span>
+</code></pre></div>
+Module B fires the <em>print</em> event:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span> <span class="p">{});</span>
+</code></pre></div>
+<p>Module B can invoke the function in Module A without knowing Module A. It works when Module A and Module B are both frontend modules. Can the business logic modules behind the webserver also subscribe to the frontend events?</p>
+<p>Yes, that's the exact idea of the new architecture.</p>
+<p><img alt="AppRun Architecture" src="https://github.com/yysun/apprun-websockets-sqlite/raw/master/architecture-new.png" /></p>
+<p>Let's see how it works.</p>
+<h2 id="an-example-application">An Example Application<a class="headerlink" href="#an-example-application" title="Permanent link">&para;</a></h2>
+<p>We will create a database-driven todo application to demonstrate the new architecture. The project has the following files:</p>
+<p><img alt="Project Files" src="https://dev-to-uploads.s3.amazonaws.com/i/ydkewsv89cs1gkxuufde.PNG" /></p>
+<ul>
+<li>The database:</li>
+<li><em>db/todo.db</em> is a SQLite database</li>
+<li>The public folder has the frontend code:</li>
+<li><em>index.html</em></li>
+<li><em>dist/app.js</em></li>
+<li>The server folder has the backend code:</li>
+<li><em>db.js</em>: the business logic</li>
+<li><em>server.js</em>: the web server using the <em>express</em> and _websocket libraries</li>
+<li>The src folder has the frontend code:</li>
+<li><em>todo.tsx</em>: the AppRun component for managing the todo list</li>
+<li><em>main.tsx</em>: the main program</li>
+</ul>
+<h3 id="send-events-to-server-through-websocket">Send Events to Server Through WebSocket<a class="headerlink" href="#send-events-to-server-through-websocket" title="Permanent link">&para;</a></h3>
+<p>First, we create a WebSocket in the frontend app (<em>main.tsx</em>). Then, We define a special AppRun global event called <em>//ws:</em>, which sends the events to the server.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">state</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">msg</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">state</span> <span class="p">};</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="receiving-events-from-frontend">Receiving Events from Frontend<a class="headerlink" href="#receiving-events-from-frontend" title="Permanent link">&para;</a></h3>
+<p>We create the WebSockets on the webserver side (<em>index.js</em>). We listen to the WebSockets messages and convert them to AppRun events. AppRun runs on the webserver. Just like Module A and Module B example above, the AppRun events will be handled in the business logic module (<em>db.js</em>).</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">apprun</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./db&#39;</span><span class="p">);</span>
+
+<span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">createServer</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">webSocket</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ws&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;../public&#39;</span><span class="p">)));</span>
+
+<span class="kr">const</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">wss</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">webSocket</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span> <span class="nx">server</span> <span class="p">});</span>
+
+<span class="nx">wss</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kr">const</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;==&gt;&#39;</span><span class="p">,</span> <span class="nx">json</span><span class="p">);</span>
+      <span class="nx">apprun</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">event</span><span class="p">,</span> <span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Notice the webserver also adds the WebSocket reference, <em>ws</em> as the event parameter for the business logic module.</p>
+<h3 id="handle-events-in-business-logic-module">Handle Events in Business Logic Module<a class="headerlink" href="#handle-events-in-business-logic-module" title="Permanent link">&para;</a></h3>
+<p>We handle AppRun events in the business logic module (<em>db.js</em>) to complete the CRUD operations against the database.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">sqlite3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;sqlite3&#39;</span><span class="p">).</span><span class="nx">verbose</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">dbFile</span> <span class="o">=</span> <span class="s2">&quot;db/todo.db&quot;</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-all-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">sql</span> <span class="o">=</span> <span class="s1">&#39;select * from todo&#39;</span><span class="p">;</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">sql</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">rows</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">json</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="nx">rows</span> <span class="o">||</span> <span class="p">[];</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">json</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">ws</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Once completed the database operations, we use the WebSocket reference, <em>ws</em>, to send events back.</p>
+<h3 id="receiving-events-from-backend">Receiving Events from Backend<a class="headerlink" href="#receiving-events-from-backend" title="Permanent link">&para;</a></h3>
+<p>Receiving events from the backend in the frontend app (<em>main.tsx</em>) is straightforward.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="p">{</span><span class="nx">event</span><span class="p">,</span> <span class="nx">state</span><span class="p">}</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">state</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can see now we have 9 lines of client-side code in <em>main.tsx</em> and 11 lines of server-side code in <em>index.js</em> for transferring AppRun events between frontend and backend through WebSockets.</p>
+<p>We also have a business logic module that operates the database using AppRun events.</p>
+<p>They are ready to serve the frontend application.</p>
+<h3 id="the-frontend-application">The Frontend Application<a class="headerlink" href="#the-frontend-application" title="Permanent link">&para;</a></h3>
+<p>The frontend Todo application is a typical AppRun application that has the Elm inspired architecture (<em>todo.tsx</em>). Listed below is the simplified code except.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">filter</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">todos</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span> <span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;new_todo&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">,</span>
+    <span class="nx">done</span><span class="o">:</span> <span class="mf">0</span>
+  <span class="p">})</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">toggle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span> <span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="p">...</span> <span class="p">})</span> <span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">remove</span> <span class="o">=</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span> <span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">clear</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span> <span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">)</span> <span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">search</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">filter</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="p">...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">filter</span> <span class="p">});</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
+
+<span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;@get-all-todo&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todos</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="p">...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todos</span> <span class="p">}),</span>
+
+  <span class="s1">&#39;@create-todo&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="p">...</span> <span class="p">}),</span>
+
+  <span class="s1">&#39;@update-todo&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="p">...</span> <span class="p">},</span>
+
+  <span class="s1">&#39;@delete-todo&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="p">...</span> <span class="p">},</span>
+
+  <span class="s1">&#39;@delete-all-todo&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="p">...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todos</span><span class="o">:</span> <span class="p">[]</span> <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Component</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
+</code></pre></div>
+<p>You can see we have <em>state</em>, <em>view</em>, and <em>update</em> to form an AppRun component.</p>
+<p>The local functions handle local events, such as <em>add</em>, <em>toggle</em>, <em>remove</em>, <em>clear</em>, and <em>search</em>. These functions fire the global event <em>//ws:</em> to the WebSocket.</p>
+<p>The <em>update</em> object contains the event handlers for the events fired from the backend.</p>
+<p>That's all the implementation plan. For details, please take a look at the live demo and the source code if you like.</p>
+<h3 id="run-the-demo">Run the Demo<a class="headerlink" href="#run-the-demo" title="Permanent link">&para;</a></h3>
+<p>Live Demo:</p>
+<p><a href="https://glitch.com/~apprun-websockets-sqlite">https://glitch.com/~apprun-websockets-sqlite</a></p>
+<p>Source Code:</p>
+<p><a href="https://github.com/yysun/apprun-websockets-sqlite">https://github.com/yysun/apprun-websockets-sqlite</a></p>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>The todo application has demonstrated the architecture of using events through WebSockets. The web server has no REST API endpoints. The frontend has only event handlings and has no REST API calls.</p>
+<p>The architecture is useful for database-driven applications, especially business applications.</p>
+<p>Furthermore, AppRun events are not limited to frontend and WebSockets.  We can use AppRun events with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API">Web Workers API</a> explained in the <a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">AppRun Book</a>. We can also use AppRun in the <a href="https://github.com/apprunjs/apprun-electron-forge">Electron Apps</a>, Firebase, Cloud Pub-Sub, and more ...</p>
+<p>Feel the power of event pub-sub pattern and learn more about building applications with AppRun.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../firebase-app/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Serverless App Using Firebase
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../rust-app/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Webassembly app with Rust
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/codemirror.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/javascript/javascript.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/xml/xml.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
+      
+        <script src="../../assets/apprun-play.js"></script>
+      
+    
+  </body>
+</html>

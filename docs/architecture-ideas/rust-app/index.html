@@ -1,0 +1,1229 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This post describes how to create a WebAssembly package using Rust and use it in the applications">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+    
+    
+      
+        <title>Rust WebAssembly and AppRun - AppRun Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/vendor/codemirror/codemirror.css">
+    
+      <link rel="stylesheet" href="../../assets/style.css">
+    
+      <link rel="stylesheet" href="../..">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-123786786-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AppRun Docs" class="md-header__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AppRun Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Rust WebAssembly and AppRun
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AppRun Docs" class="md-nav__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    AppRun Docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Concepts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Concepts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      <label class="md-nav__link" for="__nav_1_1">
+        Architecture
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Architecture" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../state-management/" class="md-nav__link">
+        State Management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../event-pubsub/" class="md-nav__link">
+        Event Pubsub
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../component/" class="md-nav__link">
+        Component
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reactivity/" class="md-nav__link">
+        Reactivity
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      <label class="md-nav__link" for="__nav_1_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dapr/" class="md-nav__link">
+        Microservice wirh Dapr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firebase-app/" class="md-nav__link">
+        Serverless App Using Firebase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../db-websocket/" class="md-nav__link">
+        Database and Websocket
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Webassembly app with Rust
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Webassembly app with Rust
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-rust" class="md-nav__link">
+    Install Rust
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-wasm-pack" class="md-nav__link">
+    Install wasm-pack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-apprun-project" class="md-nav__link">
+    Create AppRun Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-webassembly-project" class="md-nav__link">
+    Create WebAssembly Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-webpack" class="md-nav__link">
+    Use WebPack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webassembly-and-apprun" class="md-nav__link">
+    WebAssembly and AppRun
+  </a>
+  
+    <nav class="md-nav" aria-label="WebAssembly and AppRun">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#call-webassembly" class="md-nav__link">
+    Call WebAssembly
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#call-the-apprun" class="md-nav__link">
+    Call the AppRun
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#souce-code" class="md-nav__link">
+    Souce Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../state-machine/" class="md-nav__link">
+        State Machine
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Quick Start
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Single Page Apps
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Single Page Apps" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Single Page Apps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spa/" class="md-nav__link">
+        Creating Project
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        View Pattern
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="View Pattern" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          View Pattern
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../view-patterns/" class="md-nav__link">
+        JSX
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../directive/" class="md-nav__link">
+        Directive
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3rd-party-libs/" class="md-nav__link">
+        3rd Party Intergration
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli-in-console/" class="md-nav__link">
+        CLI in Console
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev-server/" class="md-nav__link">
+        Dev Server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ssr/" class="md-nav__link">
+        Server Side Rendering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strong-typing/" class="md-nav__link">
+        Strong Typing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../unit-testing/" class="md-nav__link">
+        Unit Testing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/" class="md-nav__link">
+        Resources
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-rust" class="md-nav__link">
+    Install Rust
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-wasm-pack" class="md-nav__link">
+    Install wasm-pack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-apprun-project" class="md-nav__link">
+    Create AppRun Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-webassembly-project" class="md-nav__link">
+    Create WebAssembly Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-webpack" class="md-nav__link">
+    Use WebPack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webassembly-and-apprun" class="md-nav__link">
+    WebAssembly and AppRun
+  </a>
+  
+    <nav class="md-nav" aria-label="WebAssembly and AppRun">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#call-webassembly" class="md-nav__link">
+    Call WebAssembly
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#call-the-apprun" class="md-nav__link">
+    Call the AppRun
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#souce-code" class="md-nav__link">
+    Souce Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/architecture-ideas/rust-app.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Webassembly app with Rust</h1>
+                
+                <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p><a href="https://webassembly.org/">WebAssembly</a> has many different definitions on the Internet. I like the one from <a href="https://developer.mozilla.org/en-US/docs/WebAssembly">MDN</a> the most, which says WebAssembly is a new binary assembly-like language that can run in the modern web browsers at near-native speed. There are <a href="https://github.com/appcypher/awesome-wasm-langs">many tools</a> to compile code written in C/C++, Rust, Go, C#, etc. to be WebAssembly. It tells us that we can create high-performance code, but not using JavaScript/TypeScript</p>
+<p>I decided to play with Rust. <a href="https://www.rust-lang.org/what/wasm">Rust</a> is another hot buzzword. It is a relatively new programming language focused on performance and safety, especially safe concurrency. -- Wikipedia</p>
+<p>This post describes how to create a WebAssembly package using Rust and use it in the <a href="https://apprun.js.org">AppRun</a> applications from a JavaScript/TypeScript developer point of view. You will see the minimum steps of adding and using WebAssembly into your JavaScript/TypeScript project.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p>First, you will need the Rust toolchain, including rustup, rustc, and cargo for compiling Rust code, and <a href="https://rustwasm.github.io/wasm-pack/">wasm-pack</a> for building, testing and publishing Rust-generated WebAssembly.</p>
+<h3 id="install-rust">Install Rust<a class="headerlink" href="#install-rust" title="Permanent link">&para;</a></h3>
+<p>To install Rust on Mac/Linux, run the following command in the terminal.
+<div class="highlight"><pre><span></span><code>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre></div>
+On Windows, I enabled the <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> and used Rust in the Linux terminal.</p>
+<h3 id="install-wasm-pack">Install wasm-pack<a class="headerlink" href="#install-wasm-pack" title="Permanent link">&para;</a></h3>
+<p>Once installed Rust, run the following command in the terminal.
+<div class="highlight"><pre><span></span><code>cargo install wasm-pack
+</code></pre></div>
+Believe it or not, that's all you need to create WebAssembly. Let's go back to the JavaScript/TypeScript world.</p>
+<ul>
+<li>If you start from scratch, follow the next section to create an AppRun project.</li>
+<li>If you already have an existing project, jump to the section of Create WebAssembly Project.</li>
+</ul>
+<h3 id="create-apprun-project">Create AppRun Project<a class="headerlink" href="#create-apprun-project" title="Permanent link">&para;</a></h3>
+<p>Run the commands to create an AppRun project:</p>
+<div class="highlight"><pre><span></span><code>mkdir your-app-name
+cd your-app-name
+npx apprun -i
+</code></pre></div>
+<p>Wait a few minutes for installing the npm packages, and then run the npm command:</p>
+<div class="highlight"><pre><span></span><code>npm start
+</code></pre></div>
+<p>You will see a hello world application running.</p>
+<p><img alt="AppRun Hello World" src="https://dev-to-uploads.s3.amazonaws.com/i/0v0lkfuto7d4lxh1639i.png" /></p>
+<figcaption>AppRun Hello World</figcaption>
+
+<p>Next, we will add WebAssembly to this project.</p>
+<h3 id="create-webassembly-project">Create WebAssembly Project<a class="headerlink" href="#create-webassembly-project" title="Permanent link">&para;</a></h3>
+<p>Let's create a Rust project by running the following command:</p>
+<div class="highlight"><pre><span></span><code>cargo new wasm --lib
+</code></pre></div>
+<p>The command creates a folder called <em>wasm</em> and two files under the folder <em>your-app-name/wasm</em>: <em>Cargo.toml</em> and <em>src/lib.rs</em>.</p>
+<p>It is a regular Rust project, not a WebAssembly yet. You will need to add <em>wasm-bindgen</em> as the dependency to make it target WebAssembly. Open <em>Cargo.toml</em> and add the following sections.</p>
+<div class="highlight"><pre><span></span><code>[lib]
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+wasm-bindgen = &quot;0.2.60&quot;
+js-sys = &quot;0.3.37&quot;
+</code></pre></div>
+<blockquote>
+<p><a href="https://rustwasm.github.io/">wasm-bindgen</a> is a Rust library that facilitates high-level interactions between wasm modules and JavaScript. <a href="https://crates.io/crates/js-sys">js-sys</a> is the waw bindings to JS global APIs for projects using wasm-bindgen.</p>
+</blockquote>
+<p>Now, you can use wasm-pack to build a WebAssembly.</p>
+<div class="highlight"><pre><span></span><code>cd wasm
+wasm-pack build
+</code></pre></div>
+<h3 id="use-webpack">Use WebPack<a class="headerlink" href="#use-webpack" title="Permanent link">&para;</a></h3>
+<p>Since the AppRun project is a WebPack project, we can use the <a href="https://github.com/wasm-tool/wasm-pack-plugin">wasm-pack-plugin</a> to unify the build process that creates the WebAssembly and JavaScript code at the same time. Go ahead to add the package:</p>
+<div class="highlight"><pre><span></span><code>npm i @wasm-tool/wasm-pack-plugin -D
+</code></pre></div>
+<p>And add the wasm-pack-plugin into the <em>webpack.config.js</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">WasmPackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;@wasm-tool/wasm-pack-plugin&quot;</span><span class="p">);</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">WasmPackPlugin</span><span class="p">({</span>
+      <span class="nx">crateDirectory</span><span class="o">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="p">}),</span>
+  <span class="p">]</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Also, because of the wasm-pack-plugin generates the <em>dynamic import</em> module, you need to modify <em>tsconfig.json</em> file to set the module to be <em>esnext</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;compilerOptions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="err">...</span>
+    <span class="nt">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;esnext&quot;</span><span class="p">,</span>
+    <span class="err">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Finally, the npm scripts: <em>npm start</em> and <em>npm run build</em> will build the TypeScript code as well the Rust code.</p>
+<p>Let's write some Rust code.</p>
+<h2 id="webassembly-and-apprun">WebAssembly and AppRun<a class="headerlink" href="#webassembly-and-apprun" title="Permanent link">&para;</a></h2>
+<p>We will demonstrate two interactions between the WebAssembly and the AppRun application.</p>
+<ul>
+<li>Call the WebAssembly from the AppRun application</li>
+<li>Call the AppRun application from the WebAssembly</li>
+</ul>
+<h3 id="call-webassembly">Call WebAssembly<a class="headerlink" href="#call-webassembly" title="Permanent link">&para;</a></h3>
+<p>First, we create a Rust function in the <em>wasm/src/lib.rs</em> file.</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">wasm_bindgen</span>::<span class="n">prelude</span>::<span class="o">*</span><span class="p">;</span><span class="w"></span>
+
+<span class="cp">#[wasm_bindgen]</span><span class="w"></span>
+<span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span>: <span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="n">b</span>: <span class="kt">i32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">i32</span> <span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>This function adds two numbers. We can make a counter application from it. Here is the counter application in AppRun.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">wasm</span><span class="p">;</span>
+<span class="kr">import</span><span class="p">(</span><span class="s1">&#39;../wasm/pkg&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">module</span> <span class="p">=&gt;</span> <span class="nx">wasm</span> <span class="o">=</span> <span class="nx">module</span><span class="p">);</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Hello world - AppRun !&#39;</span><span class="p">,</span>
+  <span class="nx">count</span><span class="o">:</span> <span class="mf">0</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span>
+  <span class="p">...</span><span class="nx">state</span><span class="p">,</span>
+  <span class="nx">count</span><span class="o">:</span> <span class="nx">wasm</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">count</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
+  <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">title</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+  <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+  <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{[</span><span class="nx">add</span><span class="p">,</span> <span class="o">-</span><span class="mf">1</span><span class="p">]}</span><span class="o">&gt;-</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+  <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{[</span><span class="nx">add</span><span class="p">,</span> <span class="o">+</span><span class="mf">1</span><span class="p">]}</span><span class="o">&gt;+</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+<span class="o">&lt;</span><span class="err">/&gt;;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+</code></pre></div>
+<p>You can see from the code above:</p>
+<ul>
+<li>Wasm-pack has created a JavaScript module that we can import dynamically.</li>
+<li>We can call the WebAssembly function just like a regular JavaScript function from a module.</li>
+</ul>
+<p>Running the application, we have a counter that uses the WebAssembly function.</p>
+<p><img alt="Counter with WASM" src="https://dev-to-uploads.s3.amazonaws.com/i/dmy2qkqqtlyxed4qovlf.png" /></p>
+<figcaption>Counter with WASM</figcaption>
+
+<p>Next, let's see how does the WebAssembly function call AppRun functions.</p>
+<h3 id="call-the-apprun">Call the AppRun<a class="headerlink" href="#call-the-apprun" title="Permanent link">&para;</a></h3>
+<p>Open <em>wasm/src/lib.rs</em> file and add the following functions.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#[wasm_bindgen]</span><span class="w"></span>
+<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="cp">#[wasm_bindgen(js_namespace = app)]</span><span class="w"></span>
+<span class="w">  </span><span class="k">fn</span> <span class="nf">run</span><span class="p">(</span><span class="n">event</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">p</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="cp">#[wasm_bindgen(start)]</span><span class="w"></span>
+<span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">run</span><span class="p">(</span><span class="s">&quot;@hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello world from rust&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<ul>
+<li>The first function named <em>run</em> binds to the AppRun <em>app.run</em> function.</li>
+<li>The second function named <em>start</em> runs automatically when the WebAssembly is loaded.</li>
+<li>The <em>start</em> function calls the <em>run</em> function to send a '@hello' event to AppRun.</li>
+</ul>
+<p>Back to AppRun code, we will handle the '@hello' event.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">wasm</span><span class="p">;</span>
+<span class="kr">import</span><span class="p">(</span><span class="s1">&#39;../wasm/pkg&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">module</span> <span class="p">=&gt;</span> <span class="nx">wasm</span> <span class="o">=</span> <span class="nx">module</span><span class="p">);</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{...}</span>
+
+<span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({...});</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">count</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span><span class="p">...</span><span class="o">&lt;</span><span class="err">/&gt;;</span>
+
+<span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;@hello&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">title</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">title</span><span class="p">})</span>
+<span class="p">}</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
+</code></pre></div>
+<p>Now, when the application starts, it displays the messages sent from the WebAssembly.</p>
+<p><img alt="Message from WASM" src="https://dev-to-uploads.s3.amazonaws.com/i/atljaqot7q08qcu9rk9m.png" /></p>
+<figcaption>Message from wasm</figcaption>
+
+<p>We have successfully made the two-way interactions between the WebAssembly and the AppRun application.</p>
+<h2 id="souce-code">Souce Code<a class="headerlink" href="#souce-code" title="Permanent link">&para;</a></h2>
+<p>You can run the live demo: <a href="https://yysun.github.io/apprun-rust">https://yysun.github.io/apprun-rust</a>.</p>
+<p>Or visit the source.</p>
+<p>{% github yysun/apprun-rust %}</p>
+<p>You also can use this project as an AppRun application template. Run the command to create your application.</p>
+<div class="highlight"><pre><span></span><code>npx degit yysun/apprun-rust my-app
+</code></pre></div>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>This post should give you a quick start to use Rust/WebAssembly in the AppRun applications. The demo project shows the two technologies interact with each other very well. You can use the demo project as a template.</p>
+<p>We have now opened the door to a new world. There are much more potentials to explorer.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../db-websocket/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Database and Websocket
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../state-machine/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              State Machine
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/codemirror.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/javascript/javascript.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/xml/xml.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
+      
+        <script src="../../assets/apprun-play.js"></script>
+      
+    
+  </body>
+</html>

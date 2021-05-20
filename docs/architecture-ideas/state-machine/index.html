@@ -1,0 +1,1251 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This post describes how to create a state machine in AppRun applications to help event handling using a calculator as an example.">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+    
+    
+      
+        <title>Use State Machine in AppRun Applications - AppRun Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/vendor/codemirror/codemirror.css">
+    
+      <link rel="stylesheet" href="../../assets/style.css">
+    
+      <link rel="stylesheet" href="../..">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-123786786-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AppRun Docs" class="md-header__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AppRun Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Use State Machine in AppRun Applications
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AppRun Docs" class="md-nav__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    AppRun Docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Concepts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Concepts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      <label class="md-nav__link" for="__nav_1_1">
+        Architecture
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Architecture" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../state-management/" class="md-nav__link">
+        State Management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../event-pubsub/" class="md-nav__link">
+        Event Pubsub
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../component/" class="md-nav__link">
+        Component
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reactivity/" class="md-nav__link">
+        Reactivity
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      <label class="md-nav__link" for="__nav_1_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dapr/" class="md-nav__link">
+        Microservice wirh Dapr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firebase-app/" class="md-nav__link">
+        Serverless App Using Firebase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../db-websocket/" class="md-nav__link">
+        Database and Websocket
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rust-app/" class="md-nav__link">
+        Webassembly app with Rust
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          State Machine
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        State Machine
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-machine" class="md-nav__link">
+    State machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-a-calculator" class="md-nav__link">
+    Model a Calculator
+  </a>
+  
+    <nav class="md-nav" aria-label="Model a Calculator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-and-event" class="md-nav__link">
+    State and Event
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-machine_1" class="md-nav__link">
+    State Machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-state-machine-to-apprun-application" class="md-nav__link">
+    Add State Machine to AppRun Application
+  </a>
+  
+    <nav class="md-nav" aria-label="Add State Machine to AppRun Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-state-machine-state" class="md-nav__link">
+    Add State Machine State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-ui-events" class="md-nav__link">
+    Convert UI Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-state-machine" class="md-nav__link">
+    Use State Machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Quick Start
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Single Page Apps
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Single Page Apps" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Single Page Apps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spa/" class="md-nav__link">
+        Creating Project
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        View Pattern
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="View Pattern" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          View Pattern
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../view-patterns/" class="md-nav__link">
+        JSX
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../directive/" class="md-nav__link">
+        Directive
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3rd-party-libs/" class="md-nav__link">
+        3rd Party Intergration
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli-in-console/" class="md-nav__link">
+        CLI in Console
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev-server/" class="md-nav__link">
+        Dev Server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ssr/" class="md-nav__link">
+        Server Side Rendering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strong-typing/" class="md-nav__link">
+        Strong Typing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../unit-testing/" class="md-nav__link">
+        Unit Testing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/" class="md-nav__link">
+        Resources
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-machine" class="md-nav__link">
+    State machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-a-calculator" class="md-nav__link">
+    Model a Calculator
+  </a>
+  
+    <nav class="md-nav" aria-label="Model a Calculator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-and-event" class="md-nav__link">
+    State and Event
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-machine_1" class="md-nav__link">
+    State Machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-state-machine-to-apprun-application" class="md-nav__link">
+    Add State Machine to AppRun Application
+  </a>
+  
+    <nav class="md-nav" aria-label="Add State Machine to AppRun Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-state-machine-state" class="md-nav__link">
+    Add State Machine State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-ui-events" class="md-nav__link">
+    Convert UI Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-state-machine" class="md-nav__link">
+    Use State Machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/architecture-ideas/state-machine.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>State Machine</h1>
+                
+                <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<h3 id="state-machine">State machine<a class="headerlink" href="#state-machine" title="Permanent link">&para;</a></h3>
+<p>The state machine is the tool that developers must have in their toolbox.</p>
+<blockquote>
+<p>If you are new to the state machine, check out the reference section below.</p>
+</blockquote>
+<p>How can a state machine help?</p>
+<p>Typically, when building applications, we follow what's known as the event-driven — where an event happens in the application, we update the application state and render the state to the screen.</p>
+<p>Events can happen anytime during user interactions and system interactions while the application can be in any state. Before we start to handle the events, we first have to determine what is the current state and then handle the event accordingly. Sometimes it can be challenging.</p>
+<p>The state machine provides a state-event-state mapping. Before we start to handle the events, we know the current state and the future state, so that we only need to focus on the limited state-event scope.</p>
+<blockquote>
+<p>The specific state machine we are going to use is the <a href="https://en.wikipedia.org/wiki/Mealy_machine">Mealy machine</a>. It has an initial state and then transitions to new states based on events and its current state.</p>
+</blockquote>
+<p>We are going to build a calculator application as an example. You will learn from this post:</p>
+<ul>
+<li>Model a state machine declaratively,</li>
+<li>Make the state machine type-safe</li>
+<li>Add the state machine to the AppRun application</li>
+</ul>
+<h2 id="model-a-calculator">Model a Calculator<a class="headerlink" href="#model-a-calculator" title="Permanent link">&para;</a></h2>
+<h3 id="state-and-event">State and Event<a class="headerlink" href="#state-and-event" title="Permanent link">&para;</a></h3>
+<p>The calculator application looks like:</p>
+<p><img alt="Calculator Application" src="https://dev-to-uploads.s3.amazonaws.com/i/hfscu8m5zix5dy91b3hw.png" /></p>
+<p>It has a grid of buttons that users can click at any time. It also displays:</p>
+<ul>
+<li>The numbers that the user types, or the calculation result.</li>
+<li>The calculation formula, which includes the first argument, the operator and the second argument, and the calculation result.</li>
+</ul>
+<p>The initial state of the calculator looks like:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">arg1</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">arg2</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>We handle the buttons' click events in the event handler, <em>button___click</em>. Because of the HTML event bubbling, we just need one event handler for all buttons</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span>
+  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;buttons&quot;</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">button_click</span><span class="p">}</span><span class="o">&gt;</span>
+  <span class="p">......</span>
+  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+
+<span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That's all we need to do to create an AppRun application, an <em>initial state</em>, a <em>view</em>, and <em>event handlers</em>.</p>
+<p>Next, we will add a state machine.</p>
+<h3 id="state-machine_1">State Machine<a class="headerlink" href="#state-machine_1" title="Permanent link">&para;</a></h3>
+<p>We follow and extend the calculator state machine from <a href="https://www.codinglawyer.io/posts/build-javascript-calculator">David's post</a>. The post also provides a <a href="https://www.codinglawyer.io/static/c24440761863d1b3b8bf38e336056726/fa498/sketch-fsm.png">diagram</a> helpful to understand the state machine.</p>
+<p>We first define the <em>states</em> and <em>events</em> of the state machine using TypeScript <a href="https://www.typescriptlang.org/docs/handbook/advanced-types.html#discriminated-unions">Discriminated Unions</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+
+<span class="nx">type</span> <span class="nx">States</span> <span class="o">=</span>
+  <span class="s1">&#39;START&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;FIRST_ARG&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;OP&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;SECOND_ARG&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span> <span class="o">|</span>
+  <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+</code></pre></div>
+<p>We then define the state machine. It is a collection of all the <em>states</em>. Each <em>state</em> has a list of available <em>events</em> and <em>transitions</em> in an array. The <em>transition</em> is the function to update the <em>state</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state_machine</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">START</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">]</span>
+  <span class="p">],</span>
+  <span class="nx">FIRST_ARG</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+  <span class="p">],</span>
+   <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For example, when the <em>current state</em> is START, and the NUM event comes, the <em>new state</em> should be 'FIRST_ARG (waiting for 1st argument)'. The <em>display</em> property of the <em>state</em> should be the user's input.</p>
+<p>Another example, when the <em>current state</em> is FIRST_ARG, and the <em>+/- event</em> comes, the <em>display</em> property should toggle between positive and negative.</p>
+<p>So on and so forth. It is straightforward to create the state machine object according to the diagram.</p>
+<p>Next, we make the state machine type-safe by adding more types.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="nx">type</span> <span class="nx">Transition</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">;</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">Transition</span><span class="p">];</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">[</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">S</span><span class="p">]</span><span class="o">:</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span><span class="p">[];</span>
+<span class="p">};</span>
+</code></pre></div>
+<ul>
+<li>The <em>Tansition</em> is a function to update the application state.</li>
+<li>The <em>EventStateTransition</em> is a TypeScript <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html#tuple">Tuple</a>. It describes which <em>event</em> leads to which new state.</li>
+<li>The <em>StateMachine is an object that uses the _States</em> as the index key.</li>
+</ul>
+<p>Now, the state machine is type-safe. The TypeScript compiler only allows you to use the states and events defined in <em>States</em> and <em>Events</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">States</span><span class="p">,</span> <span class="nx">Events</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">START0</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// Error on START0</span>
+    <span class="p">[</span><span class="s1">&#39;NUM0&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{}],</span> <span class="c1">// Error on NUM0</span>
+    <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT0&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{}]</span> <span class="c1">// Error on FIRST_ARG_FLOAT0</span>
+  <span class="p">],</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Also, the compiler makes sure all <em>States</em> have their relevant entries in the state machine.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">States</span><span class="p">,</span> <span class="nx">Events</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">START</span><span class="o">:</span> <span class="p">[],</span>
+  <span class="nx">FIRST_ARG</span><span class="o">:</span> <span class="p">[],</span>
+  <span class="nx">FIRST_ARG_FLOAT</span><span class="o">:</span> <span class="p">[],</span>
+  <span class="nx">OP</span><span class="o">:</span><span class="p">[],</span> <span class="nx">SECOND_ARG</span><span class="o">:</span><span class="p">[],</span>
+  <span class="nx">SECOND_ARG_FLOAT</span><span class="o">:</span><span class="p">[],</span>
+  <span class="c1">//EQ:[] // Error on missing EQ state, if we commented it out</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Compare to many other different ways of implementing the state machine in JavaScript/TypeScript found online, the state machine in this post has the following advantages:</p>
+<ul>
+<li>Declarative - it tells whats, not how;</li>
+<li>Independent - technology stack agnostic;</li>
+<li>KISS - no worry of preconditions, postconditions, etc...</li>
+</ul>
+<p>You can see the state machine is just a simple data structure. We can easily add it to the AppRun applications. Explained step by step below.</p>
+<h2 id="add-state-machine-to-apprun-application">Add State Machine to AppRun Application<a class="headerlink" href="#add-state-machine-to-apprun-application" title="Permanent link">&para;</a></h2>
+<h3 id="add-state-machine-state">Add State Machine State<a class="headerlink" href="#add-state-machine-state" title="Permanent link">&para;</a></h3>
+<p>We add a new property for tracking the state-machine state, called <em><em>_state</em></em> into the application state.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">_state</span><span class="o">:</span> <span class="s1">&#39;START&#39;</span> <span class="nx">as</span> <span class="nx">States</span><span class="p">,</span>
+  <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">arg1</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">arg2</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">state</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="convert-ui-events">Convert UI Events<a class="headerlink" href="#convert-ui-events" title="Permanent link">&para;</a></h3>
+<p>All button clicks use the <em>button___click</em> event handler. We convert UI events into different state-machine events.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span>: <span class="kt">State</span><span class="p">,</span> <span class="nx">e</span>: <span class="kt">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+
+  <span class="kr">const</span> <span class="nx">getEvent</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">Events</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="s1">&#39;+/-&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;CE&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;CE&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;.&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;DOT&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;=&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+      <span class="k">default</span><span class="o">:</span>
+        <span class="k">return</span> <span class="sr">/\d/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">:</span> <span class="s1">&#39;OP&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="o">?</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">||</span> <span class="nx">e</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">getEvent</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+
+
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="use-state-machine">Use State Machine<a class="headerlink" href="#use-state-machine" title="Permanent link">&para;</a></h3>
+<p>Now that we know the current state-machine state from the <em><em>_state</em></em> property of the application state. We also know which state-machine event we are in. We now can use the <em>state___machine</em> to find the matching <em>transition</em>.</p>
+<p>Finding <em>transitions</em> from the <em>state___machine</em> is straightforward.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">state</span>: <span class="kt">S</span><span class="p">,</span>
+  <span class="nx">event</span>: <span class="kt">E</span>
+<span class="p">)</span><span class="o">:</span> <span class="p">{</span> <span class="nx">next_state?</span>: <span class="kt">S</span><span class="p">,</span> <span class="nx">transition?</span>: <span class="kt">Transition</span> <span class="p">}</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">current_state</span> <span class="o">=</span> <span class="nx">state_machine</span><span class="p">[</span><span class="nx">state</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">current_state</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="sb">`No state: </span><span class="si">${</span><span class="nx">current_state</span><span class="si">}</span><span class="sb"> found in state machine`</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">event_tuple</span> <span class="o">=</span> <span class="nx">current_state</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">event_tuple</span> <span class="o">?</span> <span class="p">{</span>
+    <span class="nx">next_state</span>: <span class="kt">event_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="nx">transition</span>: <span class="kt">event_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+  <span class="p">}</span> <span class="o">:</span> <span class="p">{}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>If we found the <em>transition</em>, we run the <em>transition</em> function. It updates the destructed application state properties, such as <em>op</em>, <em>arg1</em>, <em>arg2</em>, and <em>display</em> accordingly. We then update the application state to be the <em>next state</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">state</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">getEvent</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">state_machine</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">next_state</span><span class="p">,</span> <span class="nx">transition</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">find_transition</span><span class="p">(</span><span class="nx">state_machine</span><span class="p">,</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="nx">transition</span> <span class="o">&amp;&amp;</span> <span class="nx">transition</span><span class="p">();</span>
+  <span class="nx">_state</span> <span class="o">=</span> <span class="nx">next_state</span> <span class="o">||</span> <span class="nx">_state</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span> <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If no <em>transition</em> found, nothing will happen.</p>
+<p>Finally, we return a new state from the event handler, AppRun will render the screen accordingly.</p>
+<p>Now, the application is wired up with AppRun architecture. We have successfully created the calculator application.</p>
+<p>You can try the live app <a href="https://apprun.js.org/#calculator">here</a> and find the source code <a href="https://github.com/yysun/apprun/blob/master/demo/components/calculator.tsx">here</a>.</p>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>We have created a declarative and type-safe state machine. The state machine data structure is technology agnostic. You can try to use it in React or other frameworks you like. It can naturally fit into AppRun applications.</p>
+<p>AppRun is event-driven. Often I feel it is challenging to make events right. Sometimes we define too many events. Sometimes the events come out of order. By using the state machine, I can handle the events within limited state scopes. I have started to think of using more state machines to control the events.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<p>There are many references online about the state machine. I got most of my inspiration from the following posts. I recommend you read the concept explanation of the posts and pay less attention to the implementations, because using AppRun, you can do better.</p>
+<ul>
+<li>
+<p>[1] Krasimir Tsonev explains <a href="https://en.wikipedia.org/wiki/Mealy_machine">Mealy</a> and <a href="https://en.wikipedia.org/wiki/Moore_machine">Moore</a> in the post: <a href="https://www.smashingmagazine.com/2018/01/rise-state-machines/">The Rise Of The State Machines</a></p>
+</li>
+<li>
+<p>[2] Jon Bellah describes the paradigm shift from event-driven to the state machine in this post: <a href="https://jonbellah.com/articles/intro-state-machines">A Complete Introduction to State Machines in JavaScript</a></p>
+</li>
+<li>
+<p>[3] Erik Mogensen explains state machine and introduced the statechart in this post: <a href="https://statecharts.github.io/what-is-a-state-machine.html">What is a state machine?</a></p>
+</li>
+</ul>
+<p>Have fun coding!</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../rust-app/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Webassembly app with Rust
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../../installation/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Installation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/codemirror.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/javascript/javascript.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/xml/xml.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
+      
+        <script src="../../assets/apprun-play.js"></script>
+      
+    
+  </body>
+</html>

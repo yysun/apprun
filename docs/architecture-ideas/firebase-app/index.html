@@ -1,0 +1,1148 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This post introduces a serverless application architecture using Firebase and AppRun.">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+    
+    
+      
+        <title>Serverless App Using Firebase and AppRun - AppRun Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/vendor/codemirror/codemirror.css">
+    
+      <link rel="stylesheet" href="../../assets/style.css">
+    
+      <link rel="stylesheet" href="../..">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-123786786-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AppRun Docs" class="md-header__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AppRun Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Serverless App Using Firebase and AppRun
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AppRun Docs" class="md-nav__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    AppRun Docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/apprunjs/apprun-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Concepts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Concepts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      <label class="md-nav__link" for="__nav_1_1">
+        Architecture
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Architecture" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../state-management/" class="md-nav__link">
+        State Management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../event-pubsub/" class="md-nav__link">
+        Event Pubsub
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../component/" class="md-nav__link">
+        Component
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reactivity/" class="md-nav__link">
+        Reactivity
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      <label class="md-nav__link" for="__nav_1_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dapr/" class="md-nav__link">
+        Microservice wirh Dapr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Serverless App Using Firebase
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Serverless App Using Firebase
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture" class="md-nav__link">
+    The Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="The Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-pub-sub-using-firestore" class="md-nav__link">
+    Event Pub-Sub Using FireStore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-logic-process-using-cloud-functions" class="md-nav__link">
+    Business Logic Process Using Cloud Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-data-sync-using-firestore" class="md-nav__link">
+    Real-Time Data Sync Using FireStore.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#save-events-to-firestore" class="md-nav__link">
+    Save Events to FireStore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-events-in-functions" class="md-nav__link">
+    Handle Events in Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-data-in-frontend" class="md-nav__link">
+    Real-Time Data in Frontend
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-demo-and-source-code" class="md-nav__link">
+    Live Demo and Source Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../db-websocket/" class="md-nav__link">
+        Database and Websocket
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rust-app/" class="md-nav__link">
+        Webassembly app with Rust
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../state-machine/" class="md-nav__link">
+        State Machine
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Quick Start
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Single Page Apps
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Single Page Apps" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Single Page Apps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spa/" class="md-nav__link">
+        Creating Project
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        View Pattern
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="View Pattern" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          View Pattern
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../view-patterns/" class="md-nav__link">
+        JSX
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../directive/" class="md-nav__link">
+        Directive
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3rd-party-libs/" class="md-nav__link">
+        3rd Party Intergration
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli-in-console/" class="md-nav__link">
+        CLI in Console
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev-server/" class="md-nav__link">
+        Dev Server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ssr/" class="md-nav__link">
+        Server Side Rendering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strong-typing/" class="md-nav__link">
+        Strong Typing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../unit-testing/" class="md-nav__link">
+        Unit Testing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/" class="md-nav__link">
+        Resources
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture" class="md-nav__link">
+    The Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="The Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-pub-sub-using-firestore" class="md-nav__link">
+    Event Pub-Sub Using FireStore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-logic-process-using-cloud-functions" class="md-nav__link">
+    Business Logic Process Using Cloud Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-data-sync-using-firestore" class="md-nav__link">
+    Real-Time Data Sync Using FireStore.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#save-events-to-firestore" class="md-nav__link">
+    Save Events to FireStore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-events-in-functions" class="md-nav__link">
+    Handle Events in Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-data-in-frontend" class="md-nav__link">
+    Real-Time Data in Frontend
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-demo-and-source-code" class="md-nav__link">
+    Live Demo and Source Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/architecture-ideas/firebase-app.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Serverless App Using Firebase</h1>
+                
+                <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>I have been writing about the application architecture without REST, which includes the <a href="https://dev.to/yysun/create-a-phoenix-liveview-like-app-in-js-with-apprun-dc8">underlying architecture using WebSockets</a> and the <a href="https://dev.to/yysun/database-driven-applications-using-websockets-2b9o">database-driven architecture</a>. In this post, I will continue the journey to make a serverless application architecture using Firebase and <a href="https://apprun.js.org">AppRun</a>.</p>
+<p>You will see how easy it is to use AppRun's event system with the Firebase stack to develop applications that have the full business logic process capabilities, such as authentication, authorization, request logging, and real-time database, and without REST layer.</p>
+<p>Finally, we can make the application a serverless deployment to Firebase.</p>
+<h2 id="the-architecture">The Architecture<a class="headerlink" href="#the-architecture" title="Permanent link">&para;</a></h2>
+<p>The example application uses the following technologies:</p>
+<ul>
+<li>Firebase Cloud Firestore as the backend database</li>
+<li>Firebase Cloud Functions for business logic process</li>
+<li>Firebase Hosting to host the frontend</li>
+<li>Firebase Authentication</li>
+</ul>
+<blockquote>
+<p><a href="firebase.google.com">Firebase</a> is Google's mobile platform that helps you quickly develop high-quality apps and grow your business.</p>
+</blockquote>
+<p>I will focus on the architecture instead of step by step instructions. If you are not familiar with the Firebase suite of products, please visit <a href="https://firebase.google.com/docs">the docs</a> and search for the tutorials.</p>
+<p>The architecture can be summarized in the diagram below.</p>
+<p><img alt="Architecture" src="https://github.com/yysun/apprun-firebase/raw/master/architecture.png" /></p>
+<figcaption>Figure 1. Architecture Diagram</figcaption>
+
+<p>Let's get into the details.</p>
+<h3 id="event-pub-sub-using-firestore">Event Pub-Sub Using FireStore<a class="headerlink" href="#event-pub-sub-using-firestore" title="Permanent link">&para;</a></h3>
+<p>The center of the architecture is the Firebase Cloud Firestore. Firestore is a real-time database that keeps your data in-sync across client apps. When one client saves the data, FireStore pushes the data to all other clients.</p>
+<p>In the AppRun applications, we use <em>app.on</em> to publish events. If we save the events to FireStore, the events can be handled by other applications. It is the step (1) shown in Figure 1 above.</p>
+<p>Firestore also triggers Cloud Functions.</p>
+<h3 id="business-logic-process-using-cloud-functions">Business Logic Process Using Cloud Functions<a class="headerlink" href="#business-logic-process-using-cloud-functions" title="Permanent link">&para;</a></h3>
+<p>Cloud Functions is Google Cloud's serverless compute platform. It runs on the server, not in the client apps. Therefore it is the best technology for business logic processing, authentication, and authorization. Functions are serverless. Functions run on Google's server, so we don't need to provision, manage, or upgrade the server.</p>
+<p>The Functions are event-driven (the magic word, I love). Firestore can trigger Functions upon data updates. When we save the events into FireStore, FireStore triggers the Function to handle the events automatically. It is the step (2) in Figure 1.</p>
+<h3 id="real-time-data-sync-using-firestore">Real-Time Data Sync Using FireStore.<a class="headerlink" href="#real-time-data-sync-using-firestore" title="Permanent link">&para;</a></h3>
+<p>During the Functions event handling, it writes the updated data back to FireStore (step (3) in Figure 1). FireStore pushes the update to the frontend applications (step (4) in Figure 1). The frontend application listens to FireStore changes and publishes AppRun events for the frontend logic process to run.</p>
+<p>Now, the event handling cycle is completed. Let's see it in action with an example.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<p>The example is a ToDo application.</p>
+<p><img alt="Todo App" src="https://dev-to-uploads.s3.amazonaws.com/i/siavm31erdel8ea0asgj.png" /></p>
+<figcaption>Figure 2. ToDo Application</figcaption>
+
+<h3 id="save-events-to-firestore">Save Events to FireStore<a class="headerlink" href="#save-events-to-firestore" title="Permanent link">&para;</a></h3>
+<p>As usual, in the AppRun applications, we convert the DOM events into AppRun events. E.g., When users click the <em>add</em> button, we publish the //: event.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// in JSX</span>
+<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{[</span><span class="nx">add</span><span class="p">]}</span><span class="o">&gt;</span><span class="nx">Add</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+
+<span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;new_todo&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">,</span>
+    <span class="nx">done</span><span class="o">:</span> <span class="mf">0</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The //: event handler saves the event into FireStore.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">firebase</span><span class="p">.</span><span class="nx">firestore</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="sb">`events`</span><span class="p">).</span><span class="nx">add</span><span class="p">({</span> <span class="nx">uid</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">data</span> <span class="p">})</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>There is a top-level collection, called <em>events</em> in FireStore. We save the user id (obtained using Firebase anonymous authentication), event name (@create-todo), and event parameters (the new to-do item).</p>
+<p>FireStore triggers our Function, which is monitoring the <em>events</em> collection.</p>
+<h3 id="handle-events-in-functions">Handle Events in Functions<a class="headerlink" href="#handle-events-in-functions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">exports</span><span class="p">.</span><span class="nx">updateTodo</span> <span class="o">=</span> <span class="nx">functions</span><span class="p">.</span><span class="nx">firestore</span><span class="p">.</span><span class="nb">document</span><span class="p">(</span><span class="s1">&#39;events/{Id}&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">onWrite</span><span class="p">((</span><span class="nx">change</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">dat</span> <span class="o">=</span> <span class="nx">change</span><span class="p">.</span><span class="nx">after</span><span class="p">.</span><span class="nx">data</span><span class="p">()</span> <span class="nx">as</span> <span class="nx">any</span><span class="p">;</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">uid</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">data</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">dat</span><span class="p">;</span>
+    <span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">admin</span><span class="p">.</span><span class="nx">firestore</span><span class="p">();</span>
+    <span class="kr">const</span> <span class="nx">todos</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span> <span class="o">+</span> <span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;/todos&#39;</span><span class="p">);</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="s1">&#39;@create-todo&#39;</span><span class="o">:</span> <span class="k">return</span> <span class="nx">todos</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="k">case</span> <span class="s1">&#39;@update-todo&#39;</span><span class="o">:</span> <span class="p">...</span>
+      <span class="k">case</span> <span class="s1">&#39;@delete-todo&#39;</span><span class="o">:</span> <span class="p">...</span>
+      <span class="k">case</span> <span class="s1">&#39;@delete-all-todo&#39;</span><span class="o">:</span> <span class="p">...</span>
+      <span class="k">default</span><span class="o">:</span> <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>The Function destructs the user id, event name, and event parameters and handles it accordingly, e.g., it adds a new Todo item data into FireStore upon the '@create-todo' event. And so on so forth.</p>
+<p>FireStore then pushes the data change to the frontend.</p>
+<h3 id="real-time-data-in-frontend">Real-Time Data in Frontend<a class="headerlink" href="#real-time-data-in-frontend" title="Permanent link">&para;</a></h3>
+<p>In the frontend, we subscribe to the <em>onSnapshot</em> of FireStore and publish the AppRun event, '@show-all'.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">firebase</span><span class="p">.</span><span class="nx">firestore</span><span class="p">();</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="sb">`users/</span><span class="si">${</span><span class="nx">uid</span><span class="si">}</span><span class="sb">/todos`</span><span class="p">).</span><span class="nx">onSnapshot</span><span class="p">(</span><span class="nx">snapshot</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;@show-all&#39;</span><span class="p">,</span>
+    <span class="nx">snapshot</span><span class="p">.</span><span class="nx">docs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">d</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="p">...</span><span class="nx">d</span><span class="p">.</span><span class="nx">data</span><span class="p">()</span> <span class="p">})))</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Now, we are back to our AppRun application world, in which you can see the three familiar parts: <em>state</em>, <em>view</em>, and <em>update</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">filter</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">todos</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;new_todo&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">,</span>
+    <span class="nx">done</span><span class="o">:</span> <span class="mf">0</span>
+  <span class="p">})</span>
+<span class="p">};</span>
+<span class="kr">const</span> <span class="nx">toggle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="p">...</span><span class="nx">todo</span><span class="p">,</span> <span class="nx">done</span><span class="o">:</span> <span class="o">!</span><span class="nx">todo</span><span class="p">.</span><span class="nx">done</span> <span class="p">})</span> <span class="p">};</span>
+<span class="kr">const</span> <span class="nx">remove</span> <span class="o">=</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">};</span>
+<span class="kr">const</span> <span class="nx">clear</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//:&#39;</span><span class="p">,</span> <span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">)</span> <span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span><span class="nx">todos</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
+
+<span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;@show-all&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todos</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="p">...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">todos</span> <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The Firebase ToDo application shares the same architecture as in the <a href="https://dev.to/yysun/database-driven-applications-using-websockets-2b9o">Database-Driven Application Post</a>. They are only different in events. The Firebase ToDo application saves the events to FireStore. The Database-Driven Application sends and receives the events through the WebSockets.</p>
+<blockquote>
+<p>If you are new to AppRun, read the <a href="https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/">AppRun Book</a> or visit <a href="https://apprun.js.org">AppRun Docs</a>.</p>
+</blockquote>
+<h2 id="live-demo-and-source-code">Live Demo and Source Code<a class="headerlink" href="#live-demo-and-source-code" title="Permanent link">&para;</a></h2>
+<p>You can play with the live demo at <a href="https://apprun-demo.firebaseapp.com">https://apprun-demo.firebaseapp.com</a>.</p>
+<p>Source Code: <a href="https://github.com/yysun/apprun-firebase">https://github.com/yysun/apprun-firebase</a></p>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>The AppRun event pub-sub pattern looks so simple (just <em>app.run</em> and <em>app.on</em>), yet so powerful. It is not only useful inside the frontend app. It shines more in crossing process boundaries, such as in the cases of <a href="https://dev.to/yysun/create-a-phoenix-liveview-like-app-in-js-with-apprun-dc8">WebSockets</a>, <a href="https://github.com/yysun/apprun-apress-book/tree/master/Chapter_05">Web Workers</a>, <a href="https://github.com/apprunjs/apprun-electron-forge">Electron Apps</a>, Firebase of course, and more ...</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../dapr/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Microservice wirh Dapr
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../db-websocket/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Database and Websocket
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/codemirror.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/javascript/javascript.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/xml/xml.js"></script>
+      
+        <script src="../../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
+      
+        <script src="../../assets/apprun-play.js"></script>
+      
+    
+  </body>
+</html>

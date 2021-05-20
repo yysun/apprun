@@ -1,0 +1,76 @@
+.apprun-play .col {
+  display: inline-block;
+  width: calc(50% - 3px);
+  height: 100%;
+}
+
+.apprun-play .editor, .apprun-play .preview {
+  display: inline-block;
+  width: calc(100% - 20px);
+  height: 100%;
+}
+
+a.button {
+  font-size: .8em;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--md-primary-bg-color);
+  background: var(--md-primary-fg-color)
+}
+a.button:hover {
+  color: var(--md-primary-fg-color);
+  background: var(--md-primary-bg-color)
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  visibility: hidden;
+  opacity: 0;
+  z-index: 999;
+}
+.overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 80px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 3px;
+  position: relative;
+  width: 90%;
+  height: calc(100% - 150px);
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  height: 100%;
+  overflow: auto;
+}
+
+.cm-s-default {
+  height: 100%;
+  font-size: small;
+}
