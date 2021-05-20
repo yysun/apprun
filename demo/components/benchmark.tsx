@@ -1,29 +1,16 @@
 import { app, Component, View } from '../../src/apprun'
-import { state, update, State, Events } from './store';
-
-let startTime;
-let lastName;
-
-const startMeasure = function (name: string) {
-  lastName = name
-  startTime = performance.now();
-}
-
-const stopMeasure = function () {
-  window.setTimeout(function () {
-    const stop = performance.now();
-    console.log(lastName + ' took ' + (stop - startTime));
-  }, 0);
-}
+import { startMeasure, stopMeasure, state, update, State, Events } from './store';
 
 const view: View<State> = state => <div class="container" $onclick={click}>
-  <div>
+  <div class="row">JSX</div>
+  <div class="row">
     <button id="run">Create 1,000 rows</button>
     <button id="runlots">Create 10,000 rows</button>
     <button id="add">Append 1,000 rows</button>
     <button id="update">Update every 10th row</button>
     <button id="clear">Clear</button>
     <button id="swaprows">Swap Rows</button>
+    <span class="pull-right" id="measure"></span>
   </div>
   <br />
   <table class="table table-hover table-striped test-data" id="main-table">
@@ -48,7 +35,15 @@ const view: View<State> = state => <div class="container" $onclick={click}>
   <span class="preloadicon glyphicon glyphicon-remove hidden" aria-hidden="true"></span>
 </div>;
 
-const getId = (elem: any) => elem.closest('tr').id;
+const getId = (elem: any) => {
+  while (elem) {
+    if (elem.tagName === "TR") {
+      return elem.id;
+    }
+    elem = elem.parentNode;
+  }
+  return undefined;
+}
 
 const click = (state: State, e: Event) => {
   const t = e.target as HTMLElement;
@@ -58,11 +53,12 @@ const click = (state: State, e: Event) => {
   if (t.tagName === 'BUTTON' && t.id) {
     startMeasure(t.id);
     component.run(t.id as Events);
+    stopMeasure();
   } else if (t.matches('.remove')) {
     startMeasure('delete');
     const id = getId(t);
     component.run('delete', id);
-  } else if (t.matches('.lbl')) {
+  } else if (t.matches('td')) {
     startMeasure('select');
     const id = getId(t);
     component.run('select', id);
@@ -70,42 +66,9 @@ const click = (state: State, e: Event) => {
   stopMeasure();
 }
 
-const component = new Component(state, view, update);
-component.unload = () => { console.log('benchmark.unload') };
-
-component.rendered = () => {
-  let nonKeyedDetector_tradded = [];
-  let nonKeyedDetector_trremoved = [];
-  let nonKeyedDetector_removedStoredTr = [];
-
-  const target = document.querySelector('#main-table');
-
-  function filterTRInNodeList(nodeList) {
-    let trs = [];
-    nodeList.forEach(n => {
-      if (n.tagName === 'TR') {
-        trs.push(n);
-        trs = trs.concat(filterTRInNodeList(n.childNodes));
-      }
-    });
-    return trs;
-  }
-
-  var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (mutation.type === 'childList') {
-        nonKeyedDetector_tradded = nonKeyedDetector_tradded.concat(filterTRInNodeList(mutation.addedNodes));
-        nonKeyedDetector_trremoved = nonKeyedDetector_trremoved.concat(filterTRInNodeList(mutation.removedNodes));
-      }
-      // console.log(mutation.type, mutation.addedNodes.length, mutation.removedNodes.length, mutation);
-    });
-    console.log('tr addded: ', nonKeyedDetector_tradded.length, 'tr removed: ', nonKeyedDetector_trremoved.length);
-  });
-  var config = { childList: true, attributes: true, subtree: true, characterData: true };
-
-  if (!target['observed']) {
-    observer.observe(target, config);
-    target['observed'] = true;
-  }
+const my_update = {
+  '#benchmark': state => state,
+  ...update,
 }
-export default (element) => component.mount(element, {route: '#benchmark'});
+const component = new Component<State, Events>(state, view, my_update);
+export default (element) => component.mount(element);

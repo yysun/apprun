@@ -1,7 +1,25 @@
 import { Update } from '../../src/apprun';
 
+let startTime;
+let lastName;
+
+export const startMeasure = function (name: string) {
+  lastName = name
+  startTime = performance.now();
+}
+
+export const stopMeasure = function () {
+  window.setTimeout(function () {
+    const stop = performance.now();
+    const measure = lastName + ' took ' + (stop - startTime).toFixed(2);
+    // console.log(measure);
+    const el = document.getElementById('measure');
+    el && (el.innerHTML = measure);
+  });
+}
+
 function _random(max: number) {
-  return Math.round(Math.random() * 1000) % max;
+  return Math.round(Math.random()*1000)%max;
 }
 
 const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
@@ -18,7 +36,7 @@ export type State = {
   selected: number;
 }
 
-export type Events = 'run' | 'runlost' | 'add' | 'udate' | 'swaprows' | 'clear' | 'delete' | 'select';
+export type Events = '.' | 'run' | 'runlost' | 'add' | 'udate' | 'swaprows' | 'clear' | 'delete' | 'select';
 
 export const state: State = {
   data: [],

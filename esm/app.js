@@ -62,7 +62,7 @@ export class App {
         return subscribers;
     }
 }
-const AppRunVersions = 'AppRun-2';
+const AppRunVersions = 'AppRun-3';
 let app;
 const root = (typeof self === 'object' && self.self === self && self) ||
     (typeof global === 'object' && global.global === global && global);

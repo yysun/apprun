@@ -1,5 +1,6 @@
 
 import { VDOM } from './types';
+import { TemplateResult } from 'lit-html';
 
 function getProp(prop) {
   if (typeof prop === 'object') {
@@ -30,6 +31,9 @@ function clean(obj) {
 
 function toHTML (vdom: VDOM) {
   if (!vdom) return '';
+  if (vdom instanceof TemplateResult) {
+    return vdom.toString();
+  }
   clean(vdom);
   if (Array.isArray(vdom)) return toHTMLArray(vdom);
   if (typeof vdom === 'string') {

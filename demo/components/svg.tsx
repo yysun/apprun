@@ -1,4 +1,4 @@
-import app, { Component } from '../../src/apprun-html'
+import { Component, run, html, svg } from '../../src/apprun-html'
 
 const triangles = [
 {id: "yellow", rot: 0},
@@ -13,21 +13,22 @@ class SvgComponent extends Component {
   state = 0;
 
   view = state => {
-    return `<div class="view">
+    const items = triangles.map(t =>
+      svg`<polygon id="${t.id}"
+        points="-50,-88 0,-175 50,-88"
+        transform="rotate(${t.rot})"
+        stroke-width="3" />`
+    );
+    return html`<div class="view">
       <h1>AppRun SVG Carousel</h1>
       <svg width="380" height="380" viewBox="-190,-190,380,380">
         <g id="carousel" style="transform: rotate(${state}deg);">
-          ${triangles.map(t =>
-            `<polygon id="${t.id}"
-              points="-50,-88 0,-175 50,-88"
-              transform="rotate(${t.rot})"
-              stroke-width="3" />`
-            ).join("")}
+          ${items}
         </g>
       </svg>
-      <button onclick='app.run("@rot+60")'>Rotate Clockwise</button>
-      <button onclick='app.run("@rot-60")'>Rotate Anticlockwise</button>
-      <button onclick='app.run("@reset")'>Reset</button>
+      <button @click=${run("@rot+60")}>Rotate Clockwise</button>
+      <button @click=${run("@rot-60")}>Rotate Anticlockwise</button>
+      <button @click=${run("@reset")}>Reset</button>
       <div>It is a reimplementation of <a href="https://github.com/snabbdom/snabbdom/tree/master/examples/carousel-svg">a snabbdom example</a> by Jon Kleiser.</div>
     </div>`;
   };
