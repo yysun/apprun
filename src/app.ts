@@ -86,7 +86,7 @@ export class App {
   }
 }
 
-const AppRunVersions = 'AppRun-2';
+const AppRunVersions = 'AppRun-3';
 let app: App;
 const root = (typeof self === 'object' && self.self === self && self) ||
   (typeof global === 'object' && global.global === global && global)
