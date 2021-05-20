@@ -48,11 +48,6 @@ a.button:hover {
   height: calc(100% - 150px);
 }
 
-.popup h2 {
-  margin-top: 0;
-  color: #333;
-  font-family: Tahoma, Arial, sans-serif;
-}
 .popup .close {
   position: absolute;
   top: 10px;
@@ -67,10 +62,11 @@ a.button:hover {
 }
 .popup .content {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .cm-s-default {
   height: 100%;
   font-size: small;
+  line-height: 1.5em;
 }

@@ -32,9 +32,9 @@ Or use it as ES module from unpkg.com:
 
 ![apprun-demo](docs/imgs/apprun-demo.gif)
 
-* AppRun architecure has _state_, _view_, and _update_.
-* AppRun is event-driven.
-* AppRun is [Component](docs/#/05-component) based.
+* AppRun [architecure](docs/architecture) has _state_, _view_, and _update_.
+* AppRun is [event-driven](docs/event-pubsub).
+* AppRun can be global app or [Component](docs/component) based.
 
 [Try the AppRun Playground](https://apprun.js.org/#play).
 

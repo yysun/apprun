@@ -2,8 +2,9 @@
 
 ## Releases
 * apprun@es5: 1.x, stable, es5
-* apprun@latest: 2.x, stable, es2015, web component
-* apprun@next: 3.x, dev, es2015, lit-html
+* apprun@latest: 3.x, stable, es6/es2015, lit-html
+
+## 3.28.3 merged into master
 
 ## 1.28/ 2.28 / 3.28
 
