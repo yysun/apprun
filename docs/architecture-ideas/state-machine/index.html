@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="This post describes how to create a state machine in AppRun applications to help event handling using a calculator as an example.">
+        <meta name="description" content="This post describes creating a state machine in AppRun applications to help event handling using a calculator as an example.">
       
       
       
@@ -436,19 +436,6 @@
     Introduction
   </a>
   
-    <nav class="md-nav" aria-label="Introduction">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#state-machine" class="md-nav__link">
-    State machine
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -467,28 +454,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#state-machine_1" class="md-nav__link">
+  <a href="#state-machine" class="md-nav__link">
     State Machine
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#add-state-machine-to-apprun-application" class="md-nav__link">
-    Add State Machine to AppRun Application
-  </a>
-  
-    <nav class="md-nav" aria-label="Add State Machine to AppRun Application">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
   <a href="#add-state-machine-state" class="md-nav__link">
-    Add State Machine State
+    Add State-Machine State
   </a>
   
 </li>
@@ -861,19 +835,6 @@
     Introduction
   </a>
   
-    <nav class="md-nav" aria-label="Introduction">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#state-machine" class="md-nav__link">
-    State machine
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -892,28 +853,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#state-machine_1" class="md-nav__link">
+  <a href="#state-machine" class="md-nav__link">
     State Machine
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#add-state-machine-to-apprun-application" class="md-nav__link">
-    Add State Machine to AppRun Application
-  </a>
-  
-    <nav class="md-nav" aria-label="Add State Machine to AppRun Application">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
   <a href="#add-state-machine-state" class="md-nav__link">
-    Add State Machine State
+    Add State-Machine State
   </a>
   
 </li>
@@ -971,15 +919,14 @@
                   <h1>State Machine</h1>
                 
                 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<h3 id="state-machine">State machine<a class="headerlink" href="#state-machine" title="Permanent link">&para;</a></h3>
 <p>The state machine is the tool that developers must have in their toolbox.</p>
 <blockquote>
 <p>If you are new to the state machine, check out the reference section below.</p>
 </blockquote>
 <p>How can a state machine help?</p>
 <p>Typically, when building applications, we follow what's known as the event-driven — where an event happens in the application, we update the application state and render the state to the screen.</p>
-<p>Events can happen anytime during user interactions and system interactions while the application can be in any state. Before we start to handle the events, we first have to determine what is the current state and then handle the event accordingly. Sometimes it can be challenging.</p>
-<p>The state machine provides a state-event-state mapping. Before we start to handle the events, we know the current state and the future state, so that we only need to focus on the limited state-event scope.</p>
+<p>Events can happen anytime during user interactions and system interactions, while the application can be in any state. Therefore, before we start to handle the events, we first have to determine the current state and then handle the event accordingly. Sometimes it can be challenging.</p>
+<p>The state machine provides a state-event-state mapping. Thus, before we start to handle the events, we know the current state and the future state, so that we only need to focus on the limited state-event scope.</p>
 <blockquote>
 <p>The specific state machine we are going to use is the <a href="https://en.wikipedia.org/wiki/Mealy_machine">Mealy machine</a>. It has an initial state and then transitions to new states based on events and its current state.</p>
 </blockquote>
@@ -991,14 +938,236 @@
 </ul>
 <h2 id="model-a-calculator">Model a Calculator<a class="headerlink" href="#model-a-calculator" title="Permanent link">&para;</a></h2>
 <h3 id="state-and-event">State and Event<a class="headerlink" href="#state-and-event" title="Permanent link">&para;</a></h3>
-<p>The calculator application looks like:</p>
-<p><img alt="Calculator Application" src="https://dev-to-uploads.s3.amazonaws.com/i/hfscu8m5zix5dy91b3hw.png" /></p>
-<p>It has a grid of buttons that users can click at any time. It also displays:</p>
+<p>The calculator application looks like this:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state_machine</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">current_state</span> <span class="o">=</span> <span class="nx">state_machine</span><span class="p">[</span><span class="nx">state</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">current_state</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="sb">`No state: </span><span class="si">${</span><span class="nx">current_state</span><span class="si">}</span><span class="sb"> found in state machine`</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">event_tuple</span> <span class="o">=</span> <span class="nx">current_state</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">s</span> <span class="p">=&gt;</span> <span class="nx">s</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">===</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">event_tuple</span> <span class="o">?</span> <span class="p">{</span>
+    <span class="nx">next_state</span><span class="o">:</span> <span class="nx">event_tuple</span><span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+    <span class="nx">transition</span><span class="o">:</span> <span class="nx">event_tuple</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span>
+  <span class="p">}</span> <span class="o">:</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">_state</span><span class="o">:</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span>
+  <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">arg1</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">arg2</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="nx">stack</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
+  <span class="o">&lt;</span><span class="nx">style</span><span class="o">&gt;</span> <span class="p">{</span><span class="sb">`</span>
+<span class="sb">    .calculator { width: 200px; }</span>
+<span class="sb">    .buttons {</span>
+<span class="sb">      display: grid;</span>
+<span class="sb">      grid-template-columns: repeat(4, 1fr);</span>
+<span class="sb">      grid-gap: 2px;</span>
+<span class="sb">    }</span>
+<span class="sb">    button { padding: 10px; width:100%; }</span>
+<span class="sb">    button:nth-of-type(1) {</span>
+<span class="sb">      grid-column: span 2;</span>
+<span class="sb">    }</span>
+<span class="sb">    button:nth-of-type(16) {</span>
+<span class="sb">      grid-column: span 2;</span>
+<span class="sb">    }</span>
+<span class="sb">  `</span><span class="p">}</span>
+  <span class="o">&lt;</span><span class="err">/style&gt;</span>
+  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;calculator&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">display</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+    <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;buttons&quot;</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">button_click</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="nx">CE</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;+</span><span class="err">/-&lt;/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="err">/&lt;/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">7</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">8</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">9</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;*&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">4</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">5</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">6</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;-&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">2</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">3</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;+&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mf">0</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;=&lt;</span><span class="err">/button&gt;</span>
+    <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="o">&lt;</span><span class="nx">small</span><span class="o">&gt;</span>
+      <span class="p">{</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mf">0</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">stack</span><span class="p">[</span><span class="mf">0</span><span class="p">][</span><span class="mf">0</span><span class="p">]</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">stack</span><span class="p">[</span><span class="mf">0</span><span class="p">][</span><span class="mf">1</span><span class="p">]</span><span class="si">}</span><span class="sb"> `</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;FIRST_&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span> <span class="o">===</span> <span class="s2">&quot;OP&quot;</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;SECOND_&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span> <span class="o">===</span> <span class="s2">&quot;EQ&quot;</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">arg2</span><span class="si">}</span><span class="sb"> = </span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="err">/small&gt;</span>
+  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+<span class="o">&lt;</span><span class="err">/&gt;;</span>
+
+<span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+
+  <span class="kr">const</span> <span class="nx">priority</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;*&#39;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+    <span class="s1">&#39;/&#39;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+    <span class="s1">&#39;+&#39;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+    <span class="s1">&#39;-&#39;</span><span class="o">:</span> <span class="mf">1</span>
+  <span class="p">}</span>
+
+  <span class="kr">const</span> <span class="nx">getEvent</span> <span class="o">=</span> <span class="nx">c</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="s1">&#39;+/-&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;CE&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;CE&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;.&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;DOT&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;=&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+      <span class="k">default</span><span class="o">:</span>
+        <span class="k">return</span> <span class="sr">/\d/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">:</span> <span class="s1">&#39;OP&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="o">?</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">||</span> <span class="nx">e</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">getEvent</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+
+  <span class="kd">let</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">state</span><span class="p">;</span>
+
+  <span class="kr">const</span> <span class="nx">clear</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nx">arg2</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+    <span class="nx">op</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="nx">stack</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kr">const</span> <span class="nx">negative</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="nx">display</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">display</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span> <span class="o">:</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">display</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">calc</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}${</span><span class="nx">op</span><span class="si">}${</span><span class="nx">arg2</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">op1</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">op2</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">priority</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">===</span> <span class="nx">priority</span><span class="p">[</span><span class="nx">op</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">calc</span><span class="p">();</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">priority</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">priority</span><span class="p">[</span><span class="nx">op</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">calc</span><span class="p">();</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+        <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">f</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="si">}${</span><span class="nx">f</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="si">}${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+        <span class="nx">display</span> <span class="o">=</span> <span class="nx">arg1</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">op</span><span class="p">]);</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">eq0</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="nx">calc</span><span class="p">();</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">eq2</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="nx">calc</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="kr">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">f</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="si">}${</span><span class="nx">f</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="si">}${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mf">1</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">state_machine</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">START</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">FIRST_ARG</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">FIRST_ARG_FLOAT</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">OP</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">SECOND_ARG</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">SECOND_ARG_FLOAT</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">EQ</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq0</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">]</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">next_state</span><span class="p">,</span> <span class="nx">transition</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">find_transition</span><span class="p">(</span><span class="nx">state_machine</span><span class="p">,</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="nx">_state</span> <span class="o">=</span> <span class="nx">next_state</span> <span class="o">||</span> <span class="nx">_state</span><span class="p">;</span>
+  <span class="nx">transition</span> <span class="o">&amp;&amp;</span> <span class="nx">transition</span><span class="p">();</span>
+
+  <span class="k">return</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">};</span>
+<span class="p">}</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span>
+</code></pre></div>
+<apprun-play style="height:350px" no_src="true"></apprun-play></p>
+<p>Click the 'Try the Code' button; you will see the source code.</p>
+<p>The calculator has a grid of buttons that users can click at any time. It also displays:</p>
 <ul>
-<li>The numbers that the user types, or the calculation result.</li>
-<li>The calculation formula, which includes the first argument, the operator and the second argument, and the calculation result.</li>
+<li>The numbers that the user typed and the calculation result on top of the grid.</li>
+<li>The calculation formula includes the first argument, the operator, and the second argument, and the calculation result below the gird.</li>
 </ul>
-<p>The initial state of the calculator looks like:</p>
+<p>Let's model the initial state of the calculator.</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
   <span class="nx">arg1</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
@@ -1006,7 +1175,7 @@
   <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
 <span class="p">};</span>
 </code></pre></div>
-<p>We handle the buttons' click events in the event handler, <em>button___click</em>. Because of the HTML event bubbling, we just need one event handler for all buttons</p>
+<p>We handle the buttons' click events in the event handler, <em>button___click</em>. Because of the HTML event bubbling, we only need one event handler for all the buttons.</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span>
   <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;buttons&quot;</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">button_click</span><span class="p">}</span><span class="o">&gt;</span>
   <span class="p">......</span>
@@ -1014,11 +1183,15 @@
 
 <span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
 <span class="p">}</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
 <p>That's all we need to do to create an AppRun application, an <em>initial state</em>, a <em>view</em>, and <em>event handlers</em>.</p>
-<p>Next, we will add a state machine.</p>
-<h3 id="state-machine_1">State Machine<a class="headerlink" href="#state-machine_1" title="Permanent link">&para;</a></h3>
+<p>Next, we will add the state machine implementation.</p>
+<h3 id="state-machine">State Machine<a class="headerlink" href="#state-machine" title="Permanent link">&para;</a></h3>
+<blockquote>
 <p>We follow and extend the calculator state machine from <a href="https://www.codinglawyer.io/posts/build-javascript-calculator">David's post</a>. The post also provides a <a href="https://www.codinglawyer.io/static/c24440761863d1b3b8bf38e336056726/fa498/sketch-fsm.png">diagram</a> helpful to understand the state machine.</p>
+</blockquote>
 <p>We first define the <em>states</em> and <em>events</em> of the state machine using TypeScript <a href="https://www.typescriptlang.org/docs/handbook/advanced-types.html#discriminated-unions">Discriminated Unions</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
 
@@ -1071,7 +1244,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>Also, the compiler makes sure all <em>States</em> have their relevant entries in the state machine.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">States</span><span class="p">,</span> <span class="nx">Events</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">States</span><span class="p">,</span> <span class="nx">Events</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">START</span><span class="o">:</span> <span class="p">[],</span>
   <span class="nx">FIRST_ARG</span><span class="o">:</span> <span class="p">[],</span>
   <span class="nx">FIRST_ARG_FLOAT</span><span class="o">:</span> <span class="p">[],</span>
@@ -1080,16 +1253,9 @@
   <span class="c1">//EQ:[] // Error on missing EQ state, if we commented it out</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Compare to many other different ways of implementing the state machine in JavaScript/TypeScript found online, the state machine in this post has the following advantages:</p>
-<ul>
-<li>Declarative - it tells whats, not how;</li>
-<li>Independent - technology stack agnostic;</li>
-<li>KISS - no worry of preconditions, postconditions, etc...</li>
-</ul>
-<p>You can see the state machine is just a simple data structure. We can easily add it to the AppRun applications. Explained step by step below.</p>
-<h2 id="add-state-machine-to-apprun-application">Add State Machine to AppRun Application<a class="headerlink" href="#add-state-machine-to-apprun-application" title="Permanent link">&para;</a></h2>
-<h3 id="add-state-machine-state">Add State Machine State<a class="headerlink" href="#add-state-machine-state" title="Permanent link">&para;</a></h3>
-<p>We add a new property for tracking the state-machine state, called <em><em>_state</em></em> into the application state.</p>
+You can see the state machine is just a simple data structure.</p>
+<h3 id="add-state-machine-state">Add State-Machine State<a class="headerlink" href="#add-state-machine-state" title="Permanent link">&para;</a></h3>
+<p>We add a new property for tracking the state-machine state, called <em><em>_state</em></em>, into the initial state.</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">_state</span><span class="o">:</span> <span class="s1">&#39;START&#39;</span> <span class="nx">as</span> <span class="nx">States</span><span class="p">,</span>
   <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
@@ -1127,7 +1293,7 @@
 <h3 id="use-state-machine">Use State Machine<a class="headerlink" href="#use-state-machine" title="Permanent link">&para;</a></h3>
 <p>Now that we know the current state-machine state from the <em><em>_state</em></em> property of the application state. We also know which state-machine event we are in. We now can use the <em>state___machine</em> to find the matching <em>transition</em>.</p>
 <p>Finding <em>transitions</em> from the <em>state___machine</em> is straightforward.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
   <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">state</span>: <span class="kt">S</span><span class="p">,</span>
   <span class="nx">event</span>: <span class="kt">E</span>
@@ -1156,14 +1322,252 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>If no <em>transition</em> found, nothing will happen.</p>
-<p>Finally, we return a new state from the event handler, AppRun will render the screen accordingly.</p>
-<p>Now, the application is wired up with AppRun architecture. We have successfully created the calculator application.</p>
-<p>You can try the live app <a href="https://apprun.js.org/#calculator">here</a> and find the source code <a href="https://github.com/yysun/apprun/blob/master/demo/components/calculator.tsx">here</a>.</p>
+<p>Finally, we return a new state from the event handler; AppRun will render the screen accordingly.</p>
+<p>Now, we have successfully created the calculator application. You can see the calculator in TypeScript below.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="nx">type</span> <span class="nx">Transition</span><span class="o">&lt;</span><span class="nx">T</span> <span class="o">=</span> <span class="nx">any</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state?</span>: <span class="kt">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">;</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">Transition</span><span class="p">];</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">[</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">S</span><span class="p">]</span><span class="o">:</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span><span class="p">[];</span>
+<span class="p">};</span>
+<span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+<span class="nx">type</span> <span class="nx">States</span> <span class="o">=</span> <span class="s1">&#39;START&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">state</span>: <span class="kt">S</span><span class="p">,</span>
+  <span class="nx">event</span>: <span class="kt">E</span>
+<span class="p">)</span><span class="o">:</span> <span class="p">{</span> <span class="nx">next_state?</span>: <span class="kt">S</span><span class="p">,</span> <span class="nx">transition?</span>: <span class="kt">Transition</span> <span class="p">}</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">current_state</span> <span class="o">=</span> <span class="nx">state_machine</span><span class="p">[</span><span class="nx">state</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">current_state</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="sb">`No state: </span><span class="si">${</span><span class="nx">current_state</span><span class="si">}</span><span class="sb"> found in state machine`</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">event_tuple</span> <span class="o">=</span> <span class="nx">current_state</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">event_tuple</span> <span class="o">?</span> <span class="p">{</span>
+    <span class="nx">next_state</span>: <span class="kt">event_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="nx">transition</span>: <span class="kt">event_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+  <span class="p">}</span> <span class="o">:</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+
+<span class="nx">type</span> <span class="nx">States</span> <span class="o">=</span> <span class="s1">&#39;START&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">_state</span><span class="o">:</span> <span class="s1">&#39;START&#39;</span> <span class="kr">as</span> <span class="nx">States</span><span class="p">,</span>
+  <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">arg1</span>: <span class="kt">0</span><span class="p">,</span>
+  <span class="nx">arg2</span>: <span class="kt">0</span><span class="p">,</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="nx">stack</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+
+<span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">state</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">}</span><span class="o">:</span> <span class="nx">State</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="o">&lt;&gt;</span>
+  <span class="o">&lt;</span><span class="nx">style</span><span class="o">&gt;</span> <span class="p">{</span><span class="sb">`</span>
+<span class="sb">    .calculator { width: 200px; }</span>
+<span class="sb">    .buttons {</span>
+<span class="sb">      display: grid;</span>
+<span class="sb">      grid-template-columns: repeat(4, 1fr);</span>
+<span class="sb">      grid-gap: 2px;</span>
+<span class="sb">    }</span>
+<span class="sb">    button { padding: 10px; width:100%; }</span>
+<span class="sb">    button:nth-of-type(1) {</span>
+<span class="sb">      grid-column: span 2;</span>
+<span class="sb">    }</span>
+<span class="sb">    button:nth-of-type(16) {</span>
+<span class="sb">      grid-column: span 2;</span>
+<span class="sb">    }</span>
+<span class="sb">  `</span><span class="p">}</span>
+  <span class="o">&lt;</span><span class="err">/style&gt;</span>
+  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;calculator&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">display</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+    <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;buttons&quot;</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">button_click</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="nx">CE</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;+</span><span class="err">/-&lt;/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="err">/&lt;/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">7</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;*&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">4</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;-&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;+&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span><span class="o">&gt;=&lt;</span><span class="err">/button&gt;</span>
+    <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="o">&lt;</span><span class="nx">small</span><span class="o">&gt;</span>
+      <span class="p">{</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="sb"> `</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;FIRST_&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span> <span class="o">===</span> <span class="s2">&quot;OP&quot;</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;SECOND_&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+      <span class="p">{</span><span class="nx">_state</span> <span class="o">===</span> <span class="s2">&quot;EQ&quot;</span> <span class="o">&amp;&amp;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">op</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">arg2</span><span class="si">}</span><span class="sb"> = </span><span class="si">${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="err">/small&gt;</span>
+  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+<span class="o">&lt;</span><span class="err">/&gt;;</span>
+
+<span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span>: <span class="kt">State</span><span class="p">,</span> <span class="nx">e</span>: <span class="kt">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+
+  <span class="kr">const</span> <span class="nx">priority</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;*&#39;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;/&#39;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;+&#39;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;-&#39;</span><span class="o">:</span> <span class="mi">1</span>
+  <span class="p">}</span>
+
+  <span class="kr">const</span> <span class="nx">getEvent</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">Events</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="s1">&#39;+/-&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;CE&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;CE&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;.&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;DOT&#39;</span><span class="p">;</span>
+      <span class="k">case</span> <span class="s1">&#39;=&#39;</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
+      <span class="k">default</span><span class="o">:</span>
+        <span class="k">return</span> <span class="sr">/\d/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">:</span> <span class="s1">&#39;OP&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="o">?</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">||</span> <span class="nx">e</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">getEvent</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+
+  <span class="kd">let</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">state</span><span class="p">;</span>
+
+  <span class="kr">const</span> <span class="nx">clear</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nx">arg2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">op</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="nx">stack</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kr">const</span> <span class="nx">negative</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="nx">display</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">display</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">display</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">calc</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">display</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">arg1</span><span class="si">}${</span><span class="nx">op</span><span class="si">}${</span><span class="nx">arg2</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">op1</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">op2</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">priority</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">===</span> <span class="nx">priority</span><span class="p">[</span><span class="nx">op</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">calc</span><span class="p">();</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">priority</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">priority</span><span class="p">[</span><span class="nx">op</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">calc</span><span class="p">();</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+        <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}${</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+        <span class="nx">display</span> <span class="o">=</span> <span class="nx">arg1</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">op</span><span class="p">]);</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">eq0</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">arg1</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="nx">calc</span><span class="p">();</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">eq2</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+    <span class="nx">calc</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">arg2</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">display</span><span class="p">);</span>
+      <span class="kr">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}${</span><span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}${</span><span class="nx">display</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+      <span class="nx">arg1</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="nx">op</span> <span class="o">=</span> <span class="nx">f</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">States</span><span class="p">,</span> <span class="nx">Events</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">START</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">FIRST_ARG</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">FIRST_ARG_FLOAT</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">OP</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">op</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">SECOND_ARG</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">SECOND_ARG_FLOAT</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">+=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op2</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+
+    <span class="nx">EQ</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;+/-&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="nx">negative</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;DOT&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;0.&#39;</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="s1">&#39;EQ&#39;</span><span class="p">,</span> <span class="nx">eq0</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="nx">op1</span><span class="p">],</span>
+      <span class="p">[</span><span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="nx">clear</span><span class="p">]</span>
+    <span class="p">]</span>
+  <span class="p">};</span>
+
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">next_state</span><span class="p">,</span> <span class="nx">transition</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">find_transition</span><span class="p">(</span><span class="nx">state_machine</span><span class="p">,</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="nx">_state</span> <span class="o">=</span> <span class="nx">next_state</span> <span class="o">||</span> <span class="nx">_state</span><span class="p">;</span>
+  <span class="nx">transition</span> <span class="o">&amp;&amp;</span> <span class="nx">transition</span><span class="p">();</span>
+
+  <span class="k">return</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">};</span>
+<span class="p">};</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>We have created a declarative and type-safe state machine. The state machine data structure is technology agnostic. You can try to use it in React or other frameworks you like. It can naturally fit into AppRun applications.</p>
 <p>AppRun is event-driven. Often I feel it is challenging to make events right. Sometimes we define too many events. Sometimes the events come out of order. By using the state machine, I can handle the events within limited state scopes. I have started to think of using more state machines to control the events.</p>
 <h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
-<p>There are many references online about the state machine. I got most of my inspiration from the following posts. I recommend you read the concept explanation of the posts and pay less attention to the implementations, because using AppRun, you can do better.</p>
+<p>There are many references online about the state machine. I got most of my inspiration from the following posts. I recommend you read the concept explanation of the posts and pay less attention to the implementations because using AppRun; you can do better.</p>
 <ul>
 <li>
 <p>[1] Krasimir Tsonev explains <a href="https://en.wikipedia.org/wiki/Mealy_machine">Mealy</a> and <a href="https://en.wikipedia.org/wiki/Moore_machine">Moore</a> in the post: <a href="https://www.smashingmagazine.com/2018/01/rise-state-machines/">The Rise Of The State Machines</a></p>

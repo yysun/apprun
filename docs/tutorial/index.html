@@ -952,9 +952,11 @@
 <span class="nx">app</span><span class="p">.</span><span class="nx">webComponent</span><span class="p">(</span><span class="s1">&#39;my-counter&#39;</span><span class="p">,</span> <span class="nx">Counter</span><span class="p">);</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span>
 <span class="sb">`&lt;my-counter&gt;&lt;/my-counter&gt;</span>
-<span class="sb"> &lt;my-counter&gt;&lt;/my-counter&gt;`</span><span class="p">);</span>
+<span class="sb"> &lt;my-counter&gt;&lt;/my-counter&gt;</span>
+<span class="sb"> &lt;my-counter&gt;&lt;/my-counter&gt;</span>
+<span class="sb">`</span><span class="p">);</span>
 </code></pre></div>
-<apprun-play></apprun-play></p>
+<apprun-play style="height:350px"></apprun-play></p>
 <h2 id="create-a-single-page-app">Create a Single-Page App<a class="headerlink" href="#create-a-single-page-app" title="Permanent link">&para;</a></h2>
 <p>We can easily make a single-page page (SPA) using AppRun components. Each page is a component that can be activated by anchor links like #Home, #contact, and #about.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">Home</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>

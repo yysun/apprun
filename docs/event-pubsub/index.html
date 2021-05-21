@@ -926,8 +926,7 @@ triggering an event.</li>
 </ol>
 <p><img alt="AppRun event life cycle" src="../imgs/Figure_1-1.png" /></p>
 <p>AppRun Event Life Cycle connects the <em>state</em>, <em>view</em>, and <em>update (event handlers)</em> together. Take a look at the <em>Counter</em> example again.</p>
-<p><div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
 <span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="k">return</span> <span class="sb">`&lt;div&gt;</span>
 <span class="sb">    &lt;h1&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/h1&gt;</span>
@@ -939,7 +938,7 @@ triggering an event.</li>
   <span class="s1">&#39;+1&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="mf">1</span><span class="p">,</span>
   <span class="s1">&#39;-1&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">-</span> <span class="mf">1</span>
 <span class="p">};</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;my-app&#39;</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
 <apprun-play></apprun-play></p>
 <p>When one of the buttons is clicked, it publishes AppRun event +1 or -1. The event handlers increase or decreases the state and return a new state. The view function creates the virtual DOM using the new state. Finally, AppRun renders the virtual DOM.</p>
@@ -977,7 +976,7 @@ triggering an event.</li>
 <h3 id="lit-html-directive">lit-html Directive<a class="headerlink" href="#lit-html-directive" title="Permanent link">&para;</a></h3>
 <p><a href="https://lit-html.polymer-project.org">lit-html</a> is the DOM rendering technology that lets us write HTML templates using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">string literals</a>.</p>
 <p>Following the idea of using the JSX <em>event directive</em> what can we do a similar thing with lit-html?</p>
-<p>The good news is that lit-html also has the directive concept to bring the <em>event directive</em> to lit-html. The directive for lit-html is called <em>run</em>.</p>
+<p>The good news is that lit-html also has the directive concept to bring the <em>event directive</em> to lit-html. So the directive for lit-html is called <em>run</em>.</p>
 <p>The example below shows how to use the <em>run</em> directive to trigger AppRun events. Also, similar to the JSX event directives, the <em>run</em> directive can call the event lifecycle directly.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">delta</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="nx">delta</span><span class="p">;</span>
 <span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">{</span>
@@ -1016,7 +1015,7 @@ triggering an event.</li>
 <span class="p">};</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
-<apprun-play></apprun-play></p>
+<apprun-play style="height:300px"></apprun-play></p>
 <h2 id="use-events-for-everything">Use Events for Everything<a class="headerlink" href="#use-events-for-everything" title="Permanent link">&para;</a></h2>
 <p>Web programming is event-driven. All we have to do is to convert DOM events to AppRun events to trigger the AppRun event life cycle.</p>
 <div class="highlight"><pre><span></span><code>DOM events =&gt; AppRun Events =&gt; (current state) =&gt; Update =&gt; (new state) =&gt; View =&gt; (HTML/Virtual DOM) =&gt; Render Web Page

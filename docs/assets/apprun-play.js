@@ -68,8 +68,9 @@ class Play extends Component {
 </div>`;
   }
 
-  rendered = ({ style }) => {
+  rendered = ({ style, no_src }) => {
     const code = this.element.previousElementSibling.innerText;
+    if (no_src) this.element.previousElementSibling.style.display = 'none';
     const iframe = document.createElement('iframe');
     iframe.classList.add('apprun-preview');
     iframe.style.cssText = style;
