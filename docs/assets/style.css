@@ -3,7 +3,9 @@
   width: calc(50% - 3px);
   height: 100%;
 }
-
+.apprun-preview {
+  width: 100%
+}
 .apprun-play .editor, .apprun-play .preview {
   display: inline-block;
   width: calc(100% - 20px);
