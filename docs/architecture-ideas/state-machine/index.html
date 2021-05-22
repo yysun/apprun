@@ -40,10 +40,6 @@
     
       <link rel="stylesheet" href="../../assets/vendor/codemirror/codemirror.css">
     
-      <link rel="stylesheet" href="../../assets/style.css">
-    
-      <link rel="stylesheet" href="../..">
-    
     
       
         
@@ -1158,9 +1154,9 @@
 
   <span class="k">return</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">};</span>
 <span class="p">}</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-play style="height:350px" no_src="true"></apprun-play></p>
+<apprun-play style="height:350px" hide_src="true"></apprun-play></p>
 <p>Click the 'Try the Code' button; you will see the source code.</p>
 <p>The calculator has a grid of buttons that users can click at any time. It also displays:</p>
 <ul>
@@ -1324,15 +1320,16 @@ You can see the state machine is just a simple data structure.</p>
 <p>If no <em>transition</em> found, nothing will happen.</p>
 <p>Finally, we return a new state from the event handler; AppRun will render the screen accordingly.</p>
 <p>Now, we have successfully created the calculator application. You can see the calculator in TypeScript below.</p>
+<div class="admonition source code">
+<p class="admonition-title">Source</p>
+<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">state machine</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kr">export</span> <span class="nx">type</span> <span class="nx">Transition</span><span class="o">&lt;</span><span class="nx">T</span> <span class="o">=</span> <span class="nx">any</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state?</span>: <span class="kt">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">;</span>
 <span class="kr">export</span> <span class="nx">type</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">Transition</span><span class="p">];</span>
 <span class="kr">export</span> <span class="nx">type</span> <span class="nx">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
   <span class="p">[</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">S</span><span class="p">]</span><span class="o">:</span> <span class="nx">EventStateTransition</span><span class="o">&lt;</span><span class="nx">E</span><span class="p">,</span> <span class="nx">S</span><span class="o">&gt;</span><span class="p">[];</span>
 <span class="p">};</span>
-<span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
-<span class="nx">type</span> <span class="nx">States</span> <span class="o">=</span> <span class="s1">&#39;START&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG&#39;</span> <span class="o">|</span> <span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span><span class="p">;</span>
 
-<span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">find_transition</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">S</span> <span class="kr">extends</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">(</span>
   <span class="nx">state_machine</span>: <span class="kt">StateMachine</span><span class="o">&lt;</span><span class="nx">S</span><span class="p">,</span> <span class="nx">E</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">state</span>: <span class="kt">S</span><span class="p">,</span>
   <span class="nx">event</span>: <span class="kt">E</span>
@@ -1345,6 +1342,11 @@ You can see the state machine is just a simple data structure.</p>
     <span class="nx">transition</span>: <span class="kt">event_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
   <span class="p">}</span> <span class="o">:</span> <span class="p">{}</span>
 <span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">calculator app</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../../src/apprun&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">StateMachine</span><span class="p">,</span> <span class="nx">find_transition</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./state-machine&#39;</span><span class="p">;</span>
 
 <span class="nx">type</span> <span class="nx">Events</span> <span class="o">=</span> <span class="s1">&#39;NUM&#39;</span> <span class="o">|</span> <span class="s1">&#39;OP&#39;</span> <span class="o">|</span> <span class="s1">&#39;DOT&#39;</span> <span class="o">|</span> <span class="s1">&#39;CE&#39;</span> <span class="o">|</span> <span class="s1">&#39;EQ&#39;</span> <span class="o">|</span> <span class="s1">&#39;+/-&#39;</span><span class="p">;</span>
 
@@ -1358,8 +1360,7 @@ You can see the state machine is just a simple data structure.</p>
   <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="nx">stack</span><span class="o">:</span> <span class="p">[]</span>
 <span class="p">};</span>
-
-<span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">state</span><span class="p">;</span>
+<span class="kr">export</span> <span class="nx">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">state</span><span class="p">;</span>
 
 <span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">}</span><span class="o">:</span> <span class="nx">State</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="o">&lt;&gt;</span>
   <span class="o">&lt;</span><span class="nx">style</span><span class="o">&gt;</span> <span class="p">{</span><span class="sb">`</span>
@@ -1410,7 +1411,7 @@ You can see the state machine is just a simple data structure.</p>
   <span class="o">&lt;</span><span class="err">/div&gt;</span>
 <span class="o">&lt;</span><span class="err">/&gt;;</span>
 
-<span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span>: <span class="kt">State</span><span class="p">,</span> <span class="nx">e</span>: <span class="kt">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">button_click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span>: <span class="kt">State</span><span class="p">,</span> <span class="nx">e</span>: <span class="kt">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
 
   <span class="kr">const</span> <span class="nx">priority</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;*&#39;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
@@ -1561,8 +1562,172 @@ You can see the state machine is just a simple data structure.</p>
 
   <span class="k">return</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">stack</span> <span class="p">};</span>
 <span class="p">};</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span>
+
+<span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;#calculator&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span>
+<span class="p">};</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">element</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nx">Component</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">update</span><span class="p">).</span><span class="nx">mount</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
 </code></pre></div>
+</div>
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">calculator specs</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">button_click</span><span class="p">,</span> <span class="nx">State</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./calculator&#39;</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">state</span>: <span class="kt">State</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">_state</span><span class="o">:</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span>
+  <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">arg1</span>: <span class="kt">0</span><span class="p">,</span>
+  <span class="nx">arg2</span>: <span class="kt">0</span><span class="p">,</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="nx">stack</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">click</span> <span class="o">=</span> <span class="p">(</span><span class="nx">input</span>: <span class="kt">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">keys</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">input</span><span class="p">];</span>
+  <span class="kd">let</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">state</span><span class="p">;</span>
+  <span class="nx">keys</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">new_state</span> <span class="o">=</span> <span class="nx">button_click</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
+    <span class="nx">s</span> <span class="o">=</span> <span class="nx">new_state</span>
+  <span class="p">})</span>
+  <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;calculator&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 1&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 2&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;12&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;12&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 3&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg1</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg2</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;EQ&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 4&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 5&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/2&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 6&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">op</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1//&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">op</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 7&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">op</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">op</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 8&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">op</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/+&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">op</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 9&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/10&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;10&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;SECOND_ARG&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 10&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+1.&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1.&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;SECOND_ARG_FLOAT&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 11&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;0.&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;0.&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;FIRST_ARG_FLOAT&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 12&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;START&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 13&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;START&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 14&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2=5&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;FIRST_ARG&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 15&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2=/&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 16&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1/+=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 17&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2=*3=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;9&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;EQ&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 18&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2*3=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;7&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg1</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg2</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;EQ&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 19&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1*2+3=&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg1</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">arg2</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;EQ&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;case 20&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">_state</span><span class="p">,</span> <span class="nx">display</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">click</span><span class="p">(</span><span class="s1">&#39;1+2*3*&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">display</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;6&#39;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">_state</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;OP&#39;</span><span class="p">);</span>
+  <span class="p">})</span>
+
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>We have created a declarative and type-safe state machine. The state machine data structure is technology agnostic. You can try to use it in React or other frameworks you like. It can naturally fit into AppRun applications.</p>
 <p>AppRun is event-driven. Often I feel it is challenging to make events right. Sometimes we define too many events. Sometimes the events come out of order. By using the state machine, I can handle the events within limited state scopes. I have started to think of using more state machines to control the events.</p>
@@ -1635,6 +1800,10 @@ You can see the state machine is just a simple data structure.</p>
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
         
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2016 - 2021 Yiyi Sun
+          </div>
+        
         Made with
         <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs
@@ -1662,8 +1831,6 @@ You can see the state machine is just a simple data structure.</p>
         <script src="../../assets/vendor/codemirror/mode/xml/xml.js"></script>
       
         <script src="../../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
-      
-        <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
       
         <script src="../../assets/apprun-play.js"></script>
       
