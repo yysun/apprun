@@ -15,7 +15,7 @@ const popup_div = `<div id="play-popup" class="overlay">
 .apprun-play .editor, .apprun-play .preview {
   display: inline-block;
   width: calc(100% - 20px);
-  height: 100%;
+  height: calc(100% - 10px);
 }
 
 a.button {
@@ -148,31 +148,36 @@ class Play extends Component {
 
   rendered = ({ style, hide_src }) => {
     const element = this.element;
-    const code = element.previousElementSibling.innerText // for div-code
+    this.state.code = element.previousElementSibling.innerText // for div-code
       || element.previousElementSibling.value; // for textarea
     if (hide_src) element.previousElementSibling.style.display = 'none';
     const iframe = document.createElement('iframe');
     iframe.classList.add('apprun-preview');
     iframe.style.cssText = style;
     element.before(iframe);
-    write_code(iframe, code);
+    write_code(iframe, this.state.code);
     if (!document.getElementById('play-popup')) {
       document.body.insertAdjacentHTML('beforeend', popup_div);
     }
-    return
   }
 
   update = {
-    'show-popup': _ => {
-      const code = this.element.previousElementSibling.previousElementSibling.innerText;
+    'show-popup': ({ code }) => {
       const textarea = document.querySelector(".editor") as HTMLTextAreaElement;
       textarea.value = code;
-      if (typeof CodeMirror !== 'undefined' && !editor) {
-        editor = CodeMirror.fromTextArea(textarea, {
-          lineNumbers: true,
-          mode: 'jsx'
-        });
-        editor.on('change', (cm) => this.run('change', cm.getValue()));
+      this.run('change', code);
+      if (typeof CodeMirror !== 'undefined') {
+        if (!editor) {
+          editor = CodeMirror.fromTextArea(textarea, {
+            lineNumbers: true,
+            mode: 'jsx'
+          });
+          editor.on('change', (cm) => this.run('change', cm.getValue()));
+        } else {
+          editor.setValue(code);
+        }
+      } else {
+        textarea.onkeyup = () => this.run('change', textarea.value);
       }
       document.getElementById('play-popup').classList.add('show');
     },
