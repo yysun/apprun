@@ -5,9 +5,8 @@
   <title>Counter</title>
 </head>
 <body>
-  <script src="../dist/apprun-html.js"></script>
-  <div id="my-app"></div>
-  <script>
+  <script src="../dist/apprun-play.js"></script>
+  <textarea style="width:100%; height:300px">
     const state = 0;
     const view = state => {
       return `<div>
@@ -20,7 +19,8 @@
       '+1': state => state + 1,
       '-1': state => state - 1
     };
-    app.start('my-app', state, view, update);
-  </script>
+    app.start(document.body, state, view, update);
+  </textarea>
+  <apprun-play></apprun-play>
 </body>
 </html>

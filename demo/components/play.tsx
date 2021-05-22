@@ -10,7 +10,6 @@ const html = code => `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   <title>AppRun Playground</title>
   <style>
     body {
@@ -26,8 +25,9 @@ const html = code => `<!DOCTYPE html>
 <script>
   Babel.registerPlugin("d", [Babel.availablePlugins["proposal-decorators"], {legacy: true}]);
   Babel.registerPlugin("c", [Babel.availablePlugins["proposal-class-properties"], {loose: true}]);
+  Babel.registerPlugin("b", [Babel.availablePlugins["proposal-private-methods"], {loose: true}]);
 </script>
-<script type="text/babel" data-plugins="d, c">
+<script type="text/babel" data-plugins="d, c, b">
   ${code}
 </script>
 </body>

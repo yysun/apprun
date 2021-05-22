@@ -3,6 +3,7 @@ const path = require('path');
 module.exports = {
   entry: {
     'dist/apprun': './src/apprun.ts',
+    'dist/apprun-play': './src/apprun-play.tsx',
     'dist/apprun-html': './src/apprun-html.ts',
     'dist/apprun-dev-tools': './src/apprun-dev-tools.tsx',
     'demo/app': './demo/main.ts'

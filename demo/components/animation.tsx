@@ -15,6 +15,7 @@ export class MyComponent extends Component {
   }
 
   view = state => <>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"></link>
     <img $animation={state.animation && 'bounce infinite'} src='logo.png' />
     <div $animation='bounceInRight'>
       <button disabled={state.animation} $onclick='start-animation'>start</button>

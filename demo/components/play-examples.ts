@@ -207,6 +207,7 @@ const start_animation = state => ({ animation: true })
 const stop_animation = state => ({ animation: false })
 
 const view = state => <>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"></link>
   <img $animation={state.animation && 'bounce infinite'} src='logo.png' />
   <div $animation='bounceInRight'>
     <button disabled={state.animation} $onclick={start_animation}>start</button>
