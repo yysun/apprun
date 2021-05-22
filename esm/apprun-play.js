@@ -74,9 +74,9 @@ a.button:hover {
   height: 100%;
   font-size: small;
   line-height: 1.5em;
+  z-index: 0;
 }
 </style>
-
 
 	<div class="popup apprun-play">
 		<a class="close" href="javascript:app.run('@close-popup')">&times;</a>
@@ -118,68 +118,90 @@ const code_html = code => `<!DOCTYPE html>
 </script>
 </body>
 </html>`;
-const write_code = (iframe, code) => {
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    if (code.indexOf('<html') >= 0)
-        doc.write(code);
-    else
-        doc.write(code_html(code));
-    doc.close();
+const setup_editor = (textarea, iframe, code, hide_src) => {
+    if (!iframe || !code)
+        return;
+    const run_code = code => {
+        var _a, _b;
+        const iframe_clone = iframe.cloneNode();
+        (_a = iframe.parentNode) === null || _a === void 0 ? void 0 : _a.replaceChild(iframe_clone, iframe);
+        iframe = iframe_clone;
+        const doc = (_b = iframe.contentWindow) === null || _b === void 0 ? void 0 : _b.document;
+        if (!doc)
+            return;
+        doc.open();
+        if (code.indexOf('<html') >= 0)
+            doc.write(code);
+        else
+            doc.write(code_html(code));
+        doc.close();
+    };
+    run_code(code);
+    if (hide_src || !textarea || textarea.nodeName !== 'TEXTAREA')
+        return;
+    if (typeof CodeMirror === 'undefined') {
+        textarea.onkeyup = () => run_code(textarea.value);
+    }
+    else {
+        if (!textarea.editor) {
+            textarea.editor = CodeMirror.fromTextArea(textarea, {
+                lineNumbers: true,
+                mode: 'jsx'
+            });
+            textarea.editor.on('change', (cm) => run_code(cm.getValue()));
+        }
+    }
 };
-const preview_code = code => {
-    let iframe = document.querySelector('.preview');
-    iframe.parentNode.replaceChild(iframe.cloneNode(), iframe);
-    iframe = document.querySelector('.preview');
-    write_code(iframe, code);
-};
-let editor;
 class Play extends Component {
     constructor() {
         super(...arguments);
-        this.view = _ => app.h("div", { class: "box" },
-            app.h("a", { class: "button", "$onclick": "show-popup" }, "Try the Code"));
-        this.rendered = ({ style, hide_src }) => {
+        this.view = (state) => {
+            const code_id = state['code-element-id'];
             const element = this.element;
-            this.state.code = element.previousElementSibling.innerText // for div-code
-                || element.previousElementSibling.value; // for textarea
-            if (hide_src)
-                element.previousElementSibling.style.display = 'none';
+            let code_area, code;
+            if (code_id) {
+                code_area = document.getElementById(code_id);
+            }
+            else {
+                code_area = element.previousElementSibling ||
+                    element.parentElement.previousElementSibling;
+            }
+            code = (code_area === null || code_area === void 0 ? void 0 : code_area.innerText // from div-code
+            )
+                || (code_area === null || code_area === void 0 ? void 0 : code_area.value) // from textarea
+                || state['code']; // from code attr
+            this.state.code_area = code_area;
+            this.state.code = code;
+            return code ? app.h(app.Fragment, null,
+                app.h("div", { class: "toolbox" }, !state.hide_button && app.h("a", { class: "button", "$onclick": "show-popup" }, "Try the Code")))
+                : app.h("div", null, "AppRun Play cannot find code to run, please set code-element-id or code.");
+        };
+        this.rendered = ({ style, hide_src, code_area, code }) => {
+            if (!code)
+                return;
+            if (!document.getElementById('play-popup')) {
+                document.body.insertAdjacentHTML('beforeend', popup_div);
+                const textarea = document.querySelector(".apprun-play .editor");
+                const iframe = document.querySelector('.apprun-play .preview');
+                textarea.value = code;
+                setup_editor(textarea, iframe, code, false);
+            }
             const iframe = document.createElement('iframe');
             iframe.classList.add('apprun-preview');
             iframe.style.cssText = style;
-            element.before(iframe);
-            write_code(iframe, this.state.code);
-            if (!document.getElementById('play-popup')) {
-                document.body.insertAdjacentHTML('beforeend', popup_div);
-            }
+            this.element.before(iframe);
+            if (hide_src)
+                code_area.style.display = 'none';
+            setup_editor(code_area, iframe, code, hide_src);
         };
         this.update = {
             'show-popup': ({ code }) => {
-                const textarea = document.querySelector(".editor");
-                textarea.value = code;
-                this.run('change', code);
-                if (typeof CodeMirror !== 'undefined') {
-                    if (!editor) {
-                        editor = CodeMirror.fromTextArea(textarea, {
-                            lineNumbers: true,
-                            mode: 'jsx'
-                        });
-                        editor.on('change', (cm) => this.run('change', cm.getValue()));
-                    }
-                    else {
-                        editor.setValue(code);
-                    }
-                }
-                else {
-                    textarea.onkeyup = () => this.run('change', textarea.value);
-                }
+                var _a;
+                const textarea = document.querySelector(".apprun-play .editor");
+                (_a = textarea.editor) === null || _a === void 0 ? void 0 : _a.setValue(code);
                 document.getElementById('play-popup').classList.add('show');
             },
             '@close-popup': () => { document.getElementById('play-popup').classList.remove('show'); },
-            'change': [(_, code) => {
-                    preview_code(code);
-                }, { delay: 300 }],
         };
     }
 }
