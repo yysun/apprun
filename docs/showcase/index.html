@@ -14,7 +14,7 @@
     
     
       
-        <title>Directive - AppRun Docs</title>
+        <title>Showcase - AppRun Docs</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#directives" class="md-skip">
+        <a href="#apprun-app-showcase" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Directive
+              Showcase
             
           </span>
         </div>
@@ -418,14 +418,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       <label class="md-nav__link" for="__nav_3">
         Getting started
@@ -465,11 +467,74 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../showcase/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Showcase
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Showcase
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#apprun-app-showcase" class="md-nav__link">
+    AppRun App Showcase
+  </a>
+  
+    <nav class="md-nav" aria-label="AppRun App Showcase">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conduit" class="md-nav__link">
+    Conduit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hacker-news-pwa" class="md-nav__link">
+    Hacker-News PWA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todomvc" class="md-nav__link">
+    TodoMVC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -542,16 +607,14 @@
 
   
   
-    
-  
   
     
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       <label class="md-nav__link" for="__nav_5">
         View Pattern
@@ -579,85 +642,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Directive
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../directive/" class="md-nav__link">
         Directive
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#on" class="md-nav__link">
-    $on...
-  </a>
-  
-    <nav class="md-nav" aria-label="$on...">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#publish-events" class="md-nav__link">
-    Publish Events
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#invoke-functions" class="md-nav__link">
-    Invoke Functions
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bind" class="md-nav__link">
-    $bind
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#custom-directive" class="md-nav__link">
-    Custom directive
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -830,8 +819,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -840,43 +827,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#on" class="md-nav__link">
-    $on...
+  <a href="#apprun-app-showcase" class="md-nav__link">
+    AppRun App Showcase
   </a>
   
-    <nav class="md-nav" aria-label="$on...">
+    <nav class="md-nav" aria-label="AppRun App Showcase">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#publish-events" class="md-nav__link">
-    Publish Events
+  <a href="#conduit" class="md-nav__link">
+    Conduit
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#invoke-functions" class="md-nav__link">
-    Invoke Functions
+  <a href="#hacker-news-pwa" class="md-nav__link">
+    Hacker-News PWA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todomvc" class="md-nav__link">
+    TodoMVC
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bind" class="md-nav__link">
-    $bind
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#custom-directive" class="md-nav__link">
-    Custom directive
-  </a>
   
 </li>
       
@@ -892,111 +872,283 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/directive.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/showcase.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="directives">Directives<a class="headerlink" href="#directives" title="Permanent link">&para;</a></h1>
-<p>AppRun directives are syntax sugars that help simplify the code. They are custom attributes in JSX that have names starting with $. AppRun two out-of-the-box directives: $on and $bind.</p>
-<h2 id="on">$on...<a class="headerlink" href="#on" title="Permanent link">&para;</a></h2>
-<p>The $on directive simplifies the code to convert the DOM events to AppRun events.</p>
-<h3 id="publish-events">Publish Events<a class="headerlink" href="#publish-events" title="Permanent link">&para;</a></h3>
-<p><div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">Counter</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
-  <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
-    <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="o">&gt;-</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="s1">&#39;+1&#39;</span><span class="o">&gt;+</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-  <span class="o">&lt;</span><span class="err">/&gt;;</span>
-  <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;+1&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="mf">1</span><span class="p">,</span>
-    <span class="s1">&#39;-1&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">-</span> <span class="mf">1</span>
-  <span class="p">};</span>
-<span class="p">}</span>
-<span class="k">new</span> <span class="nx">Counter</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-</code></pre></div>
-<apprun-play></apprun-play></p>
-<h3 id="invoke-functions">Invoke Functions<a class="headerlink" href="#invoke-functions" title="Permanent link">&para;</a></h3>
-<p>The $on directive can also invoke functions.</p>
-<p><div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">Counter</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
-  <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">state</span><span class="p">=&gt;</span><span class="nx">state</span><span class="o">-</span><span class="mf">1</span><span class="p">}</span><span class="o">&gt;-</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">state</span><span class="p">=&gt;</span><span class="nx">state</span><span class="o">+</span><span class="mf">1</span><span class="p">}</span><span class="o">&gt;+</span><span class="mf">1</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-  <span class="o">&lt;</span><span class="err">/div&gt;;</span>
-<span class="p">}</span>
-<span class="k">new</span> <span class="nx">Counter</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-</code></pre></div>
-<apprun-play></apprun-play></p>
-<h2 id="bind">$bind<a class="headerlink" href="#bind" title="Permanent link">&para;</a></h2>
-<p>The $bind directive synchronizes the HTML input value to the <em>state</em>. See the $bind example below.</p>
-<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="p">{</span><span class="nx">state</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
-  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">autofocus</span> <span class="nx">$bind</span> <span class="o">/&gt;</span>
-<span class="o">&lt;</span><span class="err">/div&gt;;</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
-</code></pre></div>
-<apprun-play></apprun-play></p>
-<p>Or, you can bind to the properties of the <em>state</em>.</p>
-<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">a</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
-  <span class="nx">b</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
-  <span class="nx">get</span> <span class="nx">c</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
-  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span> <span class="nx">$bind</span><span class="o">=</span><span class="s2">&quot;a&quot;</span> <span class="o">/&gt;</span>
-  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span> <span class="nx">$bind</span><span class="o">=</span><span class="s2">&quot;b&quot;</span> <span class="o">/&gt;</span>
-  <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">a</span><span class="p">}</span> <span class="o">+</span> <span class="p">{</span><span class="nx">b</span><span class="p">}</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">c</span> <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-<span class="o">&lt;</span><span class="err">/&gt;;</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
-</code></pre></div>
-<apprun-play></apprun-play></p>
-<h2 id="custom-directive">Custom directive<a class="headerlink" href="#custom-directive" title="Permanent link">&para;</a></h2>
-<p>When AppRun is processing the JSX code, it publishes the $ event when it finds the custom attributes like $X. Thus, you can subscribe to the $ event to provide your directives. E.g., if you create the $animation directive to attach the animation classes from the animation library, <a href="https://daneden.github.io/animate.css">animation.css</a>.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span><span class="nx">key</span><span class="p">,</span> <span class="nx">props</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;$animation&#39;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">props</span><span class="p">.</span><span class="kr">class</span> <span class="o">=</span> <span class="err">\</span><span class="sb">`animated </span><span class="err">\</span><span class="si">${</span><span class="nx">value</span><span class="si">}</span><span class="sb">\`;</span>
-<span class="sb">    }</span>
-<span class="sb">  }</span>
-<span class="sb">});</span>
-</code></pre></div>
-You can see the $animation example below.</p>
-<p><div class="highlight"><pre><span></span><code><span class="c1">// Animation Directive Using animate.css</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span><span class="nx">key</span><span class="p">,</span> <span class="nx">props</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;$animation&#39;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">props</span><span class="p">.</span><span class="kr">class</span> <span class="o">=</span> <span class="sb">`animated </span><span class="si">${</span><span class="nx">value</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+                  <h1>Showcase</h1>
+                
+                <h2 id="apprun-app-showcase">AppRun App Showcase<a class="headerlink" href="#apprun-app-showcase" title="Permanent link">&para;</a></h2>
+<p>This page shows a few applications built with AppRun.</p>
+<h3 id="conduit">Conduit<a class="headerlink" href="#conduit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Project: <a href="https://github.com/gothinkster/apprun-realworld-example-app">https://github.com/gothinkster/apprun-realworld-example-app</a></li>
+</ul>
+<textarea>
+<!DOCTYPE html>
+<html>
 
-<span class="kr">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">animation</span><span class="o">:</span> <span class="kc">true</span>
-<span class="p">}</span>
+  <!-- Import Ionicon icons & Google Fonts our Bootstrap theme relies on -->
+  <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic"
+    rel="stylesheet" type="text/css">
+  <!-- Import the custom Bootstrap 4 theme from our hosted CDN -->
+  <link rel="stylesheet" href="//demo.productionready.io/main.css">
+  <style>
+    .modal-backdrop.show {
+      opacity: 0.5;
+      z-index: 1040 !important;
+    }
 
-<span class="kr">const</span> <span class="nx">start_animation</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="nx">animation</span><span class="o">:</span> <span class="kc">true</span> <span class="p">})</span>
-<span class="kr">const</span> <span class="nx">stop_animation</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">({</span> <span class="nx">animation</span><span class="o">:</span> <span class="kc">false</span> <span class="p">})</span>
+    .modal-open {
+      position: absolute;
+      width: 100%
+    }
 
-<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
-  <span class="o">&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css&quot;</span><span class="o">&gt;&lt;</span><span class="err">/link&gt;</span>
-  <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">$animation</span><span class="o">=</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">animation</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;bounce infinite&#39;</span><span class="p">}</span> <span class="nx">src</span><span class="o">=</span><span class="s1">&#39;../assets/logo.png&#39;</span> <span class="o">/&gt;</span>
-  <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">$animation</span><span class="o">=</span><span class="s1">&#39;bounceInRight&#39;</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">disabled</span><span class="o">=</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">animation</span><span class="p">}</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">start_animation</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">start</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">disabled</span><span class="o">=</span><span class="p">{</span><span class="o">!</span><span class="nx">state</span><span class="p">.</span><span class="nx">animation</span><span class="p">}</span> <span class="nx">$onclick</span><span class="o">=</span><span class="p">{</span><span class="nx">stop_animation</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">stop</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-<span class="o">&lt;</span><span class="err">/&gt;</span>
+    .modal-dialog {
+      z-index: 1100 !important;
+    }
+  </style>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
-</code></pre></div>
-<apprun-play style="height:230px"></apprun-play></p>
+
+<body>
+  <nav class="navbar navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">conduit</a>
+      <div id="header" />
+    </div>
+  </nav>
+  <div id='my-app'></div>
+  <footer>
+    <div class="container">
+      <a href="#" class="logo-font">conduit</a>
+      <span class="attribution">
+        An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed
+        under MIT.
+      </span>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
+  <script src="https://unpkg.com/apprun"></script>
+  <script src='https://gothinkster.github.io/apprun-realworld-example-app/app.js'></script>
+</body>
+
+</html>
+</textarea>
+<p><apprun-play style="height:450px" hide_src="true" hide_button="true"></apprun-play></p>
+<h3 id="hacker-news-pwa">Hacker-News PWA<a class="headerlink" href="#hacker-news-pwa" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Project: <a href="https://github.com/yysun/apprun-hn">https://github.com/yysun/apprun-hn</a></li>
+</ul>
+<textarea>
+<!doctype html>
+<html>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FAFFE6">
+  <!-- Home screen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white">
+  <meta name="apple-mobile-web-app-title" content="AppRun*hn PWA">
+  <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
+  <!-- Tile icon for Windows -->
+  <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
+  <title>AppRun - HN</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #333;
+      background-color: #fff;
+      overflow: scroll
+    }
+
+    a {
+      color: #337ab7;
+      text-decoration: none;
+      background-color: transparent
+    }
+
+    ul {
+      padding: 0;
+      list-style: none
+    }
+
+    .inner {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto
+    }
+
+    @media (min-width: 992px) {
+      .inner {
+        width: 970px
+      }
+    }
+
+    @media (min-width: 768px) {
+      .inner {
+        width: 750px
+      }
+    }
+
+    .hn .header {
+      position: fixed;
+      background-color: #faffe6;
+      top: 0px;
+      width: 100%;
+      padding: 10px 0
+    }
+
+    .hn .main {
+      padding: 50px 0px
+    }
+
+    .hn .footer {
+      position: fixed;
+      background-color: #fff;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 1rem
+    }
+
+    .hn .story-list li {
+      padding: 10px 0
+    }
+
+    .hn .score {
+      color: #666;
+      font-size: 1.1em;
+      font-weight: 700;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      float: left;
+      padding-top: 10px
+    }
+
+    .hn .meta {
+      color: #aaa;
+      white-space: nowrap
+    }
+
+    .hn .meta a {
+      color: #096;
+      cursor: pointer
+    }
+
+    .hn .comment {
+      padding: 5px 0 5px 10px;
+      border-left: 1px solid #eeeeee
+    }
+
+    .hn .text {
+      padding: 10px 0
+    }
+
+    .hn .toggle {
+      color: #096;
+      padding-bottom: 10px;
+      cursor: pointer
+    }
+
+    .hn .collapsed {
+      display: none
+    }
+
+    .hn .toggle:before {
+      content: ' [-] '
+    }
+
+    .hn .toggle.closed:before {
+      content: ' [+] '
+    }
+
+    .hn .toggle.closed:after {
+      content: ' (...)'
+    }
+
+    .hn .more {
+      margin-top: 20px;
+      margin-left: 20px
+    }
+
+    .hn .more a {
+      cursor: pointer;
+      padding-bottom: 150px
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
+
+<body>
+  <script type="module" src="https://yysun.github.io/apprun-hn/dist/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  </script>
+</body>
+
+</html>
+</textarea>
+<p><apprun-play style="height:450px" hide_src="true" hide_button="true"></apprun-play></p>
+<h3 id="todomvc">TodoMVC<a class="headerlink" href="#todomvc" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Author: <a href="https://github.com/samsondav">https://github.com/samsondav</a></li>
+<li>Project: <a href="https://github.com/samsondav/todomvc-apprun">https://github.com/samsondav/todomvc-apprun</a></li>
+</ul>
+<textarea>
+<!doctype html>
+<html lang="en">
+<body>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/todomvc-common/base.css">
+  </link>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/todomvc-app-css/index.css">
+  </link>
+  <!-- CSS overrides - remove if you don't need it -->
+  <link rel="stylesheet" href="https://todomvc-apprunjs.surge.sh/css/app.css">
+  </link>
+  <script src="https://unpkg.com/apprun@latest/dist/apprun-html.js"></script>
+  <section class="todoapp">
+    <div id="app"></div>
+  </section>
+  <footer class="info">
+    <p>Double-click to edit a todo</p>
+    <p>Created by <a href="http://github.com/samphilipd">Sam Davies</a></p>
+    <p>Powered by <a href="https://apprun.js.org/">AppRunJS</a></p>
+    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+  </footer>
+  <!-- Scripts here. Don't remove ↓ -->
+  <script src="https://cdn.jsdelivr.net/npm/todomvc-common/base.js"></script>
+  <script src="https://todomvc-apprunjs.surge.sh/js/app.js"></script>
+</body>
+
+</html>
+</textarea>
+<p><apprun-play style="height:450px" hide_src="true" hide_button="true"></apprun-play></p>
                 
               
               
@@ -1015,7 +1167,7 @@ You can see the $animation example below.</p>
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../view-patterns/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../tutorial/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1024,19 +1176,19 @@ You can see the $animation example below.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              JSX
+              Tutorial
             </div>
           </div>
         </a>
       
       
-        <a href="../svg/" class="md-footer__link md-footer__link--next" rel="next">
+        <a href="../spa/" class="md-footer__link md-footer__link--next" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              SVG
+              Creating Project
             </div>
           </div>
           <div class="md-footer__button md-icon">

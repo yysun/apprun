@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+  <!-- Import Ionicon icons & Google Fonts our Bootstrap theme relies on -->
+  <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic"
+    rel="stylesheet" type="text/css">
+  <!-- Import the custom Bootstrap 4 theme from our hosted CDN -->
+  <link rel="stylesheet" href="//demo.productionready.io/main.css">
+  <style>
+    .modal-backdrop.show {
+      opacity: 0.5;
+      z-index: 1040 !important;
+    }
+
+    .modal-open {
+      position: absolute;
+      width: 100%
+    }
+
+    .modal-dialog {
+      z-index: 1100 !important;
+    }
+  </style>
+
+
+<body>
+  <nav class="navbar navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">conduit</a>
+      <div id="header" />
+    </div>
+  </nav>
+  <div id='my-app'></div>
+  <footer>
+    <div class="container">
+      <a href="#" class="logo-font">conduit</a>
+      <span class="attribution">
+        An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed
+        under MIT.
+      </span>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
+  <script src="https://unpkg.com/apprun"></script>
+  <script src='https://gothinkster.github.io/apprun-realworld-example-app/app.js'></script>
+</body>
+
+</html>

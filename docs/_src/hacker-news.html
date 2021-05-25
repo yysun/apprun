@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FAFFE6">
+  <!-- Home screen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white">
+  <meta name="apple-mobile-web-app-title" content="AppRun*hn PWA">
+  <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
+  <!-- Tile icon for Windows -->
+  <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
+  <title>AppRun - HN</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #333;
+      background-color: #fff;
+      overflow: scroll
+    }
+
+    a {
+      color: #337ab7;
+      text-decoration: none;
+      background-color: transparent
+    }
+
+    ul {
+      padding: 0;
+      list-style: none
+    }
+
+    .inner {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto
+    }
+
+    @media (min-width: 992px) {
+      .inner {
+        width: 970px
+      }
+    }
+
+    @media (min-width: 768px) {
+      .inner {
+        width: 750px
+      }
+    }
+
+    .hn .header {
+      position: fixed;
+      background-color: #faffe6;
+      top: 0px;
+      width: 100%;
+      padding: 10px 0
+    }
+
+    .hn .main {
+      padding: 50px 0px
+    }
+
+    .hn .footer {
+      position: fixed;
+      background-color: #fff;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 1rem
+    }
+
+    .hn .story-list li {
+      padding: 10px 0
+    }
+
+    .hn .score {
+      color: #666;
+      font-size: 1.1em;
+      font-weight: 700;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      float: left;
+      padding-top: 10px
+    }
+
+    .hn .meta {
+      color: #aaa;
+      white-space: nowrap
+    }
+
+    .hn .meta a {
+      color: #096;
+      cursor: pointer
+    }
+
+    .hn .comment {
+      padding: 5px 0 5px 10px;
+      border-left: 1px solid #eeeeee
+    }
+
+    .hn .text {
+      padding: 10px 0
+    }
+
+    .hn .toggle {
+      color: #096;
+      padding-bottom: 10px;
+      cursor: pointer
+    }
+
+    .hn .collapsed {
+      display: none
+    }
+
+    .hn .toggle:before {
+      content: ' [-] '
+    }
+
+    .hn .toggle.closed:before {
+      content: ' [+] '
+    }
+
+    .hn .toggle.closed:after {
+      content: ' (...)'
+    }
+
+    .hn .more {
+      margin-top: 20px;
+      margin-left: 20px
+    }
+
+    .hn .more a {
+      cursor: pointer;
+      padding-bottom: 150px
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-dev-tools.js"></script>
+
+<body>
+  <script type="module" src="https://yysun.github.io/apprun-hn/dist/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  </script>
+</body>
+
+</html>
