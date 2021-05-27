@@ -474,6 +474,18 @@
   
 
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/" class="md-nav__link">
+        Notebooks
+      </a>
+    </li>
+  
+
+          
         </ul>
       </nav>
     </li>
@@ -651,6 +663,26 @@
   <a href="#custom-directive" class="md-nav__link">
     Custom directive
   </a>
+  
+    <nav class="md-nav" aria-label="Custom directive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animation-directive" class="md-nav__link">
+    Animation directive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form-validation" class="md-nav__link">
+    Form Validation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -878,6 +910,26 @@
     Custom directive
   </a>
   
+    <nav class="md-nav" aria-label="Custom directive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animation-directive" class="md-nav__link">
+    Animation directive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form-validation" class="md-nav__link">
+    Form Validation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -957,8 +1009,8 @@
 </code></pre></div>
 <apprun-play></apprun-play></p>
 <h2 id="custom-directive">Custom directive<a class="headerlink" href="#custom-directive" title="Permanent link">&para;</a></h2>
-<p>When AppRun is processing the JSX code, it publishes the $ event when it finds the custom attributes like $X. Thus, you can subscribe to the $ event to provide your directives. E.g., if you create the $animation directive to attach the animation classes from the animation library, <a href="https://daneden.github.io/animate.css">animation.css</a>.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span><span class="nx">key</span><span class="p">,</span> <span class="nx">props</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<p>When AppRun is processing the JSX code, it publishes the $ event when it finds the custom attributes like $X. Thus, you can subscribe to the $ event to provide your directives.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span><span class="nx">key</span><span class="p">,</span> <span class="nx">props</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;$animation&#39;</span><span class="p">)</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
@@ -967,7 +1019,8 @@
 <span class="sb">  }</span>
 <span class="sb">});</span>
 </code></pre></div>
-You can see the $animation example below.</p>
+<h3 id="animation-directive">Animation directive<a class="headerlink" href="#animation-directive" title="Permanent link">&para;</a></h3>
+<p>We can create the $animation directive to attach the animation classes from the animation library, <a href="https://daneden.github.io/animate.css">animation.css</a>. See the $animation example below.</p>
 <p><div class="highlight"><pre><span></span><code><span class="c1">// Animation Directive Using animate.css</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span><span class="nx">key</span><span class="p">,</span> <span class="nx">props</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;$animation&#39;</span><span class="p">)</span> <span class="p">{</span>
@@ -995,6 +1048,56 @@ You can see the $animation example below.</p>
 <span class="o">&lt;</span><span class="err">/&gt;</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+</code></pre></div>
+<apprun-play style="height:230px"></apprun-play></p>
+<h3 id="form-validation">Form Validation<a class="headerlink" href="#form-validation" title="Permanent link">&para;</a></h3>
+<p>HTML5 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation">Constraint Validation API</a> simplifies the client-side validation. We can use basic validation by choosing the type attribute of input elements, such as email and URL. Or we can use the <em>pattern</em> attribute for validation using regular expression. Also, we can use the <em>required</em>, <em>maxlength</em>, <em>min</em>, and <em>max</em> attributes.</p>
+<p>We can create the $validation directive to display the validation results by setting and removing the class.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">validate</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">;</span>
+  <span class="nx">element</span><span class="p">.</span><span class="nx">checkValidity</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">validity</span><span class="p">.</span><span class="nx">valid</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">validity</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;is-invalid&#39;</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;is-invalid&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="p">({</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">props</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;$validate&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+    <span class="nx">props</span><span class="p">[</span><span class="s1">&#39;oninput&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">validate</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+
+<span class="kr">const</span> <span class="nx">signIn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;form submitted&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="p">({</span><span class="nx">name</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
+  <span class="o">&lt;</span><span class="nx">style</span><span class="o">&gt;</span><span class="p">{</span><span class="sb">`.is-invalid { border: 2px solid red; color: red }`</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/style&gt;</span>
+  <span class="o">&lt;</span><span class="nx">form</span> <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">&quot;off&quot;</span> <span class="nx">$onsubmit</span><span class="o">=</span><span class="s2">&quot;signIn&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;name&quot;</span> <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="o">&gt;</span><span class="nx">Enter</span> <span class="nx">an</span> <span class="nx">name</span> <span class="p">(</span><span class="nx">letters</span> <span class="nx">only</span><span class="p">)</span><span class="o">:</span> <span class="o">&lt;</span><span class="err">/label&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">$validate</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span> <span class="nx">required</span> <span class="nx">pattern</span><span class="o">=</span><span class="s2">&quot;[A-Za-z]+&quot;</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;email&quot;</span> <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="o">&gt;</span><span class="nx">Enter</span> <span class="nx">a</span> <span class="nx">email</span><span class="o">:</span> <span class="o">&lt;</span><span class="err">/label&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">$validate</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;email&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;email&quot;</span> <span class="nx">required</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;url&quot;</span> <span class="nx">autocomplete</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="o">&gt;</span><span class="nx">Enter</span> <span class="nx">an</span> <span class="nx">URL</span><span class="o">:</span> <span class="o">&lt;</span><span class="err">/label&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">$validate</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;url&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;url&quot;</span> <span class="nx">required</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span><span class="o">&gt;</span><span class="nx">Submit</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+  <span class="o">&lt;</span><span class="err">/form&gt;</span>
+  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/div&gt;</span>
+<span class="o">&lt;</span><span class="err">/&gt;;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="p">{},</span> <span class="nx">view</span><span class="p">,</span> <span class="p">{</span><span class="nx">signIn</span><span class="p">});</span>
 </code></pre></div>
 <apprun-play style="height:230px"></apprun-play></p>
                 

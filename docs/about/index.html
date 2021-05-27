@@ -474,6 +474,18 @@
   
 
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/" class="md-nav__link">
+        Notebooks
+      </a>
+    </li>
+  
+
+          
         </ul>
       </nav>
     </li>
@@ -775,8 +787,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#see-the-result" class="md-nav__link">
-    See the Result
+  <a href="#see-the-results" class="md-nav__link">
+    See the Results
   </a>
   
 </li>
@@ -881,8 +893,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#see-the-result" class="md-nav__link">
-    See the Result
+  <a href="#see-the-results" class="md-nav__link">
+    See the Results
   </a>
   
 </li>
@@ -961,99 +973,50 @@
                 
                 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>The recently updated <a href="https://apprun.js.org/docs">AppRun Docs Site</a> has made the code snippets in the documents runnable and editable, making the technical documentation interactive and much more fun to use.</p>
-<p>The site is built with <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>, a beautiful and powerful tool for building technical documentation site. We have extended it by adding a web component built with <a href="https://apprun.js.org">AppRun</a> to deliver interactive experiences.</p>
+<p>The site is built with <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>, a beautiful and powerful tool for building technical documentation site. We extended it by adding a web component built with <a href="https://apprun.js.org">AppRun</a> to deliver interactive experiences.</p>
 <p>In this post, I Will explain how it's made. Let's start with reviewing the user experience.</p>
 <h2 id="user-experience">User Experience<a class="headerlink" href="#user-experience" title="Permanent link">&para;</a></h2>
-<p>Technical documents usually have code snippets. Often the code has syntax highlighted for easy reading. However, users usually can see screenshots but not live results of the code. Screenshots have limitations. For example, when describing how to make animation, a static screenshot is not helpful. We need a way to display the live code execution results.</p>
-<h3 id="see-the-result">See the Result<a class="headerlink" href="#see-the-result" title="Permanent link">&para;</a></h3>
+<p>Technical documents usually have code snippets. Often the code has syntax highlighted for easy reading. However, users usually can only see screenshots but not live results of the code. Screenshots have limitations. For example, when describing how to make animation, a static screenshot is not helpful. We need a way to display the live code execution results.</p>
+<h3 id="see-the-results">See the Results<a class="headerlink" href="#see-the-results" title="Permanent link">&para;</a></h3>
 <p>You can visit the <a href="https://apprun.js.org/docs/directive/#custom-directive">AppRun Docs Page</a> to see a live animation.</p>
 <p><img alt="run code" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/1da6f59c33jatqyo0imc.png" /></p>
 <h3 id="try-the-code">Try the Code<a class="headerlink" href="#try-the-code" title="Permanent link">&para;</a></h3>
-<p>Furthermore, users might have been inspired by the code examples and want to try different ideas. Traditionally, they could copy and code to run it in their code editors. It would be nice for users to edit the code right on the doc site and see the results.</p>
+<p>Furthermore, users might have been inspired by the code examples and want to try different ideas. Traditionally, they could copy and paste the code to run it in their code editors. It would be nice for users to edit the code right on the doc site and see the results.</p>
 <p>You can click the "Try the Code" button of the <a href="https://apprun.js.org/docs/directive/#custom-directive">AppRun Docs Page</a>. It opens the AppRun Playground with an editor and preview pane to play the code.</p>
 <p><img alt="edit code" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/y0dc7t2lw0txqab2vus7.png" /></p>
 <p>The user experiences have much improved with the capabilities of seeing the code results and trying the code in technical documents.</p>
 <h2 id="author-experience">Author Experience<a class="headerlink" href="#author-experience" title="Permanent link">&para;</a></h2>
 <p>Not only is it much more attractive to the readers, but also the authors will feel it much more enjoyable when writing the documents.</p>
 <h3 id="present-the-live-code">Present the Live Code<a class="headerlink" href="#present-the-live-code" title="Permanent link">&para;</a></h3>
-<p>Traditionally, authors copy and paste the code snippets from their testing projects into the markdown documents as code blocks. The limitation is that they can only present the code but not the running code. This is because it would be simpler to show the running code than to describe the code behavior. For example, describing a calculator could need an extended text, but it could be easier to present the calculator for users to click.</p>
+<p>Traditionally, authors copy and paste the code snippets from their testing projects into the markdown documents as code blocks. The limitation is that they can only present the code but not the running code. Sometimes, it would be hard to describe the code behavior. For example, describing a calculator could need a long text, but it could be easier to present the calculator for users to click.</p>
 <p>You can visit the <a href="https://apprun.js.org/docs/architecture-ideas/state-machine/#model-a-calculator">AppRun Docs Page</a> to see a running calculator.</p>
 <p><img alt="hide source" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/yx244b2z9vkjooyl1f7i.png" /></p>
 <p>All we need to do is to add a web component, called <em>apprun-play</em> under the code blocks.</p>
-<div class="highlight"><pre><span></span><code>  ``js
-  // code snippets
-  ``
-  &lt;apprun-play&gt;&lt;/apprun-play&gt;
+<div class="highlight"><pre><span></span><code>```js
+// code snippets
+```
+&lt;apprun-play&gt;&lt;/apprun-play&gt;
+```
 </code></pre></div>
 <h3 id="control-the-presentation">Control the Presentation<a class="headerlink" href="#control-the-presentation" title="Permanent link">&para;</a></h3>
 <p>You probably have noticed that the page shows only the results but not the source code. It is because we can control whether to show the source code. We can also decide whether to see the "Try the Code" button.</p>
-<div class="highlight"><pre><span></span><code>  ``js
-  // code snippets
-  ``
-  &lt;apprun-play hide_src=&quot;true&quot; hide_button=&quot;true&quot;&gt;&lt;/apprun-play&gt;
+<div class="highlight"><pre><span></span><code>```js
+// code snippets
+```
+&lt;apprun-play hide_src=&quot;true&quot; hide_button=&quot;true&quot;&gt;&lt;/apprun-play&gt;
 </code></pre></div>
 <p>You can visit the <a href="https://apprun.js.org/docs/architecture/#ceremony-vs-essence">AppRun Docs Page</a> to see an example of only displaying the running results.</p>
 <p><img alt="hide try-the-code button" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ldvvrmu1juty4jt7ezvo.png" /></p>
 <p>We can present the code snippets, but we can also embed whole applications because the <em>apprun-play</em> web component supports HTML.</p>
 <p><img alt="Embed Apps" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/nfwlatbkx39bpijwihhl.png" /></p>
 <p>We can use the <a href="https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#embedding-external-files">embedding external files</a> feature of <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>. This way, the markdown document does not include the source code and can remain simple and clean.</p>
-<div class="highlight"><pre><span></span><code>  &lt;textarea&gt;
-  &lt;!DOCTYPE html&gt;
-  &lt;html&gt;
-
-    &lt;!-- Import Ionicon icons &amp; Google Fonts our Bootstrap theme relies on --&gt;
-    &lt;link href=&quot;//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
-    &lt;link
-      href=&quot;//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic&quot;
-      rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
-    &lt;!-- Import the custom Bootstrap 4 theme from our hosted CDN --&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;//demo.productionready.io/main.css&quot;&gt;
-    &lt;style&gt;
-      .modal-backdrop.show {
-        opacity: 0.5;
-        z-index: 1040 !important;
-      }
-
-      .modal-open {
-        position: absolute;
-        width: 100%
-      }
-
-      .modal-dialog {
-        z-index: 1100 !important;
-      }
-    &lt;/style&gt;
-
-
-  &lt;body&gt;
-    &lt;nav class=&quot;navbar navbar-light&quot;&gt;
-      &lt;div class=&quot;container&quot;&gt;
-        &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;conduit&lt;/a&gt;
-        &lt;div id=&quot;header&quot; /&gt;
-      &lt;/div&gt;
-    &lt;/nav&gt;
-    &lt;div id=&#39;my-app&#39;&gt;&lt;/div&gt;
-    &lt;footer&gt;
-      &lt;div class=&quot;container&quot;&gt;
-        &lt;a href=&quot;#&quot; class=&quot;logo-font&quot;&gt;conduit&lt;/a&gt;
-        &lt;span class=&quot;attribution&quot;&gt;
-          An interactive learning project from &lt;a href=&quot;https://thinkster.io&quot;&gt;Thinkster&lt;/a&gt;. Code &amp;amp; design licensed
-          under MIT.
-        &lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/footer&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/marked/marked.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-dev-tools.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;https://unpkg.com/apprun&quot;&gt;&lt;/script&gt;
-    &lt;script src=&#39;https://gothinkster.github.io/apprun-realworld-example-app/app.js&#39;&gt;&lt;/script&gt;
-  &lt;/body&gt;
-
-  &lt;/html&gt;
-  &lt;/textarea&gt;
-  &lt;apprun-play style=&quot;height:350px&quot; hide_src=&quot;true&quot; hide_button=&quot;true&quot;&gt;&lt;/apprun-play&gt;
+<div class="highlight"><pre><span></span><code>```
+--8&lt;--​ &quot;real-world.html&quot;
+```
+&lt;apprun-play style=&quot;height:350px&quot; hide_src=&quot;true&quot; hide_button=&quot;true&quot;&gt;&lt;/apprun-play&gt;
 </code></pre></div>
 <h3 id="automatic-test-the-code">Automatic Test the Code<a class="headerlink" href="#automatic-test-the-code" title="Permanent link">&para;</a></h3>
-<p>When it displays the code result automatically is automatic testing of the code, which tells the author if the code works as expected.</p>
+<p>When it displays the code result automatically means automatic testing of the code, which tells the author if the code works as expected.</p>
 <p>Also, while writing, the authors can come up with new ideas. With <em>apprun-play</em> web component, they can edit the code and see the live results. Once it's done, they can copy and paste the code back into the document.</p>
 <p>Overall, the <em>apprun-play</em> web component is a helpful tool for the document author.</p>
 <h2 id="how-its-made">How It's Made<a class="headerlink" href="#how-its-made" title="Permanent link">&para;</a></h2>

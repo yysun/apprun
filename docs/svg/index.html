@@ -474,6 +474,18 @@
   
 
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/" class="md-nav__link">
+        Notebooks
+      </a>
+    </li>
+  
+
+          
         </ul>
       </nav>
     </li>
@@ -978,11 +990,12 @@
 <span class="kr">class</span> <span class="nx">SvgComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
 
-  <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">{</span>
+ <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">transform</span> <span class="o">=</span> <span class="s2">&quot;rotate(&quot;</span> <span class="o">+</span> <span class="nx">state</span> <span class="o">+</span> <span class="s2">&quot;deg)&quot;</span><span class="p">;</span>
     <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;view&quot;</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="nx">style</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">style</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/style&gt;</span>
       <span class="o">&lt;</span><span class="nx">svg</span> <span class="nx">width</span><span class="o">=</span><span class="s2">&quot;380&quot;</span> <span class="nx">height</span><span class="o">=</span><span class="s2">&quot;380&quot;</span> <span class="nx">viewBox</span><span class="o">=</span><span class="s2">&quot;-190,-190,380,380&quot;</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">g</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;carousel&quot;</span> <span class="nx">transform</span><span class="o">=</span><span class="p">{</span><span class="sb">`rotate(</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">)`</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">g</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;carousel&quot;</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span><span class="nx">transform</span><span class="p">}}</span><span class="o">&gt;</span>
           <span class="p">{</span><span class="nx">triangles</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">t</span> <span class="p">=&gt;</span>
             <span class="o">&lt;</span><span class="nx">polygon</span> <span class="nx">id</span><span class="o">=</span><span class="p">{</span><span class="nx">t</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span>
               <span class="nx">points</span><span class="o">=</span><span class="s2">&quot;-50,-88 0,-175 50,-88&quot;</span>

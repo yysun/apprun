@@ -1,0 +1,32 @@
+#!javascript
+
+// import AppRun
+lib = interactive.configureRequire({
+    paths: {
+        apprun: "https://unpkg.com/apprun/dist/apprun-html"
+    }
+});
+lib(["apprun"], ()=>console.log('app is ready'));
+
+#!html
+
+<div id="my-msg"></div>
+<div id="my-app"></div>
+
+#!csharp
+
+var csharp_greeting = "hello from C#";
+
+#!javascript
+
+const state = interactive.csharp.getVariable('csharp_greeting');
+const view = state => html`<h3>${state}</h3>`
+app.start(document.getElementById('my-msg'), state, view)
+
+#!javascript
+
+  const state = new Date();
+  const view = state => html`<h3>${state.toLocaleTimeString()}</h3>`;
+  const update = { timer: state => new Date() }
+  window.setInterval(() => { app.run('timer') }, 1000);
+  app.start(document.getElementById('my-app'), state, view, update)
