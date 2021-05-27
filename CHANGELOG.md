@@ -6,6 +6,8 @@
 
 ## 3.28.3 merged into master
 
+* Replaced _morphdom_ with _lit-html_
+
 ## 1.28/ 2.28 / 3.28
 
 * New app.query function that returns the returned values of all then event handlers

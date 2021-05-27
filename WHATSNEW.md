@@ -2,19 +2,21 @@
 
 ## Default npm Version Change
 
-In the past, the AppRun default version on npm is 1.x. The CLI creates tsconfig for es5. You can use --es6 option to create tsconfig for 2.x.
-
-On Feb 21, 2020, the default version on npm has been changed from 1.x to 2.x. And the CLI creates tsconfig for es2015. You can use --es5 option for 1.x.
+On May 19, 2020, the V3 branch merged into the master branch. AppRun replaced _morphdom_ with _lit-html_.
 
 When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
 
 Currently, the npm tags are as following:
 
 * apprun@es5: 1.x, stable, es5
-* apprun@latest: 2.x, stable, es2015, web components
-* apprun@next: 3.x, dev, es2015, web components, lit-html
+* apprun@latest: 3.x, stable, es2015, web components, lit-html
 
 ## Recent Posts and Publications
+
+### [All the Ways to Make a Web Component - May 2021 Update](https://webcomponents.dev/blog/all-the-ways-to-make-a-web-component/)
+
+This post compares the coding style, bundle size, and performance of 55 different ways to make a Web Component. It put AppRun on the top 1/3 of the list of bundle size and performance.
+
 
 ### [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
 

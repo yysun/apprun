@@ -2,7 +2,7 @@
 
 AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm-inspired architecture, events, and components.
 
-> AppRun is an MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+> [All the Ways to Make a Web Component - May 2021 Update](https://webcomponents.dev/blog/all-the-ways-to-make-a-web-component/) compares the coding style, bundle size, and performance of 55 different ways to make a Web Component. It put AppRun on the top 1/3 of the list of bundle size and performance.
 
 ## AppRun Benefits
 
@@ -30,13 +30,12 @@ Or use it as ES module from unpkg.com:
 ```
 ## Architecture Concept
 
-![apprun-demo](docs/imgs/apprun-demo.gif)
-
 * AppRun [architecure](docs/architecture) has _state_, _view_, and _update_.
 * AppRun is [event-driven](docs/event-pubsub).
-* AppRun can be global app or [Component](docs/component) based.
+* AppRun apps can be global or [Component](docs/component) based.
 
-[Try the AppRun Playground](https://apprun.js.org/#play).
+
+You can get started with [AppRun Docs](https://apprun.js.org/docs) and [the AppRun Playground](https://apprun.js.org/#play).
 
 ## AppRun Book from Apress
 
@@ -66,9 +65,8 @@ npx apprun --init --spa --es5
 
 ## AppRun Dev Server
 
-AppRun now has a dev server. It is base on the _live-server_ and supports ES Modules.
+AppRun now has a dev server. It is base on the _live-server_ and supports ES Modules. _apprun-dev-server_ is install by AppRun CLI when using _esbuild_. Or you can use it directly.
 
-To use the AppRun dev server:
 
 ```sh
 npx apprun-dev-server
@@ -113,6 +111,21 @@ Have fun and send pull requests.
 
 ## Contributors
 [![](https://contributors-img.firebaseapp.com/image?repo=yysun/apprun)](https://github.com/yysun/apprun/graphs/contributors)
+
+## Support
+
+AppRun is an MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+
+### Thank you for your support
+
+* Athkahden Asura
+* Alfred Nerstu
+* Gyuri Lajos
+* Lorenz Glißmann
+* Kevin Shi
+* Chancy Kennedy
+
+
 
 ## License
 
