@@ -14,7 +14,7 @@
     
     
       
-        <title>AppRun Dev Server Supports ESM - AppRun Docs</title>
+        <title>React - AppRun Docs</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#introduction" class="md-skip">
+        <a href="#use-apprun-with-react" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AppRun Dev Server Supports ESM
+              React
             
           </span>
         </div>
@@ -418,14 +418,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       <label class="md-nav__link" for="__nav_3">
         Getting started
@@ -489,11 +491,65 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../react/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          React
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         React
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#use-apprun-components" class="md-nav__link">
+    Use AppRun Components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-react-vdom" class="md-nav__link">
+    Use React VDOM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -646,16 +702,14 @@
 
   
   
-    
-  
   
     
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       <label class="md-nav__link" for="__nav_6">
         Advanced
@@ -683,75 +737,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Dev Server
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dev-server/" class="md-nav__link">
         Dev Server
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#apprun-dev-server" class="md-nav__link">
-    apprun-dev-server
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-to-use" class="md-nav__link">
-    How to Use
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#use-with-esbuild" class="md-nav__link">
-    Use with esbuild
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -844,6 +834,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -852,36 +844,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
+  <a href="#use-apprun-components" class="md-nav__link">
+    Use AppRun Components
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#apprun-dev-server" class="md-nav__link">
-    apprun-dev-server
+  <a href="#use-react-vdom" class="md-nav__link">
+    Use React VDOM
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-to-use" class="md-nav__link">
-    How to Use
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#use-with-esbuild" class="md-nav__link">
-    Use with esbuild
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
   </a>
   
 </li>
@@ -898,98 +876,108 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/dev-server.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/react.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                  <h1>Dev Server</h1>
-                
-                <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p>We use the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">JavaScript modules</a> (ESM) extensively while coding nowadays. But we still cannot deploy the module-based code yet. It is because the browsers don't know how to handle global modules.  E.g., When developing applications using <a href="https://github.com/yysun/apprun">AppRun</a>, we need a globe module of <em>apprun</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span>
-</code></pre></div>
-<p>The browsers don't know how to import <em>apprun</em>. Therefore, We still need to use JavaScript bundlers such as webpack, rollup, or parcel to bundle the modules.</p>
-<p>But at least now, we can use the modules to speed up the development process. Recently, the Snowpack team introduced the concept of <a href="https://www.snowpack.dev/concepts/how-snowpack-works">Unbundled Development</a>, which is to leverage modules for speeding up the development process.</p>
-<p>In the past, I was thinking of building a tool to convert the global modules to the modules links on <em>unpkg</em> after compilation.</p>
-<blockquote>
-<p>The <a href="https://unpkg.com">npm package CDN</a>, unpkg.com <a href="https://github.com/mjackson/unpkg/issues/34">supports delivering modules</a> for along time. We can load <em>apprun</em> as a module from <em>unpkg</em>.</p>
-</blockquote>
-<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;https://unpkg.com/apprun?module&#39;</span>
-</code></pre></div>
-<p>Now, it seems that a development server is a different and better idea. So, I forked the live-server and made a development server for AppRun.</p>
-<p>This post is to introduce the AppRun development server, called <a href="https://github.com/yysun/apprun-dev-server"><em>apprun-dev-server</em></a>.</p>
-<h2 id="apprun-dev-server">apprun-dev-server<a class="headerlink" href="#apprun-dev-server" title="Permanent link">&para;</a></h2>
-<p>This is a static web server for developing JavaScript/TypeScript using ES modules following the concept of <a href="https://www.snowpack.dev/concepts/how-snowpack-works">Unbundled Development</a>.</p>
+                <h1 id="use-apprun-with-react">Use AppRun with React<a class="headerlink" href="#use-apprun-with-react" title="Permanent link">&para;</a></h1>
+<p><a href="https://reactjs.org/">React</a> is a popular JavaScript library for building user interfaces. Using AppRun and React in conjunction is one of the best ways to build a web app.</p>
+<p>You can use AppRun with React in one of the two ways.</p>
 <ul>
-<li>It serves the ES Modules from unpkg.com.</li>
-<li>Based on <a href="https://www.npmjs.com/package/live-server">live-server</a>, so it reloads the page automatically</li>
-<li>Also, it detects <a href="https://github.com/yysun/apprun">AppRun</a> and can replace the module/Component while keeping the application <em>state</em>.</li>
+<li>Use AppRun components in React apps</li>
+<li>Use React Virtual DOM in AppRun apps</li>
 </ul>
-<p><img alt="" src="https://github.com/yysun/apprun-dev-server/raw/master/public/apprun-hmr.gif" /></p>
-<p>The best part of the apprun-dev-server is that it does NOT require any code in our components to handle the hot module replacement. Instead, it retains the component state; replaces the module; and then puts the state back. All done automatically.</p>
-<p>If you want to refresh the state, you can reload the page in the browser by pressing F5 (on Windows) or Command+R (on Mac).</p>
-<h2 id="how-to-use">How to Use<a class="headerlink" href="#how-to-use" title="Permanent link">&para;</a></h2>
-<p>You export Component as the default module export.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<h2 id="use-apprun-components">Use AppRun Components<a class="headerlink" href="#use-apprun-components" title="Permanent link">&para;</a></h2>
+<p>It only takes one line of code to use AppRun components in React.</p>
+<p>Let's use the code from the <a href="https://reactjs.org/docs/hooks-overview.html">React Hooks Doc</a> as an example.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">AboutComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">state</span> <span class="o">=</span> <span class="s1">&#39;About&#39;</span><span class="p">;</span>
-  <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+<span class="kd">function</span> <span class="nx">Example</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Declare a new state variable, which we&#39;ll call &quot;count&quot;</span>
+  <span class="kr">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">setCount</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="p">=&gt;</span> <span class="nx">setCount</span><span class="p">(</span><span class="nx">count</span> <span class="o">+</span> <span class="mf">1</span><span class="p">)}</span><span class="o">&gt;</span>
+        <span class="nx">Click</span> <span class="nx">me</span>
+      <span class="o">&lt;</span><span class="err">/button&gt;</span>
+    <span class="o">&lt;</span><span class="err">/div&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The same app using the AppRun looks like below.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+  <span class="nx">view</span> <span class="o">=</span> <span class="nx">count</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onclick</span><span class="o">=</span><span class="p">{()=&gt;</span><span class="k">this</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">)}</span><span class="o">&gt;</span>
+      <span class="nx">Click</span> <span class="nx">me</span>
+    <span class="o">&lt;</span><span class="err">/button&gt;</span>
   <span class="o">&lt;</span><span class="err">/div&gt;;</span>
-  <span class="nx">update</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;#About&#39;</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span><span class="p">,</span>
+  <span class="nx">update</span>  <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">add</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="mf">1</span>
   <span class="p">};</span>
 <span class="p">}</span>
+<span class="k">new</span> <span class="nx">MyComponent</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 </code></pre></div>
-<p>Then, you use the Component in the main file.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">About</span> <span class="nx">from</span> <span class="s1">&#39;./About&#39;</span><span class="p">;</span>
+<apprun-play></apprun-play></p>
+<p>To use the AppRun component in React is very easy. All you need to do is converting the AppRun component to a React component by calling the <em>toReact</em> function.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;apprun/esm/component&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">toReact</span> <span class="nx">from</span> <span class="s1">&#39;apprun/react&#39;</span><span class="p">;</span>
 
-<span class="k">new</span> <span class="nx">About</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;my-app&#39;</span><span class="p">);</span>
-</code></pre></div>
-<p>Then, you use a module-type script tag in HTML.</p>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun SPA<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/dist/main.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div>
-<p>Turn on the compiler, TypeScript, or Babel in watch mode. And then, start the apprun-dev-server using npx.</p>
-<div class="highlight"><pre><span></span><code>npx apprun-dev-server
-</code></pre></div>
-<p>Apprun-dev-server monitors the file changes. If the changed JavaScript files (*.js) file have global modules. Apprun-dev-server replaces the global module's references to <em>unpkg</em>. In the server console, if you see the file names that have some dots '......' in front, they are the files modified.</p>
-<p>Apprun-dev-server injects JavaScript code snippets in the index.html just like live-server. Also, Apprun-dev-server adds logic to detect AppRun and replace AppRun components.</p>
-<p>You can download an example app to give it a try.</p>
-<div class="highlight"><pre><span></span><code>npx degit yysun/apprun-esm-server my-app
-</code></pre></div>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Create a apprun-dev-server.config.js in your project:</p>
-<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">port</span><span class="o">:</span> <span class="mf">8181</span><span class="p">,</span> <span class="c1">// Set the server port. Defaults to 8080.</span>
-  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="c1">// Set the address to bind to. Defaults to 0.0.0.0 or process.env.IP.</span>
-  <span class="nx">root</span><span class="o">:</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="c1">// Set root directory that&#39;s being served. Defaults to cwd.</span>
-  <span class="nx">open</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// When false, it won&#39;t load your browser by default.</span>
-  <span class="nx">ignore</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">// comma-separated string for paths to ignore</span>
-  <span class="nx">file</span><span class="o">:</span> <span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="c1">// When set, serve this file (server root relative) for every 404 (useful for single-page applications)</span>
-  <span class="nx">wait</span><span class="o">:</span> <span class="mf">1000</span><span class="p">,</span> <span class="c1">// Waits for all changes, before reloading. Defaults to 0 sec.</span>
-  <span class="nx">mount</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">// Mount a directory to a route.</span>
-  <span class="nx">logLevel</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span> <span class="c1">//</span>
+<span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+  <span class="nx">view</span> <span class="o">=</span> <span class="nx">count</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()=&gt;</span><span class="k">this</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">)}</span><span class="o">&gt;</span>
+      <span class="nx">Click</span> <span class="nx">me</span>
+    <span class="o">&lt;</span><span class="err">/button&gt;</span>
+  <span class="o">&lt;</span><span class="err">/div&gt;;</span>
+  <span class="nx">update</span>  <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">add</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="mf">1</span>
+  <span class="p">};</span>
 <span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="nx">toReact</span><span class="p">(</span><span class="nx">MyComponent</span><span class="p">);</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">App</span><span class="p">;</span>
 </code></pre></div>
-<h2 id="use-with-esbuild">Use with esbuild<a class="headerlink" href="#use-with-esbuild" title="Permanent link">&para;</a></h2>
-<p>The apprun-dev-server is installed when using AppRun CLI to create AppRun projects.</p>
-<div class="highlight"><pre><span></span><code>npx apprun --init --spa --esbuild
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The React VDOM uses JSX. AppRun VDOM also uses JSX. They are similar. However, React VDOM does not have directives. So you cannot use the AppRun <em>$onclick</em> directive. Instead, you need to use the React <em>onClick</em> attribute.</p>
+</div>
+<p>Now, with just one line conversion to React component, we successfully used AppRun in React apps. Thus, we have the <a href="https://apprun.js.org/docs/architecture/">elm-inspired AppRun architecture</a> in the React apps.</p>
+<p>You can visit <a href="https://github.com/yysun-apprun">https://github.com/yysun-apprun</a> to see an example React project created by the <a href="https://reactjs.org/docs/create-a-new-react-app.html">Create React App Cli</a> that uses AppRun components.</p>
+<h2 id="use-react-vdom">Use React VDOM<a class="headerlink" href="#use-react-vdom" title="Permanent link">&para;</a></h2>
+<p>On the other hand, since we can use any Virtual DOM (VDOM) technology in AppRun apps, including the one from React, lets' use the React VDOM in AppRun apps.</p>
+<p>It also just needs one line of code to replace the <em>app.render</em> function with the <em>ReactDOM.render</em> function.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">app</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">vdom</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">vdom</span><span class="p">,</span> <span class="nx">el</span><span class="p">);</span>
 </code></pre></div>
-<p>Give it a try and send pull requests.</p>
-<p><a href="https://github.com/yysun/apprun-dev-server">https://github.com/yysun/apprun-dev-server</a></p>
-                
-                  
+<p>Below is the AppRun app that uses React VDOM.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">app</span> <span class="nx">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">ReactDOM</span> <span class="nx">from</span> <span class="s1">&#39;react-dom&#39;</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">vdom</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">vdom</span><span class="p">,</span> <span class="nx">el</span><span class="p">);</span>
+
+<span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+  <span class="nx">view</span> <span class="o">=</span> <span class="nx">count</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()=&gt;</span><span class="k">this</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">)}</span><span class="o">&gt;</span>
+      <span class="nx">Click</span> <span class="nx">me</span>
+    <span class="o">&lt;</span><span class="err">/button&gt;</span>
+  <span class="o">&lt;</span><span class="err">/div&gt;;</span>
+  <span class="nx">update</span>  <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">add</span><span class="o">:</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="o">+</span> <span class="mf">1</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+<span class="k">new</span> <span class="nx">MyComponent</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</code></pre></div>
+<p>Again, you must remember to use the React <em>onClick</em> attribute instead of the AppRun <em>$onclick</em> directive.</p>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>If you prefer to use React as the main framework, you can use AppRun to get the elm-inspired architecture. If you choose to use AppRun, you can also use the React Virtual DOM for rendering. You get the best of both worlds.</p>
                 
               
               
@@ -1008,7 +996,7 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../cli-in-console/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../notebooks/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1017,19 +1005,19 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              CLI in Console
+              Notebooks
             </div>
           </div>
         </a>
       
       
-        <a href="../ssr/" class="md-footer__link md-footer__link--next" rel="next">
+        <a href="../spa/" class="md-footer__link md-footer__link--next" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Server Side Rendering
+              Creating Project
             </div>
           </div>
           <div class="md-footer__button md-icon">
