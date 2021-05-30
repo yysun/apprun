@@ -6,7 +6,7 @@ const toReact = (componentClass) => {
   return () => {
     const [_state, setState] = useState(state);
     component.view = setState;
-    return <>{view(_state)}</>;
+    return view(_state);
   }
 }
 
