@@ -202,7 +202,7 @@ program
   .parse(process.argv);
 
 program._name = 'apprun';
-options = program.opts();
+const options = program.opts();
 
 if (!options.init && !options.component && !options.git && !options.jest &&
   !options.test && !options.spa && !options.lint && !options.story) {
