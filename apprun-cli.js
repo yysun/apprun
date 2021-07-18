@@ -202,23 +202,24 @@ program
   .parse(process.argv);
 
 program._name = 'apprun';
+options = program.opts();
 
-if (!program.init && !program.component && !program.git && !program.jest &&
-  !program.test && !program.spa && !program.lint && !program.story) {
+if (!options.init && !options.component && !options.git && !options.jest &&
+  !options.test && !options.spa && !options.lint && !options.story) {
   program.outputHelp();
   process.exit()
 }
 
-if (program.es5) es5 = true;
-if (program.esbuild) esbuild = true;
-if (program.init) init();
-if (program.component) component(program.component);
-if (program.git) git_init();
-if (program.jest) jest_init();
-if (program.lint) lint_init();
-if (program.test) component_spec(program.test);
-if (program.story) component_story(program.story);
-if (program.spa) spa();
+if (options.es5) es5 = true;
+if (options.esbuild) esbuild = true;
+if (options.init) init();
+if (options.component) component(program.component);
+if (options.git) git_init();
+if (options.jest) jest_init();
+if (options.lint) lint_init();
+if (options.test) component_spec(program.test);
+if (options.story) component_story(program.story);
+if (options.spa) spa();
 
 console.log('\r');
 if (show_start) console.log('All done. You can run `npm start` and then navigate to http://localhost:8080 in a browser.');
