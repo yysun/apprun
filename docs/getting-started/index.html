@@ -554,8 +554,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#use-es-module" class="md-nav__link">
-    Use ES Module
+  <a href="#use-es-module-in-browser" class="md-nav__link">
+    Use ES Module in Browser
   </a>
   
 </li>
@@ -1032,8 +1032,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#use-es-module" class="md-nav__link">
-    Use ES Module
+  <a href="#use-es-module-in-browser" class="md-nav__link">
+    Use ES Module in Browser
   </a>
   
 </li>
@@ -1147,14 +1147,14 @@
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
 <apprun-play></apprun-play></p>
-<h3 id="use-es-module">Use ES Module<a class="headerlink" href="#use-es-module" title="Permanent link">&para;</a></h3>
+<h3 id="use-es-module-in-browser">Use ES Module in Browser<a class="headerlink" href="#use-es-module-in-browser" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
-  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm&#39;</span><span class="p">;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm.js&#39;</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
   <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello ESM&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -1170,7 +1170,7 @@
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
-  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">html</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm&#39;</span><span class="p">;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">html</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm.js&#39;</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">html</span><span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
   <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello lit-html&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
