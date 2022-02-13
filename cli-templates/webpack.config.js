@@ -17,7 +17,8 @@ module.exports = {
     ]
   },
   devServer: {
-    open: true
+    open: true,
+    static: path.join(__dirname),
   },
   devtool: 'source-map'
 }
