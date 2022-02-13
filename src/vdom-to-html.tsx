@@ -29,9 +29,9 @@ function clean(obj) {
   }
 }
 
-function toHTML (vdom: VDOM) {
+function toHTML (vdom) {
   if (!vdom) return '';
-  if (vdom instanceof TemplateResult) {
+  if ('_$litType$' in vdom) {
     return vdom.toString();
   }
   clean(vdom);

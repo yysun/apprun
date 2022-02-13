@@ -31,7 +31,7 @@ describe('vdom-lit-html', () => {
     const element = document.createElement('svg');
     render(element, svg`<g></g>`);
     // console.log(element);
-    expect(element.innerHTML).toBe('<!----><g></g><!---->')
+    expect(element.innerHTML).toBe('<!----><g></g>')
   })
 
 });

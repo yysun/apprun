@@ -1,7 +1,6 @@
-import { html } from 'lit-html/lit-html.js';
 import { repeat } from 'lit-html/directives/repeat.js';
 
-import { run, Component, View } from '../../src/apprun-html'
+import { html, run, Component, View } from '../../src/apprun-html'
 import { startMeasure, stopMeasure, state, update, Data, State, Events } from './store';
 
 const view: View<State> = state => {
