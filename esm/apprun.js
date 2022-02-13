@@ -9,7 +9,7 @@ app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
 app.start = (element, model, view, update, options) => {
-    const opts = Object.assign(Object.assign({}, options), { render: true, global_event: true });
+    const opts = Object.assign({ render: true, global_event: true }, options);
     const component = new Component(model, view, update);
     if (options && options.rendered)
         component.rendered = options.rendered;

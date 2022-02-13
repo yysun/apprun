@@ -34,7 +34,7 @@ export class Component {
             }
         };
         this.start = (element = null, options) => {
-            return this.mount(element, Object.assign(Object.assign({}, options), { render: true }));
+            return this.mount(element, Object.assign({ render: true }, options));
         };
     }
     renderState(state, vdom = null) {
