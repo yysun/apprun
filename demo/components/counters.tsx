@@ -49,4 +49,4 @@ const update = {
   ]
 };
 
-export default (element) => app.start(element, model, view, update, {history: true});
+export default (element) => app.start(element, model, view, update, {history: true, render: false});

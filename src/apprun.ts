@@ -27,7 +27,7 @@ app.webComponent = webComponent;
 
 app.start = <T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
   options?: AppStartOptions<T>): Component<T, E> => {
-  const opts = { ...options, render: true, global_event: true };
+  const opts = { render: true, global_event: true, ...options };
   const component = new Component<T, E>(model, view, update);
   if (options && options.rendered) component.rendered = options.rendered;
   component.mount(element, opts);

@@ -15,6 +15,6 @@ const update = {
   'DECREASE': (model) => model - 1
 };
 
-export default (element) => app.start(element, model, view, update);
+export default (element) => app.start(element, model, view, update, {render: false});
 
 

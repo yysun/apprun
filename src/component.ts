@@ -127,7 +127,7 @@ export class Component<T = any, E = any> {
   }
 
   start = (element = null, options?: MountOptions): Component<T, E> => {
-    return this.mount(element, { ...options, render: true });
+    return this.mount(element, { render: true, ...options });
   }
 
   public mount(element = null, options?: MountOptions): Component<T, E> {
