@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#apprun-app-showcase" class="md-skip">
+        <a href="#use-in-browser" class="md-skip">
           Skip to content
         </a>
       
@@ -556,6 +556,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#use-in-browser" class="md-nav__link">
+    Use in Browser
+  </a>
+  
+    <nav class="md-nav" aria-label="Use in Browser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cdn" class="md-nav__link">
+    Use CDN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-es-module-in-browser" class="md-nav__link">
+    Use ES Module in Browser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-lit-html" class="md-nav__link">
+    Use lit-html
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-html" class="md-nav__link">
+    Use µhtml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-jsx" class="md-nav__link">
+    Use JSX
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#apprun-app-showcase" class="md-nav__link">
     AppRun App Showcase
   </a>
@@ -949,6 +997,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#use-in-browser" class="md-nav__link">
+    Use in Browser
+  </a>
+  
+    <nav class="md-nav" aria-label="Use in Browser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cdn" class="md-nav__link">
+    Use CDN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-es-module-in-browser" class="md-nav__link">
+    Use ES Module in Browser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-lit-html" class="md-nav__link">
+    Use lit-html
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-html" class="md-nav__link">
+    Use µhtml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-jsx" class="md-nav__link">
+    Use JSX
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#apprun-app-showcase" class="md-nav__link">
     AppRun App Showcase
   </a>
@@ -1001,6 +1097,89 @@
 
   <h1>Showcase</h1>
 
+<h2 id="use-in-browser">Use in Browser<a class="headerlink" href="#use-in-browser" title="Permanent link">&para;</a></h2>
+<h3 id="use-cdn">Use CDN<a class="headerlink" href="#use-cdn" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello world&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<apprun-play></apprun-play></p>
+<h3 id="use-es-module-in-browser">Use ES Module in Browser<a class="headerlink" href="#use-es-module-in-browser" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm.js&#39;</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello ESM&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<apprun-play></apprun-play></p>
+<h3 id="use-lit-html">Use lit-html<a class="headerlink" href="#use-lit-html" title="Permanent link">&para;</a></h3>
+<p><a href="https://lit-html.polymer-project.org/">lit-html</a> is an efficient, expressive, extensible HTML templating library for JavaScript from the Polumer project. AppRun has included lit-html.
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">html</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun/dist/apprun-html.esm.js&#39;</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">html</span><span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello lit-html&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<apprun-play></apprun-play></p>
+<h3 id="use-html">Use µhtml<a class="headerlink" href="#use-html" title="Permanent link">&para;</a></h3>
+<p><a href="https://github.com/WebReflection/uhtml">µhtml</a> (micro html) is a ~2.5K <em>lighterhtml</em> subset to build declarative and reactive UI via template literals tags. AppRun allows you to use different rendering technology like µhtml.</p>
+<p><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
+  <span class="k">import</span> <span class="nx">app</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/apprun?module&#39;</span><span class="p">;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">render</span><span class="p">,</span> <span class="nx">html</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;https://unpkg.com/uhtml?module&#39;</span><span class="p">;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="nx">render</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="nx">html</span><span class="sb">`&lt;div&gt;</span><span class="si">${</span><span class="nx">state</span><span class="si">}</span><span class="sb">&lt;/div&gt;`</span><span class="p">;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello uhtml&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<apprun-play></apprun-play></p>
+<h3 id="use-jsx">Use JSX<a class="headerlink" href="#use-jsx" title="Permanent link">&para;</a></h3>
+<p><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a> is a syntax exntension to JavaScript. It makes JavaScript functions look like HTML.</p>
+<p>You can use JSX in the browser or compile JSX ahead of time. See AppRun CLI below.</p>
+<p><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>AppRun App<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@babel/standalone/babel.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/apprun&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/babel&quot;</span> <span class="na">data-presets</span><span class="o">=</span><span class="s">&quot;es2017, react&quot;</span><span class="p">&gt;</span>
+  <span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/div&gt;;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="s1">&#39;hello JSX&#39;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<apprun-play></apprun-play></p>
 <h2 id="apprun-app-showcase">AppRun App Showcase<a class="headerlink" href="#apprun-app-showcase" title="Permanent link">&para;</a></h2>
 <p>This page shows a few applications built with AppRun.</p>
 <h3 id="conduit">Conduit<a class="headerlink" href="#conduit" title="Permanent link">&para;</a></h3>

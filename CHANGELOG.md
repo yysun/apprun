@@ -1,8 +1,10 @@
 # Change Log
 
 ## Releases
-* apprun@es5: 1.x, stable, es5
-* apprun@latest: 3.x, stable, es6/es2015, lit-html
+
+## 3.28.8 merged into master
+
+* Use lit-html@2
 
 ## 3.28.3 merged into master
 

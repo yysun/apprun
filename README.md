@@ -22,12 +22,13 @@ You can also load AppRun directly from the unpkg.com CDN:
 ```javascript
 <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
 ```
-Or use it as ES module from unpkg.com:
-```javascript
-<script type="module">
-  import { app, Component } from 'https://unpkg.com/apprun/esm/apprun-html?module';
-</script>
+
+Or, you can create an AppRun app by using the `npm init apprun-app` command.
+
+```sh
+npm init apprun-app [my-app]
 ```
+
 ## Architecture Concept
 
 * AppRun [architecure](docs/architecture) has _state_, _view_, and _update_.
@@ -42,37 +43,6 @@ You can get started with [AppRun Docs](https://apprun.js.org/docs) and [the AppR
 [![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 * [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
-
-## Create AppRun Apps
-
-Use the AppRun CLI to initialize an esbuild configured project:
-
-```sh
-npx apprun --init --spa --esbuild
-```
-
-Use the AppRun CLI to initialize a TypeScript and webpack configured project:
-
-```sh
-npx apprun --init --spa
-```
-
-To initialize a project that targets ES5, use the AppRun CLI with the --es5 flag:
-
-```sh
-npx apprun --init --spa --es5
-```
-
-## AppRun Dev Server
-
-AppRun now has a dev server. It is base on the _live-server_ and supports ES Modules. _apprun-dev-server_ is install by AppRun CLI when using _esbuild_. Or you can use it directly.
-
-
-```sh
-npx apprun-dev-server
-```
-
-See the announcement: [A Dev Server Supports ESM](https://dev.to/yysun/a-dev-server-supports-esm-3cea)
 
 
 ## AppRun Dev Tools
@@ -125,13 +95,11 @@ AppRun is an MIT-licensed open source project. Please consider [supporting the p
 * Kevin Shi
 * Chancy Kennedy
 
-
-
 ## License
 
 MIT
 
-Copyright (c) 2015-2021 Yiyi Sun
+Copyright (c) 2015-2022 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master

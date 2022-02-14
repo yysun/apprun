@@ -1,15 +1,12 @@
 ### What's New
 
-## Default npm Version Change
+## Create-AppRun-App CLI
 
-On May 19, 2020, the V3 branch merged into the master branch. AppRun replaced _morphdom_ with _lit-html_.
+You can create an AppRun app by using the `npm init apprun-app` command.
 
-When upgrading projects to the latest version (2.x), please modify the tsconfig from targeting es5 to es2015.
-
-Currently, the npm tags are as following:
-
-* apprun@es5: 1.x, stable, es5
-* apprun@latest: 3.x, stable, es2015, web components, lit-html
+```sh
+npm init apprun-app [my-app]
+```
 
 ## Recent Posts and Publications
 
