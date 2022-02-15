@@ -40,7 +40,7 @@ You can get started with [AppRun Docs](https://apprun.js.org/docs) and [the AppR
 
 ## AppRun Book from Apress
 
-[![Order from Amazon](https://camo.githubusercontent.com/99fad1f024c274a3d752a1583cf125037583811c/68747470733a2f2f696d616765732e737072696e6765722e636f6d2f7367772f626f6f6b732f6d656469756d2f393738313438343234303638372e6a7067)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
+[![Order from Amazon](https://images-na.ssl-images-amazon.com/images/I/51cr-t1pdSL._SX348_BO1,204,203,200_.jpg)](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
 * [Order from Amazon](https://www.amazon.com/Practical-Application-Development-AppRun-High-Performance/dp/1484240685/)
 
