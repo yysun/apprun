@@ -2,11 +2,14 @@
 
 ## Create-AppRun-App CLI
 
-You can create an AppRun app by using the `npm init apprun-app` command.
+You can create an AppRun app by running command `npm init apprun-app`.
 
 ```sh
 npm init apprun-app [my-app]
 ```
+
+> Note: AppRun CLI `npx apprun init` is deprecated. Please use `apprun create-app` instead.
+
 
 ## Recent Posts and Publications
 

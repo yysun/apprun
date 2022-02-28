@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <title>AppRun Play</title>
-  <link rel="stylesheet" href="demo/lib/codemirror.css">
-  <script src="demo/lib/codemirror.js"></script>
-  <script src="demo/mode/javascript/javascript.js"></script>
-  <script src="demo/mode/xml/xml.js"></script>
-  <script src="demo/mode/jsx/jsx.js"></script>
-  <script src="dist/apprun-play.js"></script>
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <script src="lib/codemirror.js"></script>
+  <script src="mode/javascript/javascript.js"></script>
+  <script src="mode/xml/xml.js"></script>
+  <script src="mode/jsx/jsx.js"></script>
+  <script src="../dist/apprun-play.js"></script>
 </head>
 <body>
   <textarea style="width:100%; height:300px">
@@ -25,10 +25,10 @@
         '-1': state => state - 1
       };
       app.start(document.body, state, view, update);
-    </textarea>
-<apprun-play></apprun-play>
+  </textarea>
+  <apprun-play></apprun-play>
 
-<textarea>
+  <textarea>
 <html>
 <body>
 <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
@@ -39,8 +39,9 @@
 </body>
 </html>
 </textarea>
-<p>
-  <apprun-play></apprun-play>
-</p>
+  <p>
+    <apprun-play></apprun-play>
+  </p>
 </body>
+
 </html>

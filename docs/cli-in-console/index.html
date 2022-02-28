@@ -974,11 +974,11 @@
 </code></pre></div>
 <p>Just like many other CLI, the <em>help</em> command lists all available commands. For example, you can see three commands in the screenshot<em>components</em>, <em>events</em>, and <em>log</em>.</p>
 <h2 id="why-do-we-need-a-cli-in-the-console">Why do we need a CLI in the console?<a class="headerlink" href="#why-do-we-need-a-cli-in-the-console" title="Permanent link">&para;</a></h2>
-<p>CLI in the console is convenient for watching runtime data. For example, during application development, we often need to debug and exam the application's internal data. Using the <em>console.log</em> function is the easiest yet compelling way to display the data because the console lets us drill down into the nested array and object structure.</p>
+<p>CLI in the console is convenient for watching runtime data. For example, during application development, we often need to debug and check the application's internal data. Using the <em>console.log</em> function is the easiest yet most compelling way to display the data because the console lets us drill down into the nested array and object structure.</p>
 <p><img alt="Drilldown" src="https://thepracticaldev.s3.amazonaws.com/i/fq37a5rjfoz4pqsi0f05.png" /></p>
 <p>With a CLI in the console, The app codebase stays clear of <em>console.log</em>. The CLI provides a non-destructive way of watching the runtime data. We can include the CLI script in the development environment and remove it from the production environment.</p>
 <h1 id="how-is-it-made">How is it made?<a class="headerlink" href="#how-is-it-made" title="Permanent link">&para;</a></h1>
-<p>It is relatively easy to create a CLI in the console than to create a dev-tool as the browser extension. It is based on the JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates">tagged templates</a>.</p>
+<p>The CLI uses JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates">tagged templates</a>.</p>
 <p>We create the <em>_apprun</em> function in the <em>window</em> object.</p>
 <div class="highlight"><pre><span></span><code><span class="nb">window</span><span class="p">[</span><span class="s1">&#39;_apprun&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">strings</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="p">}</span>
 </code></pre></div>
@@ -990,7 +990,7 @@
   <span class="k">else</span> <span class="nb">window</span><span class="p">[</span><span class="s1">&#39;_apprun-help&#39;</span><span class="p">][</span><span class="mf">1</span><span class="p">]();</span>
 <span class="p">}</span>
 </code></pre></div>
-It has an extensive architecture. We create the AppRun commands in the <em>window</em> object. The AppRun command is a tuple that includes the description of the command and the implementation function of the command. E.g. the help command look like this:</p>
+It has extensive architecture. We create the AppRun commands in the <em>window</em> object. The AppRun command is a tuple that includes the description of the command and the implementation function of the command. E.g., the help command looks like this:</p>
 <p><div class="highlight"><pre><span></span><code><span class="nb">window</span><span class="p">[</span><span class="s1">&#39;_apprun-help&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">cmd</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">cmd</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;_apprun-&#39;</span><span class="p">))</span> <span class="p">{</span>
@@ -1004,7 +1004,7 @@ It has an extensive architecture. We create the AppRun commands in the <em>windo
 The <em>help</em> command searches for the tuples stored in the <em>window</em> object and prints the description of other AppRun commands.</p>
 <p>That's all the infrastructure code we need to create CLI commands in the console. Let's see an example.</p>
 <h1 id="live-demo">Live Demo<a class="headerlink" href="#live-demo" title="Permanent link">&para;</a></h1>
-<p>The AppRun CLI in the console is one of the developer tools includes in the AppRun library. You can visit the AppRun RealWorld Example App <a href="https://gothinkster.github.io/apprun-realworld-example-app">https://gothinkster.github.io/apprun-realworld-example-app</a> to see the CLI in actions.</p>
+<p>The AppRun CLI in the console is one of the developer tools included in the AppRun library. You can visit the AppRun RealWorld Example App <a href="https://gothinkster.github.io/apprun-realworld-example-app">https://gothinkster.github.io/apprun-realworld-example-app</a> to see the CLI in action.</p>
 <ul>
 <li>The <em>components</em> command logs the DOM elements that have AppRun components</li>
 <li>The <em>events</em> command logs the event subscription of the app</li>
