@@ -4,6 +4,7 @@ import { createElement, updateElement, Fragment } from './vdom-my';
 import { render, svg, html, noChange, nothing } from 'lit-html';
 import { directive, Directive, Part, PartInfo, PartType, EventPart } from 'lit-html/directive.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import app from './apprun';
 
 function _render(element, vdom, parent?) {
   if (!vdom) return;
@@ -45,7 +46,10 @@ export class RunDirective extends Directive {
     }
     const [event, ...args] = params;
     if (typeof event === 'string') {
-      element[`on${name}`] = e => getComponent().run(event, ...args, e);
+      element[`on${name}`] = e => {
+        const component = getComponent();
+        component ? component.run(event, ...args, e) : app.run(event, ...args, e)
+      }
     } else if (typeof event === 'function') {
       element[`on${name}`] = e => getComponent().setState(event(getComponent().state, ...args, e));
     }

@@ -1,4 +1,4 @@
-import { app, html, svg, render } from '../src/apprun-html';
+import { app, html, svg, render, run, Component } from '../src/apprun-html';
 
 describe('vdom-lit-html', () => {
 
@@ -48,6 +48,39 @@ describe('vdom-lit-html', () => {
     render(element, html`<div>c</div>`);
     const div = element.querySelector('div');
     expect(div.innerHTML).toBe('c')
+  })
+
+
+  it('should apply directive', () => {
+    let show = false;
+    app.on('addx', d => show = d);
+    const element = document.createElement('div');
+    render(element, html`<div>
+      <button id='btn' @click=${run('addx', -1)} />
+    </div>`);
+    const btn = element.querySelector('#btn') as HTMLButtonElement;
+    btn.click();
+    expect(show).toBeTruthy();
+  })
+
+  it('should apply directive in component', () => {
+
+    const element = document.createElement('div');
+    const add = (state, d) => state + d;
+    class Test extends Component {
+      state = 0;
+      view = () => html`<div>
+        <button id='btn2' @click=${run(add, -1)} />
+        <button id='btn3' @click=${run('add', -1)} />
+      </div>`;
+      update = { add }
+    }
+    const comp = new Test().start(element);
+    const btn2 = element.querySelector('#btn2') as HTMLButtonElement;
+    const btn3 = element.querySelector('#btn3') as HTMLButtonElement;
+    btn2.click();
+    btn3.click();
+    expect(comp['state']).toBe(-2);
   })
 
 });
