@@ -238,4 +238,32 @@ describe('Directive', () => {
     inputs[0].dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
     expect(component.state).toBe('0');
   });
+
+  it('should use directive in app.render', () => {
+    let show = false;
+    app.on('$', ({ key, props }) => {
+      if (key === '$show') {
+        show = true;
+      }
+    });
+    const View = () => <>
+      <button id='bx' $show />
+    </>
+    app.render(document.body, View());
+    expect(show).toBeTruthy();
+  });
+
+  it('should trigger $on in app.render to app.run', () => {
+    let show = false;
+    app.on('11', () => {
+        show = true;
+    });
+
+    const View = () => <>
+      <button id='bx' $onclick='11' />
+    </>
+    app.render(document.body, View());
+    document.getElementById('bx').click();
+    expect(show).toBeTruthy();
+  });
 });

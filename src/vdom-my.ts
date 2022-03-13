@@ -1,4 +1,5 @@
 import { VDOM, VNode } from './types';
+import directive from './directive';
 export type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
 export function Fragment(props, ...children): any[] {
@@ -36,10 +37,14 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
 
 const keyCache = new WeakMap();
 
-export const updateElement = render;
+export const updateElement = (element: Element, nodes: VDOM, component = {}) => {
+  // tslint:disable-next-line
+  if (nodes == null || nodes === false) return;
+  nodes = directive(nodes, this);
+  render(element, nodes, component);
+}
 
-export function render(element: Element, nodes: VDOM, parent = {}) {
-  // console.log('render', element, node);
+function render(element: Element, nodes: VDOM, parent = {}) {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
 

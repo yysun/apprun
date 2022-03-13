@@ -19,15 +19,15 @@ const apply_directive = (key: string, props: {}, tag, component) => {
     const event = props[key];
     key = key.substring(1)
     if (typeof event === 'boolean') {
-      props[key] = e => component.run(key, e);
+      props[key] = e => component.run ? component.run(key, e) : app.run(key, e);
     } else if (typeof event === 'string') {
-      props[key] = e => component.run(event, e);
+      props[key] = e => component.run ? component.run(event, e) : app.run(event, e);
     } else if (typeof event === 'function') {
       props[key] = e => component.setState(event(component.state, e));
     } else if (Array.isArray(event)) {
       const [handler, ...p] = event;
       if (typeof handler === 'string') {
-        props[key] = e => component.run(handler, ...p, e);
+        props[key] = e => component.run ? component.run(handler, ...p, e) : app.run(handler, ...p, e);
       } else if (typeof handler === 'function') {
         props[key] = e => component.setState(handler(component.state, ...p, e));
       }
