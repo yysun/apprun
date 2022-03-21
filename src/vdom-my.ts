@@ -40,7 +40,7 @@ const keyCache = new WeakMap();
 export const updateElement = (element: Element, nodes: VDOM, component = {}) => {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
-  nodes = directive(nodes, this);
+  nodes = directive(nodes, component);
   render(element, nodes, component);
 }
 
