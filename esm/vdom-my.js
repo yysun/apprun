@@ -1,3 +1,4 @@
+import directive from './directive';
 export function Fragment(props, ...children) {
     return collect(children);
 }
@@ -36,9 +37,14 @@ export function createElement(tag, props, ...children) {
 }
 ;
 const keyCache = new WeakMap();
-export const updateElement = render;
-export function render(element, nodes, parent = {}) {
-    // console.log('render', element, node);
+export const updateElement = (element, nodes, component = {}) => {
+    // tslint:disable-next-line
+    if (nodes == null || nodes === false)
+        return;
+    nodes = directive(nodes, component);
+    render(element, nodes, component);
+};
+function render(element, nodes, parent = {}) {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
         return;

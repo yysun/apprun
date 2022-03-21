@@ -125,7 +125,8 @@ export class Component {
         }
         if (options.route) {
             this.update = this.update || {};
-            this.update[options.route] = REFRESH;
+            if (!this.update[options.route])
+                this.update[options.route] = REFRESH;
         }
         this.add_actions();
         this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
