@@ -144,7 +144,7 @@ export class Component<T = any, E = any> {
 
     if (options.route) {
       this.update = this.update || {};
-      this.update[options.route] = REFRESH;
+      if (!this.update[options.route]) this.update[options.route] = REFRESH;
     }
 
     this.add_actions();
