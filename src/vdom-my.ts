@@ -138,7 +138,7 @@ function updateChildren(element, children, isSvg: boolean) {
 export const safeHTML = (html: string) => {
   const div = document.createElement('section');
   div.insertAdjacentHTML('afterbegin', html)
-  return Array.from(div.childNodes);
+  return Array.from(div.children);
 }
 
 function createText(node) {

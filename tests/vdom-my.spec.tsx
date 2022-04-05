@@ -300,10 +300,11 @@ describe('vdom-my', () => {
 
   it('it should render safe html', () => {
     const element = document.createElement('div');
-    const html = '<p>safe html</p><p>safe html</p>';
+    const html = `<p>safe html</p>
+    <p>safe html</p>`;
     const safe_html = safeHTML(html) as any;
     updateElement(element, safe_html);
-    expect(element.innerHTML).toBe(html);
+    expect(element.innerHTML).toBe('<p>safe html</p><p>safe html</p>'); 
   });
 
 });

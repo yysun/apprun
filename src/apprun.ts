@@ -18,12 +18,14 @@ export interface IApp {
   Fragment(props, ...children): any[];
   route?: Route;
   webComponent(name: string, componentClass, options?: CustomElementOptions): void;
+  safeHTML(html: string): any[];
 }
 
 app.h = app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
+app.safeHTML = safeHTML;
 
 app.start = <T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
   options?: AppStartOptions<T>): Component<T, E> => {
@@ -62,6 +64,7 @@ if (typeof window === 'object') {
   window['React'] = app;
   window['on'] = on;
   window['customElement'] = customElement;
+  window['safeHTML'] = safeHTML;
 }
 
 

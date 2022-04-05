@@ -51,6 +51,8 @@ declare module 'apprun' {
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
+    safeHTML(html: string): any[];
+
   }
 
   export class Component<T = any, E = any> {
@@ -80,6 +82,6 @@ declare module 'apprun' {
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
-
+  export const safeHTML;
   export function Fragment (props, ...children): [];
 }

@@ -9,6 +9,7 @@ export class App {
   public render;
   public Fragment;
   public webComponent;
+  public safeHTML;
 
   constructor() {
     this._events = {};
