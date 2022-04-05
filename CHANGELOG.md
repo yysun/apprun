@@ -2,7 +2,24 @@
 
 ## Releases
 
-## 3.28.8 merged into master
+
+## 3.28.12
+
+* export safeHTML funciton
+
+## 3.28.11
+
+* Make the package type module
+
+## 3.28.10
+
+* Apply directive to _app.render_
+
+## 3.28.9
+
+* retire CLI
+
+## 3.28.8
 
 * Use lit-html@2
 

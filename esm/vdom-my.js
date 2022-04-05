@@ -138,6 +138,11 @@ function updateChildren(element, children, isSvg) {
         element.appendChild(d);
     }
 }
+export const safeHTML = (html) => {
+    const div = document.createElement('section');
+    div.insertAdjacentHTML('afterbegin', html);
+    return Array.from(div.childNodes);
+};
 function createText(node) {
     if ((node === null || node === void 0 ? void 0 : node.indexOf('_html:')) === 0) { // ?
         const div = document.createElement('div');

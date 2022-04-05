@@ -1,5 +1,5 @@
 import app from './app';
-import { createElement, render, Fragment } from './vdom';
+import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
 import { on, update, customElement } from './decorator';
 import webComponent from './web-component';
@@ -32,7 +32,7 @@ if (typeof document === 'object') {
         }
     });
 }
-export { app, Component, on, update, Fragment };
+export { app, Component, on, update, Fragment, safeHTML };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };
