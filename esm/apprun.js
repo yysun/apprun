@@ -8,6 +8,7 @@ app.h = app.createElement = createElement;
 app.render = render;
 app.Fragment = Fragment;
 app.webComponent = webComponent;
+app.safeHTML = safeHTML;
 app.start = (element, model, view, update, options) => {
     const opts = Object.assign({ render: true, global_event: true }, options);
     const component = new Component(model, view, update);
@@ -42,5 +43,6 @@ if (typeof window === 'object') {
     window['React'] = app;
     window['on'] = on;
     window['customElement'] = customElement;
+    window['safeHTML'] = safeHTML;
 }
 //# sourceMappingURL=apprun.js.map

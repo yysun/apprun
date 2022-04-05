@@ -141,7 +141,7 @@ function updateChildren(element, children, isSvg) {
 export const safeHTML = (html) => {
     const div = document.createElement('section');
     div.insertAdjacentHTML('afterbegin', html);
-    return Array.from(div.childNodes);
+    return Array.from(div.children);
 };
 function createText(node) {
     if ((node === null || node === void 0 ? void 0 : node.indexOf('_html:')) === 0) { // ?
