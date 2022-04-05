@@ -2,7 +2,7 @@ import app from './apprun'
 export {
   app, Component, View, Action, Update, on, update, event, EventOptions,
   customElement, CustomElementOptions,
-  ROUTER_404_EVENT, ROUTER_EVENT
+  ROUTER_404_EVENT, ROUTER_EVENT, safeHTML
 } from './apprun'
 import { createElement, render, Fragment, html, svg, run } from './vdom-lit-html';
 export { html, svg, render, run }

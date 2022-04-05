@@ -1,4 +1,4 @@
-import { createElement, updateElement } from '../src/vdom-my';
+import { createElement, updateElement, safeHTML } from '../src/vdom-my';
 
 describe('vdom-my', () => {
   let root;
@@ -297,4 +297,13 @@ describe('vdom-my', () => {
     render(createElement('div'));
     expect(element.id).toBe('');
   });
+
+  it('it should render safe html', () => {
+    const element = document.createElement('div');
+    const html = '<p>safe html</p><p>safe html</p>';
+    const safe_html = safeHTML(html) as any;
+    updateElement(element, safe_html);
+    expect(element.innerHTML).toBe(html);
+  });
+
 });

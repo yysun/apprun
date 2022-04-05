@@ -1,5 +1,5 @@
 import app from './app';
-import { createElement, render, Fragment } from './vdom';
+import { createElement, render, Fragment,safeHTML } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions } from './types';
 import { on, update, customElement } from './decorator';
@@ -50,9 +50,8 @@ if (typeof document === 'object') {
     }
   });
 }
-
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment }
+export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment, safeHTML }
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions, AppStartOptions };

@@ -135,6 +135,12 @@ function updateChildren(element, children, isSvg: boolean) {
   }
 }
 
+export const safeHTML = (html: string) => {
+  const div = document.createElement('section');
+  div.insertAdjacentHTML('afterbegin', html)
+  return Array.from(div.childNodes);
+}
+
 function createText(node) {
   if (node?.indexOf('_html:') === 0) { // ?
     const div = document.createElement('div');
