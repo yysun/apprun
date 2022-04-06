@@ -120,7 +120,7 @@ function updateChildren(element, children, isSvg: boolean) {
     }
   }
 
-  let n = element.childNodes.length;
+  let n = element.childNodes?.length || 0;
   while (n > len) {
     element.removeChild(element.lastChild);
     n--;
