@@ -625,13 +625,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-of-a-apprun-functional-component-page" class="md-nav__link">
-    Example of a AppRun functional component page:
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#example-of-a-apprun-class-component-page" class="md-nav__link">
     Example of a AppRun class component page:
   </a>
@@ -1005,13 +998,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-of-a-apprun-functional-component-page" class="md-nav__link">
-    Example of a AppRun functional component page:
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#example-of-a-apprun-class-component-page" class="md-nav__link">
     Example of a AppRun class component page:
   </a>
@@ -1054,8 +1040,7 @@
 <div class="highlight"><pre><span></span><code>npm init apprun-app <span class="o">[</span>my-app<span class="o">]</span>
 </code></pre></div>
 <p>And select the <code>AppRun Site</code> template. An AppRun-Site project has the following structure:</p>
-<div class="highlight"><pre><span></span><code>/public             &lt;- static website
-/pages              &lt;- pages of the website
+<div class="highlight"><pre><span></span><code>/pages              &lt;- pages of the website
   /index.html       &lt;- index page
   /index.md         &lt;- home page
   /main.tsx         &lt;- start up code
@@ -1063,6 +1048,7 @@
     index.md        &lt;- about page, markdown
   /contact
     contact.tsx     &lt;- contact page, AppRun component
+/public             &lt;- static website
 </code></pre></div>
 <p>Then, you can use:</p>
 <ul>
@@ -1070,13 +1056,7 @@
 </ul>
 <p>The application will be served at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
 <h2 id="add-pages">Add Pages<a class="headerlink" href="#add-pages" title="Permanent link">&para;</a></h2>
-<p>You can add tsx/jsx files (AppRun components, including functional components and class components), markdown, or html files to the <code>pages</code> directory.</p>
-<h3 id="example-of-a-apprun-functional-component-page">Example of a AppRun functional component page:<a class="headerlink" href="#example-of-a-apprun-functional-component-page" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nx">app</span> <span class="kr">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
-<span class="k">export</span> <span class="k">default</span> <span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="o">&lt;&gt;</span>
-  <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">This</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">functional</span> <span class="nx">Component</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-<span class="o">&lt;</span><span class="err">/&gt;</span>
-</code></pre></div>
+<p>You can add tsx/jsx files (AppRun components), markdown, or html files to the <code>pages</code> directory.</p>
 <h3 id="example-of-a-apprun-class-component-page">Example of a AppRun class component page:<a class="headerlink" href="#example-of-a-apprun-class-component-page" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">Component</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">ContactComponent</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
