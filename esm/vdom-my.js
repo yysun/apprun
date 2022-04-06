@@ -78,7 +78,7 @@ function update(element, node, isSvg) {
     !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
-    var _a;
+    var _a, _b;
     const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
     const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
     const len = Math.min(old_len, new_len);
@@ -125,7 +125,7 @@ function updateChildren(element, children, isSvg) {
             }
         }
     }
-    let n = element.childNodes.length;
+    let n = ((_b = element.childNodes) === null || _b === void 0 ? void 0 : _b.length) || 0;
     while (n > len) {
         element.removeChild(element.lastChild);
         n--;
