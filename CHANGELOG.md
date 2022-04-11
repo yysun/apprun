@@ -2,10 +2,13 @@
 
 ## Releases
 
+## 3.28.15
+
+* Support css selector in _mount_, _start_, and _app.render_
 
 ## 3.28.12
 
-* export safeHTML funciton
+* Export safeHTML funciton
 
 ## 3.28.11
 

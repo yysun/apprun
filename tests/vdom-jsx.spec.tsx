@@ -165,4 +165,36 @@ describe('vdom-jsx', () => {
     expect(element.innerHTML).toBe('');
   });
 
+  it('app should render with querySelector', () => {
+    const element = document.createElement('div');
+    element.classList.add('test1');
+    document.body.appendChild(element);
+    const View = () => <p>xxx</p>;
+    app.render('.test1', <View />);
+    expect(element.innerHTML).toBe('<p>xxx</p>');
+  });
+
+  it('component should render with querySelector', () => {
+    const element = document.createElement('div');
+    element.classList.add('test2');
+    document.body.appendChild(element);
+    class T extends Component {
+      view = () => <p>xxxx</p>;
+    }
+    app.render('.test2', <T as="div"/>);
+    expect(element.innerHTML).toBe('<div><p>xxxx</p></div>');
+  });
+
+  
+  it('component should start with querySelector', () => {
+    const element = document.createElement('div');
+    element.classList.add('test3');
+    document.body.appendChild(element);
+    class T extends Component {
+      view = () => <p>xxxxx</p>;
+    }
+    new T().start('.test3');
+    expect(element.innerHTML).toBe('<p>xxxxx</p>');
+  });
+
 })

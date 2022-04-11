@@ -14,7 +14,7 @@ export interface IApp {
   run(name: string, ...args: any[]): number;
   h(tag: string | Function, props, ...children): VNode | VNode[];
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
-  render(element: HTMLElement, node: VNode): void;
+  render(element: Element | string, node: VNode): void;
   Fragment(props, ...children): any[];
   route?: Route;
   webComponent(name: string, componentClass, options?: CustomElementOptions): void;
@@ -27,7 +27,7 @@ app.Fragment = Fragment;
 app.webComponent = webComponent;
 app.safeHTML = safeHTML;
 
-app.start = <T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
+app.start = <T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
   options?: AppStartOptions<T>): Component<T, E> => {
   const opts = { render: true, global_event: true, ...options };
   const component = new Component<T, E>(model, view, update);

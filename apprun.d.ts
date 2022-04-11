@@ -37,7 +37,7 @@ declare module 'apprun' {
   };
 
   export interface IApp {
-    start<T, E = any>(element?: Element, model?: T, view?: View<T>, update?: Update<T, E>,
+    start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
       options?: AppStartOptions<T>): Component<T, E>;
     on(name: string, fn: (...args: any[]) => void, options?: any): void;
     once(name: string, fn: (...args: any[]) => void, options?: any): void;
@@ -47,7 +47,7 @@ declare module 'apprun' {
     query(name: string, ...args): Promise<any[]>;
     h(tag: string | Function, ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
-    render(element: HTMLElement, node: VDOM): void;
+    render(element: Element | string, node: VDOM): void;
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
@@ -59,8 +59,8 @@ declare module 'apprun' {
     constructor(state?: T, view?: View<T>, update?: Update<T, E>);
     readonly state: T;
     setState(state: T, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element, options?: MountOptions): Component<T, E>;
-    start(element?: Element, options?: MountOptions): Component<T, E>;
+    mount(element?: Element | string, options?: MountOptions): Component<T, E>;
+    start(element?: Element | string, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
     rendered: (state: T) => void;

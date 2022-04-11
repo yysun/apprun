@@ -37,22 +37,21 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
 
 const keyCache = new WeakMap();
 
-export const updateElement = (element: Element, nodes: VDOM, component = {}) => {
+export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
+  const el = (typeof element === 'string' && element) ?
+    document.getElementById(element) || document.querySelector(element) : element;
   nodes = directive(nodes, component);
-  render(element, nodes, component);
+  render(el, nodes, component);
 }
 
 function render(element: Element, nodes: VDOM, parent = {}) {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
-
   nodes = createComponent(nodes, parent);
-
-  const isSvg = element?.nodeName === "SVG";
-
   if (!element) return;
+  const isSvg = element.nodeName === "SVG";
   if (Array.isArray(nodes)) {
     updateChildren(element, nodes, isSvg);
   } else {
