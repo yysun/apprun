@@ -577,7 +577,7 @@
   
     <li class="md-nav__item">
       <a href="../apprun-site/" class="md-nav__link">
-        New Project
+        Create
       </a>
     </li>
   
@@ -636,6 +636,26 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#app-startup" class="md-nav__link">
+    App Startup
+  </a>
+  
+    <nav class="md-nav" aria-label="App Startup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-of-a-markdown-page" class="md-nav__link">
+    Example of a markdown page:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#no-code-routing" class="md-nav__link">
@@ -970,6 +990,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#app-startup" class="md-nav__link">
+    App Startup
+  </a>
+  
+    <nav class="md-nav" aria-label="App Startup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-of-a-markdown-page" class="md-nav__link">
+    Example of a markdown page:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#no-code-routing" class="md-nav__link">
     No-Code Routing
   </a>
@@ -1008,14 +1048,29 @@
 
 
 <h1 id="apprun-site-client-side-rendering">AppRun-Site Client-Side Rendering<a class="headerlink" href="#apprun-site-client-side-rendering" title="Permanent link">&para;</a></h1>
-<p>The AppRun-Site <em>build</em> command creates a Single-Page Application (SPA), including client-side rendering and routing. During the <em>build</em> process, it injects the client-side code into the <em>main.js</em> file.</p>
+<p>The AppRun-Site <em>build</em> command creates pages as ES modules that can be loaded dynamically. The AppRun-Site <em>build</em> command injects the client-side code into the <em>main.js</em> file for routing and loading the pages. To conclude, AppRun Sites are Single Page Applications (SPA).</p>
+<h2 id="app-startup">App Startup<a class="headerlink" href="#app-startup" title="Permanent link">&para;</a></h2>
+<p>If you have startup code, you can add it to the <em>main.tsx</em> file. The AppRun-Site <em>build</em> command injects calls to the default exported function of the <em>main.tsx</em> file.</p>
+<div class="highlight"><pre><span></span><code>/pages              &lt;- pages of the website
+  /main.tsx         &lt;- startup code
+</code></pre></div>
+<h3 id="example-of-a-markdown-page">Example of a markdown page:<a class="headerlink" href="#example-of-a-markdown-page" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nx">app</span> <span class="kr">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">Layout</span> <span class="kr">from</span> <span class="s1">&#39;../components/layout&#39;</span>
+<span class="k">import</span> <span class="nx">Comic</span> <span class="kr">from</span> <span class="s1">&#39;../components/comic&#39;</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">webComponent</span><span class="p">(</span><span class="s1">&#39;ws-comic&#39;</span><span class="p">,</span> <span class="nx">Comic</span><span class="p">);</span>        <span class="c1">// register web component</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="o">&lt;</span><span class="nx">Layout</span> <span class="o">/&gt;</span><span class="p">);</span>      <span class="c1">// render site layout</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="no-code-routing">No-Code Routing<a class="headerlink" href="#no-code-routing" title="Permanent link">&para;</a></h2>
 <p>You don't need to write any code to route an URL to a component. When users visit an URL, the client-side code will load, route, and render the page dynamically.</p>
 <p>E.g., when the URL in the browser address bar becomes http://.../contact, it triggers the <em>/contact</em> event. The <em>Contact component</em> reacts to the <em>/contact</em> and renders itself to the screen.</p>
 <p>The event handler for the <em>/contact</em> event is also injected. Therefore, there is no need to code for routing.</p>
 <h2 id="routing-parameters">Routing Parameters<a class="headerlink" href="#routing-parameters" title="Permanent link">&para;</a></h2>
-<p>However, if you want to pass parameters to the component through the URL, you can create your event handler.</p>
-<p><div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">Component</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<p>However, if you want to pass parameters to the component through the URL, you can create your event handler. For example:
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">Component</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="nx">state</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
   <span class="nx">view</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&lt;</span><span class="err">/div&gt;;</span>
@@ -1033,7 +1088,7 @@ When the URL in the browser address bar becomes http://.../products/1, it trigge
 <blockquote>
 <p>The AppRun-Site dev server provides such capability of serving <em>index.html</em> when the routes don't exist.</p>
 </blockquote>
-<p>To conclude, AppRun-Site builds Single Page Application (SPA). Next, you will see how to use the dev server and how does it render your pages on the <a href="../apprun-site-ssr/">server side</a>.</p>
+<p>Next, you will see how to use the dev server and how it renders your pages on the <a href="../apprun-site-ssr/">server side</a>.</p>
 
               
             </article>

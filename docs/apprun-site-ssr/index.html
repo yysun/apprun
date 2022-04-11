@@ -577,7 +577,7 @@
   
     <li class="md-nav__item">
       <a href="../apprun-site/" class="md-nav__link">
-        New Project
+        Create
       </a>
     </li>
   
@@ -995,17 +995,17 @@
 
 <h1 id="apprun-site-server-side-rendering">AppRun-Site Server-Side Rendering<a class="headerlink" href="#apprun-site-server-side-rendering" title="Permanent link">&para;</a></h1>
 <p>The AppRun-Site <em>serv</em> command starts a dev server at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
-<p><div class="highlight"><pre><span></span><code>npx apprun-site serv
+<div class="highlight"><pre><span></span><code>npx apprun-site serv
 </code></pre></div>
-The AppRun-Site dev server serves <em>index.html</em> when the routes don't exist to support Single Page Apps. It also has the capability of server-side rendering to support pretty links and static site creation.</p>
+<p>The AppRun-Site dev server serves <em>index.html</em> when the routes don't exist to support Single Page Apps. It also has the capability of server-side rendering to support pretty links and static site creation.</p>
 <h2 id="es-module">ES Module<a class="headerlink" href="#es-module" title="Permanent link">&para;</a></h2>
 <p>Because the pages are compiled to ES Modules, they can be loaded dynamically. Also, thanks to the <a href="../architecture/">AppRun architecture</a>, the dev server can render all the pages on the server the same way in the browser.</p>
-<p>E.g., when users visit http://.../contact, the dev server finds an ES module from <code>/contact/index.js</code>. The dev server loads the module dynamically and renders it to <a href="https://github.com/jsdom/jsdom">jsdom</a>. Then, it sends the HTML from jsdom back to the browser.</p>
+<p>E.g., when users visit http://.../contact, the dev server finds an ES module from <code>/contact/index.js</code>. The dev server loads the module dynamically and renders it to <a href="https://github.com/jsdom/jsdom">jsdom</a>. Then, it sends the HTML from <em>jsdom</em> back to the browser.</p>
 <p>The <strong>exact</strong> same code, /contact/index.js, can be run on the client-side and the server-side. No special treatment is needed.</p>
 <h2 id="dynamic-routing">Dynamic Routing<a class="headerlink" href="#dynamic-routing" title="Permanent link">&para;</a></h2>
-<p>The dev server supports dynamic routing. It searches the URL and finds the corresponding ES module. E.g., when users visit http://.../products/1, it will first try to find the ES module from <code>/products/1/index.js</code>. Of course, /products/1/index.js does not exist, so it will try to find <code>/products/index.js.</code> If <code>/products/index.js</code> exists, it will load the module dynamically and sends <em>1</em> as the parameter for rendering.</p>
-<p>The result is that pretty links are supported on the server-side.</p>
-<p>Finally, although you have a dev server for development, you may not have a node server or use a dfferent webserver in production. In this case, you can pre-render you site into a static site. Proceed to the next section to learn how to create a <a href="../apprun-site-static/">static site</a>.</p>
+<p>The dev server supports dynamic routing. It searches the URL and finds the corresponding ES module. E.g., when users visit http://.../products/1, the dev server will first try to find the ES module from <code>/products/1/index.js</code>. Of course, /products/1/index.js does not exist, so it will try to find <code>/products/index.js.</code> If <code>/products/index.js</code> exists, it will load the module dynamically and sends <em>1</em> as the parameter for rendering.</p>
+<p>The result is that pretty links are supported on the server side.</p>
+<p>Finally, although you have a dev server for development, you may not have a node server or use a different web server in production. In this case, you can pre-render your site into a static site. Proceed to the next section to learn how to create a <a href="../apprun-site-static/">static site</a>.</p>
 
               
             </article>

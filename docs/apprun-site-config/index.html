@@ -577,7 +577,7 @@
   
     <li class="md-nav__item">
       <a href="../apprun-site/" class="md-nav__link">
-        New Project
+        Create
       </a>
     </li>
   
@@ -682,6 +682,13 @@
         <li class="md-nav__item">
   <a href="#build-command-options" class="md-nav__link">
     Build Command Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dev-command-optins" class="md-nav__link">
+    Dev Command Optins
   </a>
   
 </li>
@@ -970,6 +977,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dev-command-optins" class="md-nav__link">
+    Dev Command Optins
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dev-server-options" class="md-nav__link">
     Dev Server Options
   </a>
@@ -996,7 +1010,7 @@
 <h1 id="apprun-site-configurations">AppRun-Site Configurations<a class="headerlink" href="#apprun-site-configurations" title="Permanent link">&para;</a></h1>
 <p>There are several options and configurations for AppRun-Site.</p>
 <h2 id="build-command-options">Build Command Options<a class="headerlink" href="#build-command-options" title="Permanent link">&para;</a></h2>
-<p>You can use the following command line options for the <em>build</em> command.</p>
+<p>You can use the following command-line options for the <em>build</em> command.</p>
 <div class="highlight"><pre><span></span><code>Usage: apprun-site build <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>source<span class="o">]</span>
 
 build site
@@ -1009,12 +1023,23 @@ Options:
   -p, --pages <span class="o">[</span>pages<span class="o">]</span>    pages directory <span class="o">(</span>default: <span class="s2">&quot;pages&quot;</span><span class="o">)</span>
   -h, --help             display <span class="nb">help</span> <span class="k">for</span> <span class="nb">command</span>
 </code></pre></div>
+<h2 id="dev-command-optins">Dev Command Optins<a class="headerlink" href="#dev-command-optins" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Usage: apprun-site dev <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>source<span class="o">]</span>
+
+launch development server
+
+Options:
+  -o, --output <span class="o">[</span>output<span class="o">]</span>  output directory <span class="o">(</span>default: <span class="s2">&quot;public&quot;</span><span class="o">)</span>
+  -p, --pages <span class="o">[</span>pages<span class="o">]</span>    pages directory <span class="o">(</span>default: <span class="s2">&quot;pages&quot;</span><span class="o">)</span>
+  -h, --help             display <span class="nb">help</span> <span class="k">for</span> <span class="nb">command</span>
+</code></pre></div>
 <h2 id="dev-server-options">Dev Server Options<a class="headerlink" href="#dev-server-options" title="Permanent link">&para;</a></h2>
-<p>You can customize dev server in the <code>apprun-site.yml</code> config file.</p>
+<p>In addition, you can also customize the AppRun-Site in the <code>apprun-site.yml</code> config file.</p>
 <div class="highlight"><pre><span></span><code>site_name: AppRun Site
 site_url: /
 
-no-startup: true   # don&#39;t inject start up code for dynamic routing
+no-startup: true   # don&#39;t inject startup code for dynamic routing
+no-sss: true       # don&#39;t use server-side-rendering
 
 dev-server:
   port: 8080
