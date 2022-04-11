@@ -50,8 +50,8 @@ export class Component {
         });
         if (typeof document !== 'object')
             return;
-        const el = (typeof this.element === 'string') ?
-            document.getElementById(this.element) : this.element;
+        const el = (typeof this.element === 'string' && this.element) ?
+            document.getElementById(this.element) || document.querySelector(this.element) : this.element;
         if (el) {
             const tracking_attr = '_c';
             if (!this.unload) {

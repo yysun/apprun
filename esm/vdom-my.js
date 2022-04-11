@@ -41,17 +41,19 @@ export const updateElement = (element, nodes, component = {}) => {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
         return;
+    const el = (typeof element === 'string' && element) ?
+        document.getElementById(element) || document.querySelector(element) : element;
     nodes = directive(nodes, component);
-    render(element, nodes, component);
+    render(el, nodes, component);
 };
 function render(element, nodes, parent = {}) {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
         return;
     nodes = createComponent(nodes, parent);
-    const isSvg = (element === null || element === void 0 ? void 0 : element.nodeName) === "SVG";
     if (!element)
         return;
+    const isSvg = element.nodeName === "SVG";
     if (Array.isArray(nodes)) {
         updateChildren(element, nodes, isSvg);
     }

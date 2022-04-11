@@ -100,13 +100,13 @@ const _components = (print) => {
     const data = [];
     if (components instanceof Map) {
         for (let [key, comps] of components) {
-            const element = typeof key === 'string' ? document.getElementById(key) : key;
+            const element = typeof key === 'string' ? document.getElementById(key) || document.querySelector(key) : key;
             data.push({ element, comps });
         }
     }
     else {
         Object.keys(components).forEach(el => {
-            const element = typeof el === 'string' ? document.getElementById(el) : el;
+            const element = typeof el === 'string' ? document.getElementById(el) || document.querySelector(el) : el;
             data.push({ element, comps: components[el] });
         });
     }
