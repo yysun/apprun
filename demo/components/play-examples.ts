@@ -138,7 +138,7 @@ app.start(document.body, state, view, update);
   },
   {
     name: 'Counter ($onclick)',
-    code:`// Counter ($onclick)
+    code: `// Counter ($onclick)
 const state = 0;
 const view = state => <div>
   <h1>{state}</h1>
@@ -179,7 +179,7 @@ const update = {
   'loading': (state, loading) => ({...state, loading }),
   'fetchComic': async _ => {
     app.run('loading', true);
-    const response = await fetch('https://xkcd-imgs.herokuapp.com/');
+    const response = await fetch('https://random.dog/woof.json');
     const comic = await response.json();
     return {comic};
   }
@@ -499,7 +499,7 @@ const update = {
 app.start(document.body, '', view, update);
 `
   },
-    {
+  {
     name: 'Content Editable',
     code: `// Content Editable
 const view = () => <>
@@ -534,7 +534,7 @@ app.start(document.body, {}, view);
     name: 'Init State as an Async Function',
     code: `// Init State as an Async Function
 const state = async () => {
-  const response = await fetch('https://xkcd-imgs.herokuapp.com/');
+  const response = await fetch('https://random.dog/woof.json');
   const comic = await response.json();
   return { comic };
 };

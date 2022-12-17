@@ -20,6 +20,8 @@ import svg from './components/svg';
 import animation from './components/animation';
 import play from './components/play';
 import webcomponents from './components/web-components';
+import '../src/apprun-play';
+import '../src/apprun-dev-tools';
 
 const element = document.getElementById('my-app');
 [home, hello, counter, counters, todo, calculator, dragdrop, svg, animation,

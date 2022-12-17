@@ -1,14 +1,24 @@
-### What's New
+## What's New
 
-## Create-AppRun-App CLI
+### Vite Support
 
-You can create an AppRun app by running command `npm init apprun-app`.
+The command `npm create apprun-app` supports [Vite](https://vitejs.dev/) in addition to esbuild and webpack.
+
+### Use React for Rendering View
+
+You can use React for rendering view. See [apprun-use-react](https://github.com/yysun/apprun-use-react) for details.
+
+> React 18 has breaking changes. Please use React 17 for now.
+
+### Create-AppRun-App CLI
+
+You can create an AppRun app by running command `npm create apprun-app`.
 
 ```sh
-npm init apprun-app [my-app]
+npm create apprun-app [my-app]
 ```
 
-> Note: AppRun CLI `npx apprun init` is deprecated. Please use `apprun create-app` instead.
+> Note: AppRun CLI `npx apprun init` is deprecated. Please use `npm create apprun-app` instead.
 
 
 ## Recent Posts and Publications
@@ -22,7 +32,7 @@ This post compares the coding style, bundle size, and performance of 55 differen
 
 This post introduces [apprun-dev-server](https://dev.to/yysun/a-dev-server-supports-esm-3cea), a dev server that provides fast and productive experiences to AppRun application development, so-called unbundled development.
 
-## [Observerble HQ Notebooks](https://observablehq.com/@yysun)
+### [Observerble HQ Notebooks](https://observablehq.com/@yysun)
 
 * [Introducing AppRun](https://observablehq.com/@yysun/introducing-apprun)
 

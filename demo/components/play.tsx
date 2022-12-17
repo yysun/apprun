@@ -16,6 +16,7 @@ const html = code => `<!DOCTYPE html>
       font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
       margin: 2em;
     }
+    img { width: 100%; }
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="dist/apprun-dev-tools.js"></script>
