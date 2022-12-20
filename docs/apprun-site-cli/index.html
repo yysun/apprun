@@ -728,8 +728,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#serv-command-options" class="md-nav__link">
-    Serv Command Options
+  <a href="#serve-command-options" class="md-nav__link">
+    Serve Command Options
   </a>
   
 </li>
@@ -989,8 +989,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#serv-command-options" class="md-nav__link">
-    Serv Command Options
+  <a href="#serve-command-options" class="md-nav__link">
+    Serve Command Options
   </a>
   
 </li>
@@ -1030,7 +1030,6 @@ Options:
   -h, --help                  display help for command
 
 Commands:
-  init [options] [targetDir]  initialize a new app
   build [options] [source]    build site
   serv [options] [source]     launch development server, watch and no live reload
   dev [options] [source]      launch development server, watch and live reload
@@ -1062,15 +1061,16 @@ Options:
   -h, --help             display <span class="nb">help</span> <span class="k">for</span> <span class="nb">command</span>
 ➜  apprun git:<span class="o">(</span>master<span class="o">)</span> ✗ npx apprun-site@latest serve -h
 </code></pre></div>
-<h2 id="serv-command-options">Serv Command Options<a class="headerlink" href="#serv-command-options" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>Usage: apprun-site serv [options] [source]
+<h2 id="serve-command-options">Serve Command Options<a class="headerlink" href="#serve-command-options" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Usage: apprun-site serve [options] [source]
 
-launch development server, watch and no live reload
+launch development server, live reload is optional
 
 Options:
   -o, --output [output]  output directory (default: &quot;public&quot;)
   -p, --pages [pages]    pages directory (default: &quot;pages&quot;)
   -n, --no_ssr           disable server side rendering (default: false)
+  -l, --live_reload      enable live reload (default: false)
   -h, --help             display help for command
 </code></pre></div>
 <h2 id="apprun-site-config-file">AppRun-Site Config File<a class="headerlink" href="#apprun-site-config-file" title="Permanent link">&para;</a></h2>

@@ -2,6 +2,10 @@
 
 ## Releases
 
+## 3.29.0
+
+* Resolve async state before running the event
+
 ## 3.28.15
 
 * Support css selector in _mount_, _start_, and _app.render_
