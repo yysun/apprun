@@ -33,6 +33,12 @@ app.start(document.body, state, view, update);
 
 ## Getting Started
 
+AppRun is distributed on npm. To get it, run:
+
+```sh
+npm install apprun
+```
+
 You can also load AppRun directly from the unpkg.com CDN:
 
 ```js
@@ -58,10 +64,6 @@ Or, you can create an AppRun app by using the `npm create apprun-app` command.
 npm create apprun-app [my-app]
 ```
 
-Or, you can install AppRun from npm.
-```sh
-npm install apprun
-```
 ## Component and Web Component
 
 An AppRun component is a mini-application with elm architecture, which means inside a component, there are _state_, _view_, and _update_. In addition, components provide a local scope.

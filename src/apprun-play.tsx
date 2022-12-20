@@ -3,9 +3,8 @@ import { app, Component } from './apprun';
 const popup_div = `<div id="play-popup" class="overlay">
 <style id="apprun-play-style">
 .apprun-play .col {
-  display: inline-block;
-  width: calc(50% - 3px);
   height: 100%;
+  flex: 1;
 }
 .apprun-preview {
   width: 100%
@@ -69,6 +68,7 @@ a.button:hover {
 .popup .content {
   height: 100%;
   overflow: hidden;
+  display: flex;
 }
 
 .cm-s-default {
