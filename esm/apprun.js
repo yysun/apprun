@@ -1,4 +1,4 @@
-import app from './app';
+import app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
 import { on, update, customElement } from './decorator';
@@ -33,7 +33,7 @@ if (typeof document === 'object') {
         }
     });
 }
-export { app, Component, on, update, Fragment, safeHTML };
+export { App, app, Component, on, update, Fragment, safeHTML };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };

@@ -2,7 +2,8 @@ import app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
 const componentCache = new Map();
-app.on('get-components', o => o.components = componentCache);
+if (!app.find('get-components'))
+    app.on('get-components', o => o.components = componentCache);
 const REFRESH = state => state;
 export class Component {
     constructor(state, view, update, options) {
@@ -87,15 +88,10 @@ export class Component {
         if (state instanceof Promise) {
             // Promise will not be saved or rendered
             // state will be saved and rendered when promise is resolved
-            // Wait for previous promise to complete first
-            Promise.all([state, this._state]).then(v => {
-                if (v[0])
-                    this.setState(v[0]);
-            }).catch(err => {
-                console.error(err);
-                throw err;
+            Promise.resolve(state).then(v => {
+                this.setState(v, options);
+                this._state = state;
             });
-            this._state = state;
         }
         else {
             this._state = state;
@@ -132,12 +128,7 @@ export class Component {
         this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
         if (typeof this.state === 'function')
             this.state = this.state();
-        if (options.render) {
-            this.setState(this.state, { render: true, history: true });
-        }
-        else {
-            this.setState(this.state, { render: false, history: true });
-        }
+        this.setState(this.state, { render: !!options.render, history: true });
         if (app['debug']) {
             if (componentCache.get(element)) {
                 componentCache.get(element).push(this);
@@ -215,10 +206,18 @@ export class Component {
         });
     }
     run(event, ...args) {
-        const name = event.toString();
-        return this.is_global_event(name) ?
-            app.run(name, ...args) :
-            this._app.run(name, ...args);
+        if (this.state instanceof Promise) {
+            return Promise.resolve(this.state).then(state => {
+                this.state = state;
+                this.run(event, ...args);
+            });
+        }
+        else {
+            const name = event.toString();
+            return this.is_global_event(name) ?
+                app.run(name, ...args) :
+                this._app.run(name, ...args);
+        }
     }
     on(event, fn, options) {
         const name = event.toString();
