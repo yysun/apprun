@@ -1,5 +1,5 @@
-import app from './app';
-import { createElement, render, Fragment,safeHTML } from './vdom';
+import app, { App } from './app';
+import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
 import { VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions } from './types';
 import { on, update, customElement } from './decorator';
@@ -12,6 +12,7 @@ export interface IApp {
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
+  find(name: string): any | any[];
   h(tag: string | Function, props, ...children): VNode | VNode[];
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: Element | string, node: VNode): void;
@@ -53,7 +54,7 @@ if (typeof document === 'object') {
   });
 }
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
-export { app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment, safeHTML }
+export { App, app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment, safeHTML }
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions, AppStartOptions };

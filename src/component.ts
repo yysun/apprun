@@ -5,7 +5,7 @@ import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
 import directive from './directive';
 
 const componentCache = new Map();
-app.on('get-components', o => o.components = componentCache);
+if (!app.find('get-components')) app.on('get-components', o => o.components = componentCache);
 
 const REFRESH = state => state;
 
@@ -78,14 +78,10 @@ export class Component<T = any, E = any> {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
       // state will be saved and rendered when promise is resolved
-      // Wait for previous promise to complete first
-      Promise.all([state, this._state]).then(v => {
-        if (v[0]) this.setState(v[0]);
-      }).catch(err => {
-        console.error(err);
-        throw err;
+      Promise.resolve(state).then(v => {
+        this.setState(v, options);
+        this._state = state;
       });
-      this._state = state;
     } else {
       this._state = state;
       if (state == null) return;
@@ -150,14 +146,12 @@ export class Component<T = any, E = any> {
     this.add_actions();
     this.state = this.state ?? this['model'] ?? {};
     if (typeof this.state === 'function') this.state = this.state();
-    if (options.render) {
-      this.setState(this.state, { render: true, history: true });
-    } else {
-      this.setState(this.state, { render: false, history: true });
-    }
+
+    this.setState(this.state, { render: !!options.render, history: true });
+
     if (app['debug']) {
       if (componentCache.get(element)) { componentCache.get(element).push(this) }
-      else { componentCache.set(element, [this])}
+      else { componentCache.set(element, [this]) }
     }
     return this;
   }
@@ -234,10 +228,17 @@ export class Component<T = any, E = any> {
   }
 
   public run(event: E, ...args) {
-    const name = event.toString();
-    return this.is_global_event(name) ?
-      app.run(name, ...args) :
-      this._app.run(name, ...args);
+    if (this.state instanceof Promise) {
+      return Promise.resolve(this.state).then(state => {
+        this.state = state;
+        this.run(event, ...args)
+      });
+    } else {
+      const name = event.toString();
+      return this.is_global_event(name) ?
+        app.run(name, ...args) :
+        this._app.run(name, ...args);
+    }
   }
 
   public on(event: E, fn: (...args) => void, options?: any) {

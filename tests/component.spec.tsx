@@ -374,19 +374,63 @@ describe('Component', () => {
     });
   })
 
-  it('should wait existing promise state to be resolve', (done) => {
+  it('should wait existing promise state to be resolve in sequence', (done) => {
     class Test extends Component {
-    state = async () => new Promise(resolve => setTimeout(() => resolve('old'), 150));
+      state = async () => new Promise(resolve => setTimeout(() => resolve('old'), 35));
       view = state => <div>{state}</div>
     }
     const div = document.createElement('div');
     const t = new Test().start(div);
-    t.setState(new Promise(resolve => setTimeout(() => resolve('new'), 50)));
+    t.setState(new Promise(resolve => setTimeout(() => resolve('new'), 25)));
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('');
+      done();
+    }, 20);
+
     setTimeout(() => {
       expect(div.innerHTML).toBe('<div>new</div>');
       done();
-    }, 200);
+    }, 30);
 
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('<div>old</div>');
+      done();
+    }, 40);
+
+  })
+
+  it('should allow initial state as an async function - not render when mount', (done) => {
+    class Test extends Component {
+      state = async () => new Promise(resolve => setTimeout(() => resolve(100)));
+      view = state => <div>{state}</div>
+    }
+    const div = document.createElement('div');
+    const t = new Test().mount(div);
+    setTimeout(() => {
+      expect(div.innerHTML).toBe('');
+      done();
+    });
+  })
+
+  it('should allow initial state as an async function - wait', (done) => {
+    class Test extends Component {
+      state = async () => new Promise(resolve => setTimeout(() => resolve(100), 100));
+      view = state => <div>{state}</div>
+      update = {
+        '.': state => {
+          expect(state).toBe(100);
+          done();
+        }
+      }
+    }
+
+    const div = document.createElement('div');
+    const t = new Test().mount(div);
+    // Promise.resolve(t['state']).then(state => {
+    //   t['state'] = state;
+    //   t.run('.')
+    // });
+    t.run('.'); 
   })
 
 });
