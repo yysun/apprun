@@ -34,4 +34,12 @@ export default [{
     sourcemap: true
     },
   plugins
+  }, {
+    input: 'esm/apprun-play.js',
+    output: {
+      file: 'dist/apprun-play.esm.js',
+      format: 'esm',
+      sourcemap: true
+    },
+    plugins
 }]
