@@ -1,4 +1,4 @@
-const app = require('../dist/apprun').app;
+const app = require('../dist/apprun-html').app;
 app.on('log', p => console.log(p))
 app.run('log', 'hi node')
 
