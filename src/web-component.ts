@@ -8,7 +8,7 @@ export type CustomElementOptions = {
   observedAttributes?: string[];
 };
 
-export const customElement = (componentClass, options: CustomElementOptions = {}) => class CustomElement extends HTMLElement {
+export const customElement = (componentClass, options: CustomElementOptions = {}) => class CustomElement extends HTMLDivElement {
   private _shadowRoot;
   private _component;
   private _attrMap: (arg0: string) => string;
@@ -103,5 +103,5 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
 }
 
 export default (name: string, componentClass, options?: CustomElementOptions) => {
-  (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options))
+  (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options), { extends: 'div' })
 }
