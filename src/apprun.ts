@@ -62,6 +62,7 @@ export default app as IApp;
 
 if (typeof window === 'object') {
   window['Component'] = Component;
+  window['_React'] = window['React'];
   window['React'] = app;
   window['on'] = on;
   window['customElement'] = customElement;

@@ -14,6 +14,7 @@ app.Fragment = Fragment;
 export default app;
 
 if (typeof window === 'object') {
+  window['React'] = window['_React'] || app;
   window['html'] = html;
   window['svg'] = svg;
   window['run'] = run;
