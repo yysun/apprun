@@ -1,4 +1,4 @@
-export const customElement = (componentClass, options = {}) => class CustomElement extends HTMLElement {
+export const customElement = (componentClass, options = {}) => class CustomElement extends HTMLDivElement {
     constructor() {
         super();
     }
@@ -82,6 +82,6 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
     }
 };
 export default (name, componentClass, options) => {
-    (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options));
+    (typeof customElements !== 'undefined') && customElements.define(name, customElement(componentClass, options), { extends: 'div' });
 };
 //# sourceMappingURL=web-component.js.map

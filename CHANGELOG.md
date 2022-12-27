@@ -2,6 +2,13 @@
 
 ## Releases
 
+## 3.30.0
+
+* Add no-init-route flag
+* Save Rect in app in case it needs to be used in the future
+* Create custom element that extends HTMLDivElement
+* Allow require from node
+
 ## 3.29.0
 
 * Resolve async state before running the event

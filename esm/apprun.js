@@ -28,7 +28,7 @@ if (typeof document === 'object') {
     document.addEventListener("DOMContentLoaded", () => {
         if (app['route'] === route) {
             window.onpopstate = () => route(location.hash);
-            if (!document.body.hasAttribute('apprun-no-init'))
+            if (!document.body.hasAttribute('apprun-no-init') || !app['no-init-route'])
                 route(location.hash);
         }
     });
@@ -40,6 +40,7 @@ export { customElement };
 export default app;
 if (typeof window === 'object') {
     window['Component'] = Component;
+    window['_React'] = window['React'];
     window['React'] = app;
     window['on'] = on;
     window['customElement'] = customElement;
