@@ -20,7 +20,7 @@ const update = {
 };
 app.start(document.body, state, view, update);
 ```
-<div is="apprun-play" style="height:200px"></div>
+<div is="apprun-play"></div>
 
 ## AppRun Benefits
 

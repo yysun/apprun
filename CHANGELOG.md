@@ -4,6 +4,7 @@
 
 ## 3.30.0
 
+* Add React-safe apprun-play-html
 * Add no-init-route flag
 * Save Rect in app in case it needs to be used in the future
 * Create custom element that extends HTMLDivElement
