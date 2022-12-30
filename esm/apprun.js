@@ -28,8 +28,7 @@ if (typeof document === 'object') {
     document.addEventListener("DOMContentLoaded", () => {
         if (app['route'] === route) {
             window.onpopstate = () => route(location.hash);
-            if (!document.body.hasAttribute('apprun-no-init') || !app['no-init-route'])
-                route(location.hash);
+            document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || route(location.hash);
         }
     });
 }
