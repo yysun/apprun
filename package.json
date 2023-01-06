@@ -3,7 +3,7 @@
   "version": "3.30.1",
   "description": "JavaScript library that has Elm inspired architecture, event pub-sub and components",
   "main": "dist/apprun.js",
-  "module": "dist/apprun.esm.js",
+  "module": "esm/apprun.js",
   "types": "apprun.d.ts",
   "bin": {
     "apprun": "apprun-cli.js"

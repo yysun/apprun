@@ -271,6 +271,9 @@ function render_component(node, parent, idx) {
         const element = document.createElement(asTag);
         component = parent.__componentCache[key] = new tag(Object.assign(Object.assign({}, props), { children })).start(element);
     }
+    else {
+        component.renderState(component.state);
+    }
     if (component.mounted) {
         const new_state = component.mounted(props, children, component.state);
         (typeof new_state !== 'undefined') && component.setState(new_state);
