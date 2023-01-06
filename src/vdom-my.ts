@@ -244,6 +244,8 @@ function render_component(node, parent, idx) {
   if (!component || !(component instanceof tag) || !component.element) {
     const element = document.createElement(asTag);
     component = parent.__componentCache[key] = new tag({ ...props, children }).start(element);
+  } else {
+    component.renderState(component.state);
   }
   if (component.mounted) {
     const new_state = component.mounted(props, children, component.state);
