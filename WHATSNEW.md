@@ -1,6 +1,39 @@
 ## What's New
 
+### Support View Transition API
+
+> September, 27, 2023
+
+AppRun now supports the [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent) at the event level, component level and app level.
+
+Event level example:
+
+```js
+const update = {
+  '+1': [state => state + 1, {transition: true}],
+  '-1': [state => state - 1, {transition: true}]
+};
+```
+
+Component level example:
+
+```js
+class C extends Component {
+
+}
+new C().mount(document.body, {transition: true});
+```
+
+
+App level example:
+
+```js
+app.start(document.body, {transition: true});
+```
+
 ### Vite Support
+
+> December 11, 2022
 
 The command `npm create apprun-app` supports [Vite](https://vitejs.dev/) in addition to esbuild and webpack.
 
@@ -11,6 +44,8 @@ You can use React for rendering view. See [apprun-use-react](https://github.com/
 > React 18 has breaking changes. Please use React 17 for now.
 
 ### Create-AppRun-App CLI
+
+> April 5 , 2022
 
 You can create an AppRun app by running command `npm create apprun-app`.
 

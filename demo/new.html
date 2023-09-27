@@ -1,5 +1,28 @@
 <h2 id="whats-new">What&#39;s New</h2>
+<h3 id="support-view-transition-api">Support View Transition API</h3>
+<blockquote>
+<p>September, 27, 2023</p>
+</blockquote>
+<p>AppRun now supports the <a href="https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent">View Transition API</a> at the event level, component level and app level.</p>
+<p>Event level example:</p>
+<pre><code class="language-js">const update = {
+  &#39;+1&#39;: [state =&gt; state + 1, {transition: true}],
+  &#39;-1&#39;: [state =&gt; state - 1, {transition: true}]
+};
+</code></pre>
+<p>Component level example:</p>
+<pre><code class="language-js">class C extends Component {
+
+}
+new C().mount(document.body, {transition: true});
+</code></pre>
+<p>App level example:</p>
+<pre><code class="language-js">app.start(document.body, {transition: true});
+</code></pre>
 <h3 id="vite-support">Vite Support</h3>
+<blockquote>
+<p>December 11, 2022</p>
+</blockquote>
 <p>The command <code>npm create apprun-app</code> supports <a href="https://vitejs.dev/">Vite</a> in addition to esbuild and webpack.</p>
 <h3 id="use-react-for-rendering-view">Use React for Rendering View</h3>
 <p>You can use React for rendering view. See <a href="https://github.com/yysun/apprun-use-react">apprun-use-react</a> for details.</p>
@@ -7,6 +30,9 @@
 <p>React 18 has breaking changes. Please use React 17 for now.</p>
 </blockquote>
 <h3 id="create-apprun-app-cli">Create-AppRun-App CLI</h3>
+<blockquote>
+<p>April 5 , 2022</p>
+</blockquote>
 <p>You can create an AppRun app by running command <code>npm create apprun-app</code>.</p>
 <pre><code class="language-sh">npm create apprun-app [my-app]
 </code></pre>

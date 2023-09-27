@@ -80,7 +80,12 @@ export class Component {
         }
         if (!vdom && html) {
             html = directive(html, this);
-            app.render(el, html, this);
+            if (this.options.transition && document && document['startViewTransition']) {
+                document['startViewTransition'](() => app.render(el, html, this));
+            }
+            else {
+                app.render(el, html, this);
+            }
         }
         this.rendered && this.rendered(this.state);
     }
@@ -98,8 +103,15 @@ export class Component {
             if (state == null)
                 return;
             this.state = state;
-            if (options.render !== false)
-                this.renderState(state);
+            if (options.render !== false) {
+                // before render state
+                if (options.transition && document && document['startViewTransition']) {
+                    document['startViewTransition'](() => this.renderState(state));
+                }
+                else {
+                    this.renderState(state);
+                }
+            }
             if (options.history !== false && this.enable_history) {
                 this._history = [...this._history, state];
                 this._history_idx = this._history.length - 1;
@@ -225,6 +237,12 @@ export class Component {
         return this.is_global_event(name) ?
             app.on(name, fn, options) :
             this._app.on(name, fn, options);
+    }
+    query(event, ...args) {
+        const name = event.toString();
+        return this.is_global_event(name) ?
+            app.query(name, ...args) :
+            this._app.query(name, ...args);
     }
     unmount() {
         var _a;

@@ -15,9 +15,12 @@ const update = {
   &#39;+1&#39;: state =&gt; state + 1,
   &#39;-1&#39;: state =&gt; state - 1
 };
-app.start(document.body, state, view, update);
+app.start(document.body, state, view, update, { history: true });
 </code></pre>
 <p><apprun-play style="height:200px"></apprun-play></p>
+<blockquote>
+<p>Note, the transition option is newly added to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent">View Transition API</a> during the rendering of the view.</p>
+</blockquote>
 <h2 id="apprun-benefits">AppRun Benefits</h2>
 <ul>
 <li>Clean architecure that needs less code</li>
