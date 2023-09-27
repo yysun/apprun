@@ -68,7 +68,12 @@ export class Component<T = any, E = any> {
     }
     if (!vdom && html) {
       html = directive(html, this);
-      app.render(el, html, this);
+
+      if (this.options.transition && document && document['startViewTransition']) {
+        document['startViewTransition'](() => app.render(el, html, this));
+      } else {
+        app.render(el, html, this);
+      }
     }
     this.rendered && this.rendered(this.state);
   }

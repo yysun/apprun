@@ -27,11 +27,14 @@ declare module 'apprun' {
   };
 
   export type MountOptions = {
-    render?: boolean, history?, global_event?: boolean, route?: string
+    render?: boolean, history?, global_event?: boolean,
+    transition?: boolean;
+    route?: string
   };
 
   export type AppStartOptions<T> = {
     render?: boolean;
+    transition?: boolean;
     history?;
     route?: string;
     rendered?: (state: T) => void

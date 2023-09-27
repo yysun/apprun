@@ -547,7 +547,7 @@ app.start(document.body, state, view);
 `
   },
   {
-    name: 'View Transition',
+    name: 'View Transition Event Level',
     code: `// View Transition
 const style = \`
   ::view-transition-old(root),
@@ -567,6 +567,29 @@ const update = {
   '-1': [state => state - 1, {transition: true}]
 };
 app.start(document.body, state, view, update);
+`
+  },
+  {
+    name: 'View Transition Component Level',
+    code: `// View Transition
+const style = \`
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 1s; // slow motion fade
+  }
+\`;
+const state = 0;
+const view = state => <div>
+  <style>{style}</style>
+  <h1>{state}</h1>
+  <button onclick={()=>app.run('-1')}>-1</button>
+  <button onclick={()=>app.run('+1')}>+1</button>
+</div>;
+const update = {
+  '+1': state => state + 1,
+  '-1': state => state - 1
+};
+app.start(document.body, state, view, update, {transition: true});
 `
   },
 ];

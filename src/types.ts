@@ -12,7 +12,7 @@ export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
 export type Update<T, E = string> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
 export type ActionOptions = {
   render?: boolean, history?, global?: boolean;
-  callback?: (state) => void
+  callback?: (state) => void;
 };
 export type EventOptions = {
   once?: boolean;
@@ -20,12 +20,14 @@ export type EventOptions = {
   delay?: number;
 } | any;
 export type MountOptions = {
-  render?: boolean, history?, global_event?: boolean, route?: string
+  render?: boolean, history?, global_event?: boolean, route?: string;
+  transition?: boolean;
 };
 
 export type AppStartOptions<T> = {
   render?: boolean;
   history?;
+  transition?: boolean;
   route?: string;
   rendered?: (state: T) => void
 };
