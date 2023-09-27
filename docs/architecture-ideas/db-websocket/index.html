@@ -10,8 +10,15 @@
       
       
       
+      
+        <link rel="prev" href="../firebase-app/">
+      
+      
+        <link rel="next" href="../rust-app/">
+      
+      
       <link rel="icon" href="../../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.2">
     
     
       
@@ -19,15 +26,14 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
-      
-        
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
+      <link rel="stylesheet" href="../../assets/stylesheets/main.d451bc0e.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -50,9 +56,7 @@
   
   
 
-
-  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-123786786-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
-
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","UA-123786786-1"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","UA-123786786-1",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=UA-123786786-1",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
   
     <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
   
@@ -63,14 +67,11 @@
   </head>
   
   
-    
-    
-    
-    
-    
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+    <body dir="ltr">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -90,7 +91,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="AppRun Docs" class="md-header__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
       
@@ -98,6 +101,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -120,6 +124,7 @@
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -128,12 +133,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -145,7 +153,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -157,7 +165,7 @@
         <a href="https://github.com/apprunjs/apprun-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -187,6 +195,7 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="AppRun Docs" class="md-nav__button md-logo" aria-label="AppRun Docs" data-md-component="logo">
@@ -201,7 +210,7 @@
       <a href="https://github.com/apprunjs/apprun-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -213,14 +222,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -228,197 +241,269 @@
     
       
       
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
       
-
-  
-  
-    
-  
-  
-    
       
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2">
-          Concepts
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Concepts" data-md-level="1">
-        <label class="md-nav__title" for="__nav_2">
-          <span class="md-nav__icon md-icon"></span>
-          Concepts
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
           
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     
+    
+    
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_1">
-          Architecture
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Architecture" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Architecture
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
           
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../architecture/" class="md-nav__link">
-        Overview
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../event-pubsub/" class="md-nav__link">
-        Event Pubsub
+        
+  
+  <span class="md-ellipsis">
+    Event Pubsub
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../state-management/" class="md-nav__link">
-        State Management
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../component/" class="md-nav__link">
-        Component
+        
+  
+  <span class="md-ellipsis">
+    Component
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../reactivity/" class="md-nav__link">
-        Reactivity
+        
+  
+  <span class="md-ellipsis">
+    Reactivity
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
     
   
   
+    
+    
+    
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_2">
-          Examples
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Examples" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_2">
-          <span class="md-nav__icon md-icon"></span>
-          Examples
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
           
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Examples
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../dapr/" class="md-nav__link">
-        Microservice wirh Dapr
+        
+  
+  <span class="md-ellipsis">
+    Microservice wirh Dapr
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../firebase-app/" class="md-nav__link">
-        Serverless App Using Firebase
+        
+  
+  <span class="md-ellipsis">
+    Serverless App Using Firebase
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
     
@@ -426,17 +511,29 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Database and Websocket
+          
+  
+  <span class="md-ellipsis">
+    Database and Websocket
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Database and Websocket
+        
+  
+  <span class="md-ellipsis">
+    Database and Websocket
+  </span>
+  
+
       </a>
       
         
@@ -535,447 +632,615 @@
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../rust-app/" class="md-nav__link">
-        Webassembly app with Rust
+        
+  
+  <span class="md-ellipsis">
+    Webassembly app with Rust
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../state-machine/" class="md-nav__link">
-        State Machine
+        
+  
+  <span class="md-ellipsis">
+    State Machine
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../showcase/" class="md-nav__link">
-        Showcase
+        
+  
+  <span class="md-ellipsis">
+    Showcase
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
   
     
+    
+    
+    
+    
+      
       
     
     <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3">
-          Getting started
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
-          <span class="md-nav__icon md-icon"></span>
-          Getting started
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
           
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Getting started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../getting-started/" class="md-nav__link">
-        Installation
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../tutorial/" class="md-nav__link">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../create-apprun-app/" class="md-nav__link">
-        Create AppRun App
+        
+  
+  <span class="md-ellipsis">
+    Create AppRun App
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../spa/" class="md-nav__link">
-        Single Page App
+        
+  
+  <span class="md-ellipsis">
+    Single Page App
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
   
     
+    
+    
+    
+    
+      
       
     
     <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_4">
-          AppRun Site
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="AppRun Site" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
-          <span class="md-nav__icon md-icon"></span>
-          AppRun Site
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
           
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    AppRun Site
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            AppRun Site
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site/" class="md-nav__link">
-        Create
+        
+  
+  <span class="md-ellipsis">
+    Create
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site-build/" class="md-nav__link">
-        Build
+        
+  
+  <span class="md-ellipsis">
+    Build
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site-csr/" class="md-nav__link">
-        Client-Side Rendering
+        
+  
+  <span class="md-ellipsis">
+    Client-Side Rendering
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site-ssr/" class="md-nav__link">
-        Server-Side Rendering
+        
+  
+  <span class="md-ellipsis">
+    Server-Side Rendering
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site-static/" class="md-nav__link">
-        Static Web Site
+        
+  
+  <span class="md-ellipsis">
+    Static Web Site
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../apprun-site-cli/" class="md-nav__link">
-        AppRun-Site CLI
+        
+  
+  <span class="md-ellipsis">
+    AppRun-Site CLI
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
   
     
+    
+    
+    
+    
+      
       
     
     <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5">
-          Advanced
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
-          <span class="md-nav__icon md-icon"></span>
-          Advanced
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
           
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../view-patterns/" class="md-nav__link">
-        JSX
+        
+  
+  <span class="md-ellipsis">
+    JSX
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../directive/" class="md-nav__link">
-        Directive
+        
+  
+  <span class="md-ellipsis">
+    Directive
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../svg/" class="md-nav__link">
-        SVG
+        
+  
+  <span class="md-ellipsis">
+    SVG
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../3rd-party-libs/" class="md-nav__link">
-        3rd Party Intergration
+        
+  
+  <span class="md-ellipsis">
+    3rd Party Intergration
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../cli-in-console/" class="md-nav__link">
-        Dev Tools
+        
+  
+  <span class="md-ellipsis">
+    Dev Tools
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../strong-typing/" class="md-nav__link">
-        Strong Typing
+        
+  
+  <span class="md-ellipsis">
+    Strong Typing
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../unit-testing/" class="md-nav__link">
-        Unit Testing
+        
+  
+  <span class="md-ellipsis">
+    Unit Testing
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../notebooks/" class="md-nav__link">
-        Notebooks
+        
+  
+  <span class="md-ellipsis">
+    Notebooks
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
   
     <li class="md-nav__item">
       <a href="../../react/" class="md-nav__link">
-        Use with React
+        
+  
+  <span class="md-ellipsis">
+    Use with React
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../../resources/" class="md-nav__link">
-        Resources
+        
+  
+  <span class="md-ellipsis">
+    Resources
+  </span>
+  
+
       </a>
     </li>
   
@@ -983,14 +1248,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../../about/" class="md-nav__link">
-        About
+        
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
       </a>
     </li>
   
@@ -1110,10 +1379,8 @@
                 
                   
 
-  <a href="https://github.com/apprunjs/apprun-docs/edit/master/docs/architecture-ideas/db-websocket.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
 
 
   <h1>Database and Websocket</h1>
@@ -1132,12 +1399,12 @@
 <p>The new architecture uses the WebSocket API and AppRun event system.</p>
 <p>AppRun has two important functions: <em>app.run</em> and <em>app.on</em>. <em>app.run</em> fires events. <em>app.on</em> handles events. E.g.:</p>
 <p>Module A handles the <em>print</em> event:</p>
-<p><div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span><span class="w"></span>
+<p><div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span>
 </code></pre></div>
 Module B fires the <em>print</em> event:</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;print&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{});</span>
 </code></pre></div>
 <p>Module B can invoke the function in Module A without knowing Module A. It works when Module A and Module B are both frontend modules. Can the business logic modules behind the webserver also subscribe to the frontend events?</p>
 <p>Yes, that's the exact idea of the new architecture.</p>
@@ -1161,122 +1428,122 @@ Module B fires the <em>print</em> event:</p>
 </ul>
 <h3 id="send-events-to-server-through-websocket">Send Events to Server Through WebSocket<a class="headerlink" href="#send-events-to-server-through-websocket" title="Permanent link">&para;</a></h3>
 <p>First, we create a WebSocket in the frontend app (<em>main.tsx</em>). Then, We define a special AppRun global event called <em>//ws:</em>, which sends the events to the server.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span><span class="w"></span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
-<span class="w">  </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">});</span>
 </code></pre></div>
 <h3 id="receiving-events-from-frontend">Receiving Events from Frontend<a class="headerlink" href="#receiving-events-from-frontend" title="Permanent link">&para;</a></h3>
 <p>We create the WebSockets on the webserver side (<em>index.js</em>). We listen to the WebSockets messages and convert them to AppRun events. AppRun runs on the webserver. Just like Module A and Module B example above, the AppRun events will be handled in the business logic module (<em>db.js</em>).</p>
-<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">apprun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span><span class="w"></span>
-<span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./db&#39;</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">apprun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./db&#39;</span><span class="p">);</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createServer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">webSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ws&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createServer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">webSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ws&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="k">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;../public&#39;</span><span class="p">)));</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="k">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;../public&#39;</span><span class="p">)));</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">wss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">webSocket</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">wss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">webSocket</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="p">});</span>
 
-<span class="nx">wss</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;==&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">json</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="nx">apprun</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span><span class="w"></span>
-<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">});</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">wss</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;==&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">json</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">apprun</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>Notice the webserver also adds the WebSocket reference, <em>ws</em> as the event parameter for the business logic module.</p>
 <h3 id="handle-events-in-business-logic-module">Handle Events in Business Logic Module<a class="headerlink" href="#handle-events-in-business-logic-module" title="Permanent link">&para;</a></h3>
 <p>We handle AppRun events in the business logic module (<em>db.js</em>) to complete the CRUD operations against the database.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">sqlite3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;sqlite3&#39;</span><span class="p">).</span><span class="nx">verbose</span><span class="p">();</span><span class="w"></span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">dbFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;db/todo.db&quot;</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;apprun&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">sqlite3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;sqlite3&#39;</span><span class="p">).</span><span class="nx">verbose</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dbFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;db/todo.db&quot;</span><span class="p">;</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-all-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;select * from todo&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">sql</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">rows</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">json</span><span class="p">.</span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rows</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
-<span class="w">    </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">json</span><span class="p">));</span><span class="w"></span>
-<span class="w">  </span><span class="p">});</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-all-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;select * from todo&#39;</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">sql</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">rows</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">json</span><span class="p">.</span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rows</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">json</span><span class="p">));</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@get-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">json</span><span class="p">,</span><span class="w"> </span><span class="nx">ws</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>Once completed the database operations, we use the WebSocket reference, <em>ws</em>, to send events back.</p>
 <h3 id="receiving-events-from-backend">Receiving Events from Backend<a class="headerlink" href="#receiving-events-from-backend" title="Permanent link">&para;</a></h3>
 <p>Receiving events from the backend in the frontend app (<em>main.tsx</em>) is straightforward.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span><span class="w"></span>
-<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="sb">`wss://</span><span class="si">${</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>You can see now we have 9 lines of client-side code in <em>main.tsx</em> and 11 lines of server-side code in <em>index.js</em> for transferring AppRun events between frontend and backend through WebSockets.</p>
 <p>We also have a business logic module that operates the database using AppRun events.</p>
 <p>They are ready to serve the frontend application.</p>
 <h3 id="the-frontend-application">The Frontend Application<a class="headerlink" href="#the-frontend-application" title="Permanent link">&para;</a></h3>
 <p>The frontend Todo application is a typical AppRun application that has the Elm inspired architecture (<em>todo.tsx</em>). Listed below is the simplified code except.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">filter</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">todos</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">filter</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">todos</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="p">}</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;new_todo&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">done</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"></span>
-<span class="w">  </span><span class="p">})</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@create-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;new_todo&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">done</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">  </span><span class="p">})</span>
+<span class="p">};</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">toggle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">toggle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@update-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">};</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">remove</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">remove</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@delete-todo&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">clear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">clear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s1">&#39;//ws:&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">filter</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">filter</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">filter</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">filter</span><span class="w"> </span><span class="p">});</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{...}</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{...}</span>
 
-<span class="kd">const</span><span class="w"> </span><span class="nx">update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="s1">&#39;@get-all-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="w"> </span><span class="p">}),</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="s1">&#39;@get-all-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="w"> </span><span class="p">}),</span>
 
-<span class="w">  </span><span class="s1">&#39;@create-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}),</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;@create-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}),</span>
 
-<span class="w">  </span><span class="s1">&#39;@update-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;@update-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
 
-<span class="w">  </span><span class="s1">&#39;@delete-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;@delete-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todo</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
 
-<span class="w">  </span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;@delete-all-todo&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">todos</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">})</span>
+<span class="p">}</span>
 
-<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Component</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">);</span><span class="w"></span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Component</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
 <p>You can see we have <em>state</em>, <em>view</em>, and <em>update</em> to form an AppRun component.</p>
 <p>The local functions handle local events, such as <em>add</em>, <em>toggle</em>, <em>remove</em>, <em>clear</em>, and <em>search</em>. These functions fire the global event <em>//ws:</em> to the WebSocket.</p>
@@ -1310,48 +1577,12 @@ Module B fires the <em>print</em> event:</p>
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../firebase-app/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Serverless App Using Firebase" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Serverless App Using Firebase
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../rust-app/" class="md-footer__link md-footer__link--next" aria-label="Next: Webassembly app with Rust" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Webassembly app with Rust
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2016 - 2022 Yiyi Sun
+      Copyright &copy; 2016 - 2023 Yiyi Sun
     </div>
   
   
@@ -1371,10 +1602,10 @@ Module B fires the <em>print</em> event:</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.726fbb30.min.js"></script>
       
         <script src="../../assets/vendor/codemirror/codemirror.js"></script>
       
@@ -1386,7 +1617,6 @@ Module B fires the <em>print</em> event:</p>
       
         <script src="../../assets/apprun-play.js"></script>
       
-    
     
   </body>
 </html>

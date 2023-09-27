@@ -18,7 +18,7 @@ const update = {
   '+1': state => state + 1,
   '-1': state => state - 1
 };
-app.start(document.body, state, view, update, { history: true });
+app.start(document.body, state, view, update, { transition: true });
 ```
 <apprun-play style="height:200px"></apprun-play>
 
