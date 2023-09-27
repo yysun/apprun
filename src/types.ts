@@ -16,6 +16,7 @@ export type ActionOptions = {
 };
 export type EventOptions = {
   once?: boolean;
+  transition?: boolean;
   delay?: number;
 } | any;
 export type MountOptions = {

@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions, MountOptions } from './types';
+import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions } from './types';
 import directive from './directive';
 
 const componentCache = new Map();
@@ -73,7 +73,7 @@ export class Component<T = any, E = any> {
     this.rendered && this.rendered(this.state);
   }
 
-  public setState(state: T, options: ActionOptions
+  public setState(state: T, options: ActionOptions & EventOptions
     = { render: true, history: false }) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
@@ -86,7 +86,14 @@ export class Component<T = any, E = any> {
       this._state = state;
       if (state == null) return;
       this.state = state;
-      if (options.render !== false) this.renderState(state);
+      if (options.render !== false) {
+        // before render state
+        if (options.transition && document && document['startViewTransition']) {
+          document['startViewTransition'](() => this.renderState(state));
+        } else {
+          this.renderState(state);
+        }
+      }
       if (options.history !== false && this.enable_history) {
         this._history = [...this._history, state];
         this._history_idx = this._history.length - 1;
@@ -247,6 +254,13 @@ export class Component<T = any, E = any> {
     return this.is_global_event(name) ?
       app.on(name, fn, options) :
       this._app.on(name, fn, options);
+  }
+
+  public query(event: E, ...args) {
+    const name = event.toString();
+    return this.is_global_event(name) ?
+      app.query(name, ...args) :
+      this._app.query(name, ...args);
   }
 
   public unmount() {

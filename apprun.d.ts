@@ -15,6 +15,7 @@ declare module 'apprun' {
   export type Route = (url: string, ...args: any[]) => any;
   export type EventOptions<T = any> = {
     once?: boolean;
+    transition?: boolean;
     delay?: number;
   } | any;
   export type CustomElementOptions = {
@@ -63,6 +64,7 @@ declare module 'apprun' {
     start(element?: Element | string, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
+    query(name: string, ...args): Promise<any[]>;
     rendered: (state: T) => void;
     mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
