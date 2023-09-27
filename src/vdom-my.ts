@@ -213,7 +213,7 @@ export function updateProps(element: Element, props: {}, isSvg) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
       }
-    } else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-/g.test(name) || isSvg) {
+    } else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-|^for$/g.test(name) || isSvg) {
       if (element.getAttribute(name) !== value) {
         if (value) element.setAttribute(name, value);
         else element.removeAttribute(name);
