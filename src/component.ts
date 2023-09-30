@@ -261,11 +261,16 @@ export class Component<T = any, E = any> {
       this._app.on(name, fn, options);
   }
 
-  public query(event: E, ...args) {
+  public runAsync(event: E, ...args) {
     const name = event.toString();
     return this.is_global_event(name) ?
-      app.query(name, ...args) :
-      this._app.query(name, ...args);
+      app.runAsync(name, ...args) :
+      this._app.runAsync(name, ...args);
+  }
+
+  // obsolete
+  public query(event: E, ...args) {
+    return this.runAsync(event, ...args);
   }
 
   public unmount() {

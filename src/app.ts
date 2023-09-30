@@ -58,7 +58,7 @@ export class App {
     }, options.delay);
   }
 
-  query(name: string, ...args): Promise<any[]> {
+  runAsync(name: string, ...args): Promise<any[]> {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
@@ -66,6 +66,10 @@ export class App {
       return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
     });
     return Promise.all(promises);
+  }
+
+  query(name: string, ...args): Promise<any[]> {
+    return this.query(name, ...args);
   }
 
   private getSubscribers(name: string, events) {
