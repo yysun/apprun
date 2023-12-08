@@ -6,38 +6,6 @@ if (!app.find('get-components'))
     app.on('get-components', o => o.components = componentCache);
 const REFRESH = state => state;
 export class Component {
-    constructor(state, view, update, options) {
-        this.state = state;
-        this.view = view;
-        this.update = update;
-        this.options = options;
-        this._app = new App();
-        this._actions = [];
-        this._global_events = [];
-        this._history = [];
-        this._history_idx = -1;
-        this._history_prev = () => {
-            this._history_idx--;
-            if (this._history_idx >= 0) {
-                this.setState(this._history[this._history_idx], { render: true, history: false });
-            }
-            else {
-                this._history_idx = 0;
-            }
-        };
-        this._history_next = () => {
-            this._history_idx++;
-            if (this._history_idx < this._history.length) {
-                this.setState(this._history[this._history_idx], { render: true, history: false });
-            }
-            else {
-                this._history_idx = this._history.length - 1;
-            }
-        };
-        this.start = (element = null, options) => {
-            return this.mount(element, Object.assign({ render: true }, options));
-        };
-    }
     renderState(state, vdom = null) {
         if (!this.view)
             return;
@@ -119,6 +87,43 @@ export class Component {
             if (typeof options.callback === 'function')
                 options.callback(this.state);
         }
+    }
+    constructor(state, view, update, options) {
+        this.state = state;
+        this.view = view;
+        this.update = update;
+        this.options = options;
+        this._app = new App();
+        this._actions = [];
+        this._global_events = [];
+        this._history = [];
+        this._history_idx = -1;
+        this._history_prev = () => {
+            this._history_idx--;
+            if (this._history_idx >= 0) {
+                this.setState(this._history[this._history_idx], { render: true, history: false });
+            }
+            else {
+                this._history_idx = 0;
+            }
+        };
+        this._history_next = () => {
+            this._history_idx++;
+            if (this._history_idx < this._history.length) {
+                this.setState(this._history[this._history_idx], { render: true, history: false });
+            }
+            else {
+                this._history_idx = this._history.length - 1;
+            }
+        };
+        this.start = (element = null, options) => {
+            this.mount(element, Object.assign({ render: true }, options));
+            if (this.mounted && typeof this.mounted === 'function') {
+                const new_state = this.mounted({}, [], this.state);
+                (typeof new_state !== 'undefined') && this.setState(new_state);
+            }
+            return this;
+        };
     }
     mount(element = null, options) {
         var _a, _b;
@@ -238,11 +243,15 @@ export class Component {
             app.on(name, fn, options) :
             this._app.on(name, fn, options);
     }
-    query(event, ...args) {
+    runAsync(event, ...args) {
         const name = event.toString();
         return this.is_global_event(name) ?
-            app.query(name, ...args) :
-            this._app.query(name, ...args);
+            app.runAsync(name, ...args) :
+            this._app.runAsync(name, ...args);
+    }
+    // obsolete
+    query(event, ...args) {
+        return this.runAsync(event, ...args);
     }
     unmount() {
         var _a;

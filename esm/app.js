@@ -39,7 +39,7 @@ export class App {
             Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
         }, options.delay);
     }
-    query(name, ...args) {
+    runAsync(name, ...args) {
         const subscribers = this.getSubscribers(name, this._events);
         console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
         const promises = subscribers.map(sub => {
@@ -47,6 +47,9 @@ export class App {
             return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
         });
         return Promise.all(promises);
+    }
+    query(name, ...args) {
+        return this.query(name, ...args);
     }
     getSubscribers(name, events) {
         const subscribers = events[name] || [];

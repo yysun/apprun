@@ -1,4 +1,27 @@
 <h2 id="whats-new">What&#39;s New</h2>
+<h3 id="support-the-mounted-function-when-starting-a-component-manually">Support the <em>mounted</em> function when starting a component manually</h3>
+<blockquote>
+<p>Dec, 8, 2023</p>
+</blockquote>
+<p>When using a component in JSX, AppRun always invokes the the <em>mounted</em> lifecycle function each time the component is loaded.</p>
+<pre><code class="language-js">class ComponentClass extends Component {
+  mounted = () =&gt; console.log(&#39;mounted is called&#39;);
+}
+app.render(document.body, &lt;ComponentClass /&gt;);
+</code></pre>
+<p>However, the <em>mounted</em> function is not called when you start the component manully in the previous versions.</p>
+<pre><code class="language-js">class ComponentClass extends Component {
+  mounted = () =&gt; console.log(&#39;mounted is called&#39;); // not called in previous versions
+}
+new ComponentClass().start(document.body);
+</code></pre>
+<p>Now, the <em>mounted</em> function is called when the component is started.</p>
+<pre><code class="language-js">class ComponentClass extends Component {
+  mounted = () =&gt; console.log(&#39;mounted is called&#39;); // called in this version
+}
+new ComponentClass().start(document.body);
+</code></pre>
+<p>This change make the <em>mounted</em> funciton compatible in JSX and in manual start.</p>
 <h3 id="support-view-transition-api">Support View Transition API</h3>
 <blockquote>
 <p>September, 27, 2023</p>

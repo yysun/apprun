@@ -14,7 +14,9 @@ app.start = (element, model, view, update, options) => {
     const component = new Component(model, view, update);
     if (options && options.rendered)
         component.rendered = options.rendered;
-    component.mount(element, opts);
+    if (options && options.mounted)
+        component.mounted = options.mounted;
+    component.start(element, opts);
     return component;
 };
 const NOOP = _ => { };

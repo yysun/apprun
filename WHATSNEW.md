@@ -1,5 +1,39 @@
 ## What's New
 
+### Support the _mounted_ function when starting a component manually
+
+> Dec, 8, 2023
+
+When using a component in JSX, AppRun always invokes the the _mounted_ lifecycle function each time the component is loaded.
+
+```js
+class ComponentClass extends Component {
+  mounted = () => console.log('mounted is called');
+}
+app.render(document.body, <ComponentClass />);
+```
+
+However, the _mounted_ function is not called when you start the component manully in the previous versions.
+
+```js
+class ComponentClass extends Component {
+  mounted = () => console.log('mounted is called'); // not called in previous versions
+}
+new ComponentClass().start(document.body);
+```
+
+Now, the _mounted_ function is called when the component is started.
+
+```js
+class ComponentClass extends Component {
+  mounted = () => console.log('mounted is called'); // called in this version
+}
+new ComponentClass().start(document.body);
+```
+
+This change make the _mounted_ funciton compatible in JSX and in manual start.
+
+
 ### Support View Transition API
 
 > September, 27, 2023
