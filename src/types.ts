@@ -30,4 +30,5 @@ export type AppStartOptions<T> = {
   transition?: boolean;
   route?: string;
   rendered?: (state: T) => void
+  mounted?: (props:any, children:any, state: T) => T
 };

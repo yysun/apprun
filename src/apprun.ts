@@ -33,7 +33,8 @@ app.start = <T, E = any>(element?: Element | string, model?: T, view?: View<T>, 
   const opts = { render: true, global_event: true, ...options };
   const component = new Component<T, E>(model, view, update);
   if (options && options.rendered) component.rendered = options.rendered;
-  component.mount(element, opts);
+  if (options && options.mounted) component.mounted = options.mounted;
+  component.start(element, opts);
   return component;
 };
 

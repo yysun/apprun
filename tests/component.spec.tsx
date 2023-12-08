@@ -430,8 +430,34 @@ describe('Component', () => {
     //   t['state'] = state;
     //   t.run('.')
     // });
-    t.run('.'); 
+    t.run('.');
   })
+
+
+  it('should call mounted function with .start', (done) => {
+    class Test extends Component {
+      state = 'a'
+      view = state => <div>{state}</div>
+      mounted = () => {
+        expect(this.element.innerHTML).toBe('<div>a</div>');
+        done();
+      }
+    }
+    const div = document.createElement('div');
+    const t = new Test().start(div);
+  });
+
+  it('should not call mounted function with .mount', () => {
+    class Test extends Component {
+      state = 'a'
+      view = state => <div>{state}</div>
+      mounted = () => {
+        throw new Error('should not call mounted function');
+      }
+    }
+    const div = document.createElement('div');
+    const t = new Test().mount(div);
+  });
 
 });
 

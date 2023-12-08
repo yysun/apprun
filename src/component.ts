@@ -68,7 +68,6 @@ export class Component<T = any, E = any> {
     }
     if (!vdom && html) {
       html = directive(html, this);
-
       if (this.options.transition && document && document['startViewTransition']) {
         document['startViewTransition'](() => app.render(el, html, this));
       } else {
@@ -135,7 +134,12 @@ export class Component<T = any, E = any> {
   }
 
   start = (element = null, options?: MountOptions): Component<T, E> => {
-    return this.mount(element, { render: true, ...options });
+    this.mount(element, { render: true, ...options });
+    if (this.mounted && typeof this.mounted === 'function') {
+      const new_state = this.mounted({}, [], this.state);
+      (typeof new_state !== 'undefined') && this.setState(new_state);
+    }
+    return this;
   }
 
   public mount(element = null, options?: MountOptions): Component<T, E> {
