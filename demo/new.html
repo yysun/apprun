@@ -1,4 +1,14 @@
 <h2 id="whats-new">What&#39;s New</h2>
+<blockquote>
+<p>Aug 12, 2024, V3.33.0</p>
+</blockquote>
+<h3 id="add-appuse_render-and-appuse_react-function">Add app.use_render and app.use_react function</h3>
+<p>The <code>app.use_render</code> function allows you to use a custom render function for rendering the view (e.g., React &lt; 18 ). The <code>app.use_react</code> function allows you to use React 18 and up for rendering the view.</p>
+<pre><code class="language-js">import { createRoot } from &#39;react-dom/client&#39;
+import app from &#39;apprun&#39;;
+app.use_react(createRoot);
+</code></pre>
+<p>See <a href="https://github.com/yysun/apprun-antd-demo-js">https://github.com/yysun/apprun-antd-demo-js</a> for an example.</p>
 <h3 id="support-the-mounted-function-when-starting-a-component-manually">Support the <em>mounted</em> function when starting a component manually</h3>
 <blockquote>
 <p>Dec, 8, 2023</p>

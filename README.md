@@ -1,9 +1,22 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-AppRun is a JavaScript library for building reliable, high-performance web applications using the Elm-inspired architecture, events, and components.
+
+## Introduction
+
+AppRun is a sleek and efficient JavaScript library designed to revolutionize statement management in web development. At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.
+
+
+## Why the Event Pubsub Pattern?
+
+The event PubSub pattern isn't new; it's a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.
+
+AppRun takes the familiar PubSub concept and extends it into your application's logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.
+
+Here is an example of a simple counter application built with AppRun:
+
 
 ```js
-// define the application state
+// define the initial state
 const state = 0;
 
 // view is a pure function to display the state
@@ -18,15 +31,16 @@ const update = {
   '+1': state => state + 1,
   '-1': state => state - 1
 };
-app.start(document.body, state, view, update, { transition: true });
+
+// start the app
+app.start(document.body, state, view, update);
 ```
 <apprun-play style="height:200px"></apprun-play>
 
-> Note, the transition option is newly added to enable the [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent) during the rendering of the view.
 
 ## AppRun Benefits
 
-* Clean architecure that needs less code
+* Clean architecture that needs less code
 * State management and routing included
 * No proprietary syntax to learn (no hooks)
 * Use directly in the browser or with a compiler/bundler
@@ -65,46 +79,6 @@ Or, you can create an AppRun app by using the `npm create apprun-app` command.
 ```sh
 npm create apprun-app [my-app]
 ```
-
-## Component and Web Component
-
-An AppRun component is a mini-application with elm architecture, which means inside a component, there are _state_, _view_, and _update_. In addition, components provide a local scope.
-
-```js
-class Counter extends Component {
-  state = 0;
-  view = state => {
-    const add = (state, num) => state + num;
-    return <>
-      <h1>{state}</h1>
-      <button $onclick={[add, -1]}>-1</button>
-      <button $onclick={[add, +1]}>+1</button>
-      </>;
-  }
-}
-app.render(document.body, <Counter/>);
-```
-
-You can convert AppRun components into [web components/custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components). AppRun components become the custom elements that also can handle AppRun events.
-
-```js
-class Counter extends Component {
-  state = 0;
-  view = state => {
-    const add = (state, num) => state + num;
-    return <>
-      <h1>{state}</h1>
-      <button $onclick={[add, -1]}>-1</button>
-      <button $onclick={[add, +1]}>+1</button>
-      </>;
-  }
-}
-app.webComponent('my-app', Counter);
-app.render(document.body, <my-app />);
-```
-
-> [All the Ways to Make a Web Component - May 2021 Update](https://webcomponents.dev/blog/all-the-ways-to-make-a-web-component/) compares the coding style, bundle size, and performance of 55 different ways to make a Web Component. It put AppRun on the top 1/3 of the list of bundle size and performance.
->
 
 ### Learn More
 
@@ -158,7 +132,7 @@ AppRun is an MIT-licensed open source project. Please consider [supporting the p
 
 MIT
 
-Copyright (c) 2015-2022 Yiyi Sun
+Copyright (c) 2015-2024 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master

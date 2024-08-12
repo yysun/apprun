@@ -1,5 +1,19 @@
 ## What's New
 
+> Aug 12, 2024, V3.33.0
+
+### Add app.use_render and app.use_react function
+
+The `app.use_render` function allows you to use a custom render function for rendering the view (e.g., React < 18 ). The `app.use_react` function allows you to use React 18 and up for rendering the view.
+
+```js
+import { createRoot } from 'react-dom/client'
+import app from 'apprun';
+app.use_react(createRoot);
+```
+
+See https://github.com/yysun/apprun-antd-demo-js for an example.
+
 ### Support the _mounted_ function when starting a component manually
 
 > Dec, 8, 2023
