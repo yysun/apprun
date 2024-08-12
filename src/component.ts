@@ -43,29 +43,29 @@ export class Component<T = any, E = any> {
     const el = (typeof this.element === 'string' && this.element) ?
       document.getElementById(this.element) || document.querySelector(this.element) : this.element;
 
-    if (el) {
-      const tracking_attr = '_c';
-      if (!this.unload) {
-        el.removeAttribute && el.removeAttribute(tracking_attr);
-      } else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
-        this.tracking_id = new Date().valueOf().toString();
-        el.setAttribute(tracking_attr, this.tracking_id);
-        if (typeof MutationObserver !== 'undefined') {
-          if (!this.observer) this.observer = new MutationObserver(changes => {
-            if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
-              this.unload(this.state);
-              this.observer.disconnect();
-              this.observer = null;
-            }
-          });
-          this.observer.observe(document.body, {
-            childList: true, subtree: true,
-            attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
-          });
-        }
+    if (!el) return;
+    const tracking_attr = '_c';
+    if (!this.unload) {
+      el.removeAttribute && el.removeAttribute(tracking_attr);
+    } else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
+      this.tracking_id = new Date().valueOf().toString();
+      el.setAttribute(tracking_attr, this.tracking_id);
+      if (typeof MutationObserver !== 'undefined') {
+        if (!this.observer) this.observer = new MutationObserver(changes => {
+          if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
+            this.unload(this.state);
+            this.observer.disconnect();
+            this.observer = null;
+          }
+        });
+        this.observer.observe(document.body, {
+          childList: true, subtree: true,
+          attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+        });
       }
-      el['_component'] = this;
     }
+    el['_component'] = this;
+
     if (!vdom && html) {
       html = directive(html, this);
       if (this.options.transition && document && document['startViewTransition']) {
