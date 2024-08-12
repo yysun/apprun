@@ -57,7 +57,8 @@ declare module 'apprun' {
     route?: Route;
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
     safeHTML(html: string): any[];
-
+    use_render(render, mode?: 0 | 1);
+    use_react(createRoot);
   }
 
   export class Component<T = any, E = any> {

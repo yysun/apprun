@@ -10,6 +10,8 @@ export class App {
   public Fragment;
   public webComponent;
   public safeHTML;
+  public use_render;
+  public use_react;
 
   constructor() {
     this._events = {};
