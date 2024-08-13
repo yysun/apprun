@@ -84,22 +84,19 @@ const directive = (vdom, component) => {
         return vdom.map(element => directive(element, component));
     }
     else {
-        let { tag, props, children } = vdom;
-        if (tag) {
-            if (props)
-                Object.keys(props).forEach(key => {
-                    if (key.startsWith('$')) {
-                        apply_directive(key, props, tag, component);
-                        delete props[key];
-                    }
-                });
-            if (children)
-                children = directive(children, component);
-            return { tag, props, children };
-        }
-        else {
-            return vdom;
-        }
+        let { type, tag, props, children } = vdom;
+        tag = tag || type;
+        children = children || (props === null || props === void 0 ? void 0 : props.children);
+        if (props)
+            Object.keys(props).forEach(key => {
+                if (key.startsWith('$')) {
+                    apply_directive(key, props, tag, component);
+                    delete props[key];
+                }
+            });
+        if (children)
+            directive(children, component);
+        return vdom;
     }
 };
 export default directive;

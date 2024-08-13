@@ -47,10 +47,10 @@ if (typeof window === 'object') {
     window['customElement'] = customElement;
     window['safeHTML'] = safeHTML;
 }
-app['use_render'] = (render, mode = 0) => mode === 0 ?
+app.use_render = (render, mode = 0) => mode === 0 ?
     app.render = (el, vdom) => render(vdom, el) : // react style
     app.render = (el, vdom) => render(el, vdom); // apprun style
-app['use_react'] = createRoot => {
+app.use_react = createRoot => {
     app.render = (el, vdom) => {
         if (!el || !vdom)
             return;
