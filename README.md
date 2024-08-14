@@ -35,8 +35,7 @@ const update = {
 // start the app
 app.start(document.body, state, view, update);
 ```
-<apprun-play style="height:200px"></apprun-play>
-
+<apprun-code style="height:360px; font-size: smaller;"></apprun-code>
 
 ## AppRun Benefits
 
