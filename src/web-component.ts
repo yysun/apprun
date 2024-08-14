@@ -61,7 +61,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
 
       requestAnimationFrame(() => {
         const children = this.children ? Array.from(this.children) : [];
-        children.forEach(el => el.parentElement.removeChild(el));
+        // children.forEach(el => el.parentElement.removeChild(el));
         this._component = new componentClass({ ...props, children }).mount(this._shadowRoot, opts);
         // attach props to component
         this._component._props = props;
