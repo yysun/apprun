@@ -3,23 +3,15 @@
 
 ## Introduction
 
-AppRun is a sleek and efficient JavaScript library designed to revolutionize statement management in web development. At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.
+AppRun is a lightweight alternative to other frameworks and libraries. It has a unique architecture inspired by the Elm architecture that can help you manage states, routing, and other essential aspects of your web application.
 
-
-## Why the Event Pubsub Pattern?
-
-The event PubSub pattern isn't new; it's a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.
-
-AppRun takes the familiar PubSub concept and extends it into your application's logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.
-
-Here is an example of a simple counter application built with AppRun:
-
+Use a _Counter_ as an example.
 
 ```js
 // define the initial state
 const state = 0;
 
-// view is a pure function to display the state
+// view is a function to display the state
 const view = state => `<div>
   <h1>${state}</h1>
   <button onclick="app.run('-1')">-1</button>
@@ -35,13 +27,22 @@ const update = {
 // start the app
 app.start(document.body, state, view, update);
 ```
-<apprun-code style="height:360px; font-size: smaller;"></apprun-code>
+<apprun-code style="font-size: smaller"></apprun-code>
+
+At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.
+
+
+## Why the Event Pubsub Pattern
+
+The event PubSub pattern isn't new; it's a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.
+
+AppRun takes the familiar PubSub concept and extends it into your application's logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.
 
 ## AppRun Benefits
 
 * Clean architecture that needs less code
 * State management and routing included
-* No proprietary syntax to learn (no hooks)
+* No proprietary syntax to learn (no hooks, no reducers, no signals)
 * Use directly in the browser or with a compiler/bundler
 * Advanced features: JSX, Web Components, Dev Tools, SSR, etc.
 
@@ -57,21 +58,31 @@ npm install apprun
 You can also load AppRun directly from the unpkg.com CDN:
 
 ```js
+<html>
+<body>
 <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
 <script>
   const view = state => `<div>${state}</div>`;
   app.start(document.body, 'hello AppRun', view);
 </script>
+</body>
+</html>
 ```
+<apprun-code style="font-size: smaller"></apprun-code>
 
 Or, use the ESM version:
 ```js
+<html>
+<body>
 <script type="module">
   import { app } from 'https://unpkg.com/apprun/dist/apprun-html.esm.js';
   const view = state => `<div>${state}</div>`;
   app.start(document.body, 'hello ESM', view);
 </script>
+</body>
+</html>
 ```
+<apprun-code style="font-size: smaller"></apprun-code>
 
 Or, you can create an AppRun app by using the `npm create apprun-app` command.
 

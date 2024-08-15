@@ -6,8 +6,6 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="This post describes the reactive implementation in AppRun">
-      
       
       
       
@@ -18,15 +16,15 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.2">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.31">
     
     
       
-        <title>Reactivity in AppRun - AppRun Docs</title>
+        <title>Reactivity - AppRun Docs</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.d451bc0e.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.3cba04c6.min.css">
       
       
 
@@ -70,9 +68,6 @@
     <body dir="ltr">
   
     
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
-    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -114,12 +109,15 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Reactivity in AppRun
+              Reactivity
             
           </span>
         </div>
       </div>
     </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -148,7 +146,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -165,7 +163,7 @@
         <a href="https://github.com/apprunjs/apprun-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -210,7 +208,7 @@
       <a href="https://github.com/apprunjs/apprun-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -222,6 +220,7 @@
     
       
       
+  
   
   
   
@@ -246,17 +245,18 @@
     
   
   
-    
-    
+  
     
     
     
       
+        
+        
       
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
@@ -287,14 +287,15 @@
     
   
   
+  
     
     
     
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
@@ -323,6 +324,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
@@ -340,6 +342,7 @@
             
               
                 
+  
   
   
   
@@ -363,6 +366,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../state-management/" class="md-nav__link">
         
@@ -380,6 +384,7 @@
             
               
                 
+  
   
   
   
@@ -403,6 +408,7 @@
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
@@ -447,28 +453,36 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#one-way" class="md-nav__link">
-    One-Way
+    <span class="md-ellipsis">
+      One-Way
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#two-way-binding" class="md-nav__link">
-    Two-Way Binding
+    <span class="md-ellipsis">
+      Two-Way Binding
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#reactive-state" class="md-nav__link">
-    Reactive State
+    <span class="md-ellipsis">
+      Reactive State
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Reactive State">
@@ -476,14 +490,18 @@
         
           <li class="md-nav__item">
   <a href="#property-getter" class="md-nav__link">
-    Property Getter
+    <span class="md-ellipsis">
+      Property Getter
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#es2015-proxy" class="md-nav__link">
-    ES2015 Proxy
+    <span class="md-ellipsis">
+      ES2015 Proxy
+    </span>
   </a>
   
 </li>
@@ -495,7 +513,9 @@
       
         <li class="md-nav__item">
   <a href="#conclusion" class="md-nav__link">
-    Conclusion
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
   </a>
   
 </li>
@@ -522,14 +542,15 @@
   
   
   
+  
     
     
     
+      
     
     
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
@@ -558,6 +579,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../architecture-ideas/dapr/" class="md-nav__link">
         
@@ -575,6 +597,7 @@
             
               
                 
+  
   
   
   
@@ -598,6 +621,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../architecture-ideas/db-websocket/" class="md-nav__link">
         
@@ -615,6 +639,7 @@
             
               
                 
+  
   
   
   
@@ -638,6 +663,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../architecture-ideas/state-machine/" class="md-nav__link">
         
@@ -655,6 +681,7 @@
             
               
                 
+  
   
   
   
@@ -693,17 +720,18 @@
   
   
   
-    
-    
+  
     
     
     
       
+        
+        
       
+    
     
     <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
@@ -732,8 +760,9 @@
   
   
   
+  
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -749,6 +778,7 @@
             
               
                 
+  
   
   
   
@@ -772,6 +802,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../create-apprun-app/" class="md-nav__link">
         
@@ -789,6 +820,7 @@
             
               
                 
+  
   
   
   
@@ -819,23 +851,260 @@
   
   
   
-    
-    
+  
     
     
     
       
+        
+        
       
+    
     
     <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../view-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSX
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../directive/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directive
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SVG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../react/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Use with React
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3rd-party-libs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3rd Party Intergration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-in-console/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dev Tools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strong-typing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Strong Typing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unit-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Unit Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Notebooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -846,8 +1115,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             AppRun Site
           </label>
@@ -855,6 +1124,7 @@
             
               
                 
+  
   
   
   
@@ -878,6 +1148,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../apprun-site-build/" class="md-nav__link">
         
@@ -895,6 +1166,7 @@
             
               
                 
+  
   
   
   
@@ -918,6 +1190,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../apprun-site-ssr/" class="md-nav__link">
         
@@ -938,6 +1211,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../apprun-site-static/" class="md-nav__link">
         
@@ -955,6 +1229,7 @@
             
               
                 
+  
   
   
   
@@ -985,231 +1260,6 @@
   
   
   
-    
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Advanced
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            Advanced
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../view-patterns/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    JSX
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../directive/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Directive
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../svg/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    SVG
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../3rd-party-libs/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    3rd Party Intergration
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cli-in-console/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Dev Tools
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../strong-typing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Strong Typing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../unit-testing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Unit Testing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../notebooks/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Notebooks
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../react/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Use with React
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
   
     <li class="md-nav__item">
       <a href="../resources/" class="md-nav__link">
@@ -1227,6 +1277,7 @@
     
       
       
+  
   
   
   
@@ -1270,28 +1321,36 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#one-way" class="md-nav__link">
-    One-Way
+    <span class="md-ellipsis">
+      One-Way
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#two-way-binding" class="md-nav__link">
-    Two-Way Binding
+    <span class="md-ellipsis">
+      Two-Way Binding
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#reactive-state" class="md-nav__link">
-    Reactive State
+    <span class="md-ellipsis">
+      Reactive State
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Reactive State">
@@ -1299,14 +1358,18 @@
         
           <li class="md-nav__item">
   <a href="#property-getter" class="md-nav__link">
-    Property Getter
+    <span class="md-ellipsis">
+      Property Getter
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#es2015-proxy" class="md-nav__link">
-    ES2015 Proxy
+    <span class="md-ellipsis">
+      ES2015 Proxy
+    </span>
   </a>
   
 </li>
@@ -1318,7 +1381,9 @@
       
         <li class="md-nav__item">
   <a href="#conclusion" class="md-nav__link">
-    Conclusion
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
   </a>
   
 </li>
@@ -1343,6 +1408,15 @@
 
   <h1>Reactivity</h1>
 
+<hr />
+<p>title: Reactivity in AppRun
+published: true
+description: This post describes the reactive implementation in AppRun
+tags: #apprun #vue #svelte #angular</p>
+<style>
+  .apprun-play {font-size: 0.6rem;}
+</style>
+<hr />
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>Reactivity has been a hot buzzword for modern JavaScript UI frameworks in the past few years. Angular, Vue, and Svelte all have reactivity built-in. They are famous and popular because of their reactivity features.</p>
 <p>Reactivity means that the changed application state will automatically reflect in the DOM.</p>
@@ -1378,7 +1452,7 @@
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">)</span>
 </code></pre></div>
-<apprun-play></apprun-play></p>
+<apprun-code></apprun-code></p>
 <h2 id="two-way-binding">Two-Way Binding<a class="headerlink" href="#two-way-binding" title="Permanent link">&para;</a></h2>
 <p>AppRun $bind directive can update the <em>state</em> properties automatically when used with the <em>input</em> elements and the <em>textarea</em> element. It looks similar to Angular's <em>ngModel</em>, Vue' <em>v-model</em>, and Svelte's <em>bind:value</em> syntax. However, Angular, Vue, and Svelte have invented their own proprietary template language/syntax that you need to learn. AppRun uses the JSX that React also uses.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">&lt;&gt;</span>
@@ -1387,7 +1461,7 @@
 <span class="o">&lt;</span><span class="err">/&gt;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="nx">view</span><span class="p">)</span>
 </code></pre></div>
-<apprun-play></apprun-play></p>
+<apprun-code code-width="50%"></apprun-code></p>
 <h2 id="reactive-state">Reactive State<a class="headerlink" href="#reactive-state" title="Permanent link">&para;</a></h2>
 <p>The state properties' reactivity is not a problem that the UI frameworks are to solve. But if the UI frameworks wrap or change the original <em>state</em> objects, they have to solve the reactivity problems. E.g., Vue uses the <a href="https://vuejs.org/v2/guide/computed.html"><em>computed object</em></a>. Svelte uses the <a href="https://svelte.dev/examples#reactive-declarations">reactive-declarations</a>, the famous <em>$:</em> sign.</p>
 <h3 id="property-getter">Property Getter<a class="headerlink" href="#property-getter" title="Permanent link">&para;</a></h3>
@@ -1416,7 +1490,7 @@
 <span class="o">&lt;</span><span class="err">/&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-play></apprun-play></p>
+<apprun-code code-width="50%"></apprun-code></p>
 <h3 id="es2015-proxy">ES2015 Proxy<a class="headerlink" href="#es2015-proxy" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> is used to define custom behavior for fundamental operations (e.g., property lookup, assignment, enumeration, function invocation, etc.).</p>
 <blockquote>
@@ -1460,16 +1534,23 @@
 <span class="w">  </span><span class="nx">handler</span>
 <span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-<span class="w">  </span><span class="o">&lt;</span><span class="nx">textarea</span><span class="w"> </span><span class="nx">rows</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="w"> </span><span class="nx">cols</span><span class="o">=</span><span class="s2">&quot;50&quot;</span><span class="w"> </span><span class="nx">$bind</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="o">&gt;&lt;</span><span class="err">/textarea&gt;</span>
+<span class="w">  </span><span class="o">&lt;</span><span class="nx">textarea</span><span class="w"> </span><span class="nx">rows</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="w"> </span><span class="nx">cols</span><span class="o">=</span><span class="s2">&quot;30&quot;</span><span class="w"> </span><span class="nx">$bind</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="o">&gt;&lt;</span><span class="err">/textarea&gt;</span>
 <span class="w">  </span><span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">chars</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">characters</span><span class="p">}</span><span class="w"> </span><span class="nx">words</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">words</span><span class="p">}</span><span class="w"> </span><span class="nx">lines</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">lines</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/div&gt;</span>
 <span class="w">  </span><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">text</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/pre&gt;</span>
 <span class="o">&lt;</span><span class="err">/div&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-play style="height:300px"></apprun-play></p>
+<apprun-code style="height:300px" code-width="50%"></apprun-code></p>
 <p>I like Proxy because it takes the property value calculation logic out of the <em>state</em> objects. As a result, the <em>proxy handler</em> is much easier to test and maintain. On the other hand, the <em>state</em> objects stay lean. I want the <a href="https://apprun.js.org/docs/#/04-architecture"><em>state</em> to act like the <em>data transfer object</em> (DTO)</a> in traditional multi-layered application architecture, where the DTO is an object that carries data between logical and physical layers.</p>
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>AppRun has full reactivity support that provides us the one-way and two-way data binding and the reactive <em>state</em>. Thus, we only need to use the native JavaScript/TypeScript features. Furthermore, AppRun does not require you to learn a new language or a new templating syntax.</p>
+
+
+
+
+
+
+
 
 
   
@@ -1482,6 +1563,7 @@
             </div>
           
           
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
       </main>
@@ -1493,7 +1575,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2016 - 2023 Yiyi Sun
+      Copyright &copy; 2016 - 2024 Yiyi Sun
     </div>
   
   
@@ -1513,10 +1595,11 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.726fbb30.min.js"></script>
+      <script src="../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
       
         <script src="../assets/vendor/codemirror/codemirror.js"></script>
       
@@ -1527,6 +1610,8 @@
         <script src="../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
       
         <script src="../assets/apprun-play.js"></script>
+      
+        <script src="../assets/apprun-code.js"></script>
       
     
   </body>

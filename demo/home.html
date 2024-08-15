@@ -1,14 +1,11 @@
 <h1 id="apprun-build-npm-version-downloads-license-twitter-discord-chat">AppRun <a href="https://travis-ci.org/yysun/apprun"><img src="https://travis-ci.org/yysun/apprun.svg?branch=master" alt="Build"></a> <a href="https://npmjs.org/package/apprun"><img src="https://img.shields.io/npm/v/apprun.svg" alt="NPM version"></a> <a href="https://npmjs.org/package/apprun"><img src="https://img.shields.io/npm/dm/apprun.svg" alt="Downloads"></a> <a href="LICENSE.md"><img src="https://img.shields.io/:license-mit-blue.svg" alt="License"></a> <a href="https://twitter.com/intent/tweet?text=Check%20out%20AppRun%20by%20%40yysun%20https%3A%2F%2Fgithub.com%2Fyysun%2Fapprun%20%F0%9F%91%8D%20%40apprunjs"><img src="https://img.shields.io/twitter/url/https/github.com/yysun/apprun.svg?style=social" alt="twitter"></a> <a href="https://discord.gg/CETyUdx"><img src="https://img.shields.io/discord/476903999023480842.svg" alt="Discord Chat"></a></h1>
 <h2 id="introduction">Introduction</h2>
-<p>AppRun is a sleek and efficient JavaScript library designed to revolutionize statement management in web development. At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.</p>
-<h2 id="why-the-event-pubsub-pattern">Why the Event Pubsub Pattern?</h2>
-<p>The event PubSub pattern isn&#39;t new; it&#39;s a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.</p>
-<p>AppRun takes the familiar PubSub concept and extends it into your application&#39;s logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.</p>
-<p>Here is an example of a simple counter application built with AppRun:</p>
+<p>AppRun is a lightweight alternative to other frameworks and libraries. It has a unique architecture inspired by the Elm architecture that can help you manage states, routing, and other essential aspects of your web application.</p>
+<p>Use a <em>Counter</em> as an example.</p>
 <pre><code class="language-js">// define the initial state
 const state = 0;
 
-// view is a pure function to display the state
+// view is a function to display the state
 const view = state =&gt; `&lt;div&gt;
   &lt;h1&gt;${state}&lt;/h1&gt;
   &lt;button onclick=&quot;app.run(&#39;-1&#39;)&quot;&gt;-1&lt;/button&gt;
@@ -24,12 +21,16 @@ const update = {
 // start the app
 app.start(document.body, state, view, update);
 </code></pre>
-<p><apprun-play style="height:200px"></apprun-play></p>
+<p><apprun-code style="font-size: smaller"></apprun-code></p>
+<p>At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.</p>
+<h2 id="why-the-event-pubsub-pattern">Why the Event Pubsub Pattern</h2>
+<p>The event PubSub pattern isn&#39;t new; it&#39;s a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.</p>
+<p>AppRun takes the familiar PubSub concept and extends it into your application&#39;s logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.</p>
 <h2 id="apprun-benefits">AppRun Benefits</h2>
 <ul>
 <li>Clean architecture that needs less code</li>
 <li>State management and routing included</li>
-<li>No proprietary syntax to learn (no hooks)</li>
+<li>No proprietary syntax to learn (no hooks, no reducers, no signals)</li>
 <li>Use directly in the browser or with a compiler/bundler</li>
 <li>Advanced features: JSX, Web Components, Dev Tools, SSR, etc.</li>
 </ul>
@@ -38,19 +39,29 @@ app.start(document.body, state, view, update);
 <pre><code class="language-sh">npm install apprun
 </code></pre>
 <p>You can also load AppRun directly from the unpkg.com CDN:</p>
-<pre><code class="language-js">&lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-js">&lt;html&gt;
+&lt;body&gt;
+&lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
   const view = state =&gt; `&lt;div&gt;${state}&lt;/div&gt;`;
   app.start(document.body, &#39;hello AppRun&#39;, view);
 &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
+<p><apprun-code style="font-size: smaller"></apprun-code></p>
 <p>Or, use the ESM version:</p>
-<pre><code class="language-js">&lt;script type=&quot;module&quot;&gt;
+<pre><code class="language-js">&lt;html&gt;
+&lt;body&gt;
+&lt;script type=&quot;module&quot;&gt;
   import { app } from &#39;https://unpkg.com/apprun/dist/apprun-html.esm.js&#39;;
   const view = state =&gt; `&lt;div&gt;${state}&lt;/div&gt;`;
   app.start(document.body, &#39;hello ESM&#39;, view);
 &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
+<p><apprun-code style="font-size: smaller"></apprun-code></p>
 <p>Or, you can create an AppRun app by using the <code>npm create apprun-app</code> command.</p>
 <pre><code class="language-sh">npm create apprun-app [my-app]
 </code></pre>
