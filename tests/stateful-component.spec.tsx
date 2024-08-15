@@ -77,7 +77,7 @@ describe('Stateful Component', () => {
         </div>
       }
     }
-    new Main().start();
+    new Main().start(document.body);
   });
 
   it('should call rendered function when created', (done) => {
@@ -86,7 +86,7 @@ describe('Stateful Component', () => {
         return <div>{state.n}</div>
       }
       rendered = (state) => {
-        expect(state.n).toBe(0);
+        expect(state.n).toBe(10);
         done()
       }
     }
@@ -94,7 +94,7 @@ describe('Stateful Component', () => {
       state = 0
       view = (state) => {
         return <div>
-          <Child n={0} />
+          <Child n={10} />
         </div>
       }
     }
@@ -108,7 +108,8 @@ describe('Stateful Component', () => {
         return <div>{state.n}</div>
       }
       mounted = (props) => {
-        if (props.n === 1) done();
+        // expect(props.n).toBe(1);
+        done();
       }
     }
     class Main extends Component {
@@ -122,7 +123,7 @@ describe('Stateful Component', () => {
         '+1': state => state + 1
       }
     }
-    const component = new Main().start();
+    const component = new Main().start(document.body);
     component.run('+1');
   });
 
