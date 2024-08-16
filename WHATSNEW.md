@@ -1,15 +1,16 @@
 ## What's New
 
-> Aug 12, 2024, V3.33.0
+> Aug 12, 2024, V3.33.4
 
 ### Add app.use_render and app.use_react function
 
-The `app.use_render` function allows you to use a custom render function for rendering the view (e.g., React < 18 ). The `app.use_react` function allows you to use React 18 and up for rendering the view.
+The `app.use_render` function allows you to use a custom render function for rendering the view. The `app.use_react` function allows you to use React for rendering the view.
 
 ```js
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
+import { flushSync } from 'react-dom';
 import app from 'apprun';
-app.use_react(createRoot);
+use_react(React, ReactDOM);
 ```
 
 See https://github.com/yysun/apprun-antd-demo-js for an example.
