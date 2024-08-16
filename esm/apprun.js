@@ -50,13 +50,18 @@ if (typeof window === 'object') {
 app.use_render = (render, mode = 0) => mode === 0 ?
     app.render = (el, vdom) => render(vdom, el) : // react style
     app.render = (el, vdom) => render(el, vdom); // apprun style
-app.use_react = createRoot => {
-    app.render = (el, vdom) => {
-        if (!el || !vdom)
-            return;
-        if (!el._root)
-            el._root = createRoot(el);
-        el._root.render(vdom);
-    };
+app.use_react = (React, ReactDOM) => {
+    app.h = app.createElement = React.createElement;
+    app.Fragment = React.Fragment;
+    app.render = (el, vdom) => ReactDOM.render(vdom, el);
+    if (React.version && React.version.startsWith('18')) {
+        app.render = (el, vdom) => {
+            if (!el || !vdom)
+                return;
+            if (!el._root)
+                el._root = ReactDOM.createRoot(el);
+            el._root.render(vdom);
+        };
+    }
 };
 //# sourceMappingURL=apprun.js.map
