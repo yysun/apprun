@@ -1403,9 +1403,6 @@
 </code></pre></div>
 <apprun-code style="height:380px" code-width="50%"></apprun-code></p>
 <p>Although it is effortless to enable the AppRun state history, the caveat must be immutable. Because the AppRun state history stores the references to the states, if we have modified the state directly, each state stored in the state history refers to the same state, which is always the value of the last change. Thus, the time travel back and forward will not work. Therefore, the fundamental concept of using state history is to make the state immutable.</p>
-<style>
-  .apprun-play {font-size: 0.6rem;}
-</style>
 
 
 

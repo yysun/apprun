@@ -1375,7 +1375,7 @@
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
-<apprun-code style="font-size:.6rem"></apprun-code></p>
+<apprun-code></apprun-code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Browsers dont support JSX, so we use the <em>html</em> function (Template literals) in the <em>view</em> function to create HTML elements.</p>
@@ -1406,7 +1406,7 @@
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
-<apprun-code style="font-size:.6rem"></apprun-code></p>
+<apprun-code></apprun-code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Components have local event events. We use <em>this.run</em> instead of <em>app.run</em> to publish local events.</p>
@@ -1437,9 +1437,10 @@
 <span class="o">&lt;</span><span class="err">/&gt;</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">App</span><span class="w"> </span><span class="o">/&gt;</span><span class="p">);</span>
-<span class="p">[</span><span class="nx">About</span><span class="p">,</span><span class="w"> </span><span class="nx">Contact</span><span class="p">,</span><span class="w"> </span><span class="nx">Home</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">C</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">C</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;pages&#39;</span><span class="p">));</span>
+<span class="p">[</span><span class="nx">About</span><span class="p">,</span><span class="w"> </span><span class="nx">Contact</span><span class="p">,</span><span class="w"> </span><span class="nx">Home</span><span class="p">]</span>
+<span class="w">  </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">C</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">C</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;pages&#39;</span><span class="p">));</span>
 </code></pre></div>
-<apprun-code style="font-size:.6rem"></apprun-code></p>
+<apprun-code code-width="50%"></apprun-code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>We have just created a simple SPA using components. In a real-world scenario, usually, create pages as modules and bundle them together or load them dynamically. See the <a href="../spa/">Single Page App</a> for more details.</p>
@@ -1477,7 +1478,7 @@
 <span class="o">&lt;</span><span class="err">/body&gt;</span>
 <span class="o">&lt;</span><span class="err">/html&gt;</span>
 </code></pre></div>
-<apprun-code style="font-size:.6rem"></apprun-code></p>
+<apprun-code></apprun-code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>We have create a web component / custom element and used it three times.</p>

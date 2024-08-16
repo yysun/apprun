@@ -127,7 +127,7 @@ Have fun and send pull requests.
 
 ## Support
 
-AppRun is an MIT-licensed open source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
+AppRun is an MIT-licensed open-source project. Please consider [supporting the project on Patreon](https://www.patreon.com/apprun). 👍❤️🙏
 
 ### Thank you for your support
 

@@ -904,28 +904,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-use-reacts-rendering-function" class="md-nav__link">
+  <a href="#step-2-setup-apprun" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2, Use React's Rendering Function
+      Step 2, Setup AppRun
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Step 2, Use React's Rendering Function">
+    <nav class="md-nav" aria-label="Step 2, Setup AppRun">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#for-react-18" class="md-nav__link">
+  <a href="#for-react" class="md-nav__link">
     <span class="md-ellipsis">
-      For React 18
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#for-react-17-and-earlier" class="md-nav__link">
-    <span class="md-ellipsis">
-      For React 17 and earlier
+      For React
     </span>
   </a>
   
@@ -1342,28 +1333,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-use-reacts-rendering-function" class="md-nav__link">
+  <a href="#step-2-setup-apprun" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2, Use React's Rendering Function
+      Step 2, Setup AppRun
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Step 2, Use React's Rendering Function">
+    <nav class="md-nav" aria-label="Step 2, Setup AppRun">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#for-react-18" class="md-nav__link">
+  <a href="#for-react" class="md-nav__link">
     <span class="md-ellipsis">
-      For React 18
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#for-react-17-and-earlier" class="md-nav__link">
-    <span class="md-ellipsis">
-      For React 17 and earlier
+      For React
     </span>
   </a>
   
@@ -1452,53 +1434,30 @@ npm<span class="w"> </span>i<span class="w"> </span>apprun
 <span class="nb">cd</span><span class="w"> </span>my-app
 npm<span class="w"> </span>i<span class="w"> </span>react<span class="w"> </span>react-dom
 </code></pre></div>
-<h2 id="step-2-use-reacts-rendering-function">Step 2, Use React's Rendering Function<a class="headerlink" href="#step-2-use-reacts-rendering-function" title="Permanent link">&para;</a></h2>
-<p>Replace AppRun's <em>app.render</em> function with React's <em>render</em> function.</p>
-<h3 id="for-react-18">For React 18<a class="headerlink" href="#for-react-18" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createRoot</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom/client&#39;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use_react</span><span class="p">(</span><span class="nx">createRoot</span><span class="p">);</span>
-</code></pre></div>
-<h3 id="for-react-17-and-earlier">For React 17 and earlier<a class="headerlink" href="#for-react-17-and-earlier" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">render</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom&#39;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use_render</span><span class="p">(</span><span class="nx">render</span><span class="p">);</span>
+<h2 id="step-2-setup-apprun">Step 2, Setup AppRun<a class="headerlink" href="#step-2-setup-apprun" title="Permanent link">&para;</a></h2>
+<p>To use React, call AppRun's <code>app.use_react</code> function by passing in <em>React</em> and <em>ReactDOM</em>.</p>
+<h3 id="for-react">For React<a class="headerlink" href="#for-react" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">React</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">ReactDOM</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom/client&#39;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use_react</span><span class="p">(</span><span class="nx">React</span><span class="p">,</span><span class="w"> </span><span class="nx">ReactDOM</span><span class="p">);</span>
 </code></pre></div>
 <h3 id="for-preact">For Preact<a class="headerlink" href="#for-preact" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">React</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;preact/compat&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">ReactDOM</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;preact/compat&#39;</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use_react</span><span class="p">(</span><span class="nx">React</span><span class="p">,</span><span class="w"> </span><span class="nx">ReactDOM</span><span class="p">);</span>
+</code></pre></div>
+<p>Since Preact is less restrictive than React. You can just use Preact's <em>render</em> function.</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">render</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;preact&#39;</span>
 <span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">use_render</span><span class="p">(</span><span class="nx">render</span><span class="p">);</span>
 </code></pre></div>
+<p>This way allows us to take advantage of AppRun's unique custom directives ($on, $bind) for handling events and data binding​​.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Preact's <em>render</em> function has less restriction than React's. We can take advantage of AppRun's unique custom directives ($on, $bind) for handling events and data binding​​.</p>
+<p>You need to remember React / Preact uses <em>onClick</em> instead of <em>onclick</em>.</p>
 </div>
-<p>Usually you replace the <em>app.render</em> function in the <em>main.tsx</em> file once.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="s2">&quot;antd/dist/reset.css&quot;</span>
-<span class="k">import</span><span class="w"> </span><span class="s1">&#39;./index.css&#39;</span>
-
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createRoot</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom/client&#39;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">flushSync</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">App</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./App&#39;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">Home</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./Home&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">About</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./About&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="nx">Contact</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./Contact&#39;</span><span class="p">;</span>
-
-<span class="c1">// Use React DOM to render components</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use_react</span><span class="p">(</span><span class="nx">createRoot</span><span class="p">);</span>
-
-<span class="c1">// Render the App component to create page layout</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">);</span>
-<span class="nx">flushSync</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">app</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">App</span><span class="w"> </span><span class="p">/&gt;));</span>
-
-<span class="c1">// Load page components</span>
-<span class="ow">new</span><span class="w"> </span><span class="nx">Contact</span><span class="p">().</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;my-app&#39;</span><span class="p">);</span>
-<span class="ow">new</span><span class="w"> </span><span class="nx">About</span><span class="p">().</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;my-app&#39;</span><span class="p">);</span>
-<span class="ow">new</span><span class="w"> </span><span class="nx">Home</span><span class="p">().</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;my-app&#39;</span><span class="p">);</span>
-</code></pre></div>
 <h2 id="step-3-use-react-jsx-and-components">Step 3, Use React JSX and Components<a class="headerlink" href="#step-3-use-react-jsx-and-components" title="Permanent link">&para;</a></h2>
-<p>Write your AppRun components using React's JSX and Component in the <em>view</em> function.</p>
+<p>Build your AppRun components using React's JSX in the <em>view</em> function.</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Button</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;antd&#39;</span><span class="p">;</span>
 
@@ -1522,12 +1481,13 @@ npm<span class="w"> </span>i<span class="w"> </span>react<span class="w"> </span
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The React JSX syntax is the mostly compatible with AppRun's JSX syntax. But, you need to remember React uses <em>onClick</em> instead of <em>onclick</em>.</p>
+<p>Since AppRun directives are not supported in React, you need to call <em>this.run</em> to publish events.</p>
 </div>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<p>By using React and AppRun together, you can build a powerful web application with AppRun's clean architecture and React component libraries like Ant Design..</p>
+<p>By using React and AppRun together, you can build a powerful web application with AppRun's clean architecture and beautiful React components from <a href="https://ant.design">Ant Design</a>.</p>
 <p>Here is an example: <a href="https://yysun.github.io/apprun-antd-demo-js">https://yysun.github.io/apprun-antd-demo-js</a></p>
 <p>Source: <a href="https://github.com/yysun/apprun-antd-demo-js">https://github.com/yysun/apprun-antd-demo-js</a></p>
+<p>This project has the <a href="../architecture/">AppRun architecture</a>. As well as the <a href="https://ant.design/components/overview">React components from the Ant Design</a>.</p>
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>Whether you add AppRun to your React app or add React to your AppRun app, you can get the best of both worlds.</p>
 

@@ -1537,7 +1537,7 @@ We use tuples for passing event parameters.</p>
 <span class="p">};</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code style="height:300px" code-width="50%"></apprun-code></p>
+<apprun-code style="height:300px"></apprun-code></p>
 <h2 id="use-events-for-everything">Use Events for Everything<a class="headerlink" href="#use-events-for-everything" title="Permanent link">&para;</a></h2>
 <p>Web programming is event-driven. All we have to do is to convert DOM events to AppRun events to trigger the AppRun event life cycle.</p>
 <div class="highlight"><pre><span></span><code>DOM events =&gt; AppRun Events =&gt; (current state) =&gt; Update =&gt; (new state) =&gt; View =&gt; (HTML/Virtual DOM) =&gt; Render Web Page
@@ -1550,9 +1550,6 @@ We use tuples for passing event parameters.</p>
 <h2 id="event-typing">Event Typing<a class="headerlink" href="#event-typing" title="Permanent link">&para;</a></h2>
 <p>Events can be strongly typed using TypeScript Discriminated Unions. If you are interested, please read this post: <a href="../strong-typing/">strong-typing</a>.</p>
 <p><img alt="typed events" src="https://cdn-images-1.medium.com/max/1600/1*Z1y_-n7_Y1bzDUJuw0ORVw.png" /></p>
-<style>
-  .apprun-play { font-size: 0.5rem;}
-</style>
 
 
 
