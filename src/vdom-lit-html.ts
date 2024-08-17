@@ -11,7 +11,7 @@ function _render(element, vdom, parent?) {
   if (typeof vdom === 'string') {
     if (!element['_$litPart$']) element.replaceChildren();
     render(html`${unsafeHTML(vdom)}`, element);
-  } else if ('_$litType$' in vdom) {
+  } else if (vdom['_$litType$']) {
     if (!element['_$litPart$']) element.replaceChildren();
     render(vdom, element);
   } else {
