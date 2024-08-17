@@ -1,7 +1,7 @@
 import { EventOptions} from './types'
 export class App {
 
-  private _events: Object;
+  _events: Object;
 
   public start;
   public h;

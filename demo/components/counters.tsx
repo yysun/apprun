@@ -34,9 +34,9 @@ const update = {
   '#counters': (model) => model,
   'add-counter': (state) => [...state, 0],
   'remove-counter': (state, idx) => [
-     ...state.slice(0, idx),
-     ...state.slice(idx + 1)
-   ],
+    ...state.slice(0, idx),
+    ...state.slice(idx + 1)
+  ],
   '+1': (state, idx) => [
     ...state.slice(0, idx),
     state[idx] + 1,

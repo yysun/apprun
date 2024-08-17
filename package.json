@@ -5,6 +5,7 @@
   "main": "dist/apprun.js",
   "module": "esm/apprun.js",
   "types": "apprun.d.ts",
+  "type": "module",
   "bin": {
     "apprun": "apprun-cli.js"
   },
@@ -81,5 +82,8 @@
       }
     },
     "testRunner": "jest-jasmine2"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
   }
 }

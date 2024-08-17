@@ -9,7 +9,7 @@ app.on('$', ({ key, props }) => {
   }
 });
 
-export class MyComponent extends Component {
+export class AniComponent extends Component {
   state = {
     animation: true
   }
@@ -30,4 +30,4 @@ export class MyComponent extends Component {
   }
 }
 
-export default (element) => new MyComponent().mount(element);
+export default (element) => new AniComponent().mount(element);

@@ -1,6 +1,57 @@
 import app from './app';
 import toHTML from './vdom-to-html';
 import { _createEventTests, _createStateTests } from './apprun-dev-tools-tests';
+import yaml from 'js-yaml';
+
+function replacer(key, value) {
+  if (typeof value === 'function') return value.toString(); // value.toString();
+  return ['', null].includes(value) || (typeof value === 'object' && (value.length === 0 || Object.keys(value).length === 0)) ? undefined : value;
+}
+
+function createProxy(obj) {
+  const handler = {
+    get(target, property, receiver) {
+
+      // Get the property value
+      const value = Reflect.get(target, property, receiver);
+
+      // If the value is an object (including arrays), proxy it
+      if (typeof value === 'object' && value !== null) {
+        if (Array.isArray(value)) {
+          // Proxy each element of the array if it's an object
+          return value.map(item => createProxy(item));
+        } else {
+          // Recursively proxy the object
+          return createProxy(value);
+        }
+      }
+
+      return `{${property}}`
+    },
+
+  };
+
+  return Array.isArray(obj) ?
+    obj.map(item => createProxy(item)) : new Proxy(obj, handler);
+}
+
+function htmlEncode(input) {
+  return !input ? input : input.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function getVDOM(component) {
+  let view;
+  if (typeof component.state === 'object') {
+    const proxy = createProxy(component.state);
+    view = component.view(proxy);
+  } else {
+    view = component.view(component.state);
+  }
+  return view;
+}
 
 app['debug'] = true;
 
@@ -39,26 +90,34 @@ const get_components = () => {
 const viewElement = element => <div>
   {element.tagName.toLowerCase()}{element.id ? '#' + element.id : ''}
   {' '}
-  {element.className && element.className.split(' ').map(c => '.' + c).join() }
+  {element.className && element.className.split(' ').map(c => '.' + c).join()}
 </div>;
 
 const viewComponents = state => {
-
-  const Events = ({ events }) => <ul>
-    {events && events.filter(event => event.name !== '.').map(event => <li>
-      {event.name}
-    </li>)}
-  </ul>;
-
   const Components = ({ components }) => <ul>
-    {components.map(component => <li>
-      <div>{component.constructor.name}</div>
-      <Events events={component['_actions']} />
-    </li>)}
+    {components.map(component => {
+
+      const vdom = getVDOM(component);
+      const events = component['_actions'].map(a => a.name);
+
+      const component_def = {
+        state: component.state,
+        view: vdom,
+        actions: events,
+        update: component.update
+      };
+
+      return <li>
+        <div>{component.constructor.name}</div>
+        <div><pre>{htmlEncode(yaml.dump(component_def, { replacer }))}</pre></div>
+        <br />
+      </li>;
+
+    })}
   </ul>;
 
   return <ul>
-    {state.map(({ element, comps}) => <li>
+    {state.map(({ element, comps }) => <li>
       <div>{viewElement(element)}</div>
       <Components components={comps} />
     </li>)}
@@ -66,7 +125,6 @@ const viewComponents = state => {
 }
 
 const viewEvents = state => {
-
   const Components = ({ components }) => <ul>
     {components.map(component => <li>
       <div>{component.constructor.name}</div>
@@ -136,12 +194,12 @@ const _components = (print?) => {
 
   if (components instanceof Map) {
     for (let [key, comps] of components) {
-      const element = typeof key === 'string' ? document.getElementById(key) || document.querySelector(key): key;
+      const element = typeof key === 'string' ? document.getElementById(key) || document.querySelector(key) : key;
       data.push({ element, comps });
     }
   } else {
     Object.keys(components).forEach(el => {
-      const element = typeof el === 'string' ? document.getElementById(el) || document.querySelector(el): el;
+      const element = typeof el === 'string' ? document.getElementById(el) || document.querySelector(el) : el;
       data.push({ element, comps: components[el] });
     });
   }
@@ -212,8 +270,8 @@ if (reduxExt) {
   const devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
   if (devTools) {
     const hash = location.hash || '#';
-    devTools.send(hash, '' );
-    const buf = [{ component:null, state:''}];
+    devTools.send(hash, '');
+    const buf = [{ component: null, state: '' }];
     console.info('Connected to the Redux DevTools');
     devTools.subscribe((message) => {
       if (message.type === 'START') devTools_running = true;
