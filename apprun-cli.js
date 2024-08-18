@@ -2,7 +2,18 @@
 
 'use strict';
 
-console.log(`apprun CLI is deprecated. Please use create-apprun-app instead.
+import toYaml from './cli/export.js';
+import fromYaml from './cli/import.js';
 
-npm init apprun-app [my-app]
-`);
+const cmd = process.argv[2];
+const file = process.argv[3];
+
+if (cmd === 'export') {
+  toYaml(file);
+}
+else if (cmd === 'import') {
+  fromYaml(file);
+} else {
+  console.log('Usage: apprun-cli <export|import> <file>');
+  console.log('> If you want to create an AppRun project. Please use npm create apprun-app instead.');
+}
