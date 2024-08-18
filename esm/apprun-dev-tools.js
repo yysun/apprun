@@ -2,6 +2,51 @@ var _a;
 import app from './app';
 import toHTML from './vdom-to-html';
 import { _createEventTests, _createStateTests } from './apprun-dev-tools-tests';
+import yaml from 'js-yaml';
+function replacer(key, value) {
+    if (typeof value === 'function')
+        return value.toString(); // value.toString();
+    return ['', null].includes(value) || (typeof value === 'object' && (value.length === 0 || Object.keys(value).length === 0)) ? undefined : value;
+}
+function createProxy(obj) {
+    const handler = {
+        get(target, property, receiver) {
+            // Get the property value
+            const value = Reflect.get(target, property, receiver);
+            // If the value is an object (including arrays), proxy it
+            if (typeof value === 'object' && value !== null) {
+                if (Array.isArray(value)) {
+                    // Proxy each element of the array if it's an object
+                    return value.map(item => createProxy(item));
+                }
+                else {
+                    // Recursively proxy the object
+                    return createProxy(value);
+                }
+            }
+            return `{${property}}`;
+        },
+    };
+    return Array.isArray(obj) ?
+        obj.map(item => createProxy(item)) : new Proxy(obj, handler);
+}
+function htmlEncode(input) {
+    return !input ? input : input.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+function getVDOM(component) {
+    let view;
+    if (typeof component.state === 'object') {
+        const proxy = createProxy(component.state);
+        view = component.view(proxy);
+    }
+    else {
+        view = component.view(component.state);
+    }
+    return view;
+}
 app['debug'] = true;
 window['_apprun-help'] = ['', () => {
         Object.keys(window).forEach(cmd => {
@@ -39,10 +84,21 @@ const viewElement = element => app.h("div", null,
     ' ',
     element.className && element.className.split(' ').map(c => '.' + c).join());
 const viewComponents = state => {
-    const Events = ({ events }) => app.h("ul", null, events && events.filter(event => event.name !== '.').map(event => app.h("li", null, event.name)));
-    const Components = ({ components }) => app.h("ul", null, components.map(component => app.h("li", null,
-        app.h("div", null, component.constructor.name),
-        app.h(Events, { events: component['_actions'] }))));
+    const Components = ({ components }) => app.h("ul", null, components.map(component => {
+        const vdom = getVDOM(component);
+        const events = component['_actions'].map(a => a.name);
+        const component_def = {
+            state: component.state,
+            view: vdom,
+            actions: events,
+            update: component.update
+        };
+        return app.h("li", null,
+            app.h("div", null, component.constructor.name),
+            app.h("div", null,
+                app.h("pre", null, htmlEncode(yaml.dump(component_def, { replacer })))),
+            app.h("br", null));
+    }));
     return app.h("ul", null, state.map(({ element, comps }) => app.h("li", null,
         app.h("div", null, viewElement(element)),
         app.h(Components, { components: comps }))));

@@ -26,7 +26,7 @@ function clean(obj) {
 function toHTML(vdom) {
     if (!vdom)
         return '';
-    if ('_$litType$' in vdom) {
+    if (vdom['_$litType$']) {
         return vdom.toString();
     }
     clean(vdom);

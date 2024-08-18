@@ -3,7 +3,7 @@
 
 ## Introduction
 
-AppRun is a lightweight alternative to other frameworks and libraries. It has a unique architecture inspired by the Elm architecture that can help you manage states, routing, and other essential aspects of your web application.
+AppRun is a lightweight alternative to other frameworks and libraries. It has a [unique architecture](https://apprun.js.org/docs/architecture/) inspired by the Elm architecture that can help you manage states, routing, and other essential aspects of your web application.
 
 Use a _Counter_ as an example.
 
@@ -11,12 +11,12 @@ Use a _Counter_ as an example.
 // define the initial state
 const state = 0;
 
-// view is a function to display the state
-const view = state => `<div>
-  <h1>${state}</h1>
+// view is a function to display the state (JSX)
+const view = state => <div>
+  <h1>{state}</h1>
   <button onclick="app.run('-1')">-1</button>
   <button onclick="app.run('+1')">+1</button>
-</div>`;
+</div>;
 
 // update is a collection of event handlers
 const update = {
@@ -27,16 +27,15 @@ const update = {
 // start the app
 app.start(document.body, state, view, update);
 ```
-<apprun-code style="font-size: smaller"></apprun-code>
+<apprun-code></apprun-code>
 
-At its core, AppRun harnesses the power of the event PubsSub (Publish-Subscribe) pattern to streamline your application’s state handling.
+* AppRun is lightweight, only 6KB gzipped, but includes state management, rendering, event handling, and routing.
 
+* With only three functions: `app.start`, `app.run`, and `app.on` in its API makes it easy to learn and use. And no worries about the incompatibility of version upgrades.
 
-## Why the Event Pubsub Pattern
+* One more thing, you can [use AppRun with React](https://apprun.js.org/docs/react) to simplify state management and routing of your React applications.
 
-The event PubSub pattern isn't new; it's a well-established design pattern used widely in software development to handle communication between components or services in a decoupled manner. Web developers are likely already familiar with the PubSub pattern through their use of DOM event handling.
-
-AppRun takes the familiar PubSub concept and extends it into your application's logic, providing a more structured and powerful approach to state management. The result? Cleaner, more maintainable code and a smoother development experience.
+At its core, AppRun harnesses the power of the [event PubsSub]([Publish-Subscribe](https://apprun.js.org/docs/event-pubsub/)) pattern to streamline your application’s state handling and routing. The result? Cleaner, more maintainable code and a smoother development experience.
 
 ## AppRun Benefits
 
@@ -54,7 +53,6 @@ AppRun is distributed on npm. To get it, run:
 ```sh
 npm install apprun
 ```
-
 You can also load AppRun directly from the unpkg.com CDN:
 
 ```js
@@ -68,23 +66,25 @@ You can also load AppRun directly from the unpkg.com CDN:
 </body>
 </html>
 ```
-<apprun-code style="font-size: smaller"></apprun-code>
+<apprun-code style="height:200px"></apprun-code>
 
 Or, use the ESM version:
 ```js
 <html>
 <body>
 <script type="module">
-  import { app } from 'https://unpkg.com/apprun/dist/apprun-html.esm.js';
-  const view = state => `<div>${state}</div>`;
+  import { app, html } from 'https://unpkg.com/apprun/dist/apprun-html.esm.js';
+  const view = state => html`<div>${state}</div>`;
   app.start(document.body, 'hello ESM', view);
 </script>
 </body>
 </html>
 ```
-<apprun-code style="font-size: smaller"></apprun-code>
+<apprun-code style="height:200px"></apprun-code>
 
-Or, you can create an AppRun app by using the `npm create apprun-app` command.
+In addition to run directly in the browser,  or with a compiler/bundler like Webpack or Vite.
+
+You can run the `npm create apprun-app` command to create an AppRun project.
 
 ```sh
 npm create apprun-app [my-app]
