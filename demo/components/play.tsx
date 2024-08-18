@@ -1,7 +1,6 @@
 import app, { Component } from '../../src/apprun';
 import examples from './play-examples';
 
-declare var CodeMirror;
 
 const html = code => `<!DOCTYPE html>
 <html lang="en">
@@ -41,22 +40,18 @@ const tab = ({ code }) => {
   doc.close();
 };
 
-const run = ({ code }) => {
-  let iframe = document.getElementById('iframe') as HTMLIFrameElement;
-  iframe.parentNode.replaceChild(iframe.cloneNode(), iframe);
-  iframe = document.getElementById('iframe') as HTMLIFrameElement;
-  const doc = iframe.contentWindow.document;
-  doc.open();
-  doc.write(html(code));
-  doc.close();
+const editor = (e) => {
+  const editor = document.createElement('apprun-code');
+  editor.style.height = '80vh';
+  editor.setAttribute('code-width', '60%');
+  e.appendChild(editor)
 };
 
 export class PlayComponent extends Component {
 
-  codeEditor = null
   state = {...examples[0], selectedIndex: 0}
 
-  view = (state) => <div class="playground">
+  view = (state) => <div class="playground" ref={e => editor(e)}>
     <div class="row">
       <div class="col-sm-6">
         Examples:&nbsp;
@@ -68,16 +63,9 @@ export class PlayComponent extends Component {
         <button class="btn btn-default btn-sm pull-right" $onclick='openTab'>Open in a new tab</button>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <textarea id="playground-code">
-            {state.code}
-        </textarea>
-      </div>
-      <div class="col-sm-6">
-        <iframe id="iframe" />
-      </div>
-    </div>
+    <textarea>
+      {state.code}
+    </textarea>
   </div>;
 
   update = {
@@ -89,39 +77,21 @@ export class PlayComponent extends Component {
           selectedIndex
         };
       }
-      this.codeEditor = null;
       return state;
     },
     'select': (state, e) => {
-      this.state = {
+      state = {
         ...examples[e.target.selectedIndex],
         selectedIndex: e.target.selectedIndex
       };
       history.pushState(null, null, '#play/' + e.target.selectedIndex);
-      this.codeEditor.setValue(this.state.code);
+      return state;
     },
-    'change': [(state, code) => {
-      state.code = code;
-      run(state);
-      }, {delay: 500}],
     'openTab': (state, e) => {
       e.preventDefault();
       tab(state);
     }
   }
-
-  rendered = (state) => {
-    if (!this.codeEditor) {
-      this.codeEditor = CodeMirror.fromTextArea(document.getElementById('playground-code'), {
-        lineNumbers: true,
-        mode: "jsx"
-      });
-      this.codeEditor.on('change', (cm) => this.run('change', cm.getValue()));
-    }
-    run(state);
-  }
-
-  unload = () => this.codeEditor = null
 }
 
 export default (element) => new PlayComponent().mount(element);
