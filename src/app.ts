@@ -71,7 +71,7 @@ export class App {
   }
 
   query(name: string, ...args): Promise<any[]> {
-    return this.query(name, ...args);
+    return this.runAsync(name, ...args);
   }
 
   private getSubscribers(name: string, events) {
