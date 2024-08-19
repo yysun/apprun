@@ -49,7 +49,7 @@ export class App {
         return Promise.all(promises);
     }
     query(name, ...args) {
-        return this.query(name, ...args);
+        return this.runAsync(name, ...args);
     }
     getSubscribers(name, events) {
         const subscribers = events[name] || [];
