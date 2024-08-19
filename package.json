@@ -5,7 +5,6 @@
   "main": "dist/apprun.js",
   "module": "esm/apprun.js",
   "types": "apprun.d.ts",
-  "type": "module",
   "bin": {
     "apprun": "apprun-cli.js"
   },
