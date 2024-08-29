@@ -87,6 +87,7 @@ declare module 'apprun' {
 
   export const app: IApp
   export default app;
+  export const App: IApp;
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
