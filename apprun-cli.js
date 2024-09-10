@@ -1,19 +1,102 @@
 #!/usr/bin/env node
 
-'use strict';
+const { program } = require('commander');
+const { existsSync, writeFileSync, mkdirSync } = require('fs');
+const { resolve, dirname } = require('path');
+const { red, green, yellow } = require('./cli/colors');
 
-import toYaml from './cli/export.js';
-import fromYaml from './cli/import.js';
+const component_template = `import {app, Component} from 'apprun';
 
-const cmd = process.argv[2];
-const file = process.argv[3];
+export default class #nameComponent extends Component {
+  state = '#name';
 
-if (cmd === 'export') {
-  toYaml(file);
+  view = (state) => <>
+      <h1>{state}</h1>
+  </>;
+
+  update = {
+    '/#name': state => state,
+  }
 }
-else if (cmd === 'import') {
-  fromYaml(file);
-} else {
-  console.log('Usage: apprun-cli <export|import> <file>');
-  console.log('> If you want to create an AppRun project. Please use npm create apprun-app instead.');
+`;
+
+const test_template = `import app from 'apprun';
+import #name from './#fn';
+
+describe('component', () => {
+  it('should render state upon route event', () => {
+    const element = document.createElement('div');
+    const component = new #name().mount(element);
+    app.run('/#name');
+    expect(element.textContent).toBe('#name');
+  })
+})
+`;
+
+
+program
+  .version('3.0.0')
+  .description('AppRun CLI')
+  .option('-i, --init', 'Initialize AppRun Project')
+  .option('-c, --component <name>', 'Create a component')
+  .option('-t, --test <name>', 'Create a component spec')
+  .option('-p, --pages [directory]', 'Create example pages')
+
+
+program.parse(process.argv);
+
+const options = program.opts();
+if (options.init) {
+  console.log(`\nPlease use ${yellow('npm create apprun-app')} to create AppRun projects.\n`);
+  return;
 }
+
+function createTestFile(fn, name) {
+  const component_name = name || fn.split('/').pop();
+  const component_file = fn.split('/').pop();
+  const test = test_template
+    .replace(/#name/g, component_name)
+    .replace(/#fn/g, component_file);
+  writeFile(fn + '.spec.tsx', test);
+}
+
+function createComponent(fn, name) {
+  if (!name) name = fn.split('/').pop();
+  const component = component_template.replace(/#name/g, name);
+  writeFile(fn + '.tsx', component);
+}
+
+const cwd = process.cwd();
+const writeFile = (fn, text) => {
+  fn = resolve(cwd, fn);
+  const dir = dirname(fn);
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+    console.log(yellow(`✔ ${dir}`));
+
+  }
+  if (existsSync(fn)) {
+    console.log(red(`✘ ${fn} exists`));
+    return;
+  }
+  writeFileSync(fn, text, 'utf8');
+  console.log(green(`✔ ${fn}`));
+}
+
+options.component && createComponent(options.component);
+options.test && createTestFile(options.test);
+
+if (options.pages) {
+  let pages = typeof options.pages === 'string' ? options.pages : 'pages';
+  pages = resolve(cwd, pages);
+  createComponent(`${pages}/Home/index`, 'Home');
+  createTestFile(`${pages}/Home/index`, 'Home');
+  createComponent(`${pages}/About/index`, 'About');
+  createTestFile(`${pages}/About/index`, 'About');
+  createComponent(`${pages}/Contact/index`, 'Contact');
+  createTestFile(`${pages}/Contact/index`, 'Contact');
+}
+
+
+
+
