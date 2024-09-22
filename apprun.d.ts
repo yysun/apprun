@@ -94,3 +94,9 @@ declare module 'apprun' {
   export const safeHTML;
   export function Fragment (props, ...children): [];
 }
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    [elemName: string]: any;
+  }
+}
