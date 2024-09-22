@@ -5,6 +5,7 @@ module.exports = {
     'dist/apprun': './src/apprun.ts',
     'dist/apprun-play': './src/apprun-play.tsx',
     'dist/apprun-html': './src/apprun-html.ts',
+    './jsx-runtime': './src/vdom.ts',
     'dist/apprun-dev-tools': './src/apprun-dev-tools.tsx',
     'demo/app': './demo/main.ts'
   },
