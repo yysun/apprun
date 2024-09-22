@@ -14,9 +14,9 @@ export default class #nameComponent extends Component {
       <h1>{state}</h1>
   </>;
 
-  update = {
-    '/#name': state => state,
-  }
+  // update = {
+  //   '/#name': state => state,
+  // }
 }
 `;
 
@@ -27,12 +27,12 @@ describe('component', () => {
   it('should render state upon route event', () => {
     const element = document.createElement('div');
     const component = new #name().mount(element);
-    app.run('/#name');
+    //app.run('/#name');
+    component.run('.');
     expect(element.textContent).toBe('#name');
   })
 })
 `;
-
 
 program
   .version('3.0.0')
