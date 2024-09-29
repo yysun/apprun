@@ -1096,6 +1096,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-of-an-apprun-class-component-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example of an AppRun class component page:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#example-of-an-apprun-functional-component-page" class="md-nav__link">
     <span class="md-ellipsis">
       Example of an AppRun functional component page:
@@ -1108,15 +1117,6 @@
   <a href="#example-of-a-markdown-page" class="md-nav__link">
     <span class="md-ellipsis">
       Example of a markdown page:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-of-an-html-page" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example of an html page:
     </span>
   </a>
   
@@ -1343,6 +1343,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-of-an-apprun-class-component-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example of an AppRun class component page:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#example-of-an-apprun-functional-component-page" class="md-nav__link">
     <span class="md-ellipsis">
       Example of an AppRun functional component page:
@@ -1355,15 +1364,6 @@
   <a href="#example-of-a-markdown-page" class="md-nav__link">
     <span class="md-ellipsis">
       Example of a markdown page:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-of-an-html-page" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example of an html page:
     </span>
   </a>
   
@@ -1393,36 +1393,44 @@
 
 
 <h1 id="apprun-site">AppRun Site<a class="headerlink" href="#apprun-site" title="Permanent link">&para;</a></h1>
-<p>AppRun-Site let you focus on creating web pages using HTML, markdown, AppRun components, and web components. AppRun-Site will take care of the rest:</p>
+<p>AppRun-Site let you focus on creating web pages using AppRun components, web components and even markdown files. AppRun-Site will take care of the rest:</p>
 <ul>
-<li>It compiles your pages to ES Modules</li>
-<li>It runs your pages run as Single Page Applications (SPA)</li>
-<li>It can render your pages using Server-Side Rendering (SSR)</li>
-<li>It can also generate a static website</li>
+<li>You can create web pages using AppRun components and markdown</li>
+<li><a href="../apprun-site-build/">Build</a> your pages to dynamic modules and load them on demand</li>
+<li>Render your pages to create a <a href="../apprun-site-static/">static website</a></li>
+<li><a href="../apprun-site-ssr/">Serve</a> Single Page Applications (SPA) and Server-Side Rendering (SSR)</li>
+<li><a href="../apprun-site-csr/#file-based-routing">File-based routing</a></li>
+<li><a href="../apprun-site-ssr/#api-endpoints">API endpoints</a></li>
+<li><a href="../apprun-site-ssr/#server-side-actions">Server-side actions</a></li>
 </ul>
 <h2 id="create-apprun-site">Create AppRun Site<a class="headerlink" href="#create-apprun-site" title="Permanent link">&para;</a></h2>
 <p>You can initialize a project using the <code>npm create apprun-app</code> command and select the <code>AppRun Site</code> template.</p>
 <div class="highlight"><pre><span></span><code>npm<span class="w"> </span>init<span class="w"> </span>apprun-app<span class="w"> </span><span class="o">[</span>my-app<span class="o">]</span>
 </code></pre></div>
+<p>Alternatively, you can create a project using the <code>npx apprun-site init</code> command.</p>
+<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>apprun-site<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>my-app<span class="o">]</span>
+</code></pre></div>
+<p>The <code>init</code> command provides a few more project templates to choose from:</p>
+<ul>
+<li><a href="https://github.com/apprunjs/apprun-site-template">AppRun Site Basic</a></li>
+<li><a href="https://github.com/apprunjs/apprun-shadcn">AppRun Site with Shadcn/ui</a></li>
+<li><a href="https://github.com/apprunjs/apprun-antd-pro">AppRun Site with Ant Design</a></li>
+</ul>
 <h2 id="apprun-site-architecture">AppRun Site Architecture<a class="headerlink" href="#apprun-site-architecture" title="Permanent link">&para;</a></h2>
 <p>An AppRun-Site project has the following structure:</p>
 <div class="highlight"><pre><span></span><code>/pages              &lt;- pages of the website
-  /index.html       &lt;- index page
-  /index.md         &lt;- home page
-  /main.tsx         &lt;- start up code
+  /index.html       &lt;- index file
+  /index.tsx        &lt;- home page
+  /main.tsx         &lt;- start up code (registers web component and renders the layout)
   /about
-    index.md        &lt;- about page, markdown
+    /index.tsx      &lt;- about page
   /contact
-    contact.tsx     &lt;- contact page, AppRun component
+    /index.tsx      &lt;- contact page
 </code></pre></div>
-<p>Then, you can use:</p>
-<ul>
-<li><em>npm start</em> or <em>npm run dev</em> to start the dev server and watch your code changes.</li>
-</ul>
-<p>The application will run at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+<p>The pages are tsx/jsx files (AppRun components) or markdown files:</p>
 <h2 id="add-pages">Add Pages<a class="headerlink" href="#add-pages" title="Permanent link">&para;</a></h2>
 <p>You can add AppRun components, class or functional (tsx/jsx files), markdown, or html files to the <code>pages</code> directory.</p>
-<p>Example of an AppRun class component page:
+<h3 id="example-of-an-apprun-class-component-page">Example of an AppRun class component page:<a class="headerlink" href="#example-of-an-apprun-class-component-page" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">app</span><span class="p">,</span><span class="w"> </span><span class="nx">Component</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">ContactComponent</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Component</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;...&#39;</span><span class="p">;</span>
@@ -1431,7 +1439,7 @@
 <span class="w">    </span><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">This</span><span class="w"> </span><span class="nx">is</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">Component</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 <span class="w">  </span><span class="o">&lt;</span><span class="err">/div&gt;;</span>
 <span class="p">}</span>
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="example-of-an-apprun-functional-component-page">Example of an AppRun functional component page:<a class="headerlink" href="#example-of-an-apprun-functional-component-page" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun&#39;</span><span class="p">;</span>
 <span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">&lt;&gt;</span>
@@ -1443,10 +1451,6 @@
 <div class="highlight"><pre><span></span><code><span class="gh"># Hello Web Component</span>
 This is a markdown page with a web component to display a comic from XKCD
 &lt;ws-comic&gt;&lt;/ws-comic&gt;
-</code></pre></div>
-<h3 id="example-of-an-html-page">Example of an html page:<a class="headerlink" href="#example-of-an-html-page" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Page<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>This is an HTML page<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
 <p>All the pages will be compiled into the ES modules in the <code>public</code> directory when you build the site.</p>
 <p>Next, you will learn how to <a href="../apprun-site-build/">build</a> your site.</p>

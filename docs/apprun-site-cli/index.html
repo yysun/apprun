@@ -1352,10 +1352,11 @@ Options:
   -h, --help                  display help for command
 
 Commands:
-  build [options] [source]    build site
-  serv [options] [source]     launch development server, watch and no live reload
-  dev [options] [source]      launch development server, watch and live reload
-  help [command]              display help for command
+  init [destination]        Initialize a new project from a template
+  build [options] [source]  build site
+  serve [options] [source]  launch preview server, live reload is optional
+  dev [options] [source]    launch development server, watch and live reload
+  help [command]            display help for command
 </code></pre></div>
 <h2 id="build-command-options">Build Command Options<a class="headerlink" href="#build-command-options" title="Permanent link">&para;</a></h2>
 <p>You can use the following command-line options for the <em>build</em> command.</p>
@@ -1366,9 +1367,12 @@ build<span class="w"> </span>site
 Options:
 <span class="w">  </span>-c,<span class="w"> </span>--clean<span class="w">            </span>clean<span class="w"> </span>the<span class="w"> </span>output<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
 <span class="w">  </span>-w,<span class="w"> </span>--watch<span class="w">            </span>watch<span class="w"> </span>the<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
-<span class="w">  </span>-r,<span class="w"> </span>--render<span class="w">           </span>pre-render<span class="w"> </span>html<span class="w"> </span>pages<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
 <span class="w">  </span>-o,<span class="w"> </span>--output<span class="w"> </span><span class="o">[</span>output<span class="o">]</span><span class="w">  </span>output<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s2">&quot;public&quot;</span><span class="o">)</span>
 <span class="w">  </span>-p,<span class="w"> </span>--pages<span class="w"> </span><span class="o">[</span>pages<span class="o">]</span><span class="w">    </span>pages<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s2">&quot;pages&quot;</span><span class="o">)</span>
+<span class="w">  </span>-s<span class="w"> </span>--server-only<span class="w">       </span>build<span class="w"> </span>server<span class="w"> </span>app<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
+<span class="w">  </span>-b<span class="w"> </span>--client-only<span class="w">       </span>build<span class="w"> </span>server<span class="w"> </span>app<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
+<span class="w">  </span>-r<span class="w"> </span>--render<span class="w">            </span>pre-render<span class="w"> </span>pages<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
+<span class="w">  </span>--no-csr<span class="w">               </span>no<span class="w"> </span>client<span class="w"> </span>side<span class="w"> </span>routing
 <span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">             </span>display<span class="w"> </span><span class="nb">help</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nb">command</span>
 </code></pre></div>
 <h2 id="dev-command-options">Dev Command Options<a class="headerlink" href="#dev-command-options" title="Permanent link">&para;</a></h2>
@@ -1379,37 +1383,29 @@ launch<span class="w"> </span>development<span class="w"> </span>server,<span cl
 Options:
 <span class="w">  </span>-o,<span class="w"> </span>--output<span class="w"> </span><span class="o">[</span>output<span class="o">]</span><span class="w">  </span>output<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s2">&quot;public&quot;</span><span class="o">)</span>
 <span class="w">  </span>-p,<span class="w"> </span>--pages<span class="w"> </span><span class="o">[</span>pages<span class="o">]</span><span class="w">    </span>pages<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s2">&quot;pages&quot;</span><span class="o">)</span>
-<span class="w">  </span>-n,<span class="w"> </span>--no_ssr<span class="w">           </span>disable<span class="w"> </span>server<span class="w"> </span>side<span class="w"> </span>rendering<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
+<span class="w">  </span>--no-watch<span class="w">             </span>no<span class="w"> </span>watching<span class="w"> </span>the<span class="w"> </span>directory
+<span class="w">  </span>--no-live_reload<span class="w">       </span>no<span class="w"> </span>live<span class="w"> </span>reload
+<span class="w">  </span>--no-csr<span class="w">               </span>no<span class="w"> </span>client<span class="w"> </span>side<span class="w"> </span>routing
 <span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">             </span>display<span class="w"> </span><span class="nb">help</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nb">command</span>
-➜<span class="w">  </span>apprun<span class="w"> </span>git:<span class="o">(</span>master<span class="o">)</span><span class="w"> </span>✗<span class="w"> </span>npx<span class="w"> </span>apprun-site@latest<span class="w"> </span>serve<span class="w"> </span>-h
 </code></pre></div>
 <h2 id="serve-command-options">Serve Command Options<a class="headerlink" href="#serve-command-options" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>Usage: apprun-site serve [options] [source]
+<div class="highlight"><pre><span></span><code>Usage:<span class="w"> </span>apprun-site<span class="w"> </span>serve<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span><span class="o">[</span>source<span class="o">]</span>
 
-launch development server, live reload is optional
+launch<span class="w"> </span>development<span class="w"> </span>server,<span class="w"> </span>live<span class="w"> </span>reload<span class="w"> </span>is<span class="w"> </span>optional
 
 Options:
-  -o, --output [output]  output directory (default: &quot;public&quot;)
-  -p, --pages [pages]    pages directory (default: &quot;pages&quot;)
-  -n, --no_ssr           disable server side rendering (default: false)
-  -l, --live_reload      enable live reload (default: false)
-  -h, --help             display help for command
+<span class="w">  </span>-o,<span class="w"> </span>--output<span class="w"> </span><span class="o">[</span>output<span class="o">]</span><span class="w">  </span>output<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s2">&quot;public&quot;</span><span class="o">)</span>
+<span class="w">  </span>--no-ssr<span class="w">               </span>disable<span class="w"> </span>server<span class="w"> </span>side<span class="w"> </span>rendering
+<span class="w">  </span>--no-save<span class="w">              </span>disable<span class="w"> </span>auto<span class="w"> </span>save<span class="w"> </span>of<span class="w"> </span>side<span class="w"> </span>rendered<span class="w"> </span>pages
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">             </span>display<span class="w"> </span><span class="nb">help</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nb">command</span>
 </code></pre></div>
 <h2 id="apprun-site-config-file">AppRun-Site Config File<a class="headerlink" href="#apprun-site-config-file" title="Permanent link">&para;</a></h2>
-<p>In addition, you can also customize the AppRun-Site in the <code>apprun-site.yml</code> config file.</p>
-<div class="highlight"><pre><span></span><code>site_name: AppRun Site
-site_url: /
-
-no-startup: true   # don&#39;t inject startup code for dynamic routing
-no-sss: true       # don&#39;t use server-side-rendering
-
-dev-server:
-  port: 8080
-
-static-pages:     # additional pages to pre-render for the static site
-  - /products/1
-  - /products/2
-  - /products/3
+<p>In addition, you can also customize the AppRun-Site in the <code>apprun-site.config.js</code> config file.</p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="mf">8080</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">site_url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">static_pages</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;/products/1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;/products/2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;/products/3&#39;</span><span class="p">],</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>WIP, more options to come.</p>
 

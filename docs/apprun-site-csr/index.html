@@ -1160,6 +1160,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#file-based-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      File-based Routing
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1356,6 +1365,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#file-based-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      File-based Routing
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1415,6 +1433,24 @@ When the URL in the browser address bar becomes http://.../products/1, it trigge
 <blockquote>
 <p>The AppRun-Site dev server provides such capability of serving <em>index.html</em> when the routes don't exist.</p>
 </blockquote>
+<h2 id="file-based-routing">File-based Routing<a class="headerlink" href="#file-based-routing" title="Permanent link">&para;</a></h2>
+<p>AppRun-site also injects code to load the pages on demand as dynamic modules using thw following steps:</p>
+<ul>
+<li>load the index.html</li>
+<li>load the main.js (for the dynamic layout and the start up code)</li>
+<li>load the modules by path to render the pages:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>/public
+  /                 &lt;- /index.js
+  /about            &lt;- /about/index.js
+  /contact          &lt;- /contact/index.js
+</code></pre></div>
+<blockquote>
+<p>Note:
+* The main.js should create a layout and a div with the id <code>main-app</code> to render the pages.
+* The page modules should create a div with the id <code>[page]-app</code> for sub pages. E.g., /docs/index.js should create a div with the id <code>docs-app</code> for its sub pages if any.</p>
+</blockquote>
+<p>The some file-based routing logic runs on the server side for the server-side rendering.</p>
 <p>Next, you will see how to use the dev server and how it renders your pages on the <a href="../apprun-site-ssr/">server side</a>.</p>
 
 

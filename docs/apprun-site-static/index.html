@@ -1240,14 +1240,15 @@
 </code></pre></div>
 <p>The <em>build</em> command first scans and compiles your pages in the <code>pages</code> directory and then downloads them into the <code>public</code> directory by leveraging the dev server's server-side rendering.</p>
 <div class="highlight"><pre><span></span><code>/public             &lt;- compiled site
-  /index.html       &lt;- copied
+  /_.html           &lt;- copied from `pages/index.html` for SPA
+  /index.html       &lt;- *** server-side rendered `home` page ***
   /index.js         &lt;- compiled
   /main.js          &lt;- compiled
   /about
-    /index.html     &lt;- *** server-side rendered page ***
+    /index.html     &lt;- *** server-side rendered `about` page ***
     index.js        &lt;- compiled
   /contact
-    /index.html     &lt;- *** server-side rendered page ***
+    /index.html     &lt;- *** server-side rendered `contact` page ***
     index.js        &lt;- compiled
 
 /pages              &lt;- sorrce pages

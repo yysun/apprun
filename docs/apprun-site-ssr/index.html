@@ -1148,6 +1148,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#server-side-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-Side Rendering
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server App
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server App">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-side Actions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1290,6 +1332,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#server-side-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-Side Rendering
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server App
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server App">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-side Actions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1320,7 +1404,67 @@
 <h2 id="dynamic-routing">Dynamic Routing<a class="headerlink" href="#dynamic-routing" title="Permanent link">&para;</a></h2>
 <p>The dev server supports dynamic routing. It searches the URL and finds the corresponding ES module. E.g., when users visit http://.../products/1, the dev server will first try to find the ES module from <code>/products/1/index.js</code>. Of course, /products/1/index.js does not exist, so it will try to find <code>/products/index.js.</code> If <code>/products/index.js</code> exists, it will load the module dynamically and sends <em>1</em> as the parameter for rendering.</p>
 <p>The result is that pretty links are supported on the server side.</p>
-<p>Finally, although you have a dev server for development, you may not have a node server or use a different web server in production. In this case, you can pre-render your site into a static site. Proceed to the next section to learn how to create a <a href="../apprun-site-static/">static site</a>.</p>
+<h2 id="server-side-rendering">Server-Side Rendering<a class="headerlink" href="#server-side-rendering" title="Permanent link">&para;</a></h2>
+<p>The server can render the pages on the server-side. It uses the same steps as the client-side rendering:</p>
+<ul>
+<li>load the index.html</li>
+<li>load the main.js (for the dynamic layout and the start up code)</li>
+<li>load the modules by path to render the pages:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>/public
+  /                 &lt;- /index.js
+  /about            &lt;- /about/index.js
+  /contact          &lt;- /contact/index.js
+</code></pre></div>
+<blockquote>
+<p>Note:
+In order to support server-side rendering, the code should be carefule about using browser-specific APIs. You should check if the code runs on the server-side is compatible.</p>
+</blockquote>
+<h2 id="server-app">Server App<a class="headerlink" href="#server-app" title="Permanent link">&para;</a></h2>
+<p>The <code>build</code> command generated <code>server.js</code> can serve API endpoints and server-side actions. The server code is in the <code>app</code> folder. You can add an <code>app</code> folder with the following structure:</p>
+<div class="highlight"><pre><span></span><code>/app                &lt;- app folder (backend code)
+  /_                &lt;- action folder
+  /api              &lt;- api folder
+/pages              &lt;- pages of the website
+</code></pre></div>
+<p>The <code>build</code> command will compile the server code to allow the API endpoints and server-side actions.</p>
+<p>If you only want to build the server code, you can use the <code>--server-only</code> option:</p>
+<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>apprun-site<span class="w"> </span>build<span class="w"> </span>--server-only
+</code></pre></div>
+<h3 id="api-endpoints">API Endpoints<a class="headerlink" href="#api-endpoints" title="Permanent link">&para;</a></h3>
+<p>The API endpoints are served at the path <code>/api/[endpoint]</code>. For example, the <code>api/hello.js</code> file will be served at <code>/api/hello</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// api/hello.js</span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">hello</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;world&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
+<h3 id="server-side-actions">Server-side Actions<a class="headerlink" href="#server-side-actions" title="Permanent link">&para;</a></h3>
+<p>You can add server-side actions in the <code>_</code> folder. The server-side actions are served at the path <code>/_/[action]</code>. For example, the <code>_/comic.js</code> file will be served at <code>/_/comic</code>.</p>
+<p>Use the <code>//#if server</code>, <code>//#else</code>, and <code>//#endif</code> comments to separate the server-side code from the client-side code. The compiler will strip out the server-side code from the client-side code and vice versa.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// _/comic.js</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">action</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;apprun-site/action.js&#39;</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">//#if server</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">data</span><span class="o">?</span><span class="p">.</span><span class="nx">num</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2990</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://xkcd.com/</span><span class="si">${</span><span class="nx">num</span><span class="si">}</span><span class="sb">/info.0.json`</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">//#else</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">action</span><span class="p">(</span><span class="s1">&#39;comic&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">//#endif</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>action</code> function will POST to the <code>comic</code> action on the client side.</p>
+<p>You can refer to the server-side action in the client-side code:</p>
+<div class="highlight"><pre><span></span><code>// components/comic.tsx
+import { app, Component } from &#39;apprun&#39;;
+import comic from &#39;../../app/_/comic&#39;;
+export default class Comic extends Component {
+  state = comic();
+  view = ({ img, alt }) =&gt; img ? &lt;img src={img} alt={alt} /&gt; : `Loading...`;
+}
+</code></pre></div>
+<p>The benefit of referring to the server-side code is that you can get type checking, code completion and goto-definition in your IDE.</p>
+<p>Finally, you may not have a node server or use a different web server in production. In this case, you can pre-render your site into a static site. Proceed to the next section to learn how to create a <a href="../apprun-site-static/">static site</a>.</p>
 
 
 
