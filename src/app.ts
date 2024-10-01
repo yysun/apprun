@@ -1,38 +1,43 @@
-import { EventOptions} from './types'
+import { Events, EventOptions, AppStartOptions, VDOM, View, Update, CustomElementOptions } from './types'
+import { Component } from './component';
+
+
 export class App {
 
-  _events: Object;
+  _events: Events;
+  public start: <T, E = any >(element ?: Element | string, model ?: T, view ?: View<T>, update ?: Update<T, E>,
+        options?: AppStartOptions<T>) => Component<T, E>;
+  public h: (tag: string | Function, props: any, ...children: any[]) => VDOM;
+  public createElement: (tag: string | Function, props: any, ...children: any[]) => VDOM;
+  public render: (element: Element | string, node: VDOM, component?: any) => void;
+  public Fragment: (props: any, ...children: any[]) => any[];
+  public webComponent: (name: string, componentClass: any, options?: CustomElementOptions) => void;
+  public safeHTML: (html: string) => any[];
+  public use_render: (render: (node: any, el: HTMLElement) => void, mode?: 0 | 1) => void;
+  public use_react: (React: any, ReactDOM: any) => void;
 
-  public start;
-  public h;
-  public createElement;
-  public render;
-  public Fragment;
-  public webComponent;
-  public safeHTML;
-  public use_render;
-  public use_react;
+  public route: (url: string) => void;
 
   constructor() {
     this._events = {};
   }
 
-  on(name: string, fn: (...args) => void, options: EventOptions = {}): void {
+  on(name: string, fn: Function, options: EventOptions = {}): void {
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn, options });
   }
 
-  off(name: string, fn: (...args) => void): void {
+  off(name: string, fn: Function): void {
     const subscribers = this._events[name] || [];
 
     this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
   }
 
-  find(name: string): any {
+  find(name: string): Array<{ fn: Function, options: EventOptions }> | undefined {
     return this._events[name];
   }
 
-  run(name: string, ...args): number {
+  run(name: string, ...args: any[]): number {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     subscribers.forEach((sub) => {
@@ -48,19 +53,19 @@ export class App {
     return subscribers.length;
   }
 
-  once(name: string, fn, options: EventOptions = {}): void {
+  once(name: string, fn: Function, options: EventOptions = {}): void {
     this.on(name, fn, { ...options, once: true });
   }
 
-  private delay(name, fn, args, options): void {
-    if (options._t) clearTimeout(options._t);
+  private delay(name: string, fn: Function, args: any[], options: EventOptions): void {
+    if (options._t) clearTimeout(options._t as number);
     options._t = setTimeout(() => {
-      clearTimeout(options._t);
+      clearTimeout(options._t as number);
       Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
     }, options.delay);
   }
 
-  runAsync(name: string, ...args): Promise<any[]> {
+  runAsync(name: string, ...args: any[]): Promise<any[]> {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
@@ -70,13 +75,12 @@ export class App {
     return Promise.all(promises);
   }
 
-  query(name: string, ...args): Promise<any[]> {
+  query(name: string, ...args: any[]): Promise<any[]> {
     return this.runAsync(name, ...args);
   }
 
-  private getSubscribers(name: string, events) {
+  private getSubscribers(name: string, events: Events): Array<{ fn: Function, options: EventOptions }> {
     const subscribers = events[name] || [];
-
     // Update the list of subscribers by pulling out those which will run once.
     // We must do this update prior to running any of the events in case they
     // cause additional events to be turned off or on.

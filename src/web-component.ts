@@ -9,9 +9,9 @@ export type CustomElementOptions = {
 };
 
 export const customElement = (componentClass, options: CustomElementOptions = {}) => class CustomElement extends HTMLElement {
-  private _shadowRoot;
-  private _component;
-  private _attrMap: (arg0: string) => string;
+  public _shadowRoot;
+  public _component;
+  public _attrMap: (arg0: string) => string;
   public on;
   public run;
   constructor() {

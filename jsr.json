@@ -1,0 +1,15 @@
+{
+  "name": "@apprunjs/apprun",
+  "version": "3.33.9",
+  "exports": {
+    "." : "./src/apprun.ts",
+    "./apprun-html": "./src/apprun-html.ts"
+  },
+  "publish": {
+    "include": [
+      "LICENSE",
+      "README.md",
+      "src/**/*.ts"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 
 import app, { App } from './app';
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions } from './types';
+import { View, Update, Action, ActionDef, ActionOptions, MountOptions, EventOptions } from './types';
 import directive from './directive';
 
 const componentCache = new Map();
@@ -19,15 +19,15 @@ export class Component<T = any, E = any> {
   private _history_idx = -1;
   private enable_history;
   private global_event;
-  public element;
-  public rendered;
-  public mounted;
-  public unload;
+  public element: any;
+  public rendered: (state: T) => void;
+  public mounted: (props: any, children: any[], state: T) => T | void;
+  public unload: (state: T) => void;
   private tracking_id;
   private observer;
 
 
-  private renderState(state: T, vdom = null) {
+  public renderState(state: T, vdom = null) {
     if (!this.view) return;
     let html = vdom || this.view(state);
     app['debug'] && app.run('debug', {
@@ -77,7 +77,7 @@ export class Component<T = any, E = any> {
     this.rendered && this.rendered(this.state);
   }
 
-  public setState(state: T, options: ActionOptions & EventOptions
+  public setState(state: T | Promise<T>, options: ActionOptions & EventOptions
     = { render: true, history: false }) {
     if (state instanceof Promise) {
       // Promise will not be saved or rendered
@@ -127,10 +127,10 @@ export class Component<T = any, E = any> {
   };
 
   constructor(
-    protected state?: T,
-    protected view?: View<T>,
-    protected update?: Update<T, E>,
-    protected options?) {
+    public state?: T,
+    public view?: View<T>,
+    public update?: Update<T, E>,
+    protected options?: MountOptions) {
   }
 
   start = (element = null, options?: MountOptions): Component<T, E> => {
@@ -179,7 +179,7 @@ export class Component<T = any, E = any> {
       name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
   }
 
-  add_action(name: string, action, options: ActionOptions = {}) {
+  add_action(name: string, action: Action<T>, options: ActionOptions = {}) {
     if (!action || typeof action !== 'function') return;
     if (options.global) this._global_events.push(name);
     this.on(name as any, (...p) => {
@@ -192,7 +192,7 @@ export class Component<T = any, E = any> {
         options
       });
 
-      const newState = action(this.state, ...p);
+      const newState = action(this.state, ...p) as T | Promise<T>;
 
       app['debug'] && app.run('debug', {
         component: this,
@@ -243,7 +243,7 @@ export class Component<T = any, E = any> {
     });
   }
 
-  public run(event: E, ...args) {
+  public run(event: E, ...args :any[]) : any {
     if (this.state instanceof Promise) {
       return Promise.resolve(this.state).then(state => {
         this.state = state;
@@ -257,7 +257,7 @@ export class Component<T = any, E = any> {
     }
   }
 
-  public on(event: E, fn: (...args) => void, options?: any) {
+  public on(event: E, fn: (...args) => void, options?: any): void{
     const name = event.toString();
     this._actions.push({ name, fn });
     return this.is_global_event(name) ?
@@ -265,7 +265,7 @@ export class Component<T = any, E = any> {
       this._app.on(name, fn, options);
   }
 
-  public runAsync(event: E, ...args) {
+  public runAsync(event: E, ...args: any[]) : Promise<any[]> {
     const name = event.toString();
     return this.is_global_event(name) ?
       app.runAsync(name, ...args) :
@@ -273,11 +273,11 @@ export class Component<T = any, E = any> {
   }
 
   // obsolete
-  public query(event: E, ...args) {
+  public query(event: E, ...args: any[]) : Promise<any[]> {
     return this.runAsync(event, ...args);
   }
 
-  public unmount() {
+  public unmount() : void {
     this.observer?.disconnect();
     this._actions.forEach(action => {
       const { name, fn } = action;

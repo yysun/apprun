@@ -40,26 +40,26 @@ declare module 'apprun' {
     rendered?: (state: T) => void
   };
 
-  export interface IApp {
-    start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
-      options?: AppStartOptions<T>): Component<T, E>;
-    on(name: string, fn: (...args: any[]) => void, options?: any): void;
-    once(name: string, fn: (...args: any[]) => void, options?: any): void;
-    off(name: string, fn: (...args: any[]) => void): void;
-    find(name: string): any;
-    run(name: string, ...args: any[]): number;
-    query(name: string, ...args): Promise<any[]>; // obsolete
-    runAsync(name: string, ...args): Promise<any[]>;
-    h(tag: string | Function, ...children: any[]): VNode | VNode[];
-    createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
-    render(element: Element | string, node: VDOM): void;
-    Fragment(props: any[], ...children: any[]): any[];
-    route?: Route;
-    webComponent(name: string, componentClass, options?: CustomElementOptions): void;
-    safeHTML(html: string): any[];
-    use_render(render, mode?: 0 | 1);
-    use_react(React, ReactDOM);
-  }
+  // export interface IApp {
+  //   start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+  //     options?: AppStartOptions<T>): Component<T, E>;
+  //   on(name: string, fn: (...args: any[]) => void, options?: any): void;
+  //   once(name: string, fn: (...args: any[]) => void, options?: any): void;
+  //   off(name: string, fn: (...args: any[]) => void): void;
+  //   find(name: string): any;
+  //   run(name: string, ...args: any[]): number;
+  //   query(name: string, ...args): Promise<any[]>; // obsolete
+  //   runAsync(name: string, ...args): Promise<any[]>;
+  //   h(tag: string | Function, ...children: any[]): VNode | VNode[];
+  //   createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
+  //   render(element: Element | string, node: VDOM): void;
+  //   Fragment(props: any[], ...children: any[]): any[];
+  //   route?: Route;
+  //   webComponent(name: string, componentClass, options?: CustomElementOptions): void;
+  //   safeHTML(html: string): any[];
+  //   use_render(render, mode?: 0 | 1);
+  //   use_react(React, ReactDOM);
+  // }
 
   export class Component<T = any, E = any> {
     constructor(state?: T, view?: View<T>, update?: Update<T, E>);
@@ -85,9 +85,9 @@ declare module 'apprun' {
   export function customElement(name: string, options?: CustomElementOptions):
     <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
-  export const app: IApp
+  export const App;
+  export const app;
   export default app;
-  export const App: IApp;
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;

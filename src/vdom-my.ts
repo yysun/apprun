@@ -1,16 +1,17 @@
 import { VDOM, VNode } from './types';
 import directive from './directive';
+import { Component } from './component';
 export type Element = any; //HTMLElement | SVGSVGElement | SVGElement;
 
-export function Fragment(props, ...children): any[] {
+export function Fragment(props?: {}, ...children: any[]): any[] {
   return collect(children);
 }
 
 const ATTR_PROPS = '_props';
 
-function collect(children) {
-  const ch = [];
-  const push = (c) => {
+function collect(children: any[]): any[] {
+  const ch: any[] = [];
+  const push = (c: any) => {
     if (c !== null && c !== undefined && c !== '' && c !== false) {
       ch.push((typeof c === 'function' || typeof c === 'object') ? c : `${c}`);
     }
@@ -37,7 +38,7 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
 
 const keyCache = new WeakMap();
 
-export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
+export const updateElement = (element: Element, nodes: VDOM, component = {}) => {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
   const el = (typeof element === 'string' && element) ?
@@ -46,7 +47,7 @@ export const updateElement = (element: Element | string, nodes: VDOM, component 
   render(el, nodes, component);
 }
 
-function render(element: Element, nodes: VDOM, parent = {}) {
+function render(element: HTMLElement, nodes: VDOM, parent = {}) {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
   nodes = createComponent(nodes, parent);
@@ -59,7 +60,7 @@ function render(element: Element, nodes: VDOM, parent = {}) {
   }
 }
 
-function same(el: Element, node: VNode) {
+function same(el: Element, node: VNode): boolean {
   // if (!el || !node) return false;
   const key1 = el.nodeName;
   const key2 = `${node.tag || ''}`;
@@ -78,12 +79,12 @@ function update(element: Element, node: VNode, isSvg: boolean) {
   !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 
-function updateChildren(element, children, isSvg: boolean) {
+function updateChildren(element: Element, children: any[], isSvg: boolean): void {
   const old_len = element.childNodes?.length || 0;
   const new_len = children?.length || 0;
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
-    const child = children[i];
+    const child = children[i] as VNode;
     if (child['_op'] === 3) continue;
     const el = element.childNodes[i];
     if (typeof child === 'string') {
@@ -134,19 +135,19 @@ function updateChildren(element, children, isSvg: boolean) {
   }
 }
 
-export const safeHTML = (html: string) => {
+export const safeHTML = (html: string): any[] => {
   const div = document.createElement('section');
   div.insertAdjacentHTML('afterbegin', html)
   return Array.from(div.children);
 }
 
-function createText(node) {
-  if (node?.indexOf('_html:') === 0) { // ?
+function createText(node: string): Text | HTMLDivElement {
+  if (node?.indexOf('_html:') === 0) {
     const div = document.createElement('div');
     div.insertAdjacentHTML('afterbegin', node.substring(6))
     return div;
   } else {
-    return document.createTextNode(node??'');
+    return document.createTextNode(node ?? '');
   }
 }
 
@@ -165,7 +166,7 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
   return element
 }
 
-function mergeProps(oldProps: {}, newProps: {}): {} {
+function mergeProps(oldProps: Record<string, any>, newProps: Record<string, any>): Record<string, any> {
   newProps['class'] = newProps['class'] || newProps['className'];
   delete newProps['className'];
   const props = {};
@@ -174,7 +175,7 @@ function mergeProps(oldProps: {}, newProps: {}): {} {
   return props;
 }
 
-export function updateProps(element: Element, props: {}, isSvg) {
+export function updateProps(element: Element, props: Record<string, any>, isSvg: boolean): void {
   // console.assert(!!element);
   const cached = element[ATTR_PROPS] || {};
   props = mergeProps(cached, props || {});
@@ -228,8 +229,9 @@ export function updateProps(element: Element, props: {}, isSvg) {
   }
 }
 
-function render_component(node, parent, idx) {
-  const { tag, props, children } = node;
+function render_component(node: VNode, parent: any, idx: number): Element {
+  const { props, children } = node;
+  const tag = node.tag as any;
   let key = `_${idx}`;
   let id = props && props['id'];
   if (!id) id = `_${idx}${Date.now()}`;
@@ -240,7 +242,7 @@ function render_component(node, parent, idx) {
     delete props['as'];
   }
   if (!parent.__componentCache) parent.__componentCache = {};
-  let component = parent.__componentCache[key];
+  let component = parent.__componentCache[key] as Component;
   if (!component || !(component instanceof tag) || !component.element) {
     const element = document.createElement(asTag);
     component = parent.__componentCache[key] = new tag({ ...props, children }).mount(element, { render: true });

@@ -1,12 +1,12 @@
 import { createElement, updateElement, Fragment } from './vdom-my';
-
+import { Element, VDOM } from './types';
 
 import { render, svg, html, noChange, nothing } from 'lit-html';
 import { directive, Directive, Part, PartInfo, PartType, EventPart } from 'lit-html/directive.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import app from './apprun';
 
-function _render(element, vdom, parent?) {
+function _render(element: HTMLElement, vdom: VDOM, parent?: {}) {
   if (!vdom) return;
   if (typeof vdom === 'string') {
     if (!element['_$litPart$']) element.replaceChildren();
