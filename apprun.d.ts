@@ -100,3 +100,8 @@ declare namespace JSX {
     [elemName: string]: any;
   }
 }
+
+declare module 'apprun/react' {
+  import { Component } from 'apprun';
+  export default function toReact(componentClass: Component): Function;
+}
