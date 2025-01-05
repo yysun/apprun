@@ -11,6 +11,7 @@
 		"esModuleInterop": true,
 		"downlevelIteration": true,
 		"allowJs": true,
-		"outDir": "coverage/src"
+		"outDir": "coverage/src",
+		"moduleResolution": "node"
 	}
 }

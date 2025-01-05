@@ -162,7 +162,7 @@ describe('Component', () => {
         resolve('xx');
       }, 10);
     });
-    const spy = jasmine.createSpy('spy');
+    const spy = jest.fn();
     class Test extends Component {
       state = -1;
       view = state => spy(state);
@@ -176,12 +176,11 @@ describe('Component', () => {
     const t = new Test().start();
     t.run('method1')
     window.setTimeout(() => {
-      const callArgs = spy.calls.allArgs();
-      expect(callArgs[0][0]).toBe(-1);
-      expect(callArgs[1][0]).toBe('xx');
-      done()
-    }, 20);
-  });
+      expect(spy).toHaveBeenNthCalledWith(1, -1);
+      expect(spy).toHaveBeenNthCalledWith(2, 'xx');
+      done();
+    }, 50);
+  }, 1000);
 
   it('should support tuple in update', () => {
     let i = 0;
@@ -460,5 +459,3 @@ describe('Component', () => {
   });
 
 });
-
-

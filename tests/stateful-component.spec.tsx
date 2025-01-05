@@ -103,13 +103,16 @@ describe('Stateful Component', () => {
   });
 
   it('should call mounted function when refreshed', (done) => {
+    let mountCount = 0;
     class Child extends Component {
       view = (state) => {
         return <div>{state.n}</div>
       }
       mounted = (props) => {
-        // expect(props.n).toBe(1);
-        done();
+        mountCount++;
+        if (mountCount === 2 && props.n === 1) {
+          done();
+        }
       }
     }
     class Main extends Component {

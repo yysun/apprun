@@ -62,4 +62,3 @@ export class RunDirective extends Directive {
 
 const run = directive(RunDirective) as any;
 export { createElement, Fragment, html, svg, _render as render, run };
-
