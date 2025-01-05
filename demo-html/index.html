@@ -14,6 +14,8 @@
       <button @click=${run('add', +1)}>+1</button>
       <button @click=${run(add, -1)}>-1</button>
       <button @click=${run(add, +1)}>+1</button>
+      <button @click=${()=>app.run('add', -1)}>-1</button>
+      <button @click=${()=>app.run('add', +1)}>+1</button>
     </div>`;
   };
   app.start(document.body, 0, view, { add });

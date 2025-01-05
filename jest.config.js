@@ -2,7 +2,7 @@
 module.exports = {
   testEnvironment: "jsdom",
   transformIgnorePatterns: [
-    "/node_modules/(?!(lit-html|@lit|lit|@lit-labs)/.*)"
+    "node_modules/(?!(lit|@lit|lit-html|@lit-labs))"
   ],
   transform: {
     "^.+\\.(t|j)sx?$": ["ts-jest", {
@@ -25,8 +25,8 @@ module.exports = {
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   moduleNameMapper: {
-    "^lit-html$": "<rootDir>/node_modules/lit-html/development/lit-html.js",
-    "^lit-html/directive.js$": "<rootDir>/node_modules/lit-html/development/directive.js",
-    "^lit-html/directives/(.*)$": "<rootDir>/node_modules/lit-html/development/directives/$1"
+    "^lit$": "<rootDir>/node_modules/lit/development/index.js",
+    "^lit/directive$": "<rootDir>/node_modules/lit/development/directive.js",
+    "^lit/directives/(.*)$": "<rootDir>/node_modules/lit/development/directives/$1"
   }
 };

@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -28,5 +29,11 @@ module.exports = {
     open: true,
     static: path.join(__dirname),
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      // This tells Lit to run in production mode
+      'globalThis.DEV_MODE': JSON.stringify(false)
+    })
+  ]
 }
