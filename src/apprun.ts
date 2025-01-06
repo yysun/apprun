@@ -1,3 +1,37 @@
+/**
+ * Main AppRun framework entry point
+ * 
+ * This file:
+ * 1. Assembles core AppRun modules into a complete framework
+ * 2. Exports public API and types
+ * 3. Initializes global app instance with:
+ *    - Virtual DOM rendering
+ *    - Component system
+ *    - Router
+ *    - Web component support
+ * 
+ * Key exports:
+ * - app: Global event system instance
+ * - Component: Base component class
+ * - Decorators: @on, @update, @customElement
+ * - Router events and configuration
+ * - Web component registration
+ * 
+ * Usage:
+ * ```ts
+ * import { app, Component } from 'apprun';
+ * 
+ * // Create components
+ * class MyComponent extends Component {
+ *   state = // Initial state
+ *   view = state => // Render view
+ *   update = {
+ *     'event': (state, ...args) => // Handle events
+ *   }
+ * }
+ * ```
+ */
+
 import app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';

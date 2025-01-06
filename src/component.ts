@@ -1,3 +1,36 @@
+/**
+ * AppRun Component System Implementation
+ * 
+ * This file provides the Component class which is the foundation for:
+ * 1. State Management
+ *    - Maintains component state
+ *    - Handles state updates
+ *    - Supports state history
+ * 
+ * 2. View Rendering
+ *    - Renders virtual DOM to real DOM
+ *    - Handles component lifecycle (mounted, rendered, unload)
+ *    - Supports shadow DOM and web components
+ * 
+ * 3. Event Handling
+ *    - Local and global event subscription
+ *    - Event handler registration via decorators
+ *    - Action to state updates
+ * 
+ * Usage:
+ * ```ts
+ * class MyComponent extends Component {
+ *   state = // Initial state
+ *   view = state => // Return virtual DOM
+ *   update = {
+ *     'event': (state, ...args) => // Return new state
+ *   }
+ * }
+ * 
+ * // Mount component
+ * new MyComponent().mount('element-id');
+ * ```
+ */
 
 import app, { App } from './app';
 import { Reflect } from './decorator'

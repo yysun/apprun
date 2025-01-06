@@ -1,5 +1,39 @@
 import webComponent, { CustomElementOptions } from './web-component';
 
+/**
+ * TypeScript Decorators for AppRun Components
+ * 
+ * This file provides decorators that enable:
+ * 1. Event Handler Registration
+ *    - @on(): Subscribe to events with options
+ *    - @update(): Define state updates with metadata
+ * 
+ * 2. Web Component Integration
+ *    - @customElement(): Register as custom element with options
+ *    - Handles shadow DOM and attribute observation
+ * 
+ * 3. Metadata Management
+ *    - Custom Reflect implementation for decorator metadata
+ *    - Stores event handler and update metadata
+ *    - Supports runtime reflection for dynamic behavior
+ * 
+ * Usage:
+ * ```ts
+ * @customElement('my-element')
+ * class MyComponent extends Component {
+ *   @on('event')  
+ *   handler(state, ...args) {
+ *     // Handle event
+ *   }
+ * 
+ *   @update('event') 
+ *   updater(state, ...args) {
+ *     // Update state
+ *   }
+ * }
+ * ```
+ */
+
 // tslint:disable:no-invalid-this
 export const Reflect = {
 
@@ -44,4 +78,3 @@ export function customElement(name: string, options?: CustomElementOptions) {
     return constructor;
   }
 }
-

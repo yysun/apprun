@@ -1,3 +1,31 @@
+/**
+ * Core AppRun application class and singleton instance
+ * 
+ * This file provides:
+ * 1. App class - The core event system implementation with pub/sub capabilities
+ *    - on(): Subscribe to events
+ *    - off(): Unsubscribe from events  
+ *    - run(): Publish events synchronously
+ *    - runAsync(): Publish events asynchronously
+ *    - query(): Alias for runAsync
+ * 
+ * 2. Default app singleton - Global event bus instance
+ *    - Created once and reused across the application
+ *    - Stored in global scope (window/global)
+ *    - Version tracked to prevent duplicate instances
+ * 
+ * Usage:
+ * ```ts
+ * // Subscribe to events
+ * app.on('event-name', (state, ...args) => {
+ *   // Handle event
+ * });
+ * 
+ * // Publish events
+ * app.run('event-name', ...args);
+ * ```
+ */
+
 import { EventOptions} from './types'
 export class App {
 

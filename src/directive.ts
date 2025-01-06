@@ -1,3 +1,35 @@
+/**
+ * Component Directives Implementation
+ * 
+ * This file provides built-in directives for components:
+ * 1. Event Binding
+ *    - $on: Bind DOM events to component events
+ *    - Supports event delegation and parameters
+ *    - Handles function, string, and array event handlers
+ * 
+ * 2. Two-way Data Binding
+ *    - $bind: Sync form elements with component state
+ *    - Handles input types: text, checkbox, radio, select
+ *    - Automatic value type conversion
+ *    - Support for complex property paths
+ * 
+ * 3. Custom Directives
+ *    - Extensible directive system
+ *    - Processes virtual DOM during rendering
+ *    - Supports custom attribute directives
+ * 
+ * Usage:
+ * ```tsx
+ * // Event binding
+ * <button $onclick="event-name">Click</button>
+ * <input $oninput={e => setState(e.target.value)} />
+ * 
+ * // Two-way binding
+ * <input $bind="state.property" />
+ * <select $bind="selected">...</select>
+ * ```
+ */
+
 import app from './app';
 
 const getStateValue = (component, name) => {
