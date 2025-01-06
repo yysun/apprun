@@ -12,6 +12,29 @@
 		"downlevelIteration": true,
 		"allowJs": true,
 		"outDir": "coverage/src",
-		"moduleResolution": "node"
-	}
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictPropertyInitialization": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": ".",
+		"paths": {
+			"*": ["src/types/*"]
+		},
+		"typeRoots": [
+			"./node_modules/@types",
+			"./src/types"
+		],
+		"types": ["jest", "node"]
+	},
+	"include": [
+		"src/**/*",
+		"tests/**/*",
+		"demo/**/*"
+	]
 }
