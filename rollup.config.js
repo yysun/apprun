@@ -1,24 +1,41 @@
-import { terser } from 'rollup-plugin-terser';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
+/**
+ * Rollup Configuration
+ * 
+ * This configuration builds AppRun's ESM bundles with the following features:
+ * - Minification (controlled by MINIFY env var, defaults to true)
+ * - Sourcemaps (enabled by default)
+ * - Property mangling for properties starting with '__'
+ * 
+ * Usage:
+ * - Default build (minified): rollup -c
+ * - Unminified build: MINIFY=false rollup -c
+ */
 
-const plugins = [
+const terser = require('@rollup/plugin-terser');
+const resolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+
+// Control minification via environment variable
+const minify = process.env.MINIFY !== 'false';
+
+const plugins = minify ? [
   resolve(),
   commonjs(),
   terser({
-    warnings: true,
     module: true,
+    sourceMap: true, // Enable sourcemap support in terser
     mangle: {
       properties: {
         regex: /^__/,
       },
     },
-  }),
-  sourcemaps()
+  })
+] : [
+  resolve(),
+  commonjs()
 ];
 
-export default [{
+module.exports = [{
   input: 'esm/apprun.js',
   output: {
     file: 'dist/apprun.esm.js',
