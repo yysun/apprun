@@ -1,56 +1,57 @@
 /**
  * Core AppRun application class and singleton instance
- * 
+ *
  * This file provides:
  * 1. App class - The core event system implementation with pub/sub capabilities
  *    - on(): Subscribe to events
- *    - off(): Unsubscribe from events  
+ *    - off(): Unsubscribe from events
  *    - run(): Publish events synchronously
  *    - runAsync(): Publish events asynchronously
  *    - query(): Alias for runAsync
- * 
+ *
  * 2. Default app singleton - Global event bus instance
  *    - Created once and reused across the application
  *    - Stored in global scope (window/global)
  *    - Version tracked to prevent duplicate instances
- * 
+ *
  * Usage:
  * ```ts
  * // Subscribe to events
  * app.on('event-name', (state, ...args) => {
  *   // Handle event
  * });
- * 
+ *
  * // Publish events
  * app.run('event-name', ...args);
  * ```
  */
 
 import { EventOptions} from './types'
+
 export class App {
 
-  _events: Object;
+  _events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
 
-  public start;
-  public h;
-  public createElement;
-  public render;
-  public Fragment;
-  public webComponent;
-  public safeHTML;
-  public use_render;
-  public use_react;
+  public start: any;
+  public h: any;
+  public createElement: any;
+  public render: any;
+  public Fragment: any;
+  public webComponent: any;
+  public safeHTML: any;
+  public use_render: any;
+  public use_react: any;
 
   constructor() {
-    this._events = {};
+    this._events = {} as { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
   }
 
-  on(name: string, fn: (...args) => void, options: EventOptions = {}): void {
+  on(name: string, fn: (...args: any[]) => any, options: EventOptions = {}): void {
     this._events[name] = this._events[name] || [];
     this._events[name].push({ fn, options });
   }
 
-  off(name: string, fn: (...args) => void): void {
+  off(name: string, fn: (...args: any[]) => any): void {
     const subscribers = this._events[name] || [];
 
     this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
@@ -60,7 +61,7 @@ export class App {
     return this._events[name];
   }
 
-  run(name: string, ...args): number {
+  run(name: string, ...args: any[]): number {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     subscribers.forEach((sub) => {
@@ -76,11 +77,11 @@ export class App {
     return subscribers.length;
   }
 
-  once(name: string, fn, options: EventOptions = {}): void {
+  once(name: string, fn: (...args: any[]) => any, options: EventOptions = {}): void {
     this.on(name, fn, { ...options, once: true });
   }
 
-  private delay(name, fn, args, options): void {
+  private delay(name: string, fn: (...args: any[]) => any, args: any[], options: EventOptions): void {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
@@ -88,7 +89,7 @@ export class App {
     }, options.delay);
   }
 
-  runAsync(name: string, ...args): Promise<any[]> {
+  runAsync(name: string, ...args: any[]): Promise<any[]> {
     const subscribers = this.getSubscribers(name, this._events);
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
@@ -98,11 +99,11 @@ export class App {
     return Promise.all(promises);
   }
 
-  query(name: string, ...args): Promise<any[]> {
+  query(name: string, ...args: any[]): Promise<any[]> {
     return this.runAsync(name, ...args);
   }
 
-  private getSubscribers(name: string, events) {
+  private getSubscribers(name: string, events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> }): Array<{ fn: (...args: any[]) => any, options: EventOptions }> {
     const subscribers = events[name] || [];
 
     // Update the list of subscribers by pulling out those which will run once.
@@ -122,14 +123,16 @@ export class App {
 }
 
 const AppRunVersions = 'AppRun-3';
-let app: App;
-const root = (typeof self === 'object' && self.self === self && self) ||
-  (typeof global === 'object' && global.global === global && global)
-if (root['app'] && root['_AppRunVersions']) {
-  app = root['app'];
+let _app: App;
+const root = (typeof window !== 'undefined' ? window :
+             typeof global !== 'undefined' ? global :
+             typeof self !== 'undefined' ? self : {}) as any;
+
+if (root.app && root._AppRunVersions) {
+  _app = root.app;
 } else {
-  app = new App();
-  root['app'] = app;
-  root['_AppRunVersions'] = AppRunVersions;
+  _app = new App();
+  root.app = _app;
+  root._AppRunVersions = AppRunVersions;
 }
-export default app;
+export default _app;

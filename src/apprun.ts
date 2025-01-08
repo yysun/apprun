@@ -1,6 +1,6 @@
 /**
  * Main AppRun framework entry point
- * 
+ *
  * This file:
  * 1. Assembles core AppRun modules into a complete framework
  * 2. Exports public API and types
@@ -9,18 +9,18 @@
  *    - Component system
  *    - Router
  *    - Web component support
- * 
+ *
  * Key exports:
  * - app: Global event system instance
  * - Component: Base component class
  * - Decorators: @on, @update, @customElement
  * - Router events and configuration
  * - Web component registration
- * 
+ *
  * Usage:
  * ```ts
  * import { app, Component } from 'apprun';
- * 
+ *
  * // Create components
  * class MyComponent extends Component {
  *   state = // Initial state
@@ -41,7 +41,26 @@ import webComponent, { CustomElementOptions } from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
-export { App, app, Component, View, Action, Update, on, update, EventOptions, ActionOptions, MountOptions, Fragment, safeHTML }
+type OnDecorator = {
+  <T = any>(options?: any): (constructor: Function) => void;
+  <E = string>(events?: E, options?: any): (target: any, key: string) => void;
+};
+
+export {
+  App,
+  app,
+  Component,
+  View,
+  Action,
+  Update,
+  on,
+  update,
+  EventOptions,
+  ActionOptions,
+  MountOptions,
+  Fragment,
+  safeHTML
+}
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions, AppStartOptions };
@@ -99,19 +118,26 @@ if (!app.start) {
     });
   }
 
-  if (typeof window === 'object') {
-    window['Component'] = Component;
-    window['_React'] = window['React'];
-    window['React'] = app;
-    window['on'] = on;
-    window['customElement'] = customElement;
-    window['safeHTML'] = safeHTML;
-  }
+type ComponentType = typeof Component & {
+  <T = any>(options?: any): (constructor: Function) => void;
+};
 
-  app.use_render = (render, mode = 0) =>
-    mode === 0 ?
-      app.render = (el, vdom) => render(vdom, el) : // react style
-      app.render = (el, vdom) => render(el, vdom);  // apprun style
+if (typeof window === 'object') {
+  window['Component'] = Component as ComponentType;
+  window['_React'] = window['React'];
+  window['React'] = app;
+  window['on'] = on as OnDecorator;
+  window['customElement'] = customElement;
+  window['safeHTML'] = safeHTML;
+}
+
+  app.use_render = (render, mode = 0) => {
+    if (mode === 0) {
+      app.render = (el, vdom) => render(vdom, el); // react style
+    } else {
+      app.render = (el, vdom) => render(el, vdom); // apprun style
+    }
+  };
 
   app.use_react = (React, ReactDOM) => {
     app.h = app.createElement = React.createElement;
