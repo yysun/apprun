@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+<body>
+  <script src="../dist/apprun-html.js"></script>
+  <script>
+    const state = {};
+    const view = state => html`
+    <div><button @click=${run(getComic)}>fetch ...</button></div>
+    ${state.loading && html`<div>loading ... </div>`}
+    ${state.comic && html`<img src=${state.comic.img} />`}
+`;
+    async function* getComic() {
+      yield { loading: true };
+      const response = await fetch('https://my-xkcd-api.glitch.me');
+      const comic = await response.json();
+      yield { comic };
+    }
+
+    app.start(document.body, state, view);
+  </script>
+</body>
+</html>

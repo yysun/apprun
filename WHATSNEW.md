@@ -1,4 +1,63 @@
 ## What's New
+> Jan 5, 2025
+
+## AppRun 5.0.0
+
+
+### Support async generator for event handlers
+
+You can now use async generator functions for event handlers. The async generator function can return multiple values. AppRun will render each value in the order they are generated.
+
+```js
+  const state = {};
+  const view = state => html`
+  <div><button @click=${run(getComic)}>fetch ...</button></div>
+  ${state.loading && html`<div>loading ... </div>`}
+  ${state.comic && html`<img src=${state.comic.img} />`}
+`;
+  async function* getComic() {  // async generator function returns loading flag and then the comic object
+    yield { loading: true };
+    const response = await fetch('https://my-xkcd-api.glitch.me');
+    const comic = await response.json();
+    yield { comic };
+  }
+
+  app.start(document.body, state, view);
+```
+
+
+### use lit-html V3 for apprun-html.js
+
+The `apprun-html.js` now uses `lit-html` V3 for rendering the view. The `apprun-html.js` is a standalone version of AppRun that uses `lit-html` for rendering the view without JSX.
+
+```html
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+<body>
+  <script src="https://unpkg.com/dist/apprun-html"></script>
+  <script>
+  const add = (state, delta) => state + delta;
+  const view = state => {
+    return html`<div>
+    <h1>${state}</h1>
+      <button @click=${run(add, -1)}>-1</button>
+      <button @click=${run(add, +1)}>+1</button>
+    </div>`;
+  };
+  app.start(document.body, 0, view);
+  </script>
+</body>
+
+</html>
+```
+
+
+
+
 
 > Aug 12, 2024, V3.33.4
 
