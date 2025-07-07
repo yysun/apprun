@@ -1464,7 +1464,7 @@ triggering an event.</li>
 <span class="p">};</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code></apprun-code></p>
+<apprun-play></apprun-play></p>
 <p>When one of the buttons is clicked, it publishes AppRun event +1 or -1. The event handlers increase or decrease the state and return a new state. The view function creates the virtual DOM using the new state. Finally, AppRun renders the virtual DOM.</p>
 <h2 id="event-scope">Event Scope<a class="headerlink" href="#event-scope" title="Permanent link">&para;</a></h2>
 <p>In AppRun global application mode, events are global events, which means that events are published and handled globally by all modules.</p>
@@ -1493,7 +1493,7 @@ We use tuples for passing event parameters.</p>
 <span class="o">&lt;</span><span class="err">/button&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code></apprun-code></p>
+<apprun-play></apprun-play></p>
 <p>You can see, because there are no events in this case, we don't need the <em>update</em> object anymore.</p>
 <h3 id="lit-html-directive">lit-html Directive<a class="headerlink" href="#lit-html-directive" title="Permanent link">&para;</a></h3>
 <p><a href="https://lit-html.polymer-project.org">lit-html</a> is the DOM rendering technology that lets us write HTML templates using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">string literals</a>.</p>
@@ -1510,7 +1510,7 @@ We use tuples for passing event parameters.</p>
 <span class="p">};</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">add</span><span class="p">});</span>
 </code></pre></div>
-<apprun-code></apprun-code></p>
+<apprun-play></apprun-play></p>
 <p>The <em>run</em> directive will:</p>
 <ul>
 <li>Call the <em>add</em> function</li>
@@ -1537,7 +1537,7 @@ We use tuples for passing event parameters.</p>
 <span class="p">};</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code style="height:300px"></apprun-code></p>
+<apprun-play style="height:300px"></apprun-play></p>
 <h2 id="use-events-for-everything">Use Events for Everything<a class="headerlink" href="#use-events-for-everything" title="Permanent link">&para;</a></h2>
 <p>Web programming is event-driven. All we have to do is to convert DOM events to AppRun events to trigger the AppRun event life cycle.</p>
 <div class="highlight"><pre><span></span><code>DOM events =&gt; AppRun Events =&gt; (current state) =&gt; Update =&gt; (new state) =&gt; View =&gt; (HTML/Virtual DOM) =&gt; Render Web Page
@@ -1581,7 +1581,7 @@ We use tuples for passing event parameters.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2016 - 2024 Yiyi Sun
+      Copyright &copy; 2015 - 2025 Yiyi Sun
     </div>
   
   

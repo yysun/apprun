@@ -1445,7 +1445,7 @@
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">)</span>
 </code></pre></div>
-<apprun-code></apprun-code></p>
+<apprun-play></apprun-play></p>
 <h2 id="two-way-binding">Two-Way Binding<a class="headerlink" href="#two-way-binding" title="Permanent link">&para;</a></h2>
 <p>AppRun $bind directive can update the <em>state</em> properties automatically when used with the <em>input</em> elements and the <em>textarea</em> element. It looks similar to Angular's <em>ngModel</em>, Vue' <em>v-model</em>, and Svelte's <em>bind:value</em> syntax. However, Angular, Vue, and Svelte have invented their own proprietary template language/syntax that you need to learn. AppRun uses the JSX that React also uses.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">&lt;&gt;</span>
@@ -1454,7 +1454,7 @@
 <span class="o">&lt;</span><span class="err">/&gt;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="nx">view</span><span class="p">)</span>
 </code></pre></div>
-<apprun-code code-width="50%"></apprun-code></p>
+<apprun-play code-width="50%"></apprun-play></p>
 <h2 id="reactive-state">Reactive State<a class="headerlink" href="#reactive-state" title="Permanent link">&para;</a></h2>
 <p>The state properties' reactivity is not a problem that the UI frameworks are to solve. But if the UI frameworks wrap or change the original <em>state</em> objects, they have to solve the reactivity problems. E.g., Vue uses the <a href="https://vuejs.org/v2/guide/computed.html"><em>computed object</em></a>. Svelte uses the <a href="https://svelte.dev/examples#reactive-declarations">reactive-declarations</a>, the famous <em>$:</em> sign.</p>
 <h3 id="property-getter">Property Getter<a class="headerlink" href="#property-getter" title="Permanent link">&para;</a></h3>
@@ -1483,7 +1483,7 @@
 <span class="o">&lt;</span><span class="err">/&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code code-width="50%"></apprun-code></p>
+<apprun-play code-width="50%"></apprun-play></p>
 <h3 id="es2015-proxy">ES2015 Proxy<a class="headerlink" href="#es2015-proxy" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> is used to define custom behavior for fundamental operations (e.g., property lookup, assignment, enumeration, function invocation, etc.).</p>
 <blockquote>
@@ -1533,7 +1533,7 @@
 <span class="o">&lt;</span><span class="err">/div&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code style="height:300px" code-width="50%"></apprun-code></p>
+<apprun-play style="height:300px" code-width="50%"></apprun-play></p>
 <p>I like Proxy because it takes the property value calculation logic out of the <em>state</em> objects. As a result, the <em>proxy handler</em> is much easier to test and maintain. On the other hand, the <em>state</em> objects stay lean. I want the <a href="https://apprun.js.org/docs/#/04-architecture"><em>state</em> to act like the <em>data transfer object</em> (DTO)</a> in traditional multi-layered application architecture, where the DTO is an object that carries data between logical and physical layers.</p>
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>AppRun has full reactivity support that provides us the one-way and two-way data binding and the reactive <em>state</em>. Thus, we only need to use the native JavaScript/TypeScript features. Furthermore, AppRun does not require you to learn a new language or a new templating syntax.</p>
@@ -1571,7 +1571,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2016 - 2024 Yiyi Sun
+      Copyright &copy; 2015 - 2025 Yiyi Sun
     </div>
   
   

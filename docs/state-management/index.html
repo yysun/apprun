@@ -1348,7 +1348,7 @@
 <span class="o">&lt;</span><span class="err">/&gt;;</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">);</span>
 </code></pre></div>
-<apprun-code style="height:300px" code-width="50%"></apprun-code></p>
+<apprun-play style="height:300px" code-width="50%"></apprun-play></p>
 <h2 id="state-history">State History<a class="headerlink" href="#state-history" title="Permanent link">&para;</a></h2>
 <p>The state can be stored in state history by AppRun. Once the state history is enabled, we can travel through the history back and forth to get the previous and next state. See the sample below.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
@@ -1401,7 +1401,7 @@
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="nx">update</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">history</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">});</span>
 </code></pre></div>
-<apprun-code style="height:380px" code-width="50%"></apprun-code></p>
+<apprun-play style="height:380px" code-width="50%"></apprun-play></p>
 <p>Although it is effortless to enable the AppRun state history, the caveat must be immutable. Because the AppRun state history stores the references to the states, if we have modified the state directly, each state stored in the state history refers to the same state, which is always the value of the last change. Thus, the time travel back and forward will not work. Therefore, the fundamental concept of using state history is to make the state immutable.</p>
 
 
@@ -1434,7 +1434,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2016 - 2024 Yiyi Sun
+      Copyright &copy; 2015 - 2025 Yiyi Sun
     </div>
   
   
