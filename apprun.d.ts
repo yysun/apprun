@@ -59,6 +59,7 @@ declare module 'apprun' {
     safeHTML(html: string): any[];
     use_render(render, mode?: 0 | 1);
     use_react(React, ReactDOM);
+    public use_prettyLink: () => void;
   }
 
   export class Component<T = any, E = any> {

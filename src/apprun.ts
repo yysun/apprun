@@ -118,18 +118,18 @@ if (!app.start) {
     });
   }
 
-type ComponentType = typeof Component & {
-  <T = any>(options?: any): (constructor: Function) => void;
-};
+  type ComponentType = typeof Component & {
+    <T = any>(options?: any): (constructor: Function) => void;
+  };
 
-if (typeof window === 'object') {
-  window['Component'] = Component as ComponentType;
-  window['_React'] = window['React'];
-  window['React'] = app;
-  window['on'] = on as OnDecorator;
-  window['customElement'] = customElement;
-  window['safeHTML'] = safeHTML;
-}
+  if (typeof window === 'object') {
+    window['Component'] = Component as ComponentType;
+    window['_React'] = window['React'];
+    window['React'] = app;
+    window['on'] = on as OnDecorator;
+    window['customElement'] = customElement;
+    window['safeHTML'] = safeHTML;
+  }
 
   app.use_render = (render, mode = 0) => {
     if (mode === 0) {
@@ -150,5 +150,20 @@ if (typeof window === 'object') {
         el._root.render(vdom);
       }
     }
+  }
+
+  app.use_prettyLink = () => {
+    window.onload = () => app.route(location.pathname);
+    window.addEventListener("popstate", () => app.route(location.pathname));
+    document.body.addEventListener('click', e => {
+      const element = e.target as HTMLElement;
+      const menu = (element.tagName === 'A' ? element : element.closest('a')) as HTMLAnchorElement;
+      if (menu &&
+        menu.origin === location.origin) {
+        e.preventDefault();
+        history.pushState(null, '', menu.pathname);
+        app.route(menu.pathname);
+      }
+    });
   }
 }

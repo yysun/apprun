@@ -41,6 +41,8 @@ export class App {
   public safeHTML: any;
   public use_render: any;
   public use_react: any;
+  public route: any;
+  public use_prettyLink: () => void;
 
   constructor() {
     this._events = {} as { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
