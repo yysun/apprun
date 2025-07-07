@@ -1,3 +1,27 @@
+/**
+ * AppRun Router Implementation
+ *
+ * This file provides URL routing capabilities:
+ * 1. Hash-based routing (#/path)
+ * 2. Path-based routing (/path)
+ * 3. Event-based navigation
+ *
+ * Features:
+ * - Automatic route event firing
+ * - 404 handling via ROUTER_404_EVENT
+ * - History API integration
+ * - Route parameter parsing
+ *
+ * Usage:
+ * ```ts
+ * // Handle routes
+ * app.on('#/home', () => // Show home page);
+ * app.on('#/users/:id', (id) => // Show user profile);
+ *
+ * // Navigate programmatically
+ * app.run('route', '#/home');
+ * ```
+ */
 import app from './app';
 export const ROUTER_EVENT = '//';
 export const ROUTER_404_EVENT = '///';

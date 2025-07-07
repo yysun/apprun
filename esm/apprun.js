@@ -1,3 +1,36 @@
+/**
+ * Main AppRun framework entry point
+ *
+ * This file:
+ * 1. Assembles core AppRun modules into a complete framework
+ * 2. Exports public API and types
+ * 3. Initializes global app instance with:
+ *    - Virtual DOM rendering
+ *    - Component system
+ *    - Router
+ *    - Web component support
+ *
+ * Key exports:
+ * - app: Global event system instance
+ * - Component: Base component class
+ * - Decorators: @on, @update, @customElement
+ * - Router events and configuration
+ * - Web component registration
+ *
+ * Usage:
+ * ```ts
+ * import { app, Component } from 'apprun';
+ *
+ * // Create components
+ * class MyComponent extends Component {
+ *   state = // Initial state
+ *   view = state => // Render view
+ *   update = {
+ *     'event': (state, ...args) => // Handle events
+ *   }
+ * }
+ * ```
+ */
 import app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
@@ -48,9 +81,14 @@ if (!app.start) {
         window['customElement'] = customElement;
         window['safeHTML'] = safeHTML;
     }
-    app.use_render = (render, mode = 0) => mode === 0 ?
-        app.render = (el, vdom) => render(vdom, el) : // react style
-        app.render = (el, vdom) => render(el, vdom); // apprun style
+    app.use_render = (render, mode = 0) => {
+        if (mode === 0) {
+            app.render = (el, vdom) => render(vdom, el); // react style
+        }
+        else {
+            app.render = (el, vdom) => render(el, vdom); // apprun style
+        }
+    };
     app.use_react = (React, ReactDOM) => {
         app.h = app.createElement = React.createElement;
         app.Fragment = React.Fragment;
@@ -64,6 +102,20 @@ if (!app.start) {
                 el._root.render(vdom);
             };
         }
+    };
+    app.use_prettyLink = () => {
+        window.onload = () => app.route(location.pathname);
+        window.addEventListener("popstate", () => app.route(location.pathname));
+        document.body.addEventListener('click', e => {
+            const element = e.target;
+            const menu = (element.tagName === 'A' ? element : element.closest('a'));
+            if (menu &&
+                menu.origin === location.origin) {
+                e.preventDefault();
+                history.pushState(null, '', menu.pathname);
+                app.route(menu.pathname);
+            }
+        });
     };
 }
 //# sourceMappingURL=apprun.js.map

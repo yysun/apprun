@@ -1,3 +1,35 @@
+/**
+ * Web Components Integration
+ *
+ * This file enables using AppRun components as Web Components:
+ * 1. Custom Element Creation
+ *    - Converts AppRun components to custom elements
+ *    - Handles lifecycle (connected, disconnected, etc)
+ *    - Manages shadow DOM and light DOM rendering
+ *
+ * 2. Property/Attribute Sync
+ *    - Observes attribute changes
+ *    - Updates component state automatically
+ *    - Handles camelCase/kebab-case conversion
+ *    - Supports complex property types
+ *
+ * 3. Event Handling
+ *    - Proxies events between component and element
+ *    - Supports both global and local events
+ *    - Maintains proper event bubbling
+ *
+ * Usage:
+ * ```ts
+ * // Register web component
+ * @customElement('my-element')
+ * class MyComponent extends Component {
+ *   // Regular AppRun component code
+ * }
+ *
+ * // Use in HTML
+ * <my-element name="value"></my-element>
+ * ```
+ */
 export const customElement = (componentClass, options = {}) => class CustomElement extends HTMLElement {
     constructor() {
         super();

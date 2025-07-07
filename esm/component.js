@@ -1,3 +1,36 @@
+/**
+ * AppRun Component System Implementation
+ *
+ * This file provides the Component class which is the foundation for:
+ * 1. State Management
+ *    - Maintains component state
+ *    - Handles state updates
+ *    - Supports state history
+ *
+ * 2. View Rendering
+ *    - Renders virtual DOM to real DOM
+ *    - Handles component lifecycle (mounted, rendered, unload)
+ *    - Supports shadow DOM and web components
+ *
+ * 3. Event Handling
+ *    - Local and global event subscription
+ *    - Event handler registration via decorators
+ *    - Action to state updates
+ *
+ * Usage:
+ * ```ts
+ * class MyComponent extends Component {
+ *   state = // Initial state
+ *   view = state => // Return virtual DOM
+ *   update = {
+ *     'event': (state, ...args) => // Return new state
+ *   }
+ * }
+ *
+ * // Mount component
+ * new MyComponent().mount('element-id');
+ * ```
+ */
 import app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
@@ -58,7 +91,32 @@ export class Component {
         this.rendered && this.rendered(this.state);
     }
     setState(state, options = { render: true, history: false }) {
-        if (state instanceof Promise) {
+        const handleAsyncIterator = async (iterator) => {
+            try {
+                while (true) {
+                    const { value, done } = await iterator.next();
+                    if (done)
+                        break;
+                    this.setState(value, options);
+                }
+            }
+            catch (e) {
+                console.error('Error in async iterator:', e);
+            }
+        };
+        const result = state;
+        if (result === null || result === void 0 ? void 0 : result[Symbol.asyncIterator]) {
+            // handleAsyncIterator(result[Symbol.asyncIterator]());
+            this.setState(handleAsyncIterator(result[Symbol.asyncIterator]()), options);
+            return;
+        }
+        else if ((result === null || result === void 0 ? void 0 : result[Symbol.iterator]) && typeof result.next === "function") {
+            for (const value of result) {
+                this.setState(value, options);
+            }
+            return;
+        }
+        else if (state && state instanceof Promise) {
             // Promise will not be saved or rendered
             // state will be saved and rendered when promise is resolved
             Promise.resolve(state).then(v => {

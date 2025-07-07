@@ -142,7 +142,7 @@ AppRun is an MIT-licensed open-source project. Please consider [supporting the p
 
 MIT
 
-Copyright (c) 2015-2024 Yiyi Sun
+Copyright (c) 2015-2025 Yiyi Sun
 
 
 [travis-image]: https://travis-ci.org/yysun/apprun.svg?branch=master

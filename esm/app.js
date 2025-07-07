@@ -1,3 +1,30 @@
+/**
+ * Core AppRun application class and singleton instance
+ *
+ * This file provides:
+ * 1. App class - The core event system implementation with pub/sub capabilities
+ *    - on(): Subscribe to events
+ *    - off(): Unsubscribe from events
+ *    - run(): Publish events synchronously
+ *    - runAsync(): Publish events asynchronously
+ *    - query(): Alias for runAsync
+ *
+ * 2. Default app singleton - Global event bus instance
+ *    - Created once and reused across the application
+ *    - Stored in global scope (window/global)
+ *    - Version tracked to prevent duplicate instances
+ *
+ * Usage:
+ * ```ts
+ * // Subscribe to events
+ * app.on('event-name', (state, ...args) => {
+ *   // Handle event
+ * });
+ *
+ * // Publish events
+ * app.run('event-name', ...args);
+ * ```
+ */
 export class App {
     constructor() {
         this._events = {};
@@ -66,16 +93,17 @@ export class App {
     }
 }
 const AppRunVersions = 'AppRun-3';
-let app;
-const root = (typeof self === 'object' && self.self === self && self) ||
-    (typeof global === 'object' && global.global === global && global);
-if (root['app'] && root['_AppRunVersions']) {
-    app = root['app'];
+let _app;
+const root = (typeof window !== 'undefined' ? window :
+    typeof global !== 'undefined' ? global :
+        typeof self !== 'undefined' ? self : {});
+if (root.app && root._AppRunVersions) {
+    _app = root.app;
 }
 else {
-    app = new App();
-    root['app'] = app;
-    root['_AppRunVersions'] = AppRunVersions;
+    _app = new App();
+    root.app = _app;
+    root._AppRunVersions = AppRunVersions;
 }
-export default app;
+export default _app;
 //# sourceMappingURL=app.js.map
