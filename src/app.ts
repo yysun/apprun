@@ -26,7 +26,7 @@
  * ```
  */
 
-import { EventOptions} from './types'
+import { EventOptions } from './types'
 
 export class App {
 
@@ -42,7 +42,8 @@ export class App {
   public use_render: any;
   public use_react: any;
   public route: any;
-  public use_prettyLink: () => void;
+
+  public version: string;
 
   constructor() {
     this._events = {} as { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
@@ -124,11 +125,11 @@ export class App {
   }
 }
 
-const AppRunVersions = 'AppRun-3';
+const AppRunVersions = 'AppRun-3.3.11';
 let _app: App;
 const root = (typeof window !== 'undefined' ? window :
-             typeof global !== 'undefined' ? global :
-             typeof self !== 'undefined' ? self : {}) as any;
+  typeof global !== 'undefined' ? global :
+    typeof self !== 'undefined' ? self : {}) as any;
 
 if (root.app && root._AppRunVersions) {
   _app = root.app;

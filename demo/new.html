@@ -1,5 +1,90 @@
 <h2>What&#39;s New</h2>
 <blockquote>
+<p>July 12, 2025, V3.5.0</p>
+</blockquote>
+<h3>Support auto use router for pretty links</h3>
+<p>AppRun now supports pretty links. </p>
+<pre><code class="language-html">&lt;a href=&quot;/about&quot;&gt;About&lt;/a&gt;
+</code></pre>
+<p>You can subscribe components to events like <code>&#39;/about&#39;</code>.</p>
+<pre><code class="language-js">// Routing (component event)
+class Home extends Component {
+  view = () =&gt; &lt;div&gt;Home&lt;/div&gt;;
+  update = {&#39;/, /home&#39;: state =&gt; state };
+}
+
+class Contact extends Component {
+  view = () =&gt; &lt;div&gt;Contact&lt;/div&gt;;
+  update = {&#39;/contact&#39;: state =&gt; state };
+}
+
+class About extends Component {
+  view = () =&gt; &lt;div&gt;About&lt;/div&gt;;
+  update = {&#39;/about&#39;: state =&gt; state };
+}
+
+const App = () =&gt; &lt;&gt;
+  &lt;div id=&quot;menus&quot;&gt;
+    &lt;a href=&quot;/home&quot;&gt;Home&lt;/a&gt;{&#39; | &#39;}
+    &lt;a href=&quot;/contact&quot;&gt;Contact&lt;/a&gt;{&#39; | &#39;}
+    &lt;a href=&quot;/about&quot;&gt;About&lt;/a&gt;&lt;/div&gt;
+  &lt;div id=&quot;pages&quot;&gt;&lt;/div&gt;
+&lt;/&gt;
+
+app.render(document.body, &lt;App /&gt;);
+[About, Contact, Home].map(C =&gt; new C().start(&#39;pages&#39;));
+</code></pre>
+<p><apprun-code></apprun-code></p>
+<p>AppRun will catch the <code>&#39;/about&#39;</code> route as event and render the component that is subscribed to it.</p>
+<p>If you have components subscribe to &#39;#&#39;, or &#39;#/&#39;, Apprun will fallback to the hash-based routing.</p>
+<blockquote>
+<p>July 6, 2025, V3.3.10</p>
+</blockquote>
+<h3>Support async generator for event handlers</h3>
+<p>You can now use async generator functions for event handlers. The async generator function can return multiple values. AppRun will render each value in the order they are generated.</p>
+<pre><code class="language-js">  const state = {};
+  const view = state =&gt; html`
+  &lt;div&gt;&lt;button @click=${run(getComic)}&gt;fetch ...&lt;/button&gt;&lt;/div&gt;
+  ${state.loading &amp;&amp; html`&lt;div&gt;loading ... &lt;/div&gt;`}
+  ${state.comic &amp;&amp; html`&lt;img src=${state.comic.img} /&gt;`}
+`;
+  async function* getComic() {  // async generator function returns loading flag and then the comic object
+    yield { loading: true };
+    const response = await fetch(&#39;https://my-xkcd-api.glitch.me&#39;);
+    const comic = await response.json();
+    yield { comic };
+  }
+
+  app.start(document.body, state, view);
+</code></pre>
+<p><apprun-code></apprun-code></p>
+<h3>use lit-html V3 for apprun-html.js</h3>
+<p>The <code>apprun-html.js</code> now uses <code>lit-html</code> V3 for rendering the view. The <code>apprun-html.js</code> is a standalone version of AppRun that uses <code>lit-html</code> for rendering the view without JSX.</p>
+<pre><code class="language-html">&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Counter&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src=&quot;https://unpkg.com/dist/apprun-html&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+  const add = (state, delta) =&gt; state + delta;
+  const view = state =&gt; {
+    return html`&lt;div&gt;
+    &lt;h1&gt;${state}&lt;/h1&gt;
+      &lt;button @click=${run(add, -1)}&gt;-1&lt;/button&gt;
+      &lt;button @click=${run(add, +1)}&gt;+1&lt;/button&gt;
+    &lt;/div&gt;`;
+  };
+  app.start(document.body, 0, view);
+  &lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+<p><apprun-code></apprun-code></p>
+<blockquote>
 <p>Aug 12, 2024, V3.33.4</p>
 </blockquote>
 <h3>Add app.use_render and app.use_react function</h3>

@@ -29,8 +29,9 @@ export type Route = (url: string, ...args: any[]) => any;
 
 export const ROUTER_EVENT: string = '//';
 export const ROUTER_404_EVENT: string = '///';
-
 export const route: Route = (url: string) => {
+  if (app['lastUrl'] === url) return; // Prevent duplicate routing
+  app['lastUrl'] = url;
   if (!url) url = '#';
   if (url.startsWith('#')) {
     const [name, ...rest] = url.split('/');

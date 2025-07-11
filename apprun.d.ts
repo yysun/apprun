@@ -59,7 +59,7 @@ declare module 'apprun' {
     safeHTML(html: string): any[];
     use_render(render, mode?: 0 | 1);
     use_react(React, ReactDOM);
-    public use_prettyLink: () => void;
+    version: string;
   }
 
   export class Component<T = any, E = any> {
@@ -93,7 +93,7 @@ declare module 'apprun' {
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
   export const safeHTML;
-  export function Fragment (props, ...children): [];
+  export function Fragment(props, ...children): [];
 }
 
 declare namespace JSX {

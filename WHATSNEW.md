@@ -1,8 +1,54 @@
 ## What's New
-> Jan 5, 2025
 
-## AppRun 5.0.0
+> July 12, 2025, V3.5.0
 
+### Support auto use router for pretty links
+
+AppRun now supports pretty links. 
+
+```html
+<a href="/about">About</a>
+```
+
+You can subscribe components to events like `'/about'`.
+
+```js
+// Routing (component event)
+class Home extends Component {
+  view = () => <div>Home</div>;
+  update = {'/, /home': state => state };
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+  update = {'/contact': state => state };
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+  update = {'/about': state => state };
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="/home">Home</a>{' | '}
+    <a href="/contact">Contact</a>{' | '}
+    <a href="/about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[About, Contact, Home].map(C => new C().start('pages'));
+```
+<apprun-code></apprun-code>
+
+
+
+AppRun will catch the `'/about'` route as event and render the component that is subscribed to it.
+
+If you have components subscribe to '#', or '#/', Apprun will fallback to the hash-based routing.
+
+> July 6, 2025, V3.3.10
 
 ### Support async generator for event handlers
 
@@ -24,6 +70,7 @@ You can now use async generator functions for event handlers. The async generato
 
   app.start(document.body, state, view);
 ```
+<apprun-code></apprun-code>
 
 
 ### use lit-html V3 for apprun-html.js
@@ -54,7 +101,7 @@ The `apprun-html.js` now uses `lit-html` V3 for rendering the view. The `apprun-
 
 </html>
 ```
-
+<apprun-code></apprun-code>
 
 
 
