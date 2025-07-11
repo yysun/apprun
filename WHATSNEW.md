@@ -1,6 +1,6 @@
 ## What's New
 
-> July 12, 2025, V3.5.0
+> July 12, 2025, V3.35.0
 
 ### Support auto use router for pretty links
 
@@ -48,7 +48,7 @@ AppRun will catch the `'/about'` route as event and render the component that is
 
 If you have components subscribe to '#', or '#/', Apprun will fallback to the hash-based routing.
 
-> July 6, 2025, V3.3.10
+> July 6, 2025, V3.33.10
 
 ### Support async generator for event handlers
 

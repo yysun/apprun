@@ -26,6 +26,9 @@ import app from './app';
 export const ROUTER_EVENT = '//';
 export const ROUTER_404_EVENT = '///';
 export const route = (url) => {
+    if (app['lastUrl'] === url)
+        return; // Prevent duplicate routing
+    app['lastUrl'] = url;
     if (!url)
         url = '#';
     if (url.startsWith('#')) {

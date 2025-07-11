@@ -92,7 +92,7 @@ export class App {
         return subscribers;
     }
 }
-const AppRunVersions = 'AppRun-3';
+const AppRunVersions = 'AppRun-3.3.11';
 let _app;
 const root = (typeof window !== 'undefined' ? window :
     typeof global !== 'undefined' ? global :

@@ -43,6 +43,7 @@ export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };
 export default app;
 if (!app.start) {
+    app.version = '3.35.0';
     app.h = app.createElement = createElement;
     app.render = render;
     app.Fragment = Fragment;
@@ -59,17 +60,34 @@ if (!app.start) {
         return component;
     };
     const NOOP = _ => { };
-    app.on('$', NOOP);
+    // app.on('$', NOOP);
     app.on('debug', _ => NOOP);
     app.on(ROUTER_EVENT, NOOP);
-    app.on('#', NOOP);
-    app['route'] = route;
+    app.on(ROUTER_404_EVENT, NOOP);
+    app.route = route;
     app.on('route', url => app['route'] && app['route'](url));
     if (typeof document === 'object') {
         document.addEventListener("DOMContentLoaded", () => {
-            if (app['route'] === route) {
-                window.onpopstate = () => route(location.hash);
-                document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || route(location.hash);
+            const init_load = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
+            const use_hash = app.find('#') || app.find('#/') || false;
+            // console.log(`AppRun ${app.version} started with ${use_hash ? 'hash' : 'path'} routing. Initial load: ${init_load ? 'disabled' : 'enabled'}.`);
+            window.addEventListener('hashchange', () => route(location.hash));
+            window.addEventListener('popstate', () => route(location.pathname));
+            if (use_hash) {
+                init_load && route(location.hash);
+            }
+            else {
+                init_load && route(location.pathname);
+                document.body.addEventListener('click', e => {
+                    const element = e.target;
+                    const menu = (element.tagName === 'A' ? element : element.closest('a'));
+                    if (menu &&
+                        menu.origin === location.origin) {
+                        e.preventDefault();
+                        history.pushState(null, '', menu.pathname);
+                        route(menu.pathname);
+                    }
+                });
             }
         });
     }
@@ -102,20 +120,6 @@ if (!app.start) {
                 el._root.render(vdom);
             };
         }
-    };
-    app.use_prettyLink = () => {
-        window.onload = () => app.route(location.pathname);
-        window.addEventListener("popstate", () => app.route(location.pathname));
-        document.body.addEventListener('click', e => {
-            const element = e.target;
-            const menu = (element.tagName === 'A' ? element : element.closest('a'));
-            if (menu &&
-                menu.origin === location.origin) {
-                e.preventDefault();
-                history.pushState(null, '', menu.pathname);
-                app.route(menu.pathname);
-            }
-        });
     };
 }
 //# sourceMappingURL=apprun.js.map

@@ -86,7 +86,7 @@ export interface IApp {
 
 if (!app.start) {
 
-  app.version = '3.5.0';
+  app.version = '3.35.0';
 
   app.h = app.createElement = createElement;
   app.render = render;
