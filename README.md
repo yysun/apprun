@@ -1,5 +1,10 @@
 # AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
+## News
+
+We just released [AppRun 3.36.0](https://github.com/yysun/apprun/releases/tag/v3.36.0). See [whats new](WHATSNEW.md) for details.
+
+In this release we had a code review by using Copilot and Claude Sonnet 4, which found and fixed minor bugs and edge cases in virtual DOM handling, as well as bugs in router initialization logic. Also improved overall code quality and stability.
 
 ## Introduction
 

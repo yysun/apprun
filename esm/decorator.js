@@ -4,30 +4,47 @@ import webComponent from './web-component';
  *
  * This file provides decorators that enable:
  * 1. Event Handler Registration
- *    - @on(): Subscribe to events with options
- *    - @update(): Define state updates with metadata
+ *    - @on(): Subscribe to events with options (global, once, delay)
+ *    - @update(): Define state updates with metadata and options
+ *    - Supports method and class decoration patterns
  *
  * 2. Web Component Integration
  *    - @customElement(): Register as custom element with options
  *    - Handles shadow DOM and attribute observation
+ *    - Automatic lifecycle management for web components
  *
  * 3. Metadata Management
  *    - Custom Reflect implementation for decorator metadata
- *    - Stores event handler and update metadata
+ *    - Stores event handler and update metadata for runtime use
  *    - Supports runtime reflection for dynamic behavior
+ *    - Metadata keys for event bindings and updates
+ *
+ * Features:
+ * - Event handler decoration with options
+ * - State update method decoration
+ * - Web component registration
+ * - Metadata-driven event binding
+ * - Flexible decorator patterns
+ * - Runtime metadata access
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Enhanced decorator typing for better IDE support
+ * - Improved metadata key management
+ * - Better type inference for decorated methods
  *
  * Usage:
  * ```ts
  * @customElement('my-element')
  * class MyComponent extends Component {
- *   @on('event')
+ *   @on('event', { global: true })
  *   handler(state, ...args) {
  *     // Handle event
  *   }
  *
- *   @update('event')
+ *   @update('event', { render: true })
  *   updater(state, ...args) {
  *     // Update state
+ *     return newState;
  *   }
  * }
  * ```

@@ -3,19 +3,38 @@
  *
  * This file provides the Component class which is the foundation for:
  * 1. State Management
- *    - Maintains component state
- *    - Handles state updates
- *    - Supports state history
+ *    - Maintains component state with history support
+ *    - Handles state updates with async/iterator support
+ *    - Supports state history navigation (prev/next)
+ *    - Promise and async iterator state handling
  *
  * 2. View Rendering
- *    - Renders virtual DOM to real DOM
+ *    - Renders virtual DOM to real DOM with directives
  *    - Handles component lifecycle (mounted, rendered, unload)
  *    - Supports shadow DOM and web components
+ *    - DOM change tracking with MutationObserver
+ *    - View transition API support
  *
  * 3. Event Handling
- *    - Local and global event subscription
+ *    - Local and global event subscription management
  *    - Event handler registration via decorators
- *    - Action to state updates
+ *    - Action to state updates with error handling
+ *    - Support for event options (delay, once, global)
+ *
+ * Features:
+ * - Component caching for debugging
+ * - Element tracking for cleanup
+ * - History navigation support
+ * - Global vs local event routing
+ * - Async state handling
+ * - Memory leak prevention
+ * - Component unmounting with cleanup
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Enhanced element access with null checks and warnings
+ * - Improved action validation and error handling
+ * - Better error reporting in component actions
+ * - Safer DOM element queries with fallback warnings
  *
  * Usage:
  * ```ts
@@ -34,6 +53,7 @@
 import app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
+import { safeQuerySelector, safeGetElementById } from './type-utils';
 const componentCache = new Map();
 if (!app.find('get-components'))
     app.on('get-components', o => o.components = componentCache);
@@ -53,9 +73,11 @@ export class Component {
         if (typeof document !== 'object')
             return;
         const el = (typeof this.element === 'string' && this.element) ?
-            document.getElementById(this.element) || document.querySelector(this.element) : this.element;
-        if (!el)
+            safeGetElementById(this.element) || safeQuerySelector(this.element) : this.element;
+        if (!el) {
+            console.warn(`Component element not found: ${this.element}`);
             return;
+        }
         const tracking_attr = '_c';
         if (!this.unload) {
             el.removeAttribute && el.removeAttribute(tracking_attr);
@@ -220,8 +242,10 @@ export class Component {
             name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
     }
     add_action(name, action, options = {}) {
-        if (!action || typeof action !== 'function')
+        if (!action || typeof action !== 'function') {
+            console.warn(`Component action for '${name}' is not a valid function:`, action);
             return;
+        }
         if (options.global)
             this._global_events.push(name);
         this.on(name, (...p) => {
@@ -232,16 +256,29 @@ export class Component {
                 current_state: this.state,
                 options
             });
-            const newState = action(this.state, ...p);
-            app['debug'] && app.run('debug', {
-                component: this,
-                _: '<',
-                event: name, p,
-                newState,
-                state: this.state,
-                options
-            });
-            this.setState(newState, options);
+            try {
+                const newState = action(this.state, ...p);
+                app['debug'] && app.run('debug', {
+                    component: this,
+                    _: '<',
+                    event: name, p,
+                    newState,
+                    state: this.state,
+                    options
+                });
+                this.setState(newState, options);
+            }
+            catch (error) {
+                console.error(`Error in component action '${name}':`, error);
+                app['debug'] && app.run('debug', {
+                    component: this,
+                    _: '!',
+                    event: name, p,
+                    error,
+                    state: this.state,
+                    options
+                });
+            }
         }, options);
     }
     add_actions() {

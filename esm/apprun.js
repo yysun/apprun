@@ -7,8 +7,9 @@
  * 3. Initializes global app instance with:
  *    - Virtual DOM rendering
  *    - Component system
- *    - Router
+ *    - Router with improved null safety
  *    - Web component support
+ *    - Type-safe React integration
  *
  * Key exports:
  * - app: Global event system instance
@@ -16,6 +17,22 @@
  * - Decorators: @on, @update, @customElement
  * - Router events and configuration
  * - Web component registration
+ *
+ * Features:
+ * - Event-driven architecture with pub/sub pattern
+ * - Virtual DOM rendering with multiple renderer support
+ * - Component lifecycle management
+ * - Client-side routing with hash/path support
+ * - Web Components integration
+ * - React compatibility layer
+ * - TypeScript support with strong typing
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Added null checks for DOM event targets
+ * - Improved global window object assignments with proper typing
+ * - Enhanced React integration parameter validation
+ * - Better error handling for invalid event handlers
+ * - Safer element access with proper type assertions
  *
  * Usage:
  * ```ts
@@ -37,13 +54,14 @@ import { Component } from './component';
 import { on, update, customElement } from './decorator';
 import webComponent from './web-component';
 import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import { APPRUN_VERSION } from './version';
 export { App, app, Component, on, update, Fragment, safeHTML };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };
 export default app;
 if (!app.start) {
-    app.version = '3.35.0';
+    app.version = APPRUN_VERSION;
     app.h = app.createElement = createElement;
     app.render = render;
     app.Fragment = Fragment;
@@ -59,6 +77,10 @@ if (!app.start) {
         component.start(element, opts);
         return component;
     };
+    app.once = app.once || ((name, fn, options = {}) => {
+        app.on(name, fn, Object.assign(Object.assign({}, options), { once: true }));
+    });
+    app.query = app.query || app.runAsync;
     const NOOP = _ => { };
     // app.on('$', NOOP);
     app.on('debug', _ => NOOP);
@@ -68,21 +90,24 @@ if (!app.start) {
     app.on('route', url => app['route'] && app['route'](url));
     if (typeof document === 'object') {
         document.addEventListener("DOMContentLoaded", () => {
-            const init_load = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
+            const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
             const use_hash = app.find('#') || app.find('#/') || false;
             // console.log(`AppRun ${app.version} started with ${use_hash ? 'hash' : 'path'} routing. Initial load: ${init_load ? 'disabled' : 'enabled'}.`);
             window.addEventListener('hashchange', () => route(location.hash));
             window.addEventListener('popstate', () => route(location.pathname));
             if (use_hash) {
-                init_load && route(location.hash);
+                !no_init_route && route(location.hash);
             }
             else {
-                init_load && route(location.pathname);
+                !no_init_route && route(location.pathname);
                 document.body.addEventListener('click', e => {
                     const element = e.target;
+                    if (!element)
+                        return;
                     const menu = (element.tagName === 'A' ? element : element.closest('a'));
                     if (menu &&
-                        menu.origin === location.origin) {
+                        menu.origin === location.origin &&
+                        menu.pathname) {
                         e.preventDefault();
                         history.pushState(null, '', menu.pathname);
                         route(menu.pathname);
@@ -92,12 +117,13 @@ if (!app.start) {
         });
     }
     if (typeof window === 'object') {
-        window['Component'] = Component;
-        window['_React'] = window['React'];
-        window['React'] = app;
-        window['on'] = on;
-        window['customElement'] = customElement;
-        window['safeHTML'] = safeHTML;
+        const globalWindow = window;
+        globalWindow['Component'] = Component;
+        globalWindow['_React'] = globalWindow['React'];
+        globalWindow['React'] = app;
+        globalWindow['on'] = on;
+        globalWindow['customElement'] = customElement;
+        globalWindow['safeHTML'] = safeHTML;
     }
     app.use_render = (render, mode = 0) => {
         if (mode === 0) {
@@ -108,17 +134,41 @@ if (!app.start) {
         }
     };
     app.use_react = (React, ReactDOM) => {
+        if (!React || !ReactDOM) {
+            console.error('AppRun use_react: React and ReactDOM parameters are required');
+            return;
+        }
+        if (typeof React.createElement !== 'function') {
+            console.error('AppRun use_react: Invalid React object - createElement method not found');
+            return;
+        }
+        if (!React.Fragment) {
+            console.error('AppRun use_react: Invalid React object - Fragment not found');
+            return;
+        }
         app.h = app.createElement = React.createElement;
         app.Fragment = React.Fragment;
-        app.render = (el, vdom) => ReactDOM.render(vdom, el);
+        // React 18+ uses createRoot API
         if (React.version && React.version.startsWith('18')) {
+            if (!ReactDOM.createRoot || typeof ReactDOM.createRoot !== 'function') {
+                console.error('AppRun use_react: ReactDOM.createRoot not found in React 18+');
+                return;
+            }
             app.render = (el, vdom) => {
-                if (!el || !vdom)
+                if (!el || vdom === undefined)
                     return;
                 if (!el._root)
                     el._root = ReactDOM.createRoot(el);
                 el._root.render(vdom);
             };
+        }
+        else {
+            // Legacy React versions
+            if (!ReactDOM.render || typeof ReactDOM.render !== 'function') {
+                console.error('AppRun use_react: ReactDOM.render not found in legacy React');
+                return;
+            }
+            app.render = (el, vdom) => ReactDOM.render(vdom, el);
         }
     };
 }

@@ -36,7 +36,7 @@ export function createElement(tag, props, ...children) {
         throw new Error(`Unknown tag in vdom ${tag}`);
 }
 ;
-const keyCache = new WeakMap();
+const keyCache = {};
 export const updateElement = (element, nodes, component = {}) => {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
@@ -68,74 +68,93 @@ function same(el, node) {
     return key1.toUpperCase() === key2.toUpperCase();
 }
 function update(element, node, isSvg) {
-    if (node['_op'] === 3)
-        return;
     // console.assert(!!element);
     isSvg = isSvg || node.tag === "svg";
     if (!same(element, node)) {
         element.parentNode.replaceChild(create(node, isSvg), element);
         return;
     }
-    !(node['_op'] & 2) && updateChildren(element, node.children, isSvg);
-    !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
+    updateChildren(element, node.children, isSvg);
+    updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
-    var _a, _b;
+    var _a;
     const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
     const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
+    // Handle key-based reordering first if any children have keys
+    const hasKeysInNewChildren = children === null || children === void 0 ? void 0 : children.some(child => child && typeof child === 'object' && child.props && child.props.key !== undefined);
+    if (hasKeysInNewChildren) {
+        // Create a map of existing keyed elements
+        const existingKeyedElements = new Map();
+        for (let i = 0; i < old_len; i++) {
+            const el = element.childNodes[i];
+            if (el && el.key) {
+                existingKeyedElements.set(el.key, el);
+            }
+        }
+        // Build new DOM structure
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < new_len; i++) {
+            const child = children[i];
+            if (child == null)
+                continue;
+            const key = child.props && child.props['key'];
+            if (key && existingKeyedElements.has(key)) {
+                // Reuse existing element
+                const existingEl = existingKeyedElements.get(key);
+                update(existingEl, child, isSvg);
+                fragment.appendChild(existingEl);
+                existingKeyedElements.delete(key); // Mark as used
+            }
+            else {
+                // Create new element
+                fragment.appendChild(create(child, isSvg));
+            }
+        }
+        // Clear current children and append new structure
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+        element.appendChild(fragment);
+        return;
+    }
+    // Original non-keyed logic
     const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const child = children[i];
-        if (child['_op'] === 3)
+        if (child == null)
             continue;
         const el = element.childNodes[i];
+        if (!el)
+            continue; // Safety check for undefined childNodes
         if (typeof child === 'string') {
-            if (el.textContent !== child) {
-                if (el.nodeType === 3) {
+            if (el.nodeType === 3) {
+                if (el.nodeValue !== child) {
                     el.nodeValue = child;
-                }
-                else {
-                    element.replaceChild(createText(child), el);
-                }
-            }
-        }
-        else if (child instanceof HTMLElement || child instanceof SVGElement) {
-            element.insertBefore(child, el);
-        }
-        else {
-            const key = child.props && child.props['key'];
-            if (key) {
-                if (el.key === key) {
-                    update(element.childNodes[i], child, isSvg);
-                }
-                else {
-                    // console.log(el.key, key);
-                    const old = keyCache[key];
-                    if (old) {
-                        const temp = old.nextSibling;
-                        element.insertBefore(old, el);
-                        temp ? element.insertBefore(el, temp) : element.appendChild(el);
-                        update(element.childNodes[i], child, isSvg);
-                    }
-                    else {
-                        element.replaceChild(create(child, isSvg), el);
-                    }
                 }
             }
             else {
-                update(element.childNodes[i], child, isSvg);
+                element.replaceChild(createText(child), el);
             }
         }
+        else if (child instanceof HTMLElement || child instanceof SVGElement) {
+            element.replaceChild(child, el);
+        }
+        else if (child && typeof child === 'object') {
+            update(element.childNodes[i], child, isSvg);
+        }
     }
-    let n = ((_b = element.childNodes) === null || _b === void 0 ? void 0 : _b.length) || 0;
-    while (n > len) {
+    // Remove extra old nodes
+    while (element.childNodes.length > len) {
         element.removeChild(element.lastChild);
-        n--;
     }
     if (new_len > len) {
         const d = document.createDocumentFragment();
         for (let i = len; i < children.length; i++) {
-            d.appendChild(create(children[i], isSvg));
+            const child = children[i];
+            if (child != null) {
+                d.appendChild(create(child, isSvg));
+            }
         }
         element.appendChild(d);
     }
@@ -161,8 +180,10 @@ function create(node, isSvg) {
         return node;
     if (typeof node === "string")
         return createText(node);
-    if (!node.tag || (typeof node.tag === 'function'))
-        return createText(JSON.stringify(node));
+    // Type guard for VNode objects - handle invalid node types gracefully
+    if (!node || typeof node !== 'object' || !node.tag || (typeof node.tag === 'function')) {
+        return createText(typeof node === 'object' ? JSON.stringify(node) : String(node !== null && node !== void 0 ? node : ''));
+    }
     isSvg = isSvg || node.tag === "svg";
     const element = isSvg
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
@@ -244,8 +265,10 @@ export function updateProps(element, props, isSvg) {
         else if (element[name] !== value) {
             element[name] = value;
         }
-        if (name === 'key' && value)
+        if (name === 'key' && value !== undefined) {
             keyCache[value] = element;
+            element.key = value; // Set key property on the DOM element
+        }
     }
     if (props && typeof props['ref'] === 'function') {
         window.requestAnimationFrame(() => props['ref'](element));

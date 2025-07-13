@@ -1,6 +1,14 @@
 ## What's New
 
-> July 12, 2025, V3.35.0
+> July 12, 2025, V3.36.0
+
+Code review by using Copilot and Claude Sonnet 4
+  - Enhanced type definitions (apprun.d.ts) for better TypeScript support
+  - Fixed minor bugs and edge cases in virtual DOM handling
+  - Fixed bugs in router initialization logic
+
+> July 11, 2025, V3.35.0
+
 
 ### Support auto use router for pretty links
 

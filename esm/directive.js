@@ -2,21 +2,37 @@
  * Component Directives Implementation
  *
  * This file provides built-in directives for components:
- * 1. Event Binding
+ * 1. Event Binding ($on directives)
  *    - $on: Bind DOM events to component events
  *    - Supports event delegation and parameters
  *    - Handles function, string, and array event handlers
+ *    - Type-safe event target handling
  *
- * 2. Two-way Data Binding
+ * 2. Two-way Data Binding ($bind directive)
  *    - $bind: Sync form elements with component state
- *    - Handles input types: text, checkbox, radio, select
- *    - Automatic value type conversion
+ *    - Handles input types: text, checkbox, radio, number, range
+ *    - Supports select (single/multiple) and textarea elements
+ *    - Automatic value type conversion for numbers
  *    - Support for complex property paths
  *
  * 3. Custom Directives
- *    - Extensible directive system
+ *    - Extensible directive system via '$' events
  *    - Processes virtual DOM during rendering
  *    - Supports custom attribute directives
+ *
+ * Features:
+ * - Automatic state synchronization
+ * - Type conversion for form inputs
+ * - Event delegation support
+ * - Multiple event handler formats
+ * - Nested property binding
+ * - Custom directive extensibility
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Added null checks for event targets before type assertions
+ * - Proper typing for different HTML element types
+ * - Enhanced error handling for invalid event targets
+ * - Safer DOM element property access
  *
  * Usage:
  * ```tsx
@@ -27,9 +43,13 @@
  * // Two-way binding
  * <input $bind="state.property" />
  * <select $bind="selected">...</select>
+ *
+ * // Array handlers
+ * <button $onclick={['handler', param1, param2]}>Click</button>
  * ```
  */
 import app from './app';
+import { safeEventTarget } from './type-utils';
 const getStateValue = (component, name) => {
     return (name ? component['state'][name] : component['state']) || '';
 };
@@ -73,37 +93,68 @@ const apply_directive = (key, props, tag, component) => {
             switch (type) {
                 case 'checkbox':
                     props['checked'] = getStateValue(component, name);
-                    props['onclick'] = e => setStateValue(component, name || e.target.name, e.target.checked);
+                    props['onclick'] = e => {
+                        const target = safeEventTarget(e);
+                        if (target) {
+                            setStateValue(component, name || target.name, target.checked);
+                        }
+                    };
                     break;
                 case 'radio':
                     props['checked'] = getStateValue(component, name) === props['value'];
-                    props['onclick'] = e => setStateValue(component, name || e.target.name, e.target.value);
+                    props['onclick'] = e => {
+                        const target = safeEventTarget(e);
+                        if (target) {
+                            setStateValue(component, name || target.name, target.value);
+                        }
+                    };
                     break;
                 case 'number':
                 case 'range':
                     props['value'] = getStateValue(component, name);
-                    props['oninput'] = e => setStateValue(component, name || e.target.name, Number(e.target.value));
+                    props['oninput'] = e => {
+                        const target = safeEventTarget(e);
+                        if (target) {
+                            setStateValue(component, name || target.name, Number(target.value));
+                        }
+                    };
                     break;
                 default:
                     props['value'] = getStateValue(component, name);
-                    props['oninput'] = e => setStateValue(component, name || e.target.name, e.target.value);
+                    props['oninput'] = e => {
+                        const target = safeEventTarget(e);
+                        if (target) {
+                            setStateValue(component, name || target.name, target.value);
+                        }
+                    };
             }
         }
         else if (tag === 'select') {
             props['value'] = getStateValue(component, name);
             props['onchange'] = e => {
-                if (!e.target.multiple) { // multiple selection use $bind on option
-                    setStateValue(component, name || e.target.name, e.target.value);
+                const target = safeEventTarget(e);
+                if (target && !target.multiple) { // multiple selection use $bind on option
+                    setStateValue(component, name || target.name, target.value);
                 }
             };
         }
         else if (tag === 'option') {
             props['selected'] = getStateValue(component, name);
-            props['onclick'] = e => setStateValue(component, name || e.target.name, e.target.selected);
+            props['onclick'] = e => {
+                const target = safeEventTarget(e);
+                if (target) {
+                    setStateValue(component, name || target.name, target.selected);
+                }
+            };
         }
         else if (tag === 'textarea') {
             props['innerHTML'] = getStateValue(component, name);
-            props['oninput'] = e => setStateValue(component, name || e.target.name, e.target.value);
+            props['oninput'] = e => {
+                const target = safeEventTarget(e);
+                if (target) {
+                    setStateValue(component, name || target.name, target.value);
+                }
+            };
         }
     }
     else {
