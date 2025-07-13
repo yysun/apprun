@@ -304,20 +304,141 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
   return element
 }
 
+/**
+ * Comprehensive attribute normalization map for React/HTML compatibility
+ * Maps React-style attributes to their HTML equivalents
+ */
+const ATTRIBUTE_NORMALIZATION_MAP: { [key: string]: string } = {
+  // React → HTML attribute mapping
+  'className': 'class',
+  'htmlFor': 'for',
+  'acceptCharset': 'accept-charset',
+  'accessKey': 'accesskey',
+  'allowFullScreen': 'allowfullscreen',
+  'autoComplete': 'autocomplete',
+  'autoFocus': 'autofocus',
+  'autoPlay': 'autoplay',
+  'cellPadding': 'cellpadding',
+  'cellSpacing': 'cellspacing',
+  'charSet': 'charset',
+  'classID': 'classid',
+  'colSpan': 'colspan',
+  'contentEditable': 'contenteditable',
+  'contextMenu': 'contextmenu',
+  'crossOrigin': 'crossorigin',
+  'dateTime': 'datetime',
+  'encType': 'enctype',
+  'formAction': 'formaction',
+  'formEncType': 'formenctype',
+  'formMethod': 'formmethod',
+  'formNoValidate': 'formnovalidate',
+  'formTarget': 'formtarget',
+  'frameBorder': 'frameborder',
+  'hrefLang': 'hreflang',
+  'inputMode': 'inputmode',
+  'itemID': 'itemid',
+  'itemProp': 'itemprop',
+  'itemRef': 'itemref',
+  'itemScope': 'itemscope',
+  'itemType': 'itemtype',
+  'keyParams': 'keyparams',
+  'keyType': 'keytype',
+  'marginHeight': 'marginheight',
+  'marginWidth': 'marginwidth',
+  'maxLength': 'maxlength',
+  'mediaGroup': 'mediagroup',
+  'minLength': 'minlength',
+  'noValidate': 'novalidate',
+  'radioGroup': 'radiogroup',
+  'readOnly': 'readonly',
+  'rowSpan': 'rowspan',
+  'spellCheck': 'spellcheck',
+  'srcDoc': 'srcdoc',
+  'srcLang': 'srclang',
+  'srcSet': 'srcset',
+  'tabIndex': 'tabindex',
+  'useMap': 'usemap'
+};
+
+/**
+ * Normalize attribute name to HTML standard
+ * Handles React-style camelCase to HTML kebab-case conversion
+ */
+function normalizeAttributeName(name: string): string {
+  // Check explicit mapping first
+  if (ATTRIBUTE_NORMALIZATION_MAP[name]) {
+    return ATTRIBUTE_NORMALIZATION_MAP[name];
+  }
+
+  // Handle data- and aria- attributes (already lowercase in most cases)
+  if (name.startsWith('data-') || name.startsWith('aria-')) {
+    return name.toLowerCase();
+  }
+
+  // Return as-is for other attributes (style, class, id, etc.)
+  return name;
+}
+
+/**
+ * Categorize attributes for proper handling
+ * Returns the appropriate handler type for the given attribute
+ */
+function categorizeAttribute(name: string, isSvg: boolean): 'property' | 'attribute' | 'boolean-attribute' {
+  // Properties that should be set as DOM properties (not attributes)
+  // Note: Form control properties like checked, disabled, selected are handled as boolean attributes
+  const DOM_PROPERTIES = /^(value|selectedIndex|defaultValue|defaultChecked|defaultSelected|key)$/;
+
+  // Boolean attributes that should be set/removed (not set to string values)
+  // These follow HTML5 specification where presence = true, absence = false
+  const BOOLEAN_ATTRIBUTES = /^(allowfullscreen|async|autofocus|autoplay|capture|checked|controls|default|defer|disabled|formnovalidate|hidden|itemscope|loop|multiple|muted|open|readonly|required|reversed|selected|truespeed)$/;
+
+  // Attributes that should always be set as HTML attributes
+  const FORCED_ATTRIBUTES = /^(id|class|for|role|title|lang|dir|accesskey|contenteditable|draggable|spellcheck|translate|tabindex|accept-charset|autocomplete|maxlength|minlength|data-|aria-|xmlns|viewbox|stroke|fill|d|cx|cy|r|x|y|width|height|href|src|alt|type|name|placeholder|pattern)$/i;
+
+  // SVG elements should use attributes for most properties
+  if (isSvg) {
+    return BOOLEAN_ATTRIBUTES.test(name) ? 'boolean-attribute' : 'attribute';
+  }
+
+  // Check for boolean attributes first (before other categorizations)
+  if (BOOLEAN_ATTRIBUTES.test(name)) {
+    return 'boolean-attribute';
+  }
+
+  // Check specific categories
+  if (FORCED_ATTRIBUTES.test(name) || name.includes('-')) {
+    return 'attribute';
+  }
+
+  if (DOM_PROPERTIES.test(name)) {
+    return 'property';
+  }
+
+  // Default to attribute for unknown properties
+  return 'attribute';
+}
+
 export function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
 
   // Capture protected properties before any reset/update operations
   const protectedProps = getProtectedProperties(element);
 
-  // Handle className normalization upfront
-  if (props && props['className']) {
-    props = { ...props, class: props['className'] };
-    delete props['className'];
+  // Normalize all attribute names upfront using comprehensive mapping
+  if (props) {
+    const normalizedProps = {};
+    for (const name in props) {
+      const normalizedName = normalizeAttributeName(name);
+      normalizedProps[normalizedName] = props[name];
+    }
+    props = normalizedProps;
   }
 
-  // Reset commonly used properties that might persist
-  resetCommonProperties(element);
+  // Only reset properties that are being explicitly set
+  // Don't call resetCommonProperties for partial updates
+  if (props) {
+    resetSpecificProperties(element, Object.keys(props));
+  }
 
   // Apply new properties
   if (!props) return;
@@ -330,42 +451,47 @@ export function updateProps(element: Element, props: {}, isSvg) {
       continue; // Keep the protected value
     }
 
-    if (name.startsWith('data-')) {
-      const dname = name.substring(5);
-      const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
-      if (value || value === "") element.dataset[cname] = value;
-      else delete element.dataset[cname];
-    } else if (name === 'style') {
-      if (element.style.cssText) element.style.cssText = '';
-      if (typeof value === 'string') element.style.cssText = value;
-      else {
-        for (const s in value) {
-          element.style[s] = value[s];
-        }
-      }
-    } else if (name.startsWith('xlink')) {
-      const xname = name.replace('xlink', '').toLowerCase();
+    // Normalize attribute name to HTML standard
+    const normalizedAttributeName = normalizeAttributeName(name);
+
+    if (normalizedAttributeName.startsWith('data-')) {
+      setDatasetAttribute(element, normalizedAttributeName, value);
+    } else if (normalizedAttributeName === 'style') {
+      setElementStyle(element as HTMLElement, value);
+    } else if (normalizedAttributeName.startsWith('xlink')) {
+      const xname = normalizedAttributeName.replace('xlink', '').toLowerCase();
       if (value == null || value === false) {
         element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
       } else {
-        element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+        setAttributeWithNamespace(element, `xlink:${xname}`, value, isSvg);
       }
-    } else if (name.startsWith('on')) {
-      if (!value || typeof value === 'function') {
-        element[name] = value;
-      } else if (typeof value === 'string') {
-        if (value) element.setAttribute(name, value);
-        else element.removeAttribute(name);
-      }
-    } else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-|^for$/g.test(name) || isSvg) {
-      if (value) element.setAttribute(name, value);
-      else element.removeAttribute(name);
+    } else if (normalizedAttributeName.startsWith('on')) {
+      setEventHandler(element, normalizedAttributeName, value, true);
     } else {
-      element[name] = value;
-    }
-    // Set key property on DOM element for reconciliation (no global cache needed)
-    if (name === 'key' && value !== undefined && value !== null) {
-      element.key = value;
+      // Use intelligent categorization for all other attributes
+      const handlerType = categorizeAttribute(normalizedAttributeName, isSvg);
+
+      if (handlerType === 'property') {
+        element[normalizedAttributeName] = value;
+      } else if (handlerType === 'boolean-attribute') {
+        // HTML5 boolean attributes: presence = true, absence = false
+        // Handle various falsy values that should remove the attribute
+        if (shouldSetBooleanAttribute(value)) {
+          if (isValidAttributeName(normalizedAttributeName)) {
+            setAttributeWithNamespace(element, normalizedAttributeName, normalizedAttributeName, isSvg);
+          }
+        } else {
+          element.removeAttribute(normalizedAttributeName);
+        }
+      } else { // 'attribute'
+        if (value != null) {
+          if (isValidAttributeName(normalizedAttributeName)) {
+            setAttributeWithNamespace(element, normalizedAttributeName, String(value), isSvg);
+          }
+        } else {
+          element.removeAttribute(normalizedAttributeName);
+        }
+      }
     }
   }
 
@@ -377,6 +503,52 @@ export function updateProps(element: Element, props: {}, isSvg) {
   if (props && typeof props['ref'] === 'function') {
     window.requestAnimationFrame(() => props['ref'](element));
   }
+}
+
+/**
+ * Validates if an attribute name is valid for HTML/SVG elements
+ * HTML attribute names must not contain spaces, control characters, or certain symbols
+ */
+function isValidAttributeName(name: string): boolean {
+  // HTML attribute names cannot contain spaces, quotes, >, /, =, control characters
+  return /^[^\s"'>\/=\x00-\x1F\x7F-\x9F]+$/.test(name);
+}
+
+/**
+ * Sets an attribute with proper namespace handling for SVG elements
+ */
+function setAttributeWithNamespace(element: Element, name: string, value: string, isSvg: boolean): void {
+  if (!isValidAttributeName(name)) {
+    return; // Skip invalid attribute names
+  }
+
+  // SVG namespace mappings
+  const SVG_NAMESPACE_ATTRS = {
+    'xmlns': 'http://www.w3.org/2000/xmlns/',
+    'xmlns:xlink': 'http://www.w3.org/2000/xmlns/',
+    'xml:lang': 'http://www.w3.org/XML/1998/namespace',
+    'xml:space': 'http://www.w3.org/XML/1998/namespace'
+  };
+
+  // XLink namespace attributes (deprecated but still used)
+  const XLINK_NAMESPACE_ATTRS = /^xlink:(href|title|show|actuate|role|arcrole|type)$/;
+
+  if (isSvg) {
+    // Handle specific namespace attributes
+    if (SVG_NAMESPACE_ATTRS[name]) {
+      element.setAttributeNS(SVG_NAMESPACE_ATTRS[name], name, value);
+      return;
+    }
+
+    // Handle xlink namespace attributes
+    if (XLINK_NAMESPACE_ATTRS.test(name)) {
+      element.setAttributeNS('http://www.w3.org/1999/xlink', name, value);
+      return;
+    }
+  }
+
+  // Default to regular setAttribute
+  element.setAttribute(name, value);
 }
 
 function render_component(node, parent, idx) {
@@ -423,6 +595,98 @@ function createComponent(node, parent, idx = 0) {
     }
   }
   return vdom;
+}
+
+/**
+ * Enhanced dataset attribute handler with robust kebab-case to camelCase conversion
+ */
+function setDatasetAttribute(element: Element, attributeName: string, value: any): void {
+  // Extract the data attribute name (remove 'data-' prefix)
+  const dname = attributeName.substring(5);
+
+  // Enhanced kebab-case to camelCase conversion
+  // Handles cases like 'a-b-c-d-e' -> 'aBcDe'
+  const cname = convertKebabToCamelCase(dname);
+
+  if (value != null) {
+    element.dataset[cname] = String(value);
+  } else {
+    delete element.dataset[cname];
+  }
+}
+
+/**
+ * Converts kebab-case to camelCase with improved handling of single characters
+ * Examples:
+ * - 'user-id' -> 'userId'
+ * - 'a-b-c-d-e' -> 'aBcDe'
+ * - 'very-long-name' -> 'veryLongName'
+ * - 'single' -> 'single'
+ */
+function convertKebabToCamelCase(kebabStr: string): string {
+  return kebabStr.replace(/-(.)/g, (match, letter) => letter.toUpperCase());
+}
+
+/**
+ * Enhanced style property handler with comprehensive CSS support
+ * Handles: string styles, object styles, CSS custom properties, automatic px units
+ */
+function setElementStyle(element: HTMLElement, value: any): void {
+  // Clear existing styles first
+  if (element.style.cssText) {
+    element.style.cssText = '';
+  }
+
+  if (value == null) {
+    return; // No styles to set
+  }
+
+  if (typeof value === 'string') {
+    // Handle CSS text string
+    element.style.cssText = value;
+  } else if (typeof value === 'object') {
+    // Handle style object
+    for (const styleProp in value) {
+      const styleValue = value[styleProp];
+
+      // Skip null/undefined values
+      if (styleValue == null) {
+        continue;
+      }
+
+      // Handle CSS custom properties (CSS variables)
+      if (styleProp.startsWith('--')) {
+        element.style.setProperty(styleProp, String(styleValue));
+      } else {
+        // Handle regular CSS properties using direct assignment
+        const processedValue = processCSSValue(styleProp, styleValue);
+        element.style[styleProp] = processedValue;
+      }
+    }
+  }
+}
+
+/**
+ * Process CSS values with automatic px unit addition for numeric values
+ */
+function processCSSValue(property: string, value: any): string {
+  if (typeof value === 'number') {
+    // Properties that should NOT get automatic 'px' units
+    const unitlessProperties = new Set([
+      'opacity', 'zIndex', 'fontWeight', 'lineHeight', 'flex', 'flexGrow',
+      'flexShrink', 'order', 'gridColumn', 'gridRow', 'columnCount',
+      'fillOpacity', 'strokeOpacity', 'animationIterationCount'
+    ]);
+
+    if (unitlessProperties.has(property)) {
+      return String(value);
+    } else {
+      // Add 'px' for numeric values on dimensional properties
+      return `${value}px`;
+    }
+  }
+
+  return String(value);
 }
 
 /**
@@ -479,6 +743,38 @@ function resetCommonProperties(element: Element) {
 }
 
 /**
+ * Reset only specific properties that are being updated
+ * This prevents clearing unrelated attributes during partial updates
+ */
+function resetSpecificProperties(element: Element, propsToReset: string[]) {
+  propsToReset.forEach(prop => {
+    if (prop === 'class' || prop === 'className') {
+      element.removeAttribute('class');
+    } else if (prop === 'id') {
+      element.removeAttribute('id');
+    } else if (prop === 'style') {
+      // Only reset style if style is being updated
+      if (element.style.cssText) {
+        element.style.cssText = '';
+      }
+    } else if (prop.startsWith('data-')) {
+      // Only reset specific dataset attribute
+      const dataKey = prop.slice(5); // Remove 'data-' prefix
+      const camelKey = convertKebabToCamelCase(dataKey);
+      delete element.dataset[camelKey];
+    } else if (prop.startsWith('aria-')) {
+      element.removeAttribute(prop);
+    } else if (prop.startsWith('on')) {
+      // Reset specific event handler
+      if (element[prop]) {
+        element[prop] = null;
+      }
+    }
+    // For other attributes, we don't need to pre-reset since they'll be overwritten
+  });
+}
+
+/**
  * Get protected properties for a specific element type to preserve UX during updates
  * Returns object with properties that should not be reset for interactive elements
  */
@@ -531,4 +827,75 @@ function getProtectedProperties(element: Element): { [key: string]: any } {
   }
 
   return protectedProps;
+}
+
+/**
+ * Determines if a boolean attribute should be set based on its value
+ * HTML5 boolean attributes follow the rule: presence = true, absence = false
+ */
+function shouldSetBooleanAttribute(value: any): boolean {
+  // Falsy values that should remove the attribute
+  if (value === false || value === null || value === undefined) {
+    return false;
+  }
+
+  // String "false" should also remove the attribute (React convention)
+  if (value === 'false' || value === 'False' || value === 'FALSE') {
+    return false;
+  }
+
+  // Empty string should remove the attribute
+  if (value === '') {
+    return false;
+  }
+
+  // String "0" should remove the attribute
+  if (value === '0') {
+    return false;
+  }
+
+  // Number 0 should remove the attribute
+  if (value === 0) {
+    return false;
+  }
+
+  // All other truthy values should set the attribute
+  return true;
+}
+
+/**
+ * Enhanced event handler assignment with addEventListener support
+ * Handles both onclick style and on:event-name style events
+ */
+function setEventHandler(element: Element, name: string, value: any, isUpdate = false): void {
+  // Handle on:event-name pattern for addEventListener
+  if (name.startsWith('on:')) {
+    const eventName = name.slice(3); // Remove 'on:' prefix
+
+    // Store reference to current listener for cleanup
+    const listenerKey = `__apprun_listener_${eventName}`;
+    const currentListener = (element as any)[listenerKey];
+
+    // Remove old listener if it exists
+    if (currentListener && isUpdate) {
+      element.removeEventListener(eventName, currentListener);
+      delete (element as any)[listenerKey];
+    }
+
+    // Add new listener if value is a function
+    if (typeof value === 'function') {
+      element.addEventListener(eventName, value);
+      (element as any)[listenerKey] = value;
+    }
+
+    return;
+  }
+
+  // Handle standard onclick style events
+  if (name.startsWith('on') && name.length > 2) {
+    if (!value || typeof value === 'function') {
+      (element as any)[name] = value;
+    }
+    return;
+  }
 }

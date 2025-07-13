@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "tsc -p src && rollup -c && webpack --mode production",
-    "test": "jest --watch",
-    "jest": "jest",
+    "test": "jest",
+    "jest": "jest --watch",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start": "webpack serve --mode development",
     "build:docs": "marked -i README.md -o demo/home.html & marked -i WHATSNEW.md -o demo/new.html",
