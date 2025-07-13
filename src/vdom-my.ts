@@ -35,7 +35,7 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   else throw new Error(`Unknown tag in vdom ${tag}`);
 };
 
-const keyCache = new WeakMap();
+const keyCache = {};
 
 export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
   // tslint:disable-next-line
