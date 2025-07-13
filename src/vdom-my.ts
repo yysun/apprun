@@ -84,8 +84,9 @@ function updateChildren(element, children, isSvg: boolean) {
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
-    if (child['_op'] === 3) continue;
+    if (child == null || child['_op'] === 3) continue;
     const el = element.childNodes[i];
+    if (!el) continue; // Safety check for undefined childNodes
     if (typeof child === 'string') {
       if (el.nodeType === 3) {
         if (el.nodeValue !== child) {
@@ -96,7 +97,7 @@ function updateChildren(element, children, isSvg: boolean) {
       }
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
       element.replaceChild(child, el);
-    } else {
+    } else if (child && typeof child === 'object') {
       const key = child.props && child.props['key'];
       if (key) {
         if (el.key === key) {
