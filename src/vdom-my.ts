@@ -95,7 +95,7 @@ function updateChildren(element, children, isSvg: boolean) {
         }
       }
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
-      element.insertBefore(child, el);
+      element.replaceChild(child, el);
     } else {
       const key = child.props && child.props['key'];
       if (key) {
