@@ -121,7 +121,7 @@ function reconcileKeyedChildren(element: Element, children: any[], isSvg: boolea
   const keyedElements = new Map<any, KeyedElementInfo>();
   oldChildren.forEach((child, index) => {
     const childElement = child as Element;
-    const key = (childElement as any).__apprun_key;
+    const key = (childElement as any).key;
     if (key !== undefined && key !== null) {
       keyedElements.set(key, { element: childElement, oldIndex: index });
     }
@@ -148,13 +148,13 @@ function reconcileKeyedChildren(element: Element, children: any[], isSvg: boolea
         // Reuse existing element - update in place
         const existingElement = existing.element;
         update(existingElement, child, isSvg);
-        (existingElement as any).__apprun_key = key;
+        (existingElement as any).key = key;
         newChildren.push(existingElement);
         keyedElements.delete(key); // Mark as used
       } else {
         // Create new keyed element
         const newElement = create(child, isSvg);
-        (newElement as any).__apprun_key = key;
+        (newElement as any).key = key;
         newChildren.push(newElement);
       }
     } else {
