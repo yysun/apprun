@@ -35,8 +35,6 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   else throw new Error(`Unknown tag in vdom ${tag}`);
 };
 
-const keyCache = {};
-
 export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
@@ -77,49 +75,31 @@ function update(element: Element, node: VNode, isSvg: boolean) {
   updateProps(element, node.props, isSvg);
 }
 
+/**
+ * Smart key-to-element mapping for efficient lookups
+ * Maps keys to both DOM elements and their current positions
+ */
+interface KeyedElementInfo {
+  element: Element;
+  oldIndex: number;
+}
+
+/**
+ * Efficiently reconcile children with greedy diff algorithm
+ * Supports mixed keyed/unkeyed children with minimal DOM operations
+ */
 function updateChildren(element: Element, children: any[], isSvg: boolean) {
   const old_len = element.childNodes?.length || 0;
   const new_len = children?.length || 0;
 
-  // Handle key-based reordering first if any children have keys
+  // Check if we need keyed reconciliation
   const hasKeysInNewChildren = children?.some(child =>
-    child && typeof child === 'object' && child.props && child.props.key !== undefined
+    child && typeof child === 'object' && child.props &&
+    child.props.key !== undefined && child.props.key !== null
   );
 
   if (hasKeysInNewChildren) {
-    // Create a map of existing keyed elements
-    const existingKeyedElements = new Map();
-    for (let i = 0; i < old_len; i++) {
-      const el = element.childNodes[i];
-      if (el && el.key) {
-        existingKeyedElements.set(el.key, el);
-      }
-    }
-
-    // Build new DOM structure
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < new_len; i++) {
-      const child = children[i];
-      if (child == null) continue;
-
-      const key = child.props && child.props['key'];
-      if (key && existingKeyedElements.has(key)) {
-        // Reuse existing element
-        const existingEl = existingKeyedElements.get(key);
-        update(existingEl, child as VNode, isSvg);
-        fragment.appendChild(existingEl);
-        existingKeyedElements.delete(key); // Mark as used
-      } else {
-        // Create new element
-        fragment.appendChild(create(child, isSvg));
-      }
-    }
-
-    // Clear current children and append new structure
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-    element.appendChild(fragment);
+    reconcileKeyedChildren(element, children, isSvg);
     return;
   }
 
@@ -159,6 +139,134 @@ function updateChildren(element: Element, children: any[], isSvg: boolean) {
       }
     }
     element.appendChild(d);
+  }
+}
+
+/**
+ * Efficient keyed children reconciliation using greedy diff algorithm
+ * Uses Map-based lookups for O(1) key access and minimal DOM operations
+ */
+function reconcileKeyedChildren(element: Element, children: any[], isSvg: boolean) {
+  const oldChildren = Array.from(element.childNodes);
+  const oldLen = oldChildren.length;
+  const newLen = children.length;
+
+  // Build map of existing keyed elements for O(1) lookup
+  const keyedElementMap = new Map<string, KeyedElementInfo>();
+  const unkeyedElements: Element[] = [];
+
+  // Categorize existing DOM elements
+  for (let i = 0; i < oldLen; i++) {
+    const el = oldChildren[i] as Element;
+    if (el && el.key !== undefined && el.key !== null) {
+      keyedElementMap.set(el.key, { element: el, oldIndex: i });
+    } else {
+      unkeyedElements.push(el);
+    }
+  }
+
+  // Greedy diff algorithm: process new children and build final DOM structure
+  const finalChildren: Element[] = [];
+  let unkeyedIndex = 0;
+
+  for (let i = 0; i < newLen; i++) {
+    const child = children[i];
+    if (child == null) continue;
+
+    const key = child.props?.key;
+
+    if (key !== undefined && key !== null) {
+      // Handle keyed element
+      const existingInfo = keyedElementMap.get(key);
+      if (existingInfo) {
+        // Reuse existing keyed element
+        update(existingInfo.element, child as VNode, isSvg);
+        finalChildren.push(existingInfo.element);
+        keyedElementMap.delete(key); // Mark as used
+      } else {
+        // Create new keyed element
+        const newElement = create(child, isSvg);
+        finalChildren.push(newElement);
+      }
+    } else {
+      // Handle unkeyed element - try to reuse if available
+      if (unkeyedIndex < unkeyedElements.length) {
+        const existingEl = unkeyedElements[unkeyedIndex];
+        if (typeof child === 'string') {
+          // Handle text nodes
+          if (existingEl.nodeType === 3) {
+            if (existingEl.nodeValue !== child) {
+              existingEl.nodeValue = child;
+            }
+            finalChildren.push(existingEl);
+          } else {
+            // Replace with text node
+            const textNode = createText(child);
+            finalChildren.push(textNode);
+          }
+        } else if (child instanceof HTMLElement || child instanceof SVGElement) {
+          // Direct DOM element
+          finalChildren.push(child);
+        } else if (child && typeof child === 'object') {
+          // VNode - try to update existing element
+          if (same(existingEl, child as VNode)) {
+            update(existingEl, child as VNode, isSvg);
+            finalChildren.push(existingEl);
+          } else {
+            // Create new element as types don't match
+            const newElement = create(child, isSvg);
+            finalChildren.push(newElement);
+          }
+        }
+        unkeyedIndex++;
+      } else {
+        // No more unkeyed elements to reuse, create new
+        const newElement = create(child, isSvg);
+        finalChildren.push(newElement);
+      }
+    }
+  }
+
+  // Apply changes to DOM efficiently using insertBefore strategy
+  applyChildrenChanges(element, finalChildren);
+}
+
+/**
+ * Efficiently apply children changes to DOM using minimal operations
+ * Uses insertBefore for proper positioning without full reconstruction
+ * Optimized to minimize DOM queries and operations
+ */
+function applyChildrenChanges(element: Element, newChildren: Element[]) {
+  const currentChildren = Array.from(element.childNodes);
+  const currentLength = currentChildren.length;
+  const newLength = newChildren.length;
+
+  // Create a Set for O(1) lookup of elements that should remain
+  const newChildrenSet = new Set(newChildren);
+
+  // Step 1: Remove elements that are no longer needed (from end to avoid index shifts)
+  for (let i = currentLength - 1; i >= 0; i--) {
+    const child = currentChildren[i];
+    if (!newChildrenSet.has(child as Element)) {
+      element.removeChild(child);
+    }
+  }
+
+  // Step 2: Position elements correctly using efficient insertBefore strategy
+  for (let i = 0; i < newLength; i++) {
+    const newChild = newChildren[i];
+    const currentChild = element.childNodes[i];
+
+    if (currentChild !== newChild) {
+      if (i >= element.childNodes.length) {
+        // Append at the end - no reference node needed
+        element.appendChild(newChild);
+      } else {
+        // Insert before current child at position i
+        element.insertBefore(newChild, currentChild);
+      }
+    }
+    // If currentChild === newChild, element is already in correct position
   }
 }
 
@@ -254,9 +362,9 @@ export function updateProps(element: Element, props: {}, isSvg) {
     } else if (element[name] !== value) {
       element[name] = value;
     }
-    if (name === 'key' && value !== undefined) {
-      keyCache[value] = element;
-      element.key = value; // Set key property on the DOM element
+    // Set key property on DOM element for reconciliation (no global cache needed)
+    if (name === 'key' && value !== undefined && value !== null) {
+      element.key = value;
     }
   }
   if (props && typeof props['ref'] === 'function') {

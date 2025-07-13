@@ -8,19 +8,19 @@
 
 ## Phase 2: Core Algorithm Replacement
 ### 2.1 Simple Greedy Diff Algorithm
-- [ ] **2.1.1** Implement Map-based key lookup system
-- [ ] **2.1.2** Create new `reconcileKeyedChildren()` function with greedy diff
-- [ ] **2.1.3** Add support for `key === null` fallback (treat as replaceable)
-- [ ] **2.1.4** Implement efficient `insertBefore`/`replaceChild` operations
-- [ ] **2.1.5** Replace current "nuke and rebuild" keyed logic
-- [ ] **2.1.6** Add unit tests for keyed reconciliation edge cases
+- [x] **2.1.1** Implement Map-based key lookup system
+- [x] **2.1.2** Create new `reconcileKeyedChildren()` function with greedy diff
+- [x] **2.1.3** Add support for `key === null` fallback (treat as replaceable)
+- [x] **2.1.4** Implement efficient `insertBefore`/`replaceChild` operations
+- [x] **2.1.5** Replace current "nuke and rebuild" keyed logic
+- [x] **2.1.6** Add unit tests for keyed reconciliation edge cases
 
 ### 2.2 Keyed Element Optimization
-- [ ] **2.2.1** Cache existing keyed elements in Map structure
-- [ ] **2.2.2** Implement node reuse strategy to preserve DOM state
-- [ ] **2.2.3** Add support for mixed keyed/unkeyed children
-- [ ] **2.2.4** Handle dynamic key changes gracefully
-- [ ] **2.2.5** Test with complex nested structures
+- [x] **2.2.1** Cache existing keyed elements in Map structure
+- [x] **2.2.2** Implement node reuse strategy to preserve DOM state
+- [x] **2.2.3** Add support for mixed keyed/unkeyed children
+- [x] **2.2.4** Handle dynamic key changes gracefully
+- [x] **2.2.5** Test with complex nested structures
 
 ## Phase 3: Property Management Simplification
 ### 3.1 Remove Complex Diffing
