@@ -27,6 +27,7 @@
  */
 
 import { EventOptions } from './types'
+import { APPRUN_VERSION_GLOBAL } from './version'
 
 export class App {
 
@@ -125,7 +126,7 @@ export class App {
   }
 }
 
-const AppRunVersions = 'AppRun-3.3.11';
+const AppRunVersions = APPRUN_VERSION_GLOBAL;
 let _app: App;
 const root = (typeof window !== 'undefined' ? window :
   typeof global !== 'undefined' ? global :

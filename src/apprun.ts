@@ -39,6 +39,7 @@ import { VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions,
 import { on, update, customElement } from './decorator';
 import webComponent, { CustomElementOptions } from './web-component';
 import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import { APPRUN_VERSION } from './version';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
 type OnDecorator = {
@@ -90,7 +91,7 @@ export interface IApp {
 
 if (!app.start) {
 
-  app.version = '3.35.0';
+  app.version = APPRUN_VERSION;
 
   app.h = app.createElement = createElement;
   app.render = render;
