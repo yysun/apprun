@@ -34,9 +34,50 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   else return tag(props, ...children); // JSX component
 }
 
-function createComponent(node, parent) {
-  if (typeof node?.tag === 'function') return node.tag(node.props, ...node.children);
-  else return node;
+function createComponent(node, parent, idx = 0) {
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
+  let vdom = node;
+  if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) {
+    vdom = render_component(node, parent, idx);
+  }
+  if (vdom && Array.isArray(vdom.children)) {
+    const new_parent = vdom.props?._component;
+    if (new_parent) {
+      let i = 0;
+      vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));
+    } else {
+      vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
+    }
+  }
+  return vdom;
+}
+
+function render_component(node, parent, idx) {
+  const { tag, props, children } = node;
+  let key = `_${idx}`;
+  let id = props && props['id'];
+  if (!id) id = `_${idx}${Date.now()}`;
+  else key = id;
+  let asTag = 'section';
+  if (props && props['as']) {
+    asTag = props['as'];
+    delete props['as'];
+  }
+  if (!parent.__componentCache) parent.__componentCache = {};
+  let component = parent.__componentCache[key];
+  if (!component || !(component instanceof tag) || !component.element) {
+    const element = document.createElement(asTag);
+    component = parent.__componentCache[key] = new tag({ ...props, children }).mount(element, { render: true });
+  } else {
+    component.renderState(component.state);
+  }
+  if (component.mounted) {
+    const new_state = component.mounted(props, children, component.state);
+    (typeof new_state !== 'undefined') && component.setState(new_state);
+  }
+  updateProps(component.element, props, false);
+  return component.element;
 }
 
 export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
@@ -51,7 +92,7 @@ export const updateElement = (element: Element | string, nodes: VDOM, component 
 function render(element: Element, nodes: VDOM, parent = {}) {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
-  nodes = createComponent(nodes, parent);
+  nodes = createComponent(nodes, parent, 0);
   if (!element) return;
   const isSvg = element.nodeName === "SVG";
   if (Array.isArray(nodes)) {

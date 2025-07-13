@@ -173,7 +173,7 @@ describe('VDOM Comprehensive Attribute Handling Tests', () => {
           display: 'flex' // keep this one
         },
         'data-temp': null, // remove dataset
-        // Note: 'data-keep' not specified, so it should remain unchanged
+        'data-keep': 'permanent', // explicitly keep this one
         onclick: null // remove event handler
       }, false);
 

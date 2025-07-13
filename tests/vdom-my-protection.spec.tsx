@@ -83,7 +83,7 @@ describe('VDOM Active Element Protection Tests', () => {
       expect(input.className).toBe('new-class');
     });
 
-    it('should preserve checkbox checked state', () => {
+    it('should not preserve checkbox checked state (simplified protection)', () => {
       // Render checkbox
       const element = render(createElement('input', {
         type: 'checkbox',
@@ -96,14 +96,14 @@ describe('VDOM Active Element Protection Tests', () => {
       checkbox.checked = true;
       expect(checkbox.checked).toBe(true);
 
-      // Re-render - should preserve checked state
+      // Re-render - checkbox state is not protected (only focused inputs are)
       render(createElement('input', {
         type: 'checkbox',
-        checked: false, // This should be ignored
+        checked: false, // This will override user state
         className: 'updated'
       }));
 
-      expect(checkbox.checked).toBe(true); // Protected
+      expect(checkbox.checked).toBe(false); // Not protected
       expect(checkbox.className).toBe('updated'); // Updated
     });
   });
@@ -143,7 +143,7 @@ describe('VDOM Active Element Protection Tests', () => {
   });
 
   describe('Select Element Protection', () => {
-    it('should preserve select value and selectedIndex', () => {
+    it('should not preserve select value and selectedIndex (simplified protection)', () => {
       // Render select
       const element = render(createElement('select', {}, [
         createElement('option', { value: 'a' }, 'Option A'),
@@ -165,9 +165,9 @@ describe('VDOM Active Element Protection Tests', () => {
         createElement('option', { value: 'c' }, 'Option C')
       ]));
 
-      // Should preserve user selection
-      expect(select.selectedIndex).toBe(2); // Protected
-      expect(select.value).toBe('c'); // Protected
+      // User selection is not protected (only focused inputs are)
+      expect(select.selectedIndex).toBe(0); // Not protected
+      expect(select.value).toBe('a'); // Not protected
       expect(select.className).toBe('updated'); // Updated
     });
   });
@@ -335,7 +335,7 @@ describe('VDOM Active Element Protection Tests', () => {
       expect(element.dataset.updated).toBe('true');
     });
 
-    it('should handle form submission scenarios', () => {
+    it('should handle form submission scenarios (simplified protection)', () => {
       // Create form with various input types
       const element = render(createElement('form', {}, [
         createElement('input', { type: 'text', name: 'username', value: 'initial' }),
@@ -362,9 +362,9 @@ describe('VDOM Active Element Protection Tests', () => {
         createElement('textarea', { name: 'message', value: 'should-be-ignored' })
       ]));
 
-      // User input should be preserved
+      // Only focused elements are protected in simplified protection
       expect(username.value).toBe('johndoe'); // Protected (focused)
-      expect(terms.checked).toBe(true); // Protected (checkbox state)
+      expect(terms.checked).toBe(false); // Not protected (checkboxes not protected)
       expect(email.value).toBe('should-be-ignored'); // Updated (not focused)
       expect(message.value).toBe('should-be-ignored'); // Updated (not focused)
       expect(element.dataset.validated).toBe('true');

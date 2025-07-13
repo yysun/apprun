@@ -3,7 +3,21 @@
  * Purpose: Standards-compliant property and attribute handling for VDOM operations
  * Features: Property-information based attribute normalization, enhanced style/dataset/event handling, property caching and nullification
  * Implementation: Extracted from vdom-my.ts for better modularity and standards compliance
- * Updated: 2024-07-13 - Added mergeProps pattern from backup to prevent DOM contamination
+ * Updated: 2025-07-13 - Cleaned up unused exports, only updateProps is exported for external use
+ * 
+ * EXPORTS:
+ * - updateProps: Main function for updating DOM element properties (used by vdom-my.ts and tests)
+ * 
+ * INTERNAL FUNCTIONS (previously exported but unused externally):
+ * - convertKebabToCamelCase: Converts kebab-case to camelCase for dataset properties
+ * - setElementStyle: Enhanced style property handling with CSS custom properties
+ * - setDatasetAttribute: Dataset attribute processing with proper conversion
+ * - setEventHandler: Event handler assignment with addEventListener support
+ * - setAttributeOrProperty: Standards-compliant attribute/property setting
+ * - getProtectedProperties: Gets properties to preserve during updates
+ * 
+ * REMOVED:
+ * - resetSpecificProperties: Was exported but never used externally
  */
 
 import { find, html, svg } from 'property-information';
@@ -40,10 +54,7 @@ function mergeProps(oldProps: { [key: string]: any }, newProps: { [key: string]:
       const props: { [key: string]: any } = {};
       const oldKeys = Object.keys(oldProps);
       oldKeys.forEach(p => {
-        // Skip test tracking properties like '.k' which are set manually by tests
-        if (p !== 'k') {
-          props[p] = null;
-        }
+        props[p] = null;
       });
       return props;
     }
@@ -65,9 +76,7 @@ function mergeProps(oldProps: { [key: string]: any }, newProps: { [key: string]:
       console.warn('Malformed new properties detected, applying cleanup only:', error);
       const props: { [key: string]: any } = {};
       oldKeys.forEach(p => {
-        if (p !== 'k') {
-          props[p] = null;
-        }
+        props[p] = null;
       });
       return props;
     }
@@ -89,16 +98,14 @@ function mergeProps(oldProps: { [key: string]: any }, newProps: { [key: string]:
 
     const props: { [key: string]: any } = {};
 
-    // CRITICAL: Nullify all old properties not in new props
-    // This prevents DOM contamination by ensuring old properties are removed
+    // First, nullify all old properties that are not in new props
     oldKeys.forEach(p => {
-      // Skip test tracking properties like '.k' which are set manually by tests
-      if (p !== 'k') {
+      if (!(p in newProps)) {
         props[p] = null;
       }
     });
 
-    // Apply all new properties
+    // Then apply all new properties
     newKeys.forEach(p => props[p] = newProps[p]);
 
     return props;
@@ -146,7 +153,7 @@ function maintainCacheSize() {
  * Convert kebab-case strings to camelCase for dataset properties
  * OPTIMIZED: Cached conversion with better edge case handling and memory protection
  */
-export function convertKebabToCamelCase(str: string): string {
+function convertKebabToCamelCase(str: string): string {
   // OPTIMIZATION: Use cache for frequent conversions
   let camelCase = kebabToCamelCache.get(str);
   if (camelCase !== undefined) {
@@ -201,7 +208,7 @@ function getPropertyInfo(name: string, isSvg: boolean) {
  * Enhanced style property handling with CSS custom properties support and proper cleanup
  * Handles both string styles and object styles with automatic px units and nullification
  */
-export function setElementStyle(element: HTMLElement, value: any): void {
+function setElementStyle(element: HTMLElement, value: any): void {
   if (!element.style) return;
 
   if (value === null || value === undefined) {
@@ -296,7 +303,7 @@ function processCSSValue(property: string, value: any): string {
 /**
  * Enhanced dataset attribute processing with proper conversion
  */
-export function setDatasetAttribute(element: Element, attributeName: string, value: any): void {
+function setDatasetAttribute(element: Element, attributeName: string, value: any): void {
   // Extract the data key (remove 'data-' prefix)
   const dataKey = attributeName.slice(5);
   const camelKey = convertKebabToCamelCase(dataKey);
@@ -314,7 +321,7 @@ export function setDatasetAttribute(element: Element, attributeName: string, val
  * Enhanced event handler assignment with addEventListener support
  * Handles both onclick style and on:event-name style events
  */
-export function setEventHandler(element: Element, name: string, value: any, isUpdate = false): void {
+function setEventHandler(element: Element, name: string, value: any, isUpdate = false): void {
   // Handle on:event-name pattern for addEventListener
   if (name.startsWith('on:')) {
     const eventName = name.slice(3); // Remove 'on:' prefix
@@ -350,13 +357,29 @@ export function setEventHandler(element: Element, name: string, value: any, isUp
 /**
  * Standards-compliant attribute/property setting using property-information
  */
-export function setAttributeOrProperty(element: Element, name: string, value: any, isSvg: boolean): void {
+function setAttributeOrProperty(element: Element, name: string, value: any, isSvg: boolean): void {
+  // SPECIAL CASE: For form controls, always use property for certain props
+  // This is because attributes and properties can be disconnected after user interaction
+  if ((element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') &&
+    (name === 'value' || name === 'selected' || name === 'selectedIndex')) {
+    setElementProperty(element, name, value);
+    return;
+  }
+
+  // SPECIAL CASE: For checkbox 'checked', set both property and attribute
+  // HTML5 spec requires both for boolean attributes on form controls
+  if (element.tagName === 'INPUT' && name === 'checked') {
+    setElementProperty(element, name, value);
+    setBooleanAttribute(element, name, value);
+    return;
+  }
+
   const info = getPropertyInfo(name, isSvg);
 
   if (info) {
     // Use property-information guidance (OPTIMIZED: cached lookup)
-    if (info.boolean) {
-      // Boolean attribute
+    if (info.boolean || info.overloadedBoolean) {
+      // Boolean attribute (including overloadedBoolean like 'hidden')
       setBooleanAttribute(element, info.attribute, value);
     } else if (info.mustUseProperty && !isSvg) {
       // Must use property (like checked, selected, value for form elements)
@@ -396,7 +419,8 @@ function setBooleanAttribute(element: Element, attributeName: string, value: any
   const shouldSet = shouldSetBooleanAttribute(value);
 
   if (shouldSet) {
-    element.setAttribute(attributeName, '');
+    // For boolean attributes, set the value to the attribute name
+    element.setAttribute(attributeName, attributeName);
   } else {
     element.removeAttribute(attributeName);
   }
@@ -419,7 +443,7 @@ function setElementProperty(element: Element, propertyName: string, value: any):
  * Set element attribute with namespace support
  */
 function setElementAttribute(element: Element, attributeName: string, value: any, isSvg: boolean): void {
-  if (value == null || value === false) {
+  if (value == null) {
     element.removeAttribute(attributeName);
     return;
   }
@@ -443,12 +467,13 @@ function setElementAttribute(element: Element, attributeName: string, value: any
  * Determine if a value should set a boolean attribute
  */
 function shouldSetBooleanAttribute(value: any): boolean {
-  if (value == null || value === false) return false;
-  if (value === true || value === '') return true;
+  if (value == null || value === false || value === '') return false;
+  if (value === true) return true;
   if (typeof value === 'string') {
     // HTML5 spec: presence of attribute = true, absence = false
-    // But some frameworks pass "false" as string, so handle that
-    return value !== 'false';
+    // Handle case-insensitive "false" values
+    const lowerValue = value.toLowerCase();
+    return lowerValue !== 'false' && value !== '0';
   }
   // Truthy values set the attribute
   return Boolean(value);
@@ -467,68 +492,40 @@ function isValidAttributeName(name: string): boolean {
 }
 
 /**
- * Reset only specific properties that are being updated
- * This prevents clearing unrelated attributes during partial updates
+ * Gets properties that should be protected from updates to preserve critical UI state
+ * Focus: Scroll positions, Input values when focused, and Focus state
  */
-export function resetSpecificProperties(element: Element, propsToReset: string[]): void {
-  propsToReset.forEach(prop => {
-    if (prop === 'class' || prop === 'className') {
-      element.removeAttribute('class');
-    } else if (prop === 'id') {
-      element.removeAttribute('id');
-    } else if (prop === 'style') {
-      // Only reset style if style is being updated
-      const htmlElement = element as HTMLElement;
-      if (htmlElement.style && htmlElement.style.cssText) {
-        htmlElement.style.cssText = '';
-      }
-    } else if (prop.startsWith('data-')) {
-      // Only reset specific dataset attribute
-      const dataKey = prop.slice(5); // Remove 'data-' prefix
-      const camelKey = convertKebabToCamelCase(dataKey);
-      delete (element as HTMLElement).dataset[camelKey];
-    } else if (prop.startsWith('aria-')) {
-      element.removeAttribute(prop);
-    } else if (prop.startsWith('on')) {
-      // Reset specific event handler
-      if ((element as any)[prop]) {
-        (element as any)[prop] = null;
-      }
-    }
-    // For other attributes, we don't need to pre-reset since they'll be overwritten
-  });
-}
-
-/**
- * Get protected properties for UX preservation during updates
- */
-export function getProtectedProperties(element: Element): { [key: string]: any } {
+function getProtectedProperties(element: Element): { [key: string]: any } {
   const protectedProps: { [key: string]: any } = {};
-  const tagName = element.tagName;
 
-  // Only protect if element is focused (active)
-  const isActive = document.activeElement === element;
-  if (!isActive) return protectedProps;
+  // Check if element is currently focused
+  const isFocused = document.activeElement === element;
 
-  // Protect form control values and state
-  if (tagName === 'INPUT') {
-    const input = element as HTMLInputElement;
-    if (input.type === 'text' || input.type === 'password' || input.type === 'email' || input.type === 'search' || input.type === 'tel' || input.type === 'url') {
-      protectedProps.value = input.value;
-      protectedProps.selectionStart = input.selectionStart;
-      protectedProps.selectionEnd = input.selectionEnd;
-      protectedProps.selectionDirection = input.selectionDirection;
-    } else if (input.type === 'checkbox' || input.type === 'radio') {
-      protectedProps.checked = input.checked;
+  // Protect input values only when focused (to preserve typing state)
+  if (isFocused) {
+    if (element.tagName === 'INPUT') {
+      const input = element as HTMLInputElement;
+      if (input.type === 'text' || input.type === 'password' || input.type === 'email' ||
+        input.type === 'search' || input.type === 'tel' || input.type === 'url') {
+        protectedProps.value = input.value;
+        protectedProps.selectionStart = input.selectionStart;
+        protectedProps.selectionEnd = input.selectionEnd;
+      }
+    } else if (element.tagName === 'TEXTAREA') {
+      const textarea = element as HTMLTextAreaElement;
+      protectedProps.value = textarea.value;
+      protectedProps.selectionStart = textarea.selectionStart;
+      protectedProps.selectionEnd = textarea.selectionEnd;
     }
-  } else if (tagName === 'TEXTAREA') {
-    const textarea = element as HTMLTextAreaElement;
-    protectedProps.value = textarea.value;
-    protectedProps.selectionStart = textarea.selectionStart;
-    protectedProps.selectionEnd = textarea.selectionEnd;
-    protectedProps.selectionDirection = textarea.selectionDirection;
-  } else if (tagName === 'SELECT') {
-    protectedProps.selectedIndex = (element as HTMLSelectElement).selectedIndex;
+  }
+
+  // Always protect scroll positions (critical for UX)
+  if ('scrollTop' in element && 'scrollLeft' in element) {
+    const scrollable = element as HTMLElement;
+    if (scrollable.scrollTop > 0 || scrollable.scrollLeft > 0) {
+      protectedProps.scrollTop = scrollable.scrollTop;
+      protectedProps.scrollLeft = scrollable.scrollLeft;
+    }
   }
 
   return protectedProps;

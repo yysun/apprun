@@ -126,12 +126,14 @@ describe('VDOM Boolean Attributes Tests', () => {
       const form = element as HTMLFormElement;
       const input = form.querySelector('input') as HTMLInputElement;
 
-      // For form element, novalidate is not a standard boolean attribute in our regex
-      // It should be handled as regular attribute
-      expect(form.getAttribute('novalidate')).toBe('true');
+      // For form element, novalidate is a boolean attribute per HTML5 spec
+      // It should be set to the attribute name when true
+      expect(form.hasAttribute('novalidate')).toBe(true);
+      expect(form.getAttribute('novalidate')).toBe('novalidate');
 
       // For input element, formnovalidate is a boolean attribute
       expect(input.hasAttribute('formnovalidate')).toBe(true);
+      expect(input.getAttribute('formnovalidate')).toBe('formnovalidate');
       expect(input.hasAttribute('disabled')).toBe(false);
     });
 
