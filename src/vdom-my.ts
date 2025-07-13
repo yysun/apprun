@@ -87,12 +87,12 @@ function updateChildren(element, children, isSvg: boolean) {
     if (child['_op'] === 3) continue;
     const el = element.childNodes[i];
     if (typeof child === 'string') {
-      if (el.textContent !== child) {
-        if (el.nodeType === 3) {
-          el.nodeValue = child
-        } else {
-          element.replaceChild(createText(child), el);
+      if (el.nodeType === 3) {
+        if (el.nodeValue !== child) {
+          el.nodeValue = child;
         }
+      } else {
+        element.replaceChild(createText(child), el);
       }
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
       element.replaceChild(child, el);
