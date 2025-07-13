@@ -84,7 +84,7 @@ function updateChildren(element: Element, children: any[], isSvg: boolean) {
 
   // Handle key-based reordering first if any children have keys
   const hasKeysInNewChildren = children?.some(child =>
-    child && typeof child === 'object' && child.props && child.props.key
+    child && typeof child === 'object' && child.props && child.props.key !== undefined
   );
 
   if (hasKeysInNewChildren) {
@@ -183,7 +183,12 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
   // console.assert(node !== null && node !== undefined);
   if ((node instanceof HTMLElement) || (node instanceof SVGElement)) return node;
   if (typeof node === "string") return createText(node);
-  if (!node.tag || (typeof node.tag === 'function')) return createText(JSON.stringify(node));
+
+  // Type guard for VNode objects - handle invalid node types gracefully
+  if (!node || typeof node !== 'object' || !node.tag || (typeof node.tag === 'function')) {
+    return createText(typeof node === 'object' ? JSON.stringify(node) : String(node ?? ''));
+  }
+
   isSvg = isSvg || node.tag === "svg";
   const element = isSvg
     ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
@@ -250,7 +255,7 @@ export function updateProps(element: Element, props: {}, isSvg) {
     } else if (element[name] !== value) {
       element[name] = value;
     }
-    if (name === 'key' && value) {
+    if (name === 'key' && value !== undefined) {
       keyCache[value] = element;
       element.key = value; // Set key property on the DOM element
     }
