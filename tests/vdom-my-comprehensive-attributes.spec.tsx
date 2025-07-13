@@ -5,7 +5,8 @@
  * Created: 2024-01-XX
  */
 
-import { createElement, updateElement, updateProps } from '../src/vdom-my';
+import { createElement, updateElement } from '../src/vdom-my';
+import { updateProps } from '../src/vdom-my-prop-attr';
 
 describe('VDOM Comprehensive Attribute Handling Tests', () => {
   let container: HTMLElement;

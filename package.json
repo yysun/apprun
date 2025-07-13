@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "commander": "^14.0.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "property-information": "^7.1.0"
   }
 }

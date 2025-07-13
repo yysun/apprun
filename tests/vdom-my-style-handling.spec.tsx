@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { createElement, updateElement, updateProps } from '../src/vdom-my';
+import { createElement, updateElement } from '../src/vdom-my';
+import { updateProps } from '../src/vdom-my-prop-attr';
 
 describe('VDOM Enhanced Style Handling Tests', () => {
 
