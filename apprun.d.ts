@@ -3,11 +3,11 @@ declare module 'apprun' {
   export type Element = HTMLElement | string;
 
   export type VNode = {
-    tag: string,
+    tag: string | Function,
     props: {},
     children: Array<VNode | string>
   };
-  export type VDOM = false | string | VNode | Array<VNode | string>;
+  export type VDOM = false | string | VNode | Array<VNode | string> | any; // TemplateResult from lit-html
   export type View<T> = (state: T) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
@@ -37,7 +37,8 @@ declare module 'apprun' {
     transition?: boolean;
     history?;
     route?: string;
-    rendered?: (state: T) => void
+    rendered?: (state: T) => void;
+    mounted?: (props: any, children: any[], state: T) => T | void;
   };
 
   export interface IApp {
@@ -76,7 +77,6 @@ declare module 'apprun' {
     mounted: (props: any, children: any[], state: T) => T | void;
     unmount: () => void;
     unload: (state: T) => void;
-    render(element: HTMLElement, node: any): void;
   }
 
   export function on<E>(name?: E, options?: EventOptions): any;

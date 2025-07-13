@@ -70,9 +70,12 @@ export interface IApp {
   start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): Component<T, E>;
   on(name: string, fn: (...args: any[]) => void, options?: any): void;
+  once(name: string, fn: (...args: any[]) => void, options?: any): void;
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
   find(name: string): any | any[];
+  query(name: string, ...args: any[]): Promise<any[]>;
+  runAsync(name: string, ...args: any[]): Promise<any[]>;
   h(tag: string | Function, props, ...children): VNode | VNode[];
   createElement(tag: string | Function, props, ...children): VNode | VNode[];
   render(element: Element | string, node: VNode): void;
@@ -81,7 +84,8 @@ export interface IApp {
   webComponent(name: string, componentClass, options?: CustomElementOptions): void;
   safeHTML(html: string): any[];
   use_render(render, mode?: 0 | 1);
-  use_react(createRoot);
+  use_react(React, ReactDOM);
+  version: string;
 }
 
 if (!app.start) {
@@ -103,6 +107,12 @@ if (!app.start) {
     component.start(element, opts);
     return component;
   };
+
+  app.once = app.once || ((name: string, fn: (...args: any[]) => void, options: any = {}) => {
+    app.on(name, fn, { ...options, once: true });
+  });
+
+  app.query = app.query || app.runAsync;
 
   const NOOP = _ => {/* Intentionally empty */ }
   // app.on('$', NOOP);
