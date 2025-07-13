@@ -125,7 +125,7 @@ if (!app.start) {
 
   if (typeof document === 'object') {
     document.addEventListener("DOMContentLoaded", () => {
-      const init_load = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
+      const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
       const use_hash = app.find('#') || app.find('#/') || false;
 
       // console.log(`AppRun ${app.version} started with ${use_hash ? 'hash' : 'path'} routing. Initial load: ${init_load ? 'disabled' : 'enabled'}.`);
@@ -133,9 +133,9 @@ if (!app.start) {
       window.addEventListener('popstate', () => route(location.pathname));
 
       if (use_hash) {
-        init_load && route(location.hash);
+        !no_init_route && route(location.hash);
       } else {
-        init_load && route(location.pathname);
+        !no_init_route && route(location.pathname);
         document.body.addEventListener('click', e => {
           const element = e.target as HTMLElement;
           const menu = (element.tagName === 'A' ? element : element.closest('a')) as HTMLAnchorElement;
@@ -172,15 +172,32 @@ if (!app.start) {
   };
 
   app.use_react = (React, ReactDOM) => {
+    if (!React || !ReactDOM) {
+      console.error('AppRun use_react: React and ReactDOM parameters are required');
+      return;
+    }
+    
     app.h = app.createElement = React.createElement;
     app.Fragment = React.Fragment;
-    app.render = (el, vdom) => ReactDOM.render(vdom, el);
+    
+    // React 18+ uses createRoot API
     if (React.version && React.version.startsWith('18')) {
+      if (!ReactDOM.createRoot) {
+        console.error('AppRun use_react: ReactDOM.createRoot not found in React 18+');
+        return;
+      }
       app.render = (el, vdom) => {
-        if (!el || !vdom) return;
+        if (!el || vdom === undefined) return;
         if (!el._root) el._root = ReactDOM.createRoot(el);
         el._root.render(vdom);
       }
+    } else {
+      // Legacy React versions
+      if (!ReactDOM.render) {
+        console.error('AppRun use_react: ReactDOM.render not found in legacy React');
+        return;
+      }
+      app.render = (el, vdom) => ReactDOM.render(vdom, el);
     }
   }
 }
