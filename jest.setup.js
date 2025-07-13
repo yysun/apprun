@@ -11,6 +11,32 @@ global.spyOn = (obj, method) => {
   return spy;
 };
 
+// Add TextEncoder/TextDecoder polyfills for JSDOM environment
+if (typeof TextEncoder === 'undefined') {
+  const { TextEncoder, TextDecoder } = require('util');
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder;
+}
+
+// Ensure global references are properly set up for JSDOM
+Object.defineProperty(global, 'Node', {
+  value: globalThis.Node || class Node { },
+  writable: true,
+  configurable: true
+});
+
+Object.defineProperty(global, 'HTMLElement', {
+  value: globalThis.HTMLElement || class HTMLElement { },
+  writable: true,
+  configurable: true
+});
+
+Object.defineProperty(global, 'SVGElement', {
+  value: globalThis.SVGElement || class SVGElement { },
+  writable: true,
+  configurable: true
+});
+
 // Mock jasmine functionality with Jest equivalents
 global.jasmine = {
   createSpy: (name) => {
@@ -35,13 +61,13 @@ global.jasmine = {
 if (typeof document === 'undefined') {
   global.document = {
     createElement: () => ({
-      setAttribute: () => {},
+      setAttribute: () => { },
       style: {},
-      appendChild: () => {}
+      appendChild: () => { }
     }),
     createComment: () => ({}),
     body: {
-      appendChild: () => {}
+      appendChild: () => { }
     }
   };
 }

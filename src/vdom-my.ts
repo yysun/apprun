@@ -31,58 +31,15 @@ export function createElement(tag: string | Function | [], props?: {}, ...childr
   else if (Array.isArray(tag)) return tag; // JSX fragments - babel
   else if (tag === undefined && children) return ch; // JSX fragments - typescript
   else if (Object.getPrototypeOf(tag).__isAppRunComponent) return { tag, props, children: ch } // createComponent(tag, { ...props, children });
-  else return tag(props, ...children); // JSX component
-}
+  else if (typeof tag === 'function') return tag(props, ch);
+  else throw new Error(`Unknown tag in vdom ${tag}`);
+};
 
-function createComponent(node, parent, idx = 0) {
-  if (typeof node === 'string') return node;
-  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
-  let vdom = node;
-  if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) {
-    vdom = render_component(node, parent, idx);
-  }
-  if (vdom && Array.isArray(vdom.children)) {
-    const new_parent = vdom.props?._component;
-    if (new_parent) {
-      let i = 0;
-      vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));
-    } else {
-      vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
-    }
-  }
-  return vdom;
-}
-
-function render_component(node, parent, idx) {
-  const { tag, props, children } = node;
-  let key = `_${idx}`;
-  let id = props && props['id'];
-  if (!id) id = `_${idx}${Date.now()}`;
-  else key = id;
-  let asTag = 'section';
-  if (props && props['as']) {
-    asTag = props['as'];
-    delete props['as'];
-  }
-  if (!parent.__componentCache) parent.__componentCache = {};
-  let component = parent.__componentCache[key];
-  if (!component || !(component instanceof tag) || !component.element) {
-    const element = document.createElement(asTag);
-    component = parent.__componentCache[key] = new tag({ ...props, children }).mount(element, { render: true });
-  } else {
-    component.renderState(component.state);
-  }
-  if (component.mounted) {
-    const new_state = component.mounted(props, children, component.state);
-    (typeof new_state !== 'undefined') && component.setState(new_state);
-  }
-  updateProps(component.element, props, false);
-  return component.element;
-}
+const keyCache = {};
 
 export const updateElement = (element: Element | string, nodes: VDOM, component = {}) => {
-  // console.assert(!!element);
-
+  // tslint:disable-next-line
+  if (nodes == null || nodes === false) return;
   const el = (typeof element === 'string' && element) ?
     document.getElementById(element) || document.querySelector(element) : element;
   nodes = directive(nodes, component);
@@ -92,7 +49,7 @@ export const updateElement = (element: Element | string, nodes: VDOM, component 
 function render(element: Element, nodes: VDOM, parent = {}) {
   // tslint:disable-next-line
   if (nodes == null || nodes === false) return;
-  nodes = createComponent(nodes, parent, 0);
+  nodes = createComponent(nodes, parent);
   if (!element) return;
   const isSvg = element.nodeName === "SVG";
   if (Array.isArray(nodes)) {
@@ -120,175 +77,88 @@ function update(element: Element, node: VNode, isSvg: boolean) {
   updateProps(element, node.props, isSvg);
 }
 
-/**
- * Smart key-to-element mapping for efficient lookups
- * Maps keys to both DOM elements and their current positions
- */
-interface KeyedElementInfo {
-  element: Element;
-  oldIndex: number;
-}
-
-/**
- * Efficiently reconcile children with greedy diff algorithm
- * Supports mixed keyed/unkeyed children with minimal DOM operations
- */
 function updateChildren(element: Element, children: any[], isSvg: boolean) {
   const old_len = element.childNodes?.length || 0;
   const new_len = children?.length || 0;
 
-  // Check if we need keyed reconciliation
-  const hasKeys = children && children.some(child =>
-    child && typeof child === 'object' && child.props &&
-    child.props.key !== undefined && child.props.key !== null
+  // Handle key-based reordering first if any children have keys
+  const hasKeysInNewChildren = children?.some(child =>
+    child && typeof child === 'object' && child.props && child.props.key !== undefined
   );
 
-  if (hasKeys) {
-    reconcileKeyedChildren(element, children, isSvg);
-  } else {
-    reconcileUnkeyedChildren(element, children, isSvg);
-  }
-}
-
-/**
- * Advanced keyed reconciliation using greedy diff algorithm
- * Reuses existing DOM elements when possible, minimizing operations
- */
-function reconcileKeyedChildren(element: Element, children: any[], isSvg: boolean) {
-  const oldChildren = Array.from(element.childNodes);
-  const newChildren: Element[] = [];
-
-  // Build map of existing keyed elements
-  const keyedElements = new Map<any, KeyedElementInfo>();
-  oldChildren.forEach((child, index) => {
-    const childElement = child as Element;
-    const key = (childElement as any).key;
-    if (key !== undefined && key !== null) {
-      keyedElements.set(key, { element: childElement, oldIndex: index });
-    }
-  });
-
-  // Process each new child
-  children.forEach((child, index) => {
-    if (!child || (typeof child !== 'object' && typeof child !== 'string')) {
-      newChildren.push(create(child, isSvg));
-      return;
-    }
-
-    if (typeof child === 'string') {
-      newChildren.push(create(child, isSvg));
-      return;
-    }
-
-    const key = child.props?.key;
-
-    if (key !== undefined && key !== null) {
-      // Keyed element - try to reuse existing
-      const existing = keyedElements.get(key);
-      if (existing) {
-        // Reuse existing element - update in place
-        const existingElement = existing.element;
-        update(existingElement, child, isSvg);
-        (existingElement as any).key = key;
-        newChildren.push(existingElement);
-        keyedElements.delete(key); // Mark as used
-      } else {
-        // Create new keyed element
-        const newElement = create(child, isSvg);
-        (newElement as any).key = key;
-        newChildren.push(newElement);
+  if (hasKeysInNewChildren) {
+    // Create a map of existing keyed elements
+    const existingKeyedElements = new Map();
+    for (let i = 0; i < old_len; i++) {
+      const el = element.childNodes[i];
+      if (el && (el as any).key) {
+        existingKeyedElements.set((el as any).key, el);
       }
-    } else {
-      // Non-keyed element in mixed list - create fresh
-      newChildren.push(create(child, isSvg));
     }
-  });
 
-  // Apply the efficiently computed changes
-  applyChildrenChanges(element, newChildren);
-}
+    // Build new DOM structure
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < new_len; i++) {
+      const child = children[i];
+      if (child == null) continue;
 
-/**
- * Simple reconciliation for non-keyed children
- * Optimized for common cases with minimal operations
- */
-function reconcileUnkeyedChildren(element: Element, children: any[], isSvg: boolean) {
-  const oldChildren = Array.from(element.childNodes);
-  const oldLength = oldChildren.length;
-  const newLength = children?.length || 0;
+      const key = child.props && child.props['key'];
+      if (key && existingKeyedElements.has(key)) {
+        // Reuse existing element
+        const existingEl = existingKeyedElements.get(key);
+        update(existingEl, child as VNode, isSvg);
+        fragment.appendChild(existingEl);
+        existingKeyedElements.delete(key); // Mark as used
+      } else {
+        // Create new element
+        fragment.appendChild(create(child, isSvg));
+      }
+    }
 
-  // Update/create children
-  for (let i = 0; i < newLength; i++) {
+    // Clear current children and append new structure
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+    element.appendChild(fragment);
+    return;
+  }
+
+  // Original non-keyed logic
+  const len = Math.min(old_len, new_len);
+  for (let i = 0; i < len; i++) {
     const child = children[i];
-
-    if (i < oldLength) {
-      const oldChild = oldChildren[i] as Element;
-
-      if (typeof child === 'string') {
-        if (oldChild.nodeType === Node.TEXT_NODE) {
-          if (oldChild.textContent !== child) {
-            oldChild.textContent = child;
-          }
-        } else {
-          element.replaceChild(createText(child), oldChild);
-        }
-      } else if (child && typeof child === 'object' && child.tag) {
-        if (same(oldChild, child)) {
-          update(oldChild, child, isSvg);
-        } else {
-          element.replaceChild(create(child, isSvg), oldChild);
+    if (child == null) continue;
+    const el = element.childNodes[i];
+    if (!el) continue; // Safety check for undefined childNodes
+    if (typeof child === 'string') {
+      if (el.nodeType === 3) {
+        if (el.nodeValue !== child) {
+          el.nodeValue = child;
         }
       } else {
-        element.replaceChild(create(child, isSvg), oldChild);
+        element.replaceChild(createText(child), el);
       }
-    } else {
-      // Append new children
-      element.appendChild(create(child, isSvg));
+    } else if (child instanceof HTMLElement || child instanceof SVGElement) {
+      element.replaceChild(child, el);
+    } else if (child && typeof child === 'object') {
+      update(element.childNodes[i], child as VNode, isSvg);
     }
   }
 
-  // Remove extra old children
-  for (let i = oldLength - 1; i >= newLength; i--) {
-    element.removeChild(oldChildren[i]);
-  }
-}
-
-/**
- * Efficiently apply children changes to DOM using minimal operations
- * Uses insertBefore for proper positioning without full reconstruction
- * Optimized to minimize DOM queries and operations
- */
-function applyChildrenChanges(element: Element, newChildren: Element[]) {
-  const currentChildren = Array.from(element.childNodes);
-  const currentLength = currentChildren.length;
-  const newLength = newChildren.length;
-
-  // Create a Set for O(1) lookup of elements that should remain
-  const newChildrenSet = new Set(newChildren);
-
-  // Step 1: Remove elements that are no longer needed (from end to avoid index shifts)
-  for (let i = currentLength - 1; i >= 0; i--) {
-    const child = currentChildren[i];
-    if (!newChildrenSet.has(child as Element)) {
-      element.removeChild(child);
-    }
+  // Remove extra old nodes
+  while (element.childNodes.length > len) {
+    element.removeChild(element.lastChild);
   }
 
-  // Step 2: Position elements correctly using efficient insertBefore strategy
-  for (let i = 0; i < newLength; i++) {
-    const newChild = newChildren[i];
-    const currentChild = element.childNodes[i];
-
-    if (currentChild !== newChild) {
-      if (i >= element.childNodes.length) {
-        // Append at the end - no reference node needed
-        element.appendChild(newChild);
-      } else {
-        // Insert before current child at position i
-        element.insertBefore(newChild, currentChild);
+  if (new_len > len) {
+    const d = document.createDocumentFragment();
+    for (let i = len; i < children.length; i++) {
+      const child = children[i];
+      if (child != null) {
+        d.appendChild(create(child, isSvg));
       }
     }
-    // If currentChild === newChild, element is already in correct position
+    element.appendChild(d);
   }
 }
 
@@ -326,4 +196,50 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
   updateProps(element, node.props, isSvg);
   if (node.children) node.children.forEach(child => element.appendChild(create(child, isSvg)));
   return element
+}
+
+function render_component(node, parent, idx) {
+  const { tag, props, children } = node;
+  let key = `_${idx}`;
+  let id = props && props['id'];
+  if (!id) id = `_${idx}${Date.now()}`;
+  else key = id;
+  let asTag = 'section';
+  if (props && props['as']) {
+    asTag = props['as'];
+    delete props['as'];
+  }
+  if (!parent.__componentCache) parent.__componentCache = {};
+  let component = parent.__componentCache[key];
+  if (!component || !(component instanceof tag) || !component.element) {
+    const element = document.createElement(asTag);
+    component = parent.__componentCache[key] = new tag({ ...props, children }).mount(element, { render: true });
+  } else {
+    component.renderState(component.state);
+  }
+  if (component.mounted) {
+    const new_state = component.mounted(props, children, component.state);
+    (typeof new_state !== 'undefined') && component.setState(new_state);
+  }
+  updateProps(component.element, props, false);
+  return component.element;
+}
+
+function createComponent(node, parent, idx = 0) {
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(child => createComponent(child, parent, idx++));
+  let vdom = node;
+  if (node && typeof node.tag === 'function' && Object.getPrototypeOf(node.tag).__isAppRunComponent) {
+    vdom = render_component(node, parent, idx);
+  }
+  if (vdom && Array.isArray(vdom.children)) {
+    const new_parent = vdom.props?._component;
+    if (new_parent) {
+      let i = 0;
+      vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));
+    } else {
+      vdom.children = vdom.children.map(child => createComponent(child, parent, idx++));
+    }
+  }
+  return vdom;
 }
