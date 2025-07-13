@@ -307,8 +307,8 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
 export function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
 
-  // Aggressive reset strategy: reset common properties first, then apply new ones
-  // This ensures previous state is cleared without complex caching
+  // Capture protected properties before any reset/update operations
+  const protectedProps = getProtectedProperties(element);
 
   // Handle className normalization upfront
   if (props && props['className']) {
@@ -324,6 +324,12 @@ export function updateProps(element: Element, props: {}, isSvg) {
 
   for (const name in props) {
     const value = props[name];
+
+    // Skip applying new value if this property is protected
+    if (protectedProps.hasOwnProperty(name)) {
+      continue; // Keep the protected value
+    }
+
     if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
@@ -362,6 +368,12 @@ export function updateProps(element: Element, props: {}, isSvg) {
       element.key = value;
     }
   }
+
+  // Restore protected properties after all other properties have been set
+  Object.keys(protectedProps).forEach(prop => {
+    (element as any)[prop] = protectedProps[prop];
+  });
+
   if (props && typeof props['ref'] === 'function') {
     window.requestAnimationFrame(() => props['ref'](element));
   }
@@ -416,6 +428,7 @@ function createComponent(node, parent, idx = 0) {
 /**
  * Reset commonly used properties to ensure clean state
  * This aggressive reset strategy eliminates the need for complex property diffing
+ * Protection of interactive properties is handled at the updateProps level
  */
 function resetCommonProperties(element: Element) {
   // Reset common attributes
@@ -437,16 +450,24 @@ function resetCommonProperties(element: Element) {
     element.style.cssText = '';
   }
 
-  // Reset common DOM properties (but preserve protected ones for active elements)
-  if (element !== document.activeElement) {
-    // Only reset value for form elements, not all elements that have a value property
-    const formElements = ['INPUT', 'TEXTAREA', 'SELECT'];
-    if (formElements.includes(element.tagName) && 'value' in element) {
-      (element as any).value = '';
-    }
-    if ('checked' in element && element.tagName === 'INPUT') (element as any).checked = false;
-    if ('selected' in element && element.tagName === 'OPTION') (element as any).selected = false;
+  // Reset form properties aggressively (protection happens in updateProps)
+  const tagName = element.tagName;
+
+  if (tagName === 'INPUT') {
+    const input = element as HTMLInputElement;
+    input.value = '';
+    input.checked = false;
+  } else if (tagName === 'TEXTAREA') {
+    (element as HTMLTextAreaElement).value = '';
+  } else if (tagName === 'SELECT') {
+    (element as HTMLSelectElement).selectedIndex = -1;
+  } else if (tagName === 'OPTION') {
+    (element as HTMLOptionElement).selected = false;
   }
+
+  // Reset scroll position
+  element.scrollTop = 0;
+  element.scrollLeft = 0;
 
   // Reset event handlers
   const eventProps = ['onclick', 'onchange', 'oninput', 'onsubmit', 'onload'];
@@ -455,4 +476,59 @@ function resetCommonProperties(element: Element) {
       element[prop] = null;
     }
   });
+}
+
+/**
+ * Get protected properties for a specific element type to preserve UX during updates
+ * Returns object with properties that should not be reset for interactive elements
+ */
+function getProtectedProperties(element: Element): { [key: string]: any } {
+  const protectedProps: { [key: string]: any } = {};
+  const tagName = element.tagName;
+  const isActiveElement = element === document.activeElement;
+
+  // Form elements - protect critical interactive state
+  if (tagName === 'INPUT') {
+    const inputType = (element as HTMLInputElement).type;
+
+    // Protect value for text-like inputs when focused
+    if (isActiveElement && ['text', 'password', 'email', 'url', 'tel', 'search'].includes(inputType)) {
+      protectedProps.value = (element as HTMLInputElement).value;
+      protectedProps.selectionStart = (element as HTMLInputElement).selectionStart;
+      protectedProps.selectionEnd = (element as HTMLInputElement).selectionEnd;
+      protectedProps.selectionDirection = (element as HTMLInputElement).selectionDirection;
+    }
+
+    // Protect checked state for checkboxes/radios
+    if (['checkbox', 'radio'].includes(inputType)) {
+      protectedProps.checked = (element as HTMLInputElement).checked;
+    }
+  }
+
+  // Textarea - protect content and selection when focused
+  else if (tagName === 'TEXTAREA' && isActiveElement) {
+    protectedProps.value = (element as HTMLTextAreaElement).value;
+    protectedProps.selectionStart = (element as HTMLTextAreaElement).selectionStart;
+    protectedProps.selectionEnd = (element as HTMLTextAreaElement).selectionEnd;
+    protectedProps.selectionDirection = (element as HTMLTextAreaElement).selectionDirection;
+  }
+
+  // Select - protect selected state
+  else if (tagName === 'SELECT') {
+    protectedProps.selectedIndex = (element as HTMLSelectElement).selectedIndex;
+    protectedProps.value = (element as HTMLSelectElement).value;
+  }
+
+  // Option - protect selected state
+  else if (tagName === 'OPTION') {
+    protectedProps.selected = (element as HTMLOptionElement).selected;
+  }
+
+  // Scrollable elements - protect scroll position
+  if (element.scrollTop > 0 || element.scrollLeft > 0) {
+    protectedProps.scrollTop = element.scrollTop;
+    protectedProps.scrollLeft = element.scrollLeft;
+  }
+
+  return protectedProps;
 }
