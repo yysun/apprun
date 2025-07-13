@@ -102,16 +102,8 @@ function updateChildren(element, children, isSvg: boolean) {
         if (el.key === key) {
           update(element.childNodes[i], child, isSvg);
         } else {
-          // console.log(el.key, key);
-          const old = keyCache[key];
-          if (old) {
-            const temp = old.nextSibling;
-            element.insertBefore(old, el);
-            temp ? element.insertBefore(el, temp) : element.appendChild(el);
-            update(element.childNodes[i], child, isSvg);
-          } else {
-            element.replaceChild(create(child, isSvg), el);
-          }
+          // Key mismatch: replace the element to avoid DOM corruption
+          element.replaceChild(create(child, isSvg), el);
         }
       } else {
         update(element.childNodes[i], child, isSvg);
@@ -146,7 +138,7 @@ function createText(node) {
     div.insertAdjacentHTML('afterbegin', node.substring(6))
     return div;
   } else {
-    return document.createTextNode(node??'');
+    return document.createTextNode(node ?? '');
   }
 }
 
