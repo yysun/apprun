@@ -1,4 +1,5 @@
 import app from './apprun'
+import { safeGlobalAssign, SafeGlobalContext } from './type-utils';
 export {
   app, Component, View, Action, Update, on, update, event, EventOptions,
   customElement, CustomElementOptions,
@@ -14,8 +15,11 @@ app.Fragment = Fragment;
 export default app;
 
 if (typeof window === 'object') {
-  window['React'] = window['_React'] || app;
-  window['html'] = html;
-  window['svg'] = svg;
-  window['run'] = run;
+  const globalWindow = window as SafeGlobalContext;
+  safeGlobalAssign(globalWindow, {
+    'React': globalWindow['_React'] || app,
+    'html': html,
+    'svg': svg,
+    'run': run
+  });
 }

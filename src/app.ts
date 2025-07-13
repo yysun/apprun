@@ -3,16 +3,30 @@
  *
  * This file provides:
  * 1. App class - The core event system implementation with pub/sub capabilities
- *    - on(): Subscribe to events
- *    - off(): Unsubscribe from events
- *    - run(): Publish events synchronously
- *    - runAsync(): Publish events asynchronously
- *    - query(): Alias for runAsync
+ *    - on(): Subscribe to events with options (once, delay, global)
+ *    - off(): Unsubscribe from events with proper cleanup
+ *    - run(): Publish events synchronously with error handling
+ *    - runAsync(): Publish events asynchronously with Promise support
+ *    - query(): Alias for runAsync for backward compatibility
  *
  * 2. Default app singleton - Global event bus instance
  *    - Created once and reused across the application
- *    - Stored in global scope (window/global)
- *    - Version tracked to prevent duplicate instances
+ *    - Stored in global scope (window/global) with version tracking
+ *    - Prevents duplicate instances across different versions
+ *
+ * Features:
+ * - Event wildcards support (events ending with '*')
+ * - Delayed event execution with timeout management
+ * - Once-only event subscriptions
+ * - Async event handling with Promise.all
+ * - Global event bus shared across components
+ * - Memory leak prevention with proper cleanup
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Added validation for event handler functions
+ * - Enhanced error handling in event execution
+ * - Improved null checks in delayed event handling
+ * - Better error reporting for invalid handlers
  *
  * Usage:
  * ```ts
@@ -23,6 +37,11 @@
  *
  * // Publish events
  * app.run('event-name', ...args);
+ * 
+ * // Async events
+ * app.runAsync('async-event', data).then(results => {
+ *   // Handle results
+ * });
  * ```
  */
 
@@ -70,10 +89,18 @@ export class App {
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     subscribers.forEach((sub) => {
       const { fn, options } = sub;
+      if (!fn || typeof fn !== 'function') {
+        console.error(`AppRun event handler for '${name}' is not a function:`, fn);
+        return false;
+      }
       if (options.delay) {
         this.delay(name, fn, args, options);
       } else {
-        Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+        try {
+          Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+        } catch (error) {
+          console.error(`Error in event handler for '${name}':`, error);
+        }
       }
       return !sub.options.once;
     });
@@ -89,7 +116,11 @@ export class App {
     if (options._t) clearTimeout(options._t);
     options._t = setTimeout(() => {
       clearTimeout(options._t);
-      Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+      try {
+        Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+      } catch (error) {
+        console.error(`Error in delayed event handler for '${name}':`, error);
+      }
     }, options.delay);
   }
 
@@ -98,7 +129,16 @@ export class App {
     console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
       const { fn, options } = sub;
-      return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+      if (!fn || typeof fn !== 'function') {
+        console.error(`AppRun async event handler for '${name}' is not a function:`, fn);
+        return Promise.resolve(null);
+      }
+      try {
+        return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+      } catch (error) {
+        console.error(`Error in async event handler for '${name}':`, error);
+        return Promise.reject(error);
+      }
     });
     return Promise.all(promises);
   }

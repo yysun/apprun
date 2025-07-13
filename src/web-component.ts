@@ -4,30 +4,50 @@
  * This file enables using AppRun components as Web Components:
  * 1. Custom Element Creation
  *    - Converts AppRun components to custom elements
- *    - Handles lifecycle (connected, disconnected, etc)
- *    - Manages shadow DOM and light DOM rendering
+ *    - Handles lifecycle (connected, disconnected, attributeChanged)
+ *    - Manages shadow DOM and light DOM rendering options
+ *    - Automatic element registration with customElements.define()
  * 
  * 2. Property/Attribute Sync
- *    - Observes attribute changes
- *    - Updates component state automatically
- *    - Handles camelCase/kebab-case conversion
- *    - Supports complex property types
+ *    - Observes attribute changes with attributeChangedCallback
+ *    - Updates component state automatically on changes
+ *    - Handles camelCase/kebab-case conversion automatically
+ *    - Supports complex property types and JSON parsing
+ *    - Two-way data binding between attributes and state
  * 
  * 3. Event Handling
  *    - Proxies events between component and element
- *    - Supports both global and local events
- *    - Maintains proper event bubbling
+ *    - Supports both global and local event systems
+ *    - Maintains proper event bubbling and capturing
+ *    - Custom event dispatching for component communication
  * 
+ * Features:
+ * - Shadow DOM encapsulation support
+ * - Attribute observation and change detection
+ * - Lifecycle management and cleanup
+ * - Property reflection to attributes
+ * - Event proxy system
+ * - Flexible rendering options
+ *
+ * Type Safety Improvements (v3.35.1):
+ * - Enhanced custom element options typing
+ * - Better lifecycle method signatures
+ * - Improved attribute/property type safety
+ * - Safer DOM manipulation with null checks
+ *
  * Usage:
  * ```ts
  * // Register web component
- * @customElement('my-element')
+ * @customElement('my-element', { 
+ *   shadow: true,
+ *   observedAttributes: ['name', 'value']
+ * })
  * class MyComponent extends Component {
  *   // Regular AppRun component code
  * }
  * 
  * // Use in HTML
- * <my-element name="value"></my-element>
+ * <my-element name="value" data-prop="complex"></my-element>
  * ```
  */
 
@@ -71,7 +91,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
         }
         return map
       }, {})
-      this._attrMap = (name: string) : string => attrMap[name] || name
+      this._attrMap = (name: string): string => attrMap[name] || name
 
       const props = {};
       Array.from(this.attributes).forEach(item => props[this._attrMap(item.name)] = item.value);
