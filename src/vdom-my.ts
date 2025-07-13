@@ -67,15 +67,14 @@ function same(el: Element, node: VNode) {
 }
 
 function update(element: Element, node: VNode, isSvg: boolean) {
-  if (node['_op'] === 3) return;
   // console.assert(!!element);
   isSvg = isSvg || node.tag === "svg";
   if (!same(element, node)) {
     element.parentNode.replaceChild(create(node, isSvg), element);
     return;
   }
-  !(node['_op'] & 2) && updateChildren(element, node.children, isSvg);
-  !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
+  updateChildren(element, node.children, isSvg);
+  updateProps(element, node.props, isSvg);
 }
 
 function updateChildren(element: Element, children: any[], isSvg: boolean) {
@@ -101,7 +100,7 @@ function updateChildren(element: Element, children: any[], isSvg: boolean) {
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < new_len; i++) {
       const child = children[i];
-      if (child == null || child['_op'] === 3) continue;
+      if (child == null) continue;
 
       const key = child.props && child.props['key'];
       if (key && existingKeyedElements.has(key)) {
@@ -128,7 +127,7 @@ function updateChildren(element: Element, children: any[], isSvg: boolean) {
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
-    if (child == null || child['_op'] === 3) continue;
+    if (child == null) continue;
     const el = element.childNodes[i];
     if (!el) continue; // Safety check for undefined childNodes
     if (typeof child === 'string') {
