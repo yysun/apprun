@@ -8,6 +8,7 @@ module.exports = {
     "^.+\\.(t|j)sx?$": ["ts-jest", {
       useESM: true,
       tsconfig: "tsconfig.jest.json",
+      isolatedModules: true,
       diagnostics: {
         warnOnly: true, // Convert type-check errors to warnings during tests
         ignoreCodes: [
@@ -46,13 +47,6 @@ module.exports = {
     "^(\\.{1,2}/.*)\\.js$": "$1",
     "^(\\.{1,2}/.*)\\.jsx?$": "$1",
     "^(\\.{1,2}/.*)\\.tsx?$": "$1"
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.jest.json',
-      useESM: true,
-      isolatedModules: true
-    }
   },
   testPathIgnorePatterns: [
     "/node_modules/",
