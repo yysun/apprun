@@ -78,7 +78,7 @@ function update(element: Element, node: VNode, isSvg: boolean) {
   !(node['_op'] & 1) && updateProps(element, node.props, isSvg);
 }
 
-function updateChildren(element, children, isSvg: boolean) {
+function updateChildren(element: Element, children: any[], isSvg: boolean) {
   const old_len = element.childNodes?.length || 0;
   const new_len = children?.length || 0;
   const len = Math.min(old_len, new_len);
@@ -101,13 +101,13 @@ function updateChildren(element, children, isSvg: boolean) {
       const key = child.props && child.props['key'];
       if (key) {
         if (el.key === key) {
-          update(element.childNodes[i], child, isSvg);
+          update(element.childNodes[i], child as VNode, isSvg);
         } else {
           // Key mismatch: replace the element to avoid DOM corruption
-          element.replaceChild(create(child, isSvg), el);
+          element.replaceChild(create(child as VNode, isSvg), el);
         }
       } else {
-        update(element.childNodes[i], child, isSvg);
+        update(element.childNodes[i], child as VNode, isSvg);
       }
     }
   }
@@ -120,7 +120,10 @@ function updateChildren(element, children, isSvg: boolean) {
   if (new_len > len) {
     const d = document.createDocumentFragment();
     for (let i = len; i < children.length; i++) {
-      d.appendChild(create(children[i], isSvg));
+      const child = children[i];
+      if (child != null) {
+        d.appendChild(create(child, isSvg));
+      }
     }
     element.appendChild(d);
   }
