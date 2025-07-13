@@ -6,8 +6,6 @@ export function Fragment(props, ...children): any[] {
   return collect(children);
 }
 
-const ATTR_PROPS = '_props';
-
 function collect(children) {
   const ch = [];
   const push = (c) => {
@@ -306,38 +304,37 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
   return element
 }
 
-function mergeProps(oldProps: {}, newProps: {}): {} {
-  newProps['class'] = newProps['class'] || newProps['className'];
-  delete newProps['className'];
-  const props = {};
-  if (oldProps) Object.keys(oldProps).forEach(p => props[p] = null);
-  if (newProps) Object.keys(newProps).forEach(p => props[p] = newProps[p]);
-  return props;
-}
-
 export function updateProps(element: Element, props: {}, isSvg) {
   // console.assert(!!element);
-  const cached = element[ATTR_PROPS] || {};
-  props = mergeProps(cached, props || {});
-  element[ATTR_PROPS] = props;
+
+  // Aggressive reset strategy: reset common properties first, then apply new ones
+  // This ensures previous state is cleared without complex caching
+
+  // Handle className normalization upfront
+  if (props && props['className']) {
+    props = { ...props, class: props['className'] };
+    delete props['className'];
+  }
+
+  // Reset commonly used properties that might persist
+  resetCommonProperties(element);
+
+  // Apply new properties
+  if (!props) return;
 
   for (const name in props) {
     const value = props[name];
-    // if (cached[name] === value) continue;
-    // console.log('updateProps', name, value);
     if (name.startsWith('data-')) {
       const dname = name.substring(5);
       const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
-      if (element.dataset[cname] !== value) {
-        if (value || value === "") element.dataset[cname] = value;
-        else delete element.dataset[cname];
-      }
+      if (value || value === "") element.dataset[cname] = value;
+      else delete element.dataset[cname];
     } else if (name === 'style') {
       if (element.style.cssText) element.style.cssText = '';
       if (typeof value === 'string') element.style.cssText = value;
       else {
         for (const s in value) {
-          if (element.style[s] !== value[s]) element.style[s] = value[s];
+          element.style[s] = value[s];
         }
       }
     } else if (name.startsWith('xlink')) {
@@ -355,11 +352,9 @@ export function updateProps(element: Element, props: {}, isSvg) {
         else element.removeAttribute(name);
       }
     } else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-|^for$/g.test(name) || isSvg) {
-      if (element.getAttribute(name) !== value) {
-        if (value) element.setAttribute(name, value);
-        else element.removeAttribute(name);
-      }
-    } else if (element[name] !== value) {
+      if (value) element.setAttribute(name, value);
+      else element.removeAttribute(name);
+    } else {
       element[name] = value;
     }
     // Set key property on DOM element for reconciliation (no global cache needed)
@@ -416,4 +411,48 @@ function createComponent(node, parent, idx = 0) {
     }
   }
   return vdom;
+}
+
+/**
+ * Reset commonly used properties to ensure clean state
+ * This aggressive reset strategy eliminates the need for complex property diffing
+ */
+function resetCommonProperties(element: Element) {
+  // Reset common attributes
+  element.removeAttribute('class');
+  element.removeAttribute('id');
+  element.removeAttribute('role');
+
+  // Reset common aria attributes
+  const ariaAttrs = ['aria-label', 'aria-hidden', 'aria-expanded', 'aria-selected'];
+  ariaAttrs.forEach(attr => element.removeAttribute(attr));
+
+  // Reset data attributes by clearing dataset
+  Object.keys(element.dataset).forEach(key => {
+    delete element.dataset[key];
+  });
+
+  // Reset style
+  if (element.style.cssText) {
+    element.style.cssText = '';
+  }
+
+  // Reset common DOM properties (but preserve protected ones for active elements)
+  if (element !== document.activeElement) {
+    // Only reset value for form elements, not all elements that have a value property
+    const formElements = ['INPUT', 'TEXTAREA', 'SELECT'];
+    if (formElements.includes(element.tagName) && 'value' in element) {
+      (element as any).value = '';
+    }
+    if ('checked' in element && element.tagName === 'INPUT') (element as any).checked = false;
+    if ('selected' in element && element.tagName === 'OPTION') (element as any).selected = false;
+  }
+
+  // Reset event handlers
+  const eventProps = ['onclick', 'onchange', 'oninput', 'onsubmit', 'onload'];
+  eventProps.forEach(prop => {
+    if (element[prop]) {
+      element[prop] = null;
+    }
+  });
 }

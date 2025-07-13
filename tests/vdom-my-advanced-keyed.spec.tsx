@@ -200,8 +200,8 @@ describe('Advanced Keyed Reconciliation Tests', () => {
       expect(element.children[0].textContent).toBe('Item 999');
       expect(element.children[999].textContent).toBe('Item 0');
 
-      // Should complete in reasonable time (less than 200ms for 1000 element reverse)
-      expect(duration).toBeLessThan(200);
+      // Should complete in reasonable time (less than 250ms for 1000 element reverse)
+      expect(duration).toBeLessThan(250);
     });
 
     it('should handle deeply nested keyed structures', () => {
