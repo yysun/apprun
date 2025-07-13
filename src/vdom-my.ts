@@ -112,10 +112,9 @@ function updateChildren(element, children, isSvg: boolean) {
     }
   }
 
-  let n = element.childNodes?.length || 0;
-  while (n > len) {
+  // Remove extra old nodes
+  while (element.childNodes.length > len) {
     element.removeChild(element.lastChild);
-    n--;
   }
 
   if (new_len > len) {
