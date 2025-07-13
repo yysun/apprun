@@ -81,6 +81,50 @@ function update(element: Element, node: VNode, isSvg: boolean) {
 function updateChildren(element: Element, children: any[], isSvg: boolean) {
   const old_len = element.childNodes?.length || 0;
   const new_len = children?.length || 0;
+
+  // Handle key-based reordering first if any children have keys
+  const hasKeysInNewChildren = children?.some(child =>
+    child && typeof child === 'object' && child.props && child.props.key
+  );
+
+  if (hasKeysInNewChildren) {
+    // Create a map of existing keyed elements
+    const existingKeyedElements = new Map();
+    for (let i = 0; i < old_len; i++) {
+      const el = element.childNodes[i];
+      if (el && el.key) {
+        existingKeyedElements.set(el.key, el);
+      }
+    }
+
+    // Build new DOM structure
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < new_len; i++) {
+      const child = children[i];
+      if (child == null || child['_op'] === 3) continue;
+
+      const key = child.props && child.props['key'];
+      if (key && existingKeyedElements.has(key)) {
+        // Reuse existing element
+        const existingEl = existingKeyedElements.get(key);
+        update(existingEl, child as VNode, isSvg);
+        fragment.appendChild(existingEl);
+        existingKeyedElements.delete(key); // Mark as used
+      } else {
+        // Create new element
+        fragment.appendChild(create(child, isSvg));
+      }
+    }
+
+    // Clear current children and append new structure
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+    element.appendChild(fragment);
+    return;
+  }
+
+  // Original non-keyed logic
   const len = Math.min(old_len, new_len);
   for (let i = 0; i < len; i++) {
     const child = children[i];
@@ -98,17 +142,7 @@ function updateChildren(element: Element, children: any[], isSvg: boolean) {
     } else if (child instanceof HTMLElement || child instanceof SVGElement) {
       element.replaceChild(child, el);
     } else if (child && typeof child === 'object') {
-      const key = child.props && child.props['key'];
-      if (key) {
-        if (el.key === key) {
-          update(element.childNodes[i], child as VNode, isSvg);
-        } else {
-          // Key mismatch: replace the element to avoid DOM corruption
-          element.replaceChild(create(child as VNode, isSvg), el);
-        }
-      } else {
-        update(element.childNodes[i], child as VNode, isSvg);
-      }
+      update(element.childNodes[i], child as VNode, isSvg);
     }
   }
 
@@ -216,7 +250,10 @@ export function updateProps(element: Element, props: {}, isSvg) {
     } else if (element[name] !== value) {
       element[name] = value;
     }
-    if (name === 'key' && value) keyCache[value] = element;
+    if (name === 'key' && value) {
+      keyCache[value] = element;
+      element.key = value; // Set key property on the DOM element
+    }
   }
   if (props && typeof props['ref'] === 'function') {
     window.requestAnimationFrame(() => props['ref'](element));
