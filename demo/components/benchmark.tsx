@@ -58,12 +58,13 @@ const click = (state: State, e: Event) => {
     startMeasure('delete');
     const id = getId(t);
     component.run('delete', id);
+    stopMeasure();
   } else if (t.matches('td')) {
     startMeasure('select');
     const id = getId(t);
     component.run('select', id);
+    stopMeasure();
   }
-  stopMeasure();
 }
 
 const my_update = {
