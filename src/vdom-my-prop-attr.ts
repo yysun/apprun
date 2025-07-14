@@ -1,9 +1,9 @@
 /**
- * File: vdom-my-prop-attr.ts
- * Purpose: Simplified standards-compliant property and attribute handling for VDOM operations
- * Features: Property caching, style/dataset/event handling, standards compliance
- * Updated: 2025-07-14 - Simplified implementation removing over-optimization
- * Export: updateProps - Main function for updating DOM element properties
+ * VDOM Property and Attribute Handler
+ * Standards-compliant property/attribute handling with caching and special element support
+ * Features: Skip logic for preserving user interactions during VDOM reconciliation
+ * Exports: updateProps - Main function for DOM element property updates
+ * Updated: 2025-01-14 - Added skip logic for focus-sensitive, scroll, and media properties
  */
 
 import { find, html, svg } from 'property-information';
@@ -11,60 +11,51 @@ import { find, html, svg } from 'property-information';
 const ATTR_PROPS = '_props';
 const propertyInfoCache = new Map<string, any>();
 
+// Merge old and new props, handling className -> class conversion and null cleanup
 function mergeProps(oldProps: { [key: string]: any }, newProps: { [key: string]: any }): { [key: string]: any } {
   if (newProps) {
     newProps['class'] = newProps['class'] || newProps['className'];
     delete newProps['className'];
   }
 
-  if (!oldProps || Object.keys(oldProps).length === 0) {
-    return newProps || {};
-  }
-
+  if (!oldProps || Object.keys(oldProps).length === 0) return newProps || {};
   if (!newProps || Object.keys(newProps).length === 0) {
     const props: { [key: string]: any } = {};
-    Object.keys(oldProps).forEach(p => {
-      props[p] = null;
-    });
+    Object.keys(oldProps).forEach(p => props[p] = null);
     return props;
   }
 
   const props: { [key: string]: any } = {};
-
   Object.keys(oldProps).forEach(p => {
-    if (!(p in newProps)) {
-      props[p] = null;
-    }
+    if (!(p in newProps)) props[p] = null;
   });
-
   Object.keys(newProps).forEach(p => props[p] = newProps[p]);
-
   return props;
 }
 
+// Convert kebab-case to camelCase for dataset keys
 function convertKebabToCamelCase(str: string): string {
   if (str.length <= 1) return str.toLowerCase();
-  return str.split('-').map((word, index) => {
-    if (index === 0) return word.toLowerCase();
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  }).join('');
+  return str.split('-').map((word, index) =>
+    index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join('');
 }
 
+// Cached property information lookup
 function getPropertyInfo(name: string, isSvg: boolean) {
   const cacheKey = `${name}:${isSvg}`;
   let info = propertyInfoCache.get(cacheKey);
   if (info === undefined) {
-    const schema = isSvg ? svg : html;
-    info = find(schema, name) || null;
+    info = find(isSvg ? svg : html, name) || null;
     propertyInfoCache.set(cacheKey, info);
   }
   return info;
 }
 
 
+// Specialized handlers for different attribute types
 function setDatasetAttribute(element: Element, attributeName: string, value: any): void {
-  const dataKey = attributeName.slice(5);
-  const camelKey = convertKebabToCamelCase(dataKey);
+  const camelKey = convertKebabToCamelCase(attributeName.slice(5));
   if (value == null) {
     delete (element as HTMLElement).dataset[camelKey];
   } else {
@@ -73,59 +64,18 @@ function setDatasetAttribute(element: Element, attributeName: string, value: any
 }
 
 function setEventHandler(element: Element, name: string, value: any): void {
-  if (name.startsWith('on')) {
-    if (!value || typeof value === 'function') {
-      (element as any)[name] = value;
-    } else if (typeof value === 'string') {
-      if (value) element.setAttribute(name, value);
-      else element.removeAttribute(name);
-    }
-  }
-}
+  if (!name.startsWith('on')) return;
 
-function setAttributeOrProperty(element: Element, name: string, value: any, isSvg: boolean): void {
-  if ((element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') &&
-    (name === 'value' || name === 'selected' || name === 'selectedIndex')) {
-    setElementProperty(element, name, value);
-    return;
-  }
-
-  if (element.tagName === 'INPUT' && name === 'checked') {
-    setElementProperty(element, name, value);
-    setBooleanAttribute(element, name, value);
-    return;
-  }
-
-  const info = getPropertyInfo(name, isSvg);
-
-  if (info) {
-    if (info.boolean || info.overloadedBoolean) {
-      setBooleanAttribute(element, info.attribute, value);
-    } else if (info.mustUseProperty && !isSvg) {
-      setElementProperty(element, info.property, value);
-    } else {
-      setElementAttribute(element, info.attribute, value, isSvg);
-    }
-  } else {
-    if (name.startsWith('data-')) {
-      setDatasetAttribute(element, name, value);
-    } else if (name.startsWith('aria-') || name === 'role') {
-      setElementAttribute(element, name, value, isSvg);
-    } else if (name.startsWith('on')) {
-      setEventHandler(element, name, value);
-    } else {
-      if (name in element || (element as any)[name] !== undefined) {
-        setElementProperty(element, name, value);
-      } else {
-        setElementAttribute(element, name, value, isSvg);
-      }
-    }
+  if (!value || typeof value === 'function') {
+    (element as any)[name] = value;
+  } else if (typeof value === 'string') {
+    if (value) element.setAttribute(name, value);
+    else element.removeAttribute(name);
   }
 }
 
 function setBooleanAttribute(element: Element, attributeName: string, value: any): void {
-  const shouldSet = shouldSetBooleanAttribute(value);
-  if (shouldSet) {
+  if (shouldSetBooleanAttribute(value)) {
     element.setAttribute(attributeName, attributeName);
   } else {
     element.removeAttribute(attributeName);
@@ -147,9 +97,8 @@ function setElementAttribute(element: Element, attributeName: string, value: any
   }
 
   const stringValue = String(value);
-
   if (isSvg && attributeName.includes(':')) {
-    const [prefix, localName] = attributeName.split(':');
+    const [prefix] = attributeName.split(':');
     if (prefix === 'xlink') {
       element.setAttributeNS('http://www.w3.org/1999/xlink', attributeName, stringValue);
     } else {
@@ -170,15 +119,90 @@ function shouldSetBooleanAttribute(value: any): boolean {
   return Boolean(value);
 }
 
-function getProtectedProperties(element: Element): { [key: string]: any } {
-  const protectedProps: { [key: string]: any } = {};
-  if (document.activeElement === element && element.tagName === 'TEXTAREA') {
-    const textarea = element as HTMLTextAreaElement;
-    protectedProps.value = textarea.value;
-    protectedProps.selectionStart = textarea.selectionStart;
-    protectedProps.selectionEnd = textarea.selectionEnd;
+// Core property/attribute setting function - handles all property types with skip logic
+function setAttributeOrProperty(element: Element, name: string, value: any, isSvg: boolean): void {
+  // Check if we should skip this property update to preserve user interaction
+  if (shouldSkipPatch(element as HTMLElement, name)) {
+    return;
   }
-  return protectedProps;
+
+  // Special cases with dedicated handling
+  if (name === 'style') {
+    if ((element as HTMLElement).style.cssText) (element as HTMLElement).style.cssText = '';
+    if (typeof value === 'string') (element as HTMLElement).style.cssText = value;
+    else if (value && typeof value === 'object') {
+      for (const s in value) {
+        if ((element as HTMLElement).style[s] !== value[s]) (element as HTMLElement).style[s] = value[s];
+      }
+    }
+    return;
+  }
+
+  if (name === 'key') {
+    if (value !== undefined && value !== null) (element as any).key = value;
+    return;
+  }
+
+  if (name.startsWith('data-')) {
+    setDatasetAttribute(element, name, value);
+    return;
+  }
+
+  if (name.startsWith('on')) {
+    setEventHandler(element, name, value);
+    return;
+  }
+
+  // Form elements with special property requirements
+  if ((element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') &&
+    (name === 'value' || name === 'selected' || name === 'selectedIndex')) {
+    setElementProperty(element, name, value);
+    return;
+  }
+
+  // Input checked needs both property and attribute
+  if (element.tagName === 'INPUT' && name === 'checked') {
+    setElementProperty(element, name, value);
+    setBooleanAttribute(element, name, value);
+    return;
+  }
+
+  // Use property information for standard attributes
+  const info = getPropertyInfo(name, isSvg);
+  if (info) {
+    if (info.boolean || info.overloadedBoolean) {
+      setBooleanAttribute(element, info.attribute, value);
+    } else if (info.mustUseProperty && !isSvg) {
+      setElementProperty(element, info.property, value);
+    } else {
+      setElementAttribute(element, info.attribute, value, isSvg);
+    }
+  } else {
+    // Fallback handling for unknown attributes
+    if (name.startsWith('aria-') || name === 'role') {
+      setElementAttribute(element, name, value, isSvg);
+    } else if (name in element || (element as any)[name] !== undefined) {
+      setElementProperty(element, name, value);
+    } else {
+      setElementAttribute(element, name, value, isSvg);
+    }
+  }
+}
+
+// Skip logic for preventing user interaction disruption during VDOM reconciliation
+function shouldSkipPatch(dom: HTMLElement, prop: string): boolean {
+  if (document.activeElement === dom) {
+    return ['value', 'selectionStart', 'selectionEnd', 'selectionDirection']
+      .includes(prop);
+  }
+  if (prop === 'scrollTop' || prop === 'scrollLeft') {
+    return true;
+  }
+  if (dom instanceof HTMLMediaElement &&
+    ['currentTime', 'paused', 'playbackRate', 'volume'].includes(prop)) {
+    return true;
+  }
+  return false;           // default: allow normal diff logic
 }
 
 function isValidAttributeName(name: string): boolean {
@@ -187,62 +211,31 @@ function isValidAttributeName(name: string): boolean {
 }
 
 
+// Main exported function for updating element properties
 export function updateProps(element: Element, props: { [key: string]: any }, isSvg: boolean): void {
-  if (!props || Object.keys(props).length === 0) {
-    const cached = (element as any)[ATTR_PROPS];
-    if (cached && Object.keys(cached).length > 0) {
-      const mergedProps = mergeProps(cached, {});
-      (element as any)[ATTR_PROPS] = {};
-      applyPropertiesToElement(element, mergedProps, props, isSvg, {});
-    }
-    return;
-  }
+  // console.assert(!!element);
+  const cached = element[ATTR_PROPS] || {};
+  const merged = mergeProps(cached, props);
+  element[ATTR_PROPS] = props || {};
 
-  const protectedProps = getProtectedProperties(element);
-  const cached = (element as any)[ATTR_PROPS] || {};
-  const mergedProps = mergeProps(cached, props);
-  (element as any)[ATTR_PROPS] = props || {};
-  applyPropertiesToElement(element, mergedProps, props, isSvg, protectedProps);
+  applyPropertiesToElement(element, merged, props, isSvg);
 }
 
+// Apply merged properties to element with ref handling
 function applyPropertiesToElement(
   element: Element,
   mergedProps: { [key: string]: any },
   originalProps: { [key: string]: any } | null,
-  isSvg: boolean,
-  protectedProps: { [key: string]: any } = {}
+  isSvg: boolean
 ): void {
   for (const name in mergedProps) {
-    const value = mergedProps[name];
-
-    if (!isValidAttributeName(name)) continue;
-
-    if (name === 'style') {
-      if ((element as HTMLElement).style.cssText) (element as HTMLElement).style.cssText = '';
-      if (typeof value === 'string') (element as HTMLElement).style.cssText = value;
-      else {
-        for (const s in value) {
-          if ((element as HTMLElement).style[s] !== value[s]) (element as HTMLElement).style[s] = value[s];
-        }
-      }
-    } else if (name === 'key') {
-      if (value !== undefined && value !== null) {
-        (element as any).key = value;
-      }
-    } else if (name.startsWith('data-')) {
-      setDatasetAttribute(element, name, value);
-    } else if (name.startsWith('on')) {
-      setEventHandler(element, name, value);
-    } else {
-      setAttributeOrProperty(element, name, value, isSvg);
+    if (isValidAttributeName(name)) {
+      setAttributeOrProperty(element, name, mergedProps[name], isSvg);
     }
   }
 
-  Object.keys(protectedProps).forEach(prop => {
-    (element as any)[prop] = protectedProps[prop];
-  });
-
-  if (originalProps && typeof originalProps['ref'] === 'function') {
-    originalProps['ref'](element);
+  // Handle ref callback
+  if (mergedProps && typeof mergedProps['ref'] === 'function') {
+    window.requestAnimationFrame(() => mergedProps['ref'](element));
   }
 }

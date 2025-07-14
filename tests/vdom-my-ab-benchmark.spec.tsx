@@ -11,7 +11,7 @@
  * 4. Edge cases
  */
 
-import { createElement } from '../src/vdom-my';
+import { createElement, updateElement } from '../src/vdom-my';
 import { updateProps } from '../src/vdom-my-prop-attr';
 
 // Import the old implementation by copying its updateChildren function
@@ -129,11 +129,20 @@ function createOldVersionUpdateChildren() {
 }
 
 // Import the new implementation
-import { updateElement } from '../src/vdom-my';
 
 describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
   let oldImplementation: any;
   let container: HTMLElement;
+  let benchmarkResults: Array<{
+    scenario: string;
+    oldOpsPerSec: number;
+    newOpsPerSec: number;
+    improvement: number;
+    oldTotal: number;
+    newTotal: number;
+    oldAverage: number;
+    newAverage: number;
+  }> = [];
 
   beforeAll(() => {
     oldImplementation = createOldVersionUpdateChildren();
@@ -167,6 +176,30 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
     return { total: duration, average: avgTime, opsPerSec };
   }
 
+  function recordBenchmarkResult(scenario: string, oldResult: any, newResult: any) {
+    const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
+
+    benchmarkResults.push({
+      scenario,
+      oldOpsPerSec: oldResult.opsPerSec,
+      newOpsPerSec: newResult.opsPerSec,
+      improvement,
+      oldTotal: oldResult.total,
+      newTotal: newResult.total,
+      oldAverage: oldResult.average,
+      newAverage: newResult.average
+    });
+
+    // Display results in a clean table format
+    const scenarioShort = scenario.replace(' (100 elements)', '').replace(' (50 elements)', '');
+    const oldOps = oldResult.opsPerSec.toFixed(0).padStart(8);
+    const newOps = newResult.opsPerSec.toFixed(0).padStart(8);
+    const improvementStr = `${improvement.toFixed(1)}%`.padStart(8);
+    const status = improvement > 0 ? '✅' : '❌';
+
+    process.stdout.write(`│ ${scenarioShort.padEnd(32)} │ ${oldOps} │ ${newOps} │ ${improvementStr} │ ${status} │\n`);
+  }
+
   function runOldVersion(vdom: any) {
     container.innerHTML = '';
     container.appendChild(oldImplementation.create(vdom, false));
@@ -187,7 +220,13 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         )
       );
 
-      console.log('\n=== Scenario 1: Large Non-Keyed Lists (100 elements) ===');
+      // Display table header only once
+      if (benchmarkResults.length === 0) {
+        process.stdout.write('\n=== PERFORMANCE BENCHMARK RESULTS ===\n');
+        process.stdout.write('┌──────────────────────────────────┬──────────┬──────────┬──────────┬────┐\n');
+        process.stdout.write('│ Scenario                         │ Old Ops  │ New Ops  │ Change   │ ✓  │\n');
+        process.stdout.write('├──────────────────────────────────┼──────────┼──────────┼──────────┼────┤\n');
+      }
 
       const oldResult = benchmark('Old Implementation', iterations, () => {
         runOldVersion(generateVDOM('old'));
@@ -197,11 +236,7 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         runNewVersion(generateVDOM('new'));
       });
 
-      console.log(`Old: ${oldResult.total.toFixed(2)}ms total, ${oldResult.average.toFixed(4)}ms avg, ${oldResult.opsPerSec.toFixed(0)} ops/sec`);
-      console.log(`New: ${newResult.total.toFixed(2)}ms total, ${newResult.average.toFixed(4)}ms avg, ${newResult.opsPerSec.toFixed(0)} ops/sec`);
-
-      const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
-      console.log(`Performance difference: ${improvement.toFixed(1)}% ${improvement > 0 ? 'improvement' : 'regression'}`);
+      recordBenchmarkResult('Large Non-Keyed Lists (100 elements)', oldResult, newResult);
 
       expect(oldResult.opsPerSec).toBeGreaterThan(0);
       expect(newResult.opsPerSec).toBeGreaterThan(0);
@@ -219,8 +254,6 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         )
       );
 
-      console.log('\n=== Scenario 2: Large Keyed Lists (100 elements) ===');
-
       const oldResult = benchmark('Old Implementation', iterations, () => {
         runOldVersion(generateVDOM('old'));
       });
@@ -229,11 +262,7 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         runNewVersion(generateVDOM('new'));
       });
 
-      console.log(`Old: ${oldResult.total.toFixed(2)}ms total, ${oldResult.average.toFixed(4)}ms avg, ${oldResult.opsPerSec.toFixed(0)} ops/sec`);
-      console.log(`New: ${newResult.total.toFixed(2)}ms total, ${newResult.average.toFixed(4)}ms avg, ${newResult.opsPerSec.toFixed(0)} ops/sec`);
-
-      const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
-      console.log(`Performance difference: ${improvement.toFixed(1)}% ${improvement > 0 ? 'improvement' : 'regression'}`);
+      recordBenchmarkResult('Large Keyed Lists (100 elements)', oldResult, newResult);
 
       expect(oldResult.opsPerSec).toBeGreaterThan(0);
       expect(newResult.opsPerSec).toBeGreaterThan(0);
@@ -260,8 +289,6 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         )
       );
 
-      console.log('\n=== Scenario 3: List Reordering (50 elements) ===');
-
       const oldResult = benchmark('Old Implementation', iterations, () => {
         runOldVersion(generateVDOM(initialItems));
         runOldVersion(generateVDOM(reorderedItems));
@@ -272,11 +299,7 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         runNewVersion(generateVDOM(reorderedItems));
       });
 
-      console.log(`Old: ${oldResult.total.toFixed(2)}ms total, ${oldResult.average.toFixed(4)}ms avg, ${oldResult.opsPerSec.toFixed(0)} ops/sec`);
-      console.log(`New: ${newResult.total.toFixed(2)}ms total, ${newResult.average.toFixed(4)}ms avg, ${newResult.opsPerSec.toFixed(0)} ops/sec`);
-
-      const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
-      console.log(`Performance difference: ${improvement.toFixed(1)}% ${improvement > 0 ? 'improvement' : 'regression'}`);
+      recordBenchmarkResult('List Reordering (50 elements)', oldResult, newResult);
 
       expect(oldResult.opsPerSec).toBeGreaterThan(0);
       expect(newResult.opsPerSec).toBeGreaterThan(0);
@@ -315,8 +338,6 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         createElement('footer', null, `Footer ${suffix}`)
       );
 
-      console.log('\n=== Scenario 4: Mixed Keyed/Non-Keyed Elements ===');
-
       const oldResult = benchmark('Old Implementation', iterations, () => {
         runOldVersion(generateVDOM('old'));
       });
@@ -325,11 +346,7 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         runNewVersion(generateVDOM('new'));
       });
 
-      console.log(`Old: ${oldResult.total.toFixed(2)}ms total, ${oldResult.average.toFixed(4)}ms avg, ${oldResult.opsPerSec.toFixed(0)} ops/sec`);
-      console.log(`New: ${newResult.total.toFixed(2)}ms total, ${newResult.average.toFixed(4)}ms avg, ${newResult.opsPerSec.toFixed(0)} ops/sec`);
-
-      const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
-      console.log(`Performance difference: ${improvement.toFixed(1)}% ${improvement > 0 ? 'improvement' : 'regression'}`);
+      recordBenchmarkResult('Mixed Keyed/Non-Keyed Elements', oldResult, newResult);
 
       expect(oldResult.opsPerSec).toBeGreaterThan(0);
       expect(newResult.opsPerSec).toBeGreaterThan(0);
@@ -346,8 +363,6 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         createElement('p', null, `Paragraph ${counter}`)
       );
 
-      console.log('\n=== Scenario 5: Simple Text Updates ===');
-
       const oldResult = benchmark('Old Implementation', iterations, () => {
         runOldVersion(generateVDOM(Math.random()));
       });
@@ -356,11 +371,7 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
         runNewVersion(generateVDOM(Math.random()));
       });
 
-      console.log(`Old: ${oldResult.total.toFixed(2)}ms total, ${oldResult.average.toFixed(4)}ms avg, ${oldResult.opsPerSec.toFixed(0)} ops/sec`);
-      console.log(`New: ${newResult.total.toFixed(2)}ms total, ${newResult.average.toFixed(4)}ms avg, ${newResult.opsPerSec.toFixed(0)} ops/sec`);
-
-      const improvement = ((newResult.opsPerSec - oldResult.opsPerSec) / oldResult.opsPerSec * 100);
-      console.log(`Performance difference: ${improvement.toFixed(1)}% ${improvement > 0 ? 'improvement' : 'regression'}`);
+      recordBenchmarkResult('Simple Text Updates', oldResult, newResult);
 
       expect(oldResult.opsPerSec).toBeGreaterThan(0);
       expect(newResult.opsPerSec).toBeGreaterThan(0);
@@ -369,11 +380,70 @@ describe('A/B Performance Benchmark: Old vs New updateChildren', () => {
 
   describe('Summary Report', () => {
     it('should provide a comprehensive performance summary', () => {
-      console.log('\n=== A/B Benchmark Summary ===');
-      console.log('Test completed successfully!');
-      console.log('Check the detailed results above for performance comparisons.');
-      console.log('Note: Performance can vary based on browser, system load, and other factors.');
-      console.log('Run this test multiple times for more reliable averages.');
+      // Close the main results table
+      process.stdout.write('└──────────────────────────────────┴──────────┴──────────┴──────────┴────┘\n');
+
+      // Calculate overall statistics
+      const improvements = benchmarkResults.map(r => r.improvement);
+      const positiveImprovements = improvements.filter(i => i > 0);
+      const negativeImprovements = improvements.filter(i => i < 0);
+
+      const avgImprovement = improvements.reduce((a, b) => a + b, 0) / improvements.length;
+      const bestImprovement = Math.max(...improvements);
+      const worstRegression = Math.min(...improvements);
+
+      process.stdout.write('\n=== OVERALL STATISTICS ===\n');
+      process.stdout.write(`Total scenarios tested: ${benchmarkResults.length}\n`);
+      process.stdout.write(`Scenarios with improvements: ${positiveImprovements.length}\n`);
+      process.stdout.write(`Scenarios with regressions: ${negativeImprovements.length}\n`);
+      process.stdout.write(`Average performance change: ${avgImprovement.toFixed(1)}%\n`);
+      process.stdout.write(`Best improvement: ${bestImprovement.toFixed(1)}%\n`);
+      if (worstRegression < 0) {
+        process.stdout.write(`Worst regression: ${worstRegression.toFixed(1)}%\n`);
+      }
+
+      // Performance category analysis
+      process.stdout.write('\n=== PERFORMANCE CATEGORY ANALYSIS ===\n');
+      benchmarkResults.forEach(result => {
+        let category = '';
+        if (result.improvement > 100) {
+          category = 'EXCEPTIONAL IMPROVEMENT';
+        } else if (result.improvement > 50) {
+          category = 'MAJOR IMPROVEMENT';
+        } else if (result.improvement > 10) {
+          category = 'MODERATE IMPROVEMENT';
+        } else if (result.improvement > 0) {
+          category = 'MINOR IMPROVEMENT';
+        } else if (result.improvement > -10) {
+          category = 'MINOR REGRESSION';
+        } else if (result.improvement > -50) {
+          category = 'MODERATE REGRESSION';
+        } else {
+          category = 'MAJOR REGRESSION';
+        }
+
+        process.stdout.write(`${result.scenario}: ${category} (${result.improvement.toFixed(1)}%)\n`);
+      });
+
+      // Recommendations
+      process.stdout.write('\n=== RECOMMENDATIONS ===\n');
+      if (avgImprovement > 0) {
+        process.stdout.write('✅ Overall performance improvement detected\n');
+        process.stdout.write('✅ New implementation is recommended for production use\n');
+      } else {
+        process.stdout.write('❌ Overall performance regression detected\n');
+        process.stdout.write('❌ Consider optimizing the new implementation before production use\n');
+      }
+
+      if (negativeImprovements.length > 0) {
+        process.stdout.write('⚠️  Some scenarios show performance regression - investigate further\n');
+        const regressionScenarios = benchmarkResults.filter(r => r.improvement < 0);
+        regressionScenarios.forEach(result => {
+          process.stdout.write(`   - ${result.scenario}: ${result.improvement.toFixed(1)}% regression\n`);
+        });
+      }
+
+      process.stdout.write('\n=== END OF SUMMARY ===\n');
 
       expect(true).toBe(true); // Always pass - this is just for reporting
     });

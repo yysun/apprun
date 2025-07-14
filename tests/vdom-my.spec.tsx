@@ -138,7 +138,7 @@ describe('vdom-my', () => {
     const element = render(createElement('div', null, 'a'));
     const nodes =
       { "tag": "div", "props": null, "children": [{ "tag": "div", "props": null, "children": ["Hello: ", "world"] }] }
-    for (let i = 0; i < 5; i++){
+    for (let i = 0; i < 5; i++) {
       render(nodes);
       expect(element.textContent).toEqual('Hello: world');
     }
@@ -146,29 +146,29 @@ describe('vdom-my', () => {
 
   it('it should reuse element based on key', () => {
     const element = render(createElement('div', null, [
-        createElement('div', {key: 'a'}),
-        createElement('div', {key: 'b'}),
-      ]));
+      createElement('div', { key: 'a' }),
+      createElement('div', { key: 'b' }),
+    ]));
     element.childNodes[1].k = 'b';
     render(createElement('div', null, [
-      createElement('div', {key: 'b'}, 'x')
+      createElement('div', { key: 'b' }, 'x')
     ]));
 
     expect(element.firstChild.textContent).toEqual('x');
-    expect(element.firstChild.k).toBe('b')
-    expect(element.childNodes.length).toBe(1)
+    expect(element.firstChild.k).toBe('b');
+    expect(element.childNodes.length).toBe(1);
   });
 
   it('it should retain element based on key', () => {
     const element = render(createElement('div', null, [
-        createElement('div', {key: 'a'}),
-        createElement('div', {key: 'b'}),
-      ]));
+      createElement('div', { key: 'a' }),
+      createElement('div', { key: 'b' }),
+    ]));
     element.childNodes[0].k = 'a';
     element.childNodes[1].k = 'b';
     render(createElement('div', null, [
-      createElement('div', {key: 'b'}, 'x'),
-      createElement('div', {key: 'a'}, 'xx')
+      createElement('div', { key: 'b' }, 'x'),
+      createElement('div', { key: 'a' }, 'xx')
     ]));
 
     expect(element.childNodes[0].textContent).toEqual('x');
@@ -242,7 +242,7 @@ describe('vdom-my', () => {
   });
 
   it('it should support class attribute', () => {
-    let element = render(createElement('div', { "className": "a"} ));
+    let element = render(createElement('div', { "className": "a" }));
     expect(element.className).toBe('a');
     expect(element.getAttribute('class')).toBe('a');
     element = render(createElement('div', { "class": "b" }));
@@ -250,7 +250,7 @@ describe('vdom-my', () => {
   });
 
   it('it should support class attribute for svg', () => {
-    let  element = render(createElement('svg', { "class": "a" }));
+    let element = render(createElement('svg', { "class": "a" }));
     expect(element.getAttribute('class')).toBe('a');
     element = render(createElement('svg', { "className": "b" }));
     expect(element.getAttribute('class')).toBe('b');
@@ -259,22 +259,22 @@ describe('vdom-my', () => {
   it('it should reset event handler', () => {
     const element = render(createElement('div', {
       class: 'a',
-      onclick: () => {}
+      onclick: () => { }
     }, 'x'));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('a');
     expect(element.onclick).not.toBeNull();
-    render(createElement("div", {className: 'b'}));
+    render(createElement("div", { className: 'b' }));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('b');
     expect(element.onclick).toBeNull();
   });
 
   it('it should reset className with class', () => {
-    const element = render(createElement('div', { className: 'a'}));
+    const element = render(createElement('div', { className: 'a' }));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('a');
-    render(createElement("div", {class: 'b'}));
+    render(createElement("div", { class: 'b' }));
     expect(element.className).toEqual('b');
     render(createElement("div"));
     expect(element.className).toBe('');
@@ -282,10 +282,10 @@ describe('vdom-my', () => {
   });
 
   it('it should reset class with className', () => {
-    const element = render(createElement('div', { class: 'a'}));
+    const element = render(createElement('div', { class: 'a' }));
     expect(element.nodeName).toEqual('DIV');
     expect(element.className).toEqual('a');
-    render(createElement("div", {className: 'b'}));
+    render(createElement("div", { className: 'b' }));
     expect(element.className).toEqual('b');
     render(createElement("div"));
     expect(element.className).toBe('');
@@ -304,7 +304,7 @@ describe('vdom-my', () => {
     <p>safe html</p>`;
     const safe_html = safeHTML(html) as any;
     updateElement(element, safe_html);
-    expect(element.innerHTML).toBe('<p>safe html</p><p>safe html</p>'); 
+    expect(element.innerHTML).toBe('<p>safe html</p><p>safe html</p>');
   });
 
 });

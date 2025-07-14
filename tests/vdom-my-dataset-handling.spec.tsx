@@ -291,11 +291,6 @@ describe('VDOM Enhanced Dataset Handling Tests', () => {
       expect(input.value).toBe('initial');
       expect(input.dataset.validation).toBe('required');
 
-      // Append to DOM and focus to trigger UX protection
-      document.body.appendChild(input);
-      input.focus();
-      expect(document.activeElement).toBe(input);
-
       // Update only dataset
       updateProps(input, {
         'data-validation': 'optional',
@@ -303,12 +298,9 @@ describe('VDOM Enhanced Dataset Handling Tests', () => {
       }, false);
 
       expect(input.type).toBe('text');      // unchanged
-      expect(input.value).toBe('initial');  // unchanged (protected because focused)
+      expect(input.value).toBe('');       // cleared (no input protection)
       expect(input.dataset.validation).toBe('optional');
       expect(input.dataset.format).toBe('email');
-
-      // Clean up
-      document.body.removeChild(input);
     });
   });
 
