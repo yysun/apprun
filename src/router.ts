@@ -31,7 +31,7 @@
  * 
  * Usage:
  * ```ts
- * // Handle routes
+ * // Basic routing
  * app.on('#/home', () => // Show home page);
  * app.on('#/users/:id', (id) => // Show user profile);
  * app.on('/api/*', (path) => // Handle API routes);
@@ -43,6 +43,25 @@
  * // Hierarchical matching examples
  * app.on('/api', (operation, id) => // Handle /api/users/123);
  * app.on('#users', (id, action) => // Handle #users/123/edit);
+ * 
+ * // Hierarchical Route Matching (NEW):
+ * // For URL: /api/v1/users/123
+ * // Router tries: /api/v1/users/123 → /api/v1/users → /api/v1 → /api → 404
+ * // If handler found at /api, it receives: ('v1', 'users', '123')
+ * 
+ * // Base Path Support (NEW):
+ * app.basePath = '/myapp'; // For sub-directory deployments
+ * // Links: <a href="/users/123"> (relative paths)
+ * // Navigation: /myapp/users/123 (full path)
+ * // Routing: /users/123 (base path stripped)
+ * 
+ * // Empty Path Handling (NEW):
+ * // For URL: "" (empty)
+ * // Router tries: # → / → #/ → 404 (in priority order)
+ * 
+ * // 404 Behavior (ENHANCED):
+ * // Fires only at minimal levels: /a, #a, #/a, a
+ * // Never tries root handlers: /, #, #/
  * ```
  */
 

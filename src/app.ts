@@ -62,6 +62,7 @@ export class App {
   public use_render: any;
   public use_react: any;
   public route: any;
+  public basePath: string; // Base path for sub-directory deployments
 
   public version: string;
 

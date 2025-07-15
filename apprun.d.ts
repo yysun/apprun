@@ -56,6 +56,7 @@ declare module 'apprun' {
     render(element: Element | string, node: VDOM): void;
     Fragment(props: any[], ...children: any[]): any[];
     route?: Route;
+    basePath?: string; // Base path for sub-directory deployments
     webComponent(name: string, componentClass, options?: CustomElementOptions): void;
     safeHTML(html: string): any[];
     use_render(render, mode?: 0 | 1);

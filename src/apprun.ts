@@ -152,7 +152,18 @@ if (!app.start) {
       if (use_hash) {
         !no_init_route && route(location.hash);
       } else {
-        !no_init_route && route(location.pathname);
+        !no_init_route && (() => {
+          const basePath = app.basePath || '';
+          let initialPath = location.pathname;
+
+          // Strip base path if present
+          if (basePath && initialPath.startsWith(basePath)) {
+            initialPath = initialPath.substring(basePath.length);
+            if (!initialPath.startsWith('/')) initialPath = '/' + initialPath;
+          }
+
+          route(initialPath);
+        })();
         document.body.addEventListener('click', e => {
           const element = e.target as HTMLElement;
           if (!element) return;
@@ -162,8 +173,13 @@ if (!app.start) {
             menu.origin === location.origin &&
             menu.pathname) {
             e.preventDefault();
-            history.pushState(null, '', menu.pathname);
-            route(menu.pathname);
+
+            // Handle base path for navigation
+            const basePath = app.basePath || '';
+            const fullPath = basePath + menu.pathname;
+
+            history.pushState(null, '', fullPath);
+            route(menu.pathname); // Route with relative path (without base path)
           }
         });
       }
