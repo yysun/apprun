@@ -1,35 +1,45 @@
-/**
- * Virtual DOM Implementation with Optimized Key Caching
+/** * VDOM Implementation for AppRun
+ * 
+ * Notes for AppRun’s key prop
+ * Use the key prop only if you need to preserve browser-side DOM state (such as cursor 
+ * position in an <input>, focus, or maintaining state in inline components).
+ *
+ * For most use cases, especially with stateless or purely data-driven UIs, key is not
+ * needed and may decrease performance by forcing DOM moves.
+ *
+ * AppRun aggressively updates DOM to match your vdom, so DOM node preservation is
+ * only valuable when you intentionally depend on browser-managed state.
+ *
+ * | Use Case                      | Should I use `key`? | Why                   |
+ * | ----------------------------- | ------------------- | --------------------- |
+ * | Preserve input cursor/focus   | ✅ Yes               | Keeps browser state   |
+ * | Inline stateful component     | ✅ Yes               | Preserves component   |
+ * | Regular data list (stateless) | 🚫 No               | Unnecessary DOM moves |  
+ * | Purely visual updates         | 🚫 No               | No state to preserve  |
  * 
  * Features:
- * - Virtual DOM creation and rendering with createElement and Fragment support
- * - Optimized key caching using Map with performance-focused cleanup
- * - Element update and patching with proper reconciliation
- * - SVG namespace support for SVG elements
- * - Props and children handling with proper lifecycle management
- * - Efficient cleanup strategy to prevent memory leaks without performance degradation
- * - Cross-component element reuse through global key cache
+ * - Virtual DOM rendering and diffing for efficient DOM updates
+ * - JSX Fragment support for both Babel and TypeScript
+ * - Element creation with props, children, and event handling
+ * - SVG element support with proper namespace handling
+ * - Component lifecycle management and caching
+ * - Keyed element optimization with automatic cleanup for memory management
+ * - Safe HTML insertion and text node creation
+ * - Directive processing integration
  * 
  * Implementation:
- * - Uses Map<string, Element> for O(1) key lookups
- * - Counter-based cleanup (every 500 operations) instead of time-based
- * - Removed expensive .isConnected checks from hot paths
- * - Cleanup only runs when cache size exceeds threshold
- * - Maintains element keys for efficient DOM updates and reordering
+ * - Uses plain JavaScript object for keyCache instead of Map for better performance
+ * - Implements automatic cleanup of disconnected elements from keyCache
+ * - Supports both string and function-based tags
+ * - Handles component mounting and state management
+ * - Optimized children updating with minimal DOM operations
+ * - Memory-efficient caching with configurable thresholds (500 ops, 1000 max size)
  * 
- * Performance Optimizations:
- * - Eliminated .isConnected checks in updateChildren (expensive DOM API)
- * - Removed Date.now() calls from create function
- * - Cleanup triggered by operation count instead of time intervals
- * - Early return in cleanup if cache size is acceptable
- * - Simplified logic for better JIT optimization
- * 
- * Changes:
- * - Converted keyCache from plain object to Map<string, Element>
- * - Implemented counter-based cleanup strategy
- * - Removed connectivity validation from key lookups
- * - Optimized cleanup triggers for better performance
- * - Preserved cross-component element reuse capability
+ * Recent Changes:
+ * - 2025-07-15: Converted keyCache from Map to plain object ({}) for improved performance
+ * - Updated cleanup functions to use object property deletion instead of Map methods
+ * - Enhanced memory management with automatic cleanup of disconnected elements
+ * - Added comprehensive key prop usage documentation and guidelines
  */
 
 import { VDOM, VNode } from './types';
@@ -58,25 +68,27 @@ function collect(children) {
   return ch;
 }
 
-const keyCache = new Map<string, Element>();
+const keyCache: { [key: string]: Element } = {};
 let cleanupCounter = 0;
 const CLEANUP_THRESHOLD = 500; // Cleanup every 500 operations
 const MAX_CACHE_SIZE = 1000;
 
 // Lightweight cleanup function - only runs when needed
 function cleanupKeyCache() {
-  if (keyCache.size <= MAX_CACHE_SIZE) return; // Skip if under limit
+  if (Object.keys(keyCache).length <= MAX_CACHE_SIZE) return; // Skip if under limit
 
-  for (const [key, element] of keyCache) {
+  for (const [key, element] of Object.entries(keyCache)) {
     if (!element.isConnected) {
-      keyCache.delete(key);
+      delete keyCache[key];
     }
   }
 }
 
 // Export cleanup function for manual cleanup if needed
 export function clearKeyCache() {
-  keyCache.clear();
+  for (const key in keyCache) {
+    delete keyCache[key];
+  }
   cleanupCounter = 0;
 }
 
@@ -150,13 +162,15 @@ function updateChildren(element, children, isSvg: boolean) {
     } else {
       const key = child.props && child.props['key'];
       if (key) {
-        if ((el as any).key === key) {
+        if (el.key === key) {
           update(element.childNodes[i], child, isSvg);
         } else {
           // console.log(el.key, key);
-          const old = keyCache.get(key);
+          const old = keyCache[key];
           if (old) {
+            // const temp = old.nextSibling;
             element.insertBefore(old, el);
+            // temp ? element.insertBefore(el, temp) : element.appendChild(el);
             update(element.childNodes[i], child, isSvg);
           } else {
             element.replaceChild(create(child, isSvg), el);
@@ -214,7 +228,7 @@ function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean)
 
   if (node.props && (node.props as any).key !== undefined) {
     (element as any).key = (node.props as any).key;
-    keyCache.set((node.props as any).key, element);
+    keyCache[(node.props as any).key] = element;
 
     // Lightweight cleanup - only when counter reaches threshold
     if (++cleanupCounter >= CLEANUP_THRESHOLD) {

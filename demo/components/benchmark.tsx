@@ -17,7 +17,7 @@ const view: View<State> = state => <div class="container" $onclick={click}>
     <tbody>
       {state.data.map(item => {
         const selected = item.id == state.selected ? 'danger' : undefined;
-        return <tr class={selected} id={item.id} key={item.id}>
+        return <tr class={selected} id={item.id}>
           <td class="col-md-1">{item.id}</td>
           <td class="col-md-4">
             <a class="lbl">{item.label}</a>
