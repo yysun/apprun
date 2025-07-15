@@ -1,14 +1,22 @@
-# AppRun [![Build][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
+# AppRun 
 
-## News
+[![AppRun Docs](https://img.shields.io/badge/docs-website-blue.svg)](https://apprun.js.org/docs)
+[![AppRun Playground](https://img.shields.io/badge/playground-online-green.svg)](https://apprun.js.org/#play)
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
-We just released [AppRun 3.36.0](https://github.com/yysun/apprun/releases/tag/v3.36.0). See [whats new](WHATSNEW.md) for details.
-
-In this release we had a code review by using Copilot and Claude Sonnet 4, which found and fixed minor bugs and edge cases in virtual DOM handling, as well as bugs in router initialization logic. Also improved overall code quality and stability.
+🚀 July 2025, We have started to improve the codebase using AI. See [whats new](#new) for details.
 
 ## Introduction
 
 AppRun is a lightweight alternative to other frameworks and libraries. It has a [unique architecture](https://apprun.js.org/docs/architecture/) inspired by the Elm architecture that can help you manage states, routing, and other essential aspects of your web application.
+
+* AppRun is lightweight, only 6KB gzipped, but includes state management, rendering, event handling, and routing.
+
+* With only three functions: `app.start`, `app.run`, and `app.on` in its API makes it easy to learn and use. And no worries about the incompatibility of version upgrades.
+
+* One more thing, you can [use AppRun with React](https://apprun.js.org/docs/react) to simplify state management and routing of your React applications.
+
+At its core, AppRun harnesses the power of the [event PubsSub]([Publish-Subscribe](https://apprun.js.org/docs/event-pubsub/)) pattern to streamline your application’s state handling and routing. The result? Cleaner, more maintainable code and a smoother development experience.
 
 Use a _Counter_ as an example.
 
@@ -34,13 +42,6 @@ app.start(document.body, state, view, update);
 ```
 <apprun-code></apprun-code>
 
-* AppRun is lightweight, only 6KB gzipped, but includes state management, rendering, event handling, and routing.
-
-* With only three functions: `app.start`, `app.run`, and `app.on` in its API makes it easy to learn and use. And no worries about the incompatibility of version upgrades.
-
-* One more thing, you can [use AppRun with React](https://apprun.js.org/docs/react) to simplify state management and routing of your React applications.
-
-At its core, AppRun harnesses the power of the [event PubsSub]([Publish-Subscribe](https://apprun.js.org/docs/event-pubsub/)) pattern to streamline your application’s state handling and routing. The result? Cleaner, more maintainable code and a smoother development experience.
 
 ## AppRun Benefits
 

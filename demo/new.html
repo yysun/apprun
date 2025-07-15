@@ -1,5 +1,13 @@
 <h2>What&#39;s New</h2>
 <blockquote>
+<p>July 12, 2025, V3.36.1</p>
+</blockquote>
+<ul>
+<li>Continue code review with AI</li>
+<li>Use property-information to improve property and attribute handling</li>
+<li>Performance improvements in virtual DOM handling, see <a href="docs/done/framework-reordering-comparison.md">analysis reports</a></li>
+</ul>
+<blockquote>
 <p>July 12, 2025, V3.36.0</p>
 </blockquote>
 <p>Code review by using Copilot and Claude Sonnet 4</p>
@@ -59,7 +67,7 @@ app.render(document.body, &lt;App /&gt;);
 `;
   async function* getComic() {  // async generator function returns loading flag and then the comic object
     yield { loading: true };
-    const response = await fetch(&#39;https://my-xkcd-api.glitch.me&#39;);
+    const response = await fetch(&#39;https://xkcd-api.netlify.app&#39;);
     const comic = await response.json();
     yield { comic };
   }

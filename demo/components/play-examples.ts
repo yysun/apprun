@@ -179,7 +179,7 @@ const update = {
   'loading': (state, loading) => ({...state, loading }),
   'fetchComic': async _ => {
     app.run('loading', true);
-    const response = await fetch('https://my-xkcd-api.glitch.me');
+    const response = await fetch('https://xkcd-api.netlify.app');
     const comic = await response.json();
     return {comic};
   }
@@ -534,7 +534,7 @@ app.start(document.body, {}, view);
     name: 'Init State as an Async Function',
     code: `// Init State as an Async Function
 const state = async () => {
-  const response = await fetch('https://my-xkcd-api.glitch.me');
+  const response = await fetch('https://xkcd-api.netlify.app');
   const comic = await response.json();
   return { comic };
 };
@@ -597,7 +597,7 @@ app.start(document.body, state, view, update, {transition: true});
     code: `// Async Generator Function
   async function* getComic() {
     yield { loading: true };
-    const response = await fetch('https://my-xkcd-api.glitch.me');
+    const response = await fetch('https://xkcd-api.netlify.app');
     const comic = await response.json();
     yield { comic };
   }

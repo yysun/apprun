@@ -133,7 +133,7 @@ if (!app.start) {
   app.query = app.query || app.runAsync;
 
   const NOOP = _ => {/* Intentionally empty */ }
-  // app.on('$', NOOP);
+  app.on('/', NOOP);
   app.on('debug', _ => NOOP);
   app.on(ROUTER_EVENT, NOOP);
   app.on(ROUTER_404_EVENT, NOOP);

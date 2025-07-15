@@ -1,5 +1,12 @@
 ## What's New
 
+> July 12, 2025, V3.36.1
+
+- Continue code review with AI
+- Use property-information to improve property and attribute handling
+- Performance improvements in virtual DOM handling, see [analysis reports](docs/done/framework-reordering-comparison.md)
+
+
 > July 12, 2025, V3.36.0
 
 Code review by using Copilot and Claude Sonnet 4
@@ -71,7 +78,7 @@ You can now use async generator functions for event handlers. The async generato
 `;
   async function* getComic() {  // async generator function returns loading flag and then the comic object
     yield { loading: true };
-    const response = await fetch('https://my-xkcd-api.glitch.me');
+    const response = await fetch('https://xkcd-api.netlify.app');
     const comic = await response.json();
     yield { comic };
   }
