@@ -75,35 +75,6 @@ const view = state =&gt; &lt;div&gt;
 app.start(document.body, state, view);
 </code></pre>
 <p><apprun-code></apprun-code></p>
-<p>And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. AppRun supports routing to <code>/&lt;path&gt;</code>, <code>#&lt;path&gt;</code>, and <code>#/&lt;path&gt;</code> URLs with <a href="docs/requirements/req-hierarchical-routing.md">hierarchical routing</a>.</p>
-<pre><code class="language-js">class Home extends Component {
-  view = () =&gt; &lt;div&gt;Home&lt;/div&gt;;
-}
-
-class Contact extends Component {
-  view = () =&gt; &lt;div&gt;Contact&lt;/div&gt;;
-}
-
-class About extends Component {
-  view = () =&gt; &lt;div&gt;About&lt;/div&gt;;
-}
-
-const App = () =&gt; &lt;&gt;
-  &lt;div id=&quot;menus&quot;&gt;
-    &lt;a href=&quot;/home&quot;&gt;Home&lt;/a&gt;{&#39; | &#39;}
-    &lt;a href=&quot;/contact&quot;&gt;Contact&lt;/a&gt;{&#39; | &#39;}
-    &lt;a href=&quot;/about&quot;&gt;About&lt;/a&gt;&lt;/div&gt;
-  &lt;div id=&quot;pages&quot;&gt;&lt;/div&gt;
-&lt;/&gt;
-
-app.render(document.body, &lt;App /&gt;);
-[
-  [About, &#39;/about&#39;],
-  [Contact, &#39;/contact&#39;],
-  [Home, &#39;/, /home&#39;],
-].map(([C, route]) =&gt; new C().start(&#39;pages&#39;, {route}));
-</code></pre>
-<p><apprun-code></apprun-code></p>
 <p>One cool feature of AppRun is that you can use async generator functions for event handlers to return multiple values. AppRun will render each value in the order they are generated.</p>
 <pre><code class="language-js">const state = {};
 const view = state =&gt; html`
@@ -121,13 +92,41 @@ async function* getComic() {  // async generator function returns loading flag a
 app.start(document.body, state, view);
 </code></pre>
 <p><apprun-code></apprun-code></p>
+<p>And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle the routing events. AppRun routes <code>/&lt;path&gt;</code>, <code>#&lt;path&gt;</code>, and <code>#/&lt;path&gt;</code> URLs to components. AppRun also does this with <a href="docs/requirements/req-hierarchical-routing.md">hierarchical routing</a>.</p>
+<pre><code class="language-js">class Home extends Component {
+  view = () =&gt; &lt;div&gt;Home&lt;/div&gt;;
+  update = {&#39;/, /home&#39;: state =&gt; state };
+}
+
+class Contact extends Component {
+  view = () =&gt; &lt;div&gt;Contact&lt;/div&gt;;
+  update = {&#39;/contact&#39;: state =&gt; state };
+}
+
+class About extends Component {
+  view = () =&gt; &lt;div&gt;About&lt;/div&gt;;
+  update = {&#39;/about&#39;: state =&gt; state };
+}
+
+const App = () =&gt; &lt;&gt;
+  &lt;div id=&quot;menus&quot;&gt;
+    &lt;a href=&quot;/home&quot;&gt;Home&lt;/a&gt;{&#39; | &#39;}
+    &lt;a href=&quot;/contact&quot;&gt;Contact&lt;/a&gt;{&#39; | &#39;}
+    &lt;a href=&quot;/about&quot;&gt;About&lt;/a&gt;&lt;/div&gt;
+  &lt;div id=&quot;pages&quot;&gt;&lt;/div&gt;
+&lt;/&gt;
+
+app.render(document.body, &lt;App /&gt;);
+[About, Contact, Home].map(C =&gt; new C().start(&#39;pages&#39;));
+</code></pre>
+<p><apprun-code></apprun-code></p>
 <p>Finally, you can use AppRun with <a href="https://reactjs.org/">React</a>. The <code>app.use_react</code> function allows you to use React for rendering the view.</p>
 <pre><code class="language-js">import React from &#39;react&#39;
 import ReactDOM from &#39;react-dom/client&#39;
 import app from &#39;apprun&#39;;
 use_react(React, ReactDOM);
 </code></pre>
-<p>The <code>app.use_render</code> function allows you to use a other render library for rendering the view.</p>
+<p>The <code>app.use_render</code> function allows you to use a other render library for rendering the view. Enjoy the rich ecosystem of React.</p>
 <pre><code class="language-js">import { render } from &#39;preact&#39;
 import app from &#39;apprun&#39;;
 app.use_render(render);
@@ -142,8 +141,15 @@ app.use_render(render);
 &lt;body&gt;
 &lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
-  const view = state =&gt; `&lt;div&gt;${state}&lt;/div&gt;`;
-  app.start(document.body, &#39;hello AppRun&#39;, view);
+  const add = (state, delta) =&gt; state + delta;
+  const view = state =&gt; {
+    return html`&lt;div&gt;
+    &lt;h1&gt;${state}&lt;/h1&gt;
+      &lt;button @click=${run(add, -1)}&gt;-1&lt;/button&gt;
+      &lt;button @click=${run(add, +1)}&gt;+1&lt;/button&gt;
+    &lt;/div&gt;`;
+  };
+  app.start(document.body, 0, view);
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -161,8 +167,7 @@ app.use_render(render);
 &lt;/html&gt;
 </code></pre>
 <p><apprun-code style="height:200px"></apprun-code></p>
-<p>In addition to run directly in the browser,  or with a compiler/bundler like Webpack or Vite.</p>
-<p>You can run the <code>npm create apprun-app</code> command to create an AppRun project.</p>
+<p>In addition to run directly in the browser,  you can run the <code>npm create apprun-app</code> command to create an AppRun project for using a compiler/bundler like Webpack, esbuild or Vite.</p>
 <pre><code class="language-sh">npm create apprun-app [my-app]
 </code></pre>
 <h3>Learn More</h3>

@@ -90,38 +90,6 @@ app.start(document.body, state, view);
 ```
 <apprun-code></apprun-code>
 
-And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. AppRun supports routing to `/<path>`, `#<path>`, and `#/<path>` URLs with [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
-
-```js
-class Home extends Component {
-  view = () => <div>Home</div>;
-}
-
-class Contact extends Component {
-  view = () => <div>Contact</div>;
-}
-
-class About extends Component {
-  view = () => <div>About</div>;
-}
-
-const App = () => <>
-  <div id="menus">
-    <a href="/home">Home</a>{' | '}
-    <a href="/contact">Contact</a>{' | '}
-    <a href="/about">About</a></div>
-  <div id="pages"></div>
-</>
-
-app.render(document.body, <App />);
-[
-  [About, '/about'],
-  [Contact, '/contact'],
-  [Home, '/, /home'],
-].map(([C, route]) => new C().start('pages', {route}));
-```
-<apprun-code></apprun-code>
-
 
 One cool feature of AppRun is that you can use async generator functions for event handlers to return multiple values. AppRun will render each value in the order they are generated.
 
@@ -143,6 +111,38 @@ app.start(document.body, state, view);
 ```
 <apprun-code></apprun-code>
 
+And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle the routing events. AppRun routes `/<path>`, `#<path>`, and `#/<path>` URLs to components. AppRun also does this with [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
+
+```js
+class Home extends Component {
+  view = () => <div>Home</div>;
+  update = {'/, /home': state => state };
+}
+
+class Contact extends Component {
+  view = () => <div>Contact</div>;
+  update = {'/contact': state => state };
+}
+
+class About extends Component {
+  view = () => <div>About</div>;
+  update = {'/about': state => state };
+}
+
+const App = () => <>
+  <div id="menus">
+    <a href="/home">Home</a>{' | '}
+    <a href="/contact">Contact</a>{' | '}
+    <a href="/about">About</a></div>
+  <div id="pages"></div>
+</>
+
+app.render(document.body, <App />);
+[About, Contact, Home].map(C => new C().start('pages'));
+```
+<apprun-code></apprun-code>
+
+
 Finally, you can use AppRun with [React](https://reactjs.org/). The `app.use_react` function allows you to use React for rendering the view.
 
 ```js
@@ -152,7 +152,7 @@ import app from 'apprun';
 use_react(React, ReactDOM);
 ```
 
-The `app.use_render` function allows you to use a other render library for rendering the view.
+The `app.use_render` function allows you to use a other render library for rendering the view. Enjoy the rich ecosystem of React.
 
 ```js
 import { render } from 'preact'
@@ -178,8 +178,15 @@ When you want to do a rapid prototyping or demo, you can use AppRun directly in 
 <body>
 <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
 <script>
-  const view = state => `<div>${state}</div>`;
-  app.start(document.body, 'hello AppRun', view);
+  const add = (state, delta) => state + delta;
+  const view = state => {
+    return html`<div>
+    <h1>${state}</h1>
+      <button @click=${run(add, -1)}>-1</button>
+      <button @click=${run(add, +1)}>+1</button>
+    </div>`;
+  };
+  app.start(document.body, 0, view);
 </script>
 </body>
 </html>
@@ -200,9 +207,7 @@ Or, use the ESM version:
 ```
 <apprun-code style="height:200px"></apprun-code>
 
-In addition to run directly in the browser,  or with a compiler/bundler like Webpack or Vite.
-
-You can run the `npm create apprun-app` command to create an AppRun project.
+In addition to run directly in the browser,  you can run the `npm create apprun-app` command to create an AppRun project for using a compiler/bundler like Webpack, esbuild or Vite.
 
 ```sh
 npm create apprun-app [my-app]
