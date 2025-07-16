@@ -92,6 +92,7 @@ export interface IApp {
   off(name: string, fn: (...args: any[]) => void): void;
   run(name: string, ...args: any[]): number;
   find(name: string): any | any[];
+  /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
   query(name: string, ...args: any[]): Promise<any[]>;
   runAsync(name: string, ...args: any[]): Promise<any[]>;
   h(tag: string | Function, props, ...children): VNode | VNode[];
@@ -130,6 +131,7 @@ if (!app.start) {
     app.on(name, fn, { ...options, once: true });
   });
 
+  // Deprecated: app.query is deprecated in favor of app.runAsync
   app.query = app.query || app.runAsync;
 
   const NOOP = _ => {/* Intentionally empty */ }

@@ -49,7 +49,8 @@ declare module 'apprun' {
     off(name: string, fn: (...args: any[]) => void): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
-    query(name: string, ...args): Promise<any[]>; // obsolete
+    /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
+    query(name: string, ...args): Promise<any[]>;
     runAsync(name: string, ...args): Promise<any[]>;
     h(tag: string | Function, ...children: any[]): VNode | VNode[];
     createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
@@ -72,7 +73,8 @@ declare module 'apprun' {
     start(element?: Element | string, options?: MountOptions): Component<T, E>;
     on(name: E, fn: (...args: any[]) => void, options?: any): void;
     run(name: E, ...args: any[]): number;
-    query(name: string, ...args): Promise<any[]>; // obsolete
+    /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
+    query(name: string, ...args): Promise<any[]>;
     runAsync(name: string, ...args): Promise<any[]>;
     rendered: (state: T) => void;
     mounted: (props: any, children: any[], state: T) => T | void;
