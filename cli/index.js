@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const { existsSync, writeFileSync, mkdirSync } = require('fs');
+const { existsSync, writeFileSync, mkdirSync, copyFileSync } = require('fs');
 const { resolve, dirname } = require('path');
-const { red, green, yellow } = require('./cli/colors');
+const { red, green, yellow } = require('./colors');
+const execSync = require('child_process').execSync;
 
 const component_template = `import {app, Component} from 'apprun';
 
@@ -26,30 +27,27 @@ import #name from './#fn';
 describe('component', () => {
   it('should render state upon route event', () => {
     const element = document.createElement('div');
-    const component = new #name().mount(element);
-    //app.run('/#name');
-    component.run('.');
+    const component = new #name().start(element);
     expect(element.textContent).toBe('#name');
   })
 })
 `;
 
 program
-  .version('3.0.0')
+  .version('3.36.0')
   .description('AppRun CLI')
   .option('-i, --init', 'Initialize AppRun Project')
   .option('-c, --component <name>', 'Create a component')
   .option('-t, --test <name>', 'Create a component spec')
   .option('-p, --pages [directory]', 'Create example pages')
 
-
 program.parse(process.argv);
 
 const options = program.opts();
 if (options.init) {
-  console.log(`\nPlease use ${yellow('npm create apprun-app')} to create AppRun projects.\n`);
-  return;
+  execSync('npm create apprun-app@latest', { stdio: 'inherit' });
 }
+
 
 function createTestFile(fn, name) {
   const component_name = name || fn.split('/').pop();
@@ -96,7 +94,3 @@ if (options.pages) {
   createComponent(`${pages}/Contact/index`, 'Contact');
   createTestFile(`${pages}/Contact/index`, 'Contact');
 }
-
-
-
-

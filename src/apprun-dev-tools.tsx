@@ -1,12 +1,6 @@
 import app from './app';
 import toHTML from './vdom-to-html';
 import { _createEventTests, _createStateTests } from './apprun-dev-tools-tests';
-import yaml from 'js-yaml';
-
-function replacer(key, value) {
-  if (typeof value === 'function') return value.toString(); // value.toString();
-  return ['', null].includes(value) || (typeof value === 'object' && (value.length === 0 || Object.keys(value).length === 0)) ? undefined : value;
-}
 
 function createProxy(obj) {
   const handler = {
@@ -109,7 +103,7 @@ const viewComponents = state => {
 
       return <li>
         <div>{component.constructor.name}</div>
-        <div><pre>{htmlEncode(yaml.dump(component_def, { replacer }))}</pre></div>
+        <div><pre>{htmlEncode(JSON.stringify(component_def, null, 2))}</pre></div>
         <br />
       </li>;
 

@@ -6,7 +6,7 @@
   "module": "esm/apprun.js",
   "types": "apprun.d.ts",
   "bin": {
-    "apprun": "apprun-cli.js"
+    "apprun": "cli/index.js"
   },
   "scripts": {
     "build": "tsc -p src && rollup -c && webpack --mode production",
@@ -53,11 +53,10 @@
     "typescript": "^5.7.2",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0"
+    "webpack-dev-server": "^5.2.0",
+    "property-information": "^7.1.0"
   },
   "dependencies": {
-    "commander": "^14.0.0",
-    "js-yaml": "^4.1.0",
-    "property-information": "^7.1.0"
+    "commander": "^14.0.0"
   }
 }
