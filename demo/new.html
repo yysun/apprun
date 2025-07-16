@@ -1,16 +1,17 @@
 <h2>What&#39;s New</h2>
 <blockquote>
-<p>July 12, 2025, V3.36.1</p>
+<p>July 15, 2025, V3.36.1</p>
 </blockquote>
 <ul>
 <li>Continue code review with AI</li>
 <li>Use property-information to improve property and attribute handling</li>
 <li>Performance improvements in virtual DOM handling, see <a href="docs/done/framework-reordering-comparison.md">analysis reports</a></li>
+<li>New hierarchical matching behavior, see <a href="docs/requirements/req-hierarchical-routing.md">hierarchical routing document</a></li>
 </ul>
 <blockquote>
 <p>July 12, 2025, V3.36.0</p>
 </blockquote>
-<p>Code review by using Copilot and Claude Sonnet 4</p>
+<p>Code review by using Copilot and Claude Sonnet 4, see <a href="docs/plan/plan-apprun-bugfixes.md">plan-apprun-bugfixes.md</a> for details.</p>
 <ul>
 <li>Enhanced type definitions (apprun.d.ts) for better TypeScript support</li>
 <li>Fixed minor bugs and edge cases in virtual DOM handling</li>
@@ -59,20 +60,20 @@ app.render(document.body, &lt;App /&gt;);
 </blockquote>
 <h3>Support async generator for event handlers</h3>
 <p>You can now use async generator functions for event handlers. The async generator function can return multiple values. AppRun will render each value in the order they are generated.</p>
-<pre><code class="language-js">  const state = {};
-  const view = state =&gt; html`
+<pre><code class="language-js">const state = {};
+const view = state =&gt; html`
   &lt;div&gt;&lt;button @click=${run(getComic)}&gt;fetch ...&lt;/button&gt;&lt;/div&gt;
   ${state.loading &amp;&amp; html`&lt;div&gt;loading ... &lt;/div&gt;`}
   ${state.comic &amp;&amp; html`&lt;img src=${state.comic.img} /&gt;`}
 `;
-  async function* getComic() {  // async generator function returns loading flag and then the comic object
-    yield { loading: true };
-    const response = await fetch(&#39;https://xkcd-api.netlify.app&#39;);
-    const comic = await response.json();
-    yield { comic };
-  }
+async function* getComic() {  // async generator function returns loading flag and then the comic object
+  yield { loading: true };
+  const response = await fetch(&#39;https://xkcd-api.netlify.app&#39;);
+  const comic = await response.json();
+  yield { comic };
+}
 
-  app.start(document.body, state, view);
+app.start(document.body, state, view);
 </code></pre>
 <p><apprun-code></apprun-code></p>
 <h3>use lit-html V3 for apprun-html.js</h3>
@@ -84,7 +85,7 @@ app.render(document.body, &lt;App /&gt;);
   &lt;title&gt;Counter&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  &lt;script src=&quot;https://unpkg.com/dist/apprun-html&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://unpkg.com/apprun/dist/apprun-html&quot;&gt;&lt;/script&gt;
   &lt;script&gt;
   const add = (state, delta) =&gt; state + delta;
   const view = state =&gt; {

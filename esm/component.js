@@ -345,7 +345,11 @@ export class Component {
             this._app.runAsync(name, ...args);
     }
     // obsolete
+    /**
+     * @deprecated Use runAsync() instead. query() will be removed in a future version.
+     */
     query(event, ...args) {
+        console.warn('component.query() is deprecated. Use component.runAsync() instead.');
         return this.runAsync(event, ...args);
     }
     unmount() {

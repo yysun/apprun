@@ -2,6 +2,34 @@
 
 ## Releases
 
+## 3.36.1
+
+* Continue code review with AI
+* Use property-information to improve property and attribute handling
+* Performance improvements in virtual DOM handling, see [analysis reports](docs/done/framework-reordering-comparison.md)
+* New hierarchical matching behavior, see [hierarchical routing requirements](docs/requirements/req-hierarchical-routing.md)
+
+## 3.36.0
+
+* Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](docs/plan/plan-apprun-bugfixes.md) for details. 
+* Enhanced type definitions (apprun.d.ts) for better TypeScript support
+* Fixed minor bugs and edge cases in virtual DOM handling
+* Fixed bugs in router initialization logic
+
+## 3.35.0
+
+* Support auto use router for pretty links
+* AppRun now supports pretty links with components subscribing to route events like '/about'
+* Routing component events with pretty links
+* Fallback to hash-based routing when components subscribe to '#' or '#/'
+
+## 3.33.10
+
+* Support async generator for event handlers
+* Async generator functions can return multiple values rendered in order
+* Use lit-html V3 for apprun-html.js
+* Standalone version of AppRun using lit-html for rendering without JSX
+
 ## 3.30.0
 
 * Add React-safe apprun-play-html

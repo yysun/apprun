@@ -80,9 +80,10 @@ if (!app.start) {
     app.once = app.once || ((name, fn, options = {}) => {
         app.on(name, fn, Object.assign(Object.assign({}, options), { once: true }));
     });
+    // Deprecated: app.query is deprecated in favor of app.runAsync
     app.query = app.query || app.runAsync;
     const NOOP = _ => { };
-    // app.on('$', NOOP);
+    app.on('/', NOOP);
     app.on('debug', _ => NOOP);
     app.on(ROUTER_EVENT, NOOP);
     app.on(ROUTER_404_EVENT, NOOP);
@@ -99,7 +100,17 @@ if (!app.start) {
                 !no_init_route && route(location.hash);
             }
             else {
-                !no_init_route && route(location.pathname);
+                !no_init_route && (() => {
+                    const basePath = app.basePath || '';
+                    let initialPath = location.pathname;
+                    // Strip base path if present
+                    if (basePath && initialPath.startsWith(basePath)) {
+                        initialPath = initialPath.substring(basePath.length);
+                        if (!initialPath.startsWith('/'))
+                            initialPath = '/' + initialPath;
+                    }
+                    route(initialPath);
+                })();
                 document.body.addEventListener('click', e => {
                     const element = e.target;
                     if (!element)
@@ -109,8 +120,11 @@ if (!app.start) {
                         menu.origin === location.origin &&
                         menu.pathname) {
                         e.preventDefault();
-                        history.pushState(null, '', menu.pathname);
-                        route(menu.pathname);
+                        // Handle base path for navigation
+                        const basePath = app.basePath || '';
+                        const fullPath = basePath + menu.pathname;
+                        history.pushState(null, '', fullPath);
+                        route(menu.pathname); // Route with relative path (without base path)
                     }
                 });
             }

@@ -1,15 +1,16 @@
 ## What's New
 
-> July 12, 2025, V3.36.1
+> July 15, 2025, V3.36.1
 
 - Continue code review with AI
 - Use property-information to improve property and attribute handling
 - Performance improvements in virtual DOM handling, see [analysis reports](docs/done/framework-reordering-comparison.md)
+- New hierarchical matching behavior, see [hierarchical routing document](docs/requirements/req-hierarchical-routing.md)
 
 
 > July 12, 2025, V3.36.0
 
-Code review by using Copilot and Claude Sonnet 4
+Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](docs/plan/plan-apprun-bugfixes.md) for details.
   - Enhanced type definitions (apprun.d.ts) for better TypeScript support
   - Fixed minor bugs and edge cases in virtual DOM handling
   - Fixed bugs in router initialization logic
@@ -70,20 +71,20 @@ If you have components subscribe to '#', or '#/', Apprun will fallback to the ha
 You can now use async generator functions for event handlers. The async generator function can return multiple values. AppRun will render each value in the order they are generated.
 
 ```js
-  const state = {};
-  const view = state => html`
+const state = {};
+const view = state => html`
   <div><button @click=${run(getComic)}>fetch ...</button></div>
   ${state.loading && html`<div>loading ... </div>`}
   ${state.comic && html`<img src=${state.comic.img} />`}
 `;
-  async function* getComic() {  // async generator function returns loading flag and then the comic object
-    yield { loading: true };
-    const response = await fetch('https://xkcd-api.netlify.app');
-    const comic = await response.json();
-    yield { comic };
-  }
+async function* getComic() {  // async generator function returns loading flag and then the comic object
+  yield { loading: true };
+  const response = await fetch('https://xkcd-api.netlify.app');
+  const comic = await response.json();
+  yield { comic };
+}
 
-  app.start(document.body, state, view);
+app.start(document.body, state, view);
 ```
 <apprun-code></apprun-code>
 
@@ -100,7 +101,7 @@ The `apprun-html.js` now uses `lit-html` V3 for rendering the view. The `apprun-
   <title>Counter</title>
 </head>
 <body>
-  <script src="https://unpkg.com/dist/apprun-html"></script>
+  <script src="https://unpkg.com/apprun/dist/apprun-html"></script>
   <script>
   const add = (state, delta) => state + delta;
   const view = state => {

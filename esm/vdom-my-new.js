@@ -1,51 +1,8 @@
-/** * VDOM Implementation for AppRun
- *
- * Notes for AppRun’s key prop
- * Use the key prop only if you need to preserve browser-side DOM state (such as cursor
- * position in an <input>, focus, or maintaining state in inline components).
- *
- * For most use cases, especially with stateless or purely data-driven UIs, key is not
- * needed and may decrease performance by forcing DOM moves.
- *
- * AppRun aggressively updates DOM to match your vdom, so DOM node preservation is
- * only valuable when you intentionally depend on browser-managed state.
- *
- * | Use Case                      | Should I use `key`? | Why                   |
- * | ----------------------------- | ------------------- | --------------------- |
- * | Preserve input cursor/focus   | ✅ Yes               | Keeps browser state   |
- * | Inline stateful component     | ✅ Yes               | Preserves component   |
- * | Regular data list (stateless) | 🚫 No               | Unnecessary DOM moves |
- * | Purely visual updates         | 🚫 No               | No state to preserve  |
- *
- * Features:
- * - Virtual DOM rendering and diffing for efficient DOM updates
- * - JSX Fragment support for both Babel and TypeScript
- * - Element creation with props, children, and event handling
- * - SVG element support with proper namespace handling
- * - Component lifecycle management and caching
- * - Keyed element optimization with automatic cleanup for memory management
- * - Safe HTML insertion and text node creation
- * - Directive processing integration
- *
- * Implementation:
- * - Uses plain JavaScript object for keyCache instead of Map for better performance
- * - Implements automatic cleanup of disconnected elements from keyCache
- * - Supports both string and function-based tags
- * - Handles component mounting and state management
- * - Optimized children updating with minimal DOM operations
- * - Memory-efficient caching with configurable thresholds (500 ops, 1000 max size)
- *
- * Recent Changes:
- * - 2025-07-15: Converted keyCache from Map to plain object ({}) for improved performance
- * - Updated cleanup functions to use object property deletion instead of Map methods
- * - Enhanced memory management with automatic cleanup of disconnected elements
- * - Added comprehensive key prop usage documentation and guidelines
- */
 import directive from './directive';
-import { updateProps } from './vdom-my-prop-attr';
 export function Fragment(props, ...children) {
     return collect(children);
 }
+const ATTR_PROPS = '_props';
 function collect(children) {
     const ch = [];
     const push = (c) => {
@@ -63,27 +20,6 @@ function collect(children) {
     });
     return ch;
 }
-const keyCache = {};
-let cleanupCounter = 0;
-const CLEANUP_THRESHOLD = 500; // Cleanup every 500 operations
-const MAX_CACHE_SIZE = 1000;
-// Lightweight cleanup function - only runs when needed
-function cleanupKeyCache() {
-    if (Object.keys(keyCache).length <= MAX_CACHE_SIZE)
-        return; // Skip if under limit
-    for (const [key, element] of Object.entries(keyCache)) {
-        if (!element.isConnected) {
-            delete keyCache[key];
-        }
-    }
-}
-// Export cleanup function for manual cleanup if needed
-export function clearKeyCache() {
-    for (const key in keyCache) {
-        delete keyCache[key];
-    }
-    cleanupCounter = 0;
-}
 export function createElement(tag, props, ...children) {
     const ch = collect(children);
     if (typeof tag === 'string')
@@ -100,6 +36,7 @@ export function createElement(tag, props, ...children) {
         throw new Error(`Unknown tag in vdom ${tag}`);
 }
 ;
+const keyCache = {};
 export const updateElement = (element, nodes, component = {}) => {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
@@ -141,60 +78,83 @@ function update(element, node, isSvg) {
     updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
-    var _a, _b;
+    var _a;
     const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
     const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
+    // Handle key-based reordering first if any children have keys
+    const hasKeysInNewChildren = children === null || children === void 0 ? void 0 : children.some(child => child && typeof child === 'object' && child.props && child.props.key !== undefined);
+    if (hasKeysInNewChildren) {
+        // Create a map of existing keyed elements
+        const existingKeyedElements = new Map();
+        for (let i = 0; i < old_len; i++) {
+            const el = element.childNodes[i];
+            if (el && el.key) {
+                existingKeyedElements.set(el.key, el);
+            }
+        }
+        // Build new DOM structure
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < new_len; i++) {
+            const child = children[i];
+            if (child == null)
+                continue;
+            const key = child.props && child.props['key'];
+            if (key && existingKeyedElements.has(key)) {
+                // Reuse existing element
+                const existingEl = existingKeyedElements.get(key);
+                update(existingEl, child, isSvg);
+                fragment.appendChild(existingEl);
+                existingKeyedElements.delete(key); // Mark as used
+            }
+            else {
+                // Create new element
+                fragment.appendChild(create(child, isSvg));
+            }
+        }
+        // Clear current children and append new structure
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+        element.appendChild(fragment);
+        return;
+    }
+    // Original non-keyed logic
     const len = Math.min(old_len, new_len);
     for (let i = 0; i < len; i++) {
         const child = children[i];
+        if (child == null)
+            continue;
         const el = element.childNodes[i];
+        if (!el)
+            continue; // Safety check for undefined childNodes
         if (typeof child === 'string') {
-            if (el.textContent !== child) {
-                if (el.nodeType === 3) {
+            if (el.nodeType === 3) {
+                if (el.nodeValue !== child) {
                     el.nodeValue = child;
-                }
-                else {
-                    element.replaceChild(createText(child), el);
-                }
-            }
-        }
-        else if (child instanceof HTMLElement || child instanceof SVGElement) {
-            element.insertBefore(child, el);
-        }
-        else {
-            const key = child.props && child.props['key'];
-            if (key) {
-                if (el.key === key) {
-                    update(element.childNodes[i], child, isSvg);
-                }
-                else {
-                    // console.log(el.key, key);
-                    const old = keyCache[key];
-                    if (old) {
-                        // const temp = old.nextSibling;
-                        element.insertBefore(old, el);
-                        // temp ? element.insertBefore(el, temp) : element.appendChild(el);
-                        update(element.childNodes[i], child, isSvg);
-                    }
-                    else {
-                        element.replaceChild(create(child, isSvg), el);
-                    }
                 }
             }
             else {
-                update(element.childNodes[i], child, isSvg);
+                element.replaceChild(createText(child), el);
             }
         }
+        else if (child instanceof HTMLElement || child instanceof SVGElement) {
+            element.replaceChild(child, el);
+        }
+        else if (child && typeof child === 'object') {
+            update(element.childNodes[i], child, isSvg);
+        }
     }
-    let n = ((_b = element.childNodes) === null || _b === void 0 ? void 0 : _b.length) || 0;
-    while (n > len) {
+    // Remove extra old nodes
+    while (element.childNodes.length > len) {
         element.removeChild(element.lastChild);
-        n--;
     }
     if (new_len > len) {
         const d = document.createDocumentFragment();
         for (let i = len; i < children.length; i++) {
-            d.appendChild(create(children[i], isSvg));
+            const child = children[i];
+            if (child != null) {
+                d.appendChild(create(child, isSvg));
+            }
         }
         element.appendChild(d);
     }
@@ -220,8 +180,10 @@ function create(node, isSvg) {
         return node;
     if (typeof node === "string")
         return createText(node);
-    if (!node.tag || (typeof node.tag === 'function'))
-        return createText(JSON.stringify(node));
+    // Type guard for VNode objects - handle invalid node types gracefully
+    if (!node || typeof node !== 'object' || !node.tag || (typeof node.tag === 'function')) {
+        return createText(typeof node === 'object' ? JSON.stringify(node) : String(node !== null && node !== void 0 ? node : ''));
+    }
     isSvg = isSvg || node.tag === "svg";
     const element = isSvg
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
@@ -229,16 +191,88 @@ function create(node, isSvg) {
     updateProps(element, node.props, isSvg);
     if (node.children)
         node.children.forEach(child => element.appendChild(create(child, isSvg)));
-    if (node.props && node.props.key !== undefined) {
-        element.key = node.props.key;
-        keyCache[node.props.key] = element;
-        // Lightweight cleanup - only when counter reaches threshold
-        if (++cleanupCounter >= CLEANUP_THRESHOLD) {
-            cleanupKeyCache();
-            cleanupCounter = 0;
+    return element;
+}
+function mergeProps(oldProps, newProps) {
+    newProps['class'] = newProps['class'] || newProps['className'];
+    delete newProps['className'];
+    const props = {};
+    if (oldProps)
+        Object.keys(oldProps).forEach(p => props[p] = null);
+    if (newProps)
+        Object.keys(newProps).forEach(p => props[p] = newProps[p]);
+    return props;
+}
+export function updateProps(element, props, isSvg) {
+    // console.assert(!!element);
+    const cached = element[ATTR_PROPS] || {};
+    props = mergeProps(cached, props || {});
+    element[ATTR_PROPS] = props;
+    for (const name in props) {
+        const value = props[name];
+        // if (cached[name] === value) continue;
+        // console.log('updateProps', name, value);
+        if (name.startsWith('data-')) {
+            const dname = name.substring(5);
+            const cname = dname.replace(/-(\w)/g, (match) => match[1].toUpperCase());
+            if (element.dataset[cname] !== value) {
+                if (value || value === "")
+                    element.dataset[cname] = value;
+                else
+                    delete element.dataset[cname];
+            }
+        }
+        else if (name === 'style') {
+            if (element.style.cssText)
+                element.style.cssText = '';
+            if (typeof value === 'string')
+                element.style.cssText = value;
+            else {
+                for (const s in value) {
+                    if (element.style[s] !== value[s])
+                        element.style[s] = value[s];
+                }
+            }
+        }
+        else if (name.startsWith('xlink')) {
+            const xname = name.replace('xlink', '').toLowerCase();
+            if (value == null || value === false) {
+                element.removeAttributeNS('http://www.w3.org/1999/xlink', xname);
+            }
+            else {
+                element.setAttributeNS('http://www.w3.org/1999/xlink', xname, value);
+            }
+        }
+        else if (name.startsWith('on')) {
+            if (!value || typeof value === 'function') {
+                element[name] = value;
+            }
+            else if (typeof value === 'string') {
+                if (value)
+                    element.setAttribute(name, value);
+                else
+                    element.removeAttribute(name);
+            }
+        }
+        else if (/^id$|^class$|^list$|^readonly$|^contenteditable$|^role|-|^for$/g.test(name) || isSvg) {
+            if (element.getAttribute(name) !== value) {
+                if (value)
+                    element.setAttribute(name, value);
+                else
+                    element.removeAttribute(name);
+            }
+        }
+        else if (element[name] !== value) {
+            element[name] = value;
+        }
+        if (name === 'key' && value !== undefined) {
+            keyCache[value] = element;
+            element.key = value; // Set key property on the DOM element
         }
     }
-    return element;
+    if (props && typeof props['ref'] === 'function') {
+        window.requestAnimationFrame(() => props['ref'](element));
+    }
 }
 function render_component(node, parent, idx) {
     const { tag, props, children } = node;
@@ -292,4 +326,4 @@ function createComponent(node, parent, idx = 0) {
     }
     return vdom;
 }
-//# sourceMappingURL=vdom-my.js.map
+//# sourceMappingURL=vdom-my-new.js.map

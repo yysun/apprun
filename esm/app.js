@@ -6,8 +6,8 @@
  *    - on(): Subscribe to events with options (once, delay, global)
  *    - off(): Unsubscribe from events with proper cleanup
  *    - run(): Publish events synchronously with error handling
- *    - runAsync(): Publish events asynchronously with Promise support
- *    - query(): Alias for runAsync for backward compatibility
+ *    - runAsync(): Publish events asynchronously with Promise support, returns handler values
+ *    - query(): Deprecated alias for runAsync() - use runAsync() instead
  *
  * 2. Default app singleton - Global event bus instance
  *    - Created once and reused across the application
@@ -35,12 +35,12 @@
  *   // Handle event
  * });
  *
- * // Publish events
+ * // Publish events (fire-and-forget)
  * app.run('event-name', ...args);
  *
- * // Async events
- * app.runAsync('async-event', data).then(results => {
- *   // Handle results
+ * // Get return values from event handlers
+ * app.runAsync('event-name', data).then(results => {
+ *   // Handle results array
  * });
  * ```
  */
@@ -119,7 +119,11 @@ export class App {
         });
         return Promise.all(promises);
     }
+    /**
+     * @deprecated Use runAsync() instead. app.query() will be removed in a future version.
+     */
     query(name, ...args) {
+        console.warn('app.query() is deprecated. Use app.runAsync() instead.');
         return this.runAsync(name, ...args);
     }
     getSubscribers(name, events) {
