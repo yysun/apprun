@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
-		"target": "es2018",
-		"module": "es2015",
+		"target": "es2020",
+		"module": "esnext",
 		"moduleResolution": "node",
 		"jsx": "react",
 		"jsxFactory": "app.h",
 		"jsxFragmentFactory": "app.Fragment",
-		"lib": ["dom", "es2018", "esnext.asynciterable"],
+		"lib": ["dom", "es2020", "esnext.asynciterable"],
 		"experimentalDecorators": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
