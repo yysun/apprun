@@ -21,6 +21,7 @@ import animation from './components/animation';
 import play from './components/play';
 import webcomponents from './components/web-components';
 import '../src/apprun-dev-tools';
+import '../src/apprun-code'
 
 const element = document.getElementById('my-app');
 [home, hello, counter, counters, todo, calculator, dragdrop, svg, animation,

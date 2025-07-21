@@ -38,7 +38,7 @@ const code_html = code => `<!DOCTYPE html>
     }
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+  <script src="dist/apprun-html.js"></script>
 </head>
 <body>
 <script>
