@@ -248,10 +248,9 @@ export class Component<T = any, E = any> {
 
     this.setState(this.state, { render: !!options.render, history: true });
 
-    // if (app['debug']) {
-    //   if (componentCache.get(element)) { componentCache.get(element).push(this) }
-    //   else { componentCache.set(element, [this]) }
-    // }
+    if (app['debug'] && app.find('debug-create-component')?.length) {
+      app.run('debug-create-component', this);
+    }
     return this;
   }
 

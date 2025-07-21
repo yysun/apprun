@@ -47,7 +47,17 @@ function getVDOM(component) {
   return view;
 }
 
+const componentCache = new Map();
 app['debug'] = true;
+app.on('debug-create-component', component => {
+  const element = component.element;
+  if (!element) {
+    console.warn('Component created without an element:', component);
+    return;
+  }
+  if (componentCache.get(element)) { componentCache.get(element).push(component) }
+  else { componentCache.set(element, [component]) }
+});
 
 window['_apprun-help'] = ['', () => {
   Object.keys(window).forEach(cmd => {
@@ -75,12 +85,6 @@ function newWin(html) {
   win.document.close();
 }
 
-const get_components = () => {
-  const o = { components: {} };
-  app.run('get-components', o);
-  const { components } = o;
-  return components;
-}
 const viewElement = element => <div>
   {element.tagName.toLowerCase()}{element.id ? '#' + element.id : ''}
   {' '}
@@ -146,7 +150,7 @@ const viewEvents = state => {
 const _events = (print?) => {
   const global_events = app['_events']
   const events = {};
-  const cache = get_components();
+  const cache = componentCache;
 
   const add_component = component => component['_actions'].forEach(event => {
     events[event.name] = events[event.name] || [];
@@ -157,10 +161,6 @@ const _events = (print?) => {
     for (let [key, comps] of cache) {
       comps.forEach(add_component);
     }
-  } else {
-    Object.keys(cache).forEach(el =>
-      cache[el].forEach(add_component)
-    );
   }
   const data = [];
   Object.keys(events).forEach(event => {
@@ -183,7 +183,7 @@ const _events = (print?) => {
 }
 
 const _components = (print?) => {
-  const components = get_components();
+  const components = componentCache;
   const data = [];
 
   if (components instanceof Map) {
@@ -191,11 +191,6 @@ const _components = (print?) => {
       const element = typeof key === 'string' ? document.getElementById(key) || document.querySelector(key) : key;
       data.push({ element, comps });
     }
-  } else {
-    Object.keys(components).forEach(el => {
-      const element = typeof el === 'string' ? document.getElementById(el) || document.querySelector(el) : el;
-      data.push({ element, comps: components[el] });
-    });
   }
   if (print) {
     const vdom = viewComponents(data);
@@ -211,8 +206,15 @@ app.on('debug', p => {
   if (debugging & 2 && p.vdom) console.log(p);
 });
 
-window['_apprun-components'] = ['components [print]', (p) => {
-  _components(p === 'print');
+window['_apprun-components'] = ['components [print|clear]', (p) => {
+  if (p === 'print') {
+    _components(true);
+  } else if (p === 'clear') {
+    componentCache.clear();
+    console.log('Component cache cleared');
+  } else {
+    _components(false);
+  }
 }]
 
 window['_apprun-events'] = ['events [print]', (p) => {
@@ -256,7 +258,7 @@ window['_apprun'] = (strings) => {
   else window['_apprun-help'][1]();
 }
 
-console.info('AppRun DevTools 2.27: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 3.36: type "_apprun `help`" to list all available commands.');
 
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
