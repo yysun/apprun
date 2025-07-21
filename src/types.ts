@@ -84,6 +84,14 @@ export type AppStartOptions<T> = {
 };
 export type Router = (url: string, ...args: any[]) => any;
 
+export type CustomElementOptions = {
+  render?: boolean;
+  shadow?: boolean;
+  history?: boolean;
+  global_event?: boolean;
+  observedAttributes?: string[];
+};
+
 export interface IApp {
   // Event system methods
   on(name: string, fn: (...args: any[]) => any, options?: EventOptions): void;
@@ -95,52 +103,9 @@ export interface IApp {
 
   /** @deprecated Use runAsync() instead */
   query(name: string, ...args: any[]): Promise<any[]>;
-}
 
-export interface IComponent<T = any, E = any> {
-  // Core properties
-  readonly element: Element;
-  readonly state: T;
-  view?: View<T>;
-  update?: Update<T, E>;
-
-  // Lifecycle hooks
-  mounted?: (props: any, children: any[], state: T) => T | void;
-  rendered?: (state: T) => void;
-  unload?: (state: T) => void;
-
-  // Component lifecycle methods
-  mount(element?: Element, options?: MountOptions): IComponent<T, E>;
-  start(element?: Element, options?: MountOptions): IComponent<T, E>;
-  unmount(): void;
-
-  // State management
-  setState(state: T, options?: ActionOptions & EventOptions): void;
-
-  // Event system
-  on(event: E, fn: (...args: any[]) => void, options?: EventOptions): void;
-  run(event: E, ...args: any[]): any;
-  runAsync(event: E, ...args: any[]): Promise<any[]>;
-
-  /** @deprecated Use runAsync() instead */
-  query(event: E, ...args: any[]): Promise<any[]>;
-
-  // Action management
-  add_action(name: string, action: Action<T>, options?: ActionOptions): void;
-  is_global_event(name: string): boolean;
-}
-
-export type CustomElementOptions = {
-  render?: boolean;
-  shadow?: boolean;
-  history?: boolean;
-  global_event?: boolean;
-  observedAttributes?: string[];
-};
-
-export interface IAppRun extends IApp {
   start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
-    options?: AppStartOptions<T>): IComponent<T, E>;
+    options?: AppStartOptions<T>): any;
 
   h(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
   createElement(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];

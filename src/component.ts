@@ -55,7 +55,7 @@ import _app, { App } from './app';
 
 
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IComponent, IAppRun } from './types';
+import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IApp } from './types';
 import directive from './directive';
 import { safeQuerySelector, safeGetElementById } from './type-utils';
 
@@ -64,9 +64,9 @@ import { safeQuerySelector, safeGetElementById } from './type-utils';
 
 export const REFRESH = state => state;
 
-const app = _app as unknown as IAppRun;
+const app = _app as unknown as IApp;
 
-export class Component<T = any, E = any> implements IComponent<T, E> {
+export class Component<T = any, E = any> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];

@@ -45,10 +45,10 @@
  * ```
  */
 
-import { IApp, EventOptions } from './types'
+import { EventOptions } from './types'
 import { APPRUN_VERSION_GLOBAL } from './version'
 
-export class App implements IApp {
+export class App {
 
   _events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
 

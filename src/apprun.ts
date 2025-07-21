@@ -65,8 +65,8 @@ import _app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
 import {
-  IAppRun, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions,
-  ComponentRoute, Router, CustomElementOptions
+  IApp, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions,
+  ComponentRoute, CustomElementOptions
 } from './types';
 import { on, update, customElement } from './decorator';
 import webComponent from './web-component';
@@ -79,8 +79,8 @@ type OnDecorator = {
   <E = string>(events?: E, options?: any): (target: any, key: string) => void;
 };
 
-const app: IAppRun = _app as unknown as IAppRun;
-export default app as IAppRun;
+const app: IApp = _app as unknown as IApp;
+export default app as IApp;
 
 export {
   App,
