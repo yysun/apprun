@@ -9,7 +9,7 @@ app.on(ROUTER_EVENT, route => {
 
 import home from './components/home';
 import counter from './components/counter';
-import counters from './components/counters';
+import counters from './components/counters-immer';
 import dragdrop from './components/dragdrop';
 import calculator from './components/calculator';
 import todo from './components/todo';

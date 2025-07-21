@@ -1,19 +1,11 @@
-import type { Draft } from 'immer';
+import { produce, Draft } from 'immer';
 
-export async function createState<T>(
-  state: T,
-  updater: (draft: Draft<T>) => void
-): Promise<T> {
-  let produce: typeof import('immer').produce;
-  try {
-    // dynamic ESM import
-    const mod = await import('immer');
-    produce = mod.produce;
-  } catch {
-    throw new Error(
-      "immer is not installed. Please run: npm install immer"
-    );
-  }
-
-  return produce(state, updater);
+export function createState<T = any>(
+  fn: (draft: Draft<T>, ...args: any[]) => void
+): (state: T, ...args: any[]) => T {
+  return (state: T, ...args: any[]): T => {
+    return produce(state, (draft) => {
+      fn(draft, ...args);
+    });
+  };
 }
