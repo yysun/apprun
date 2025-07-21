@@ -1,4 +1,5 @@
-import webComponent, { CustomElementOptions } from './web-component';
+import { CustomElementOptions } from './types';
+import webComponent from './web-component';
 
 /**
  * TypeScript Decorators for AppRun Components

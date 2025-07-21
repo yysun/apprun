@@ -297,11 +297,11 @@ const publishRoute = (name: string, ...args: any[]) => {
   app.run(ROUTER_EVENT, name, ...args);
 }
 
-export type Route = (url: string, ...args: any[]) => any;
+import { Router } from './types';
 
 export const ROUTER_EVENT: string = '//';
 export const ROUTER_404_EVENT: string = '///';
-export const route: Route = (url: string) => {
+export const route: Router = (url: string) => {
   if (app['lastUrl'] === url) return; // Prevent duplicate routing
   app['lastUrl'] = url;
 

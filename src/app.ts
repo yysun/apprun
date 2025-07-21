@@ -45,26 +45,12 @@
  * ```
  */
 
-import { EventOptions } from './types'
+import { IApp, EventOptions } from './types'
 import { APPRUN_VERSION_GLOBAL } from './version'
 
-export class App {
+export class App implements IApp {
 
   _events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
-
-  public start: any;
-  public h: any;
-  public createElement: any;
-  public render: any;
-  public Fragment: any;
-  public webComponent: any;
-  public safeHTML: any;
-  public use_render: any;
-  public use_react: any;
-  public route: any;
-  public basePath: string; // Base path for sub-directory deployments
-
-  public version: string;
 
   constructor() {
     this._events = {} as { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };

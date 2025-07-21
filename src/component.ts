@@ -51,18 +51,22 @@
  * ```
  */
 
-import app, { App } from './app';
+import _app, { App } from './app';
+
+
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions } from './types';
+import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IComponent, IAppRun } from './types';
 import directive from './directive';
 import { safeQuerySelector, safeGetElementById } from './type-utils';
 
-const componentCache = new Map();
-if (!app.find('get-components')) app.on('get-components', o => o.components = componentCache);
+// const componentCache = new Map();
+// if (!app.find('get-components')) app.on('get-components', o => o.components = componentCache);
 
-const REFRESH = state => state;
+export const REFRESH = state => state;
 
-export class Component<T = any, E = any> {
+const app = _app as unknown as IAppRun;
+
+export class Component<T = any, E = any> implements IComponent<T, E> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];
@@ -244,10 +248,10 @@ export class Component<T = any, E = any> {
 
     this.setState(this.state, { render: !!options.render, history: true });
 
-    if (app['debug']) {
-      if (componentCache.get(element)) { componentCache.get(element).push(this) }
-      else { componentCache.set(element, [this]) }
-    }
+    // if (app['debug']) {
+    //   if (componentCache.get(element)) { componentCache.get(element).push(this) }
+    //   else { componentCache.set(element, [this]) }
+    // }
     return this;
   }
 
