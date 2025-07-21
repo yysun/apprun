@@ -433,18 +433,21 @@ class About extends Component {
 
 const App = () => <>
   <div id="menus">
-    <a href="#home">Home</a>{' | '}
-    <a href="#contact">Contact</a>{' | '}
-    <a href="#about">About</a></div>
+    <a href="/">Home</a>{' | '}
+    <a href="/contact">Contact</a>{' | '}
+    <a href="/about">About</a></div>
   <div id="pages"></div>
 </>
 
 app.render(document.body, <App />);
-[
-  [About, '#about'],
-  [Contact, '#contact'],
-  [Home, '#, #home'],
-].map(([C, route]) => new C().start('pages', {route}));
+
+app.addComponents('#pages', {
+  '/': Home, 
+  '/about': About,
+  '/contact': Contact
+});
+
+app.run('/'); // start with Home
 `
   },
 
