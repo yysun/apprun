@@ -53,18 +53,12 @@
 
 declare var customElements;
 
-export type CustomElementOptions = {
-  render?: boolean;
-  shadow?: boolean;
-  history?: boolean;
-  global_event?: boolean;
-  observedAttributes?: string[];
-};
+import { CustomElementOptions } from './types';
 
 export const customElement = (componentClass, options: CustomElementOptions = {}) => class CustomElement extends HTMLElement {
-  private _shadowRoot;
-  private _component;
-  private _attrMap: (arg0: string) => string;
+  public _shadowRoot;
+  public _component;
+  public _attrMap: (arg0: string) => string;
   public on;
   public run;
   constructor() {

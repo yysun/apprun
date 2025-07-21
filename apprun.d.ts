@@ -1,3 +1,42 @@
+/**
+ * AppRun TypeScript Declaration File
+ * 
+ * This file provides TypeScript declarations for the AppRun framework:
+ * 1. Core Framework Types
+ *    - Component lifecycle (View, Action, Update)
+ *    - Virtual DOM (VNode, VDOM)
+ *    - Event system with comprehensive options
+ * 
+ * 2. Application Interfaces
+ *    - IApp: Core event system and utilities
+ *    - IComponent: Component lifecycle and state management
+ *    - IAppRun: Main framework interface extending IApp
+ * 
+ * 3. Configuration Options
+ *    - EventOptions: Event handling configuration
+ *    - ActionOptions: Action behavior settings
+ *    - MountOptions: Component mounting configuration
+ *    - CustomElementOptions: Web component settings
+ * 
+ * 4. Integration Support
+ *    - React integration types
+ *    - Lit-html TemplateResult support
+ *    - JSX namespace declarations
+ *    - State management with createState
+ * 
+ * Updated in v3.35.1:
+ * - Consolidated types from types.ts implementation
+ * - Enhanced type safety with better generic constraints
+ * - Improved lifecycle hook typing with proper signatures
+ * - Added routing system types with ComponentRoute
+ * - Better integration with external libraries
+ * - Comprehensive options typing matching implementation
+ * - Added proper deprecation warnings
+ * - Enhanced error handling and validation
+ */
+
+import { TemplateResult } from 'lit-html';
+
 declare module 'apprun' {
 
   export type Element = HTMLElement | string;
@@ -7,17 +46,44 @@ declare module 'apprun' {
     props: {},
     children: Array<VNode | string>
   };
-  export type VDOM = false | string | VNode | Array<VNode | string> | any; // TemplateResult from lit-html
+
+  export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResult;
   export type View<T> = (state: T) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
-  export type Route = (url: string, ...args: any[]) => any;
-  export type EventOptions<T = any> = {
+  export type Router = (url: string, ...args: any[]) => any;
+
+  export type EventOptions = {
     once?: boolean;
     transition?: boolean;
     delay?: number;
   } | any;
+
+  export type ActionOptions = {
+    render?: boolean;
+    history?;
+    global?: boolean;
+    callback?: (state: any) => void;
+  };
+
+  export type MountOptions = {
+    render?: boolean;
+    history?;
+    global_event?: boolean;
+    route?: string;
+    transition?: boolean;
+  };
+
+  export type AppStartOptions<T> = {
+    render?: boolean;
+    history?;
+    transition?: boolean;
+    route?: string;
+    rendered?: (state: T) => void;
+    mounted?: (props: any, children: any, state: T) => T;
+  };
+
   export type CustomElementOptions = {
     render?: boolean;
     shadow?: boolean;
@@ -26,77 +92,127 @@ declare module 'apprun' {
     observedAttributes?: string[];
   };
 
-  export type MountOptions = {
-    render?: boolean, history?, global_event?: boolean,
-    transition?: boolean;
-    route?: string
-  };
-
-  export type AppStartOptions<T> = {
-    render?: boolean;
-    transition?: boolean;
-    history?;
-    route?: string;
-    rendered?: (state: T) => void;
-    mounted?: (props: any, children: any[], state: T) => T | void;
+  export type ComponentRoute = {
+    [route: string]: any;
   };
 
   export interface IApp {
-    start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
-      options?: AppStartOptions<T>): Component<T, E>;
-    on(name: string, fn: (...args: any[]) => void, options?: any): void;
-    once(name: string, fn: (...args: any[]) => void, options?: any): void;
-    off(name: string, fn: (...args: any[]) => void): void;
+    // Event system methods
+    on(name: string, fn: (...args: any[]) => any, options?: EventOptions): void;
+    once(name: string, fn: (...args: any[]) => any, options?: EventOptions): void;
+    off(name: string, fn: (...args: any[]) => any): void;
     find(name: string): any;
     run(name: string, ...args: any[]): number;
+    runAsync(name: string, ...args: any[]): Promise<any[]>;
+
     /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
-    query(name: string, ...args): Promise<any[]>;
-    runAsync(name: string, ...args): Promise<any[]>;
-    h(tag: string | Function, ...children: any[]): VNode | VNode[];
-    createElement(tag: string | Function, ...children: any[]): VNode | VNode[];
-    render(element: Element | string, node: VDOM): void;
-    Fragment(props: any[], ...children: any[]): any[];
-    route?: Route;
-    basePath?: string; // Base path for sub-directory deployments
-    webComponent(name: string, componentClass, options?: CustomElementOptions): void;
+    query(name: string, ...args: any[]): Promise<any[]>;
+  }
+
+  export interface IComponent<T = any, E = any> {
+    // Core properties
+    readonly element: Element;
+    readonly state: T;
+    view?: View<T>;
+    update?: Update<T, E>;
+
+    // Lifecycle hooks
+    mounted?: (props: any, children: any[], state: T) => T | void;
+    rendered?: (state: T) => void;
+    unload?: (state: T) => void;
+
+    // Component lifecycle methods
+    mount(element?: Element, options?: MountOptions): IComponent<T, E>;
+    start(element?: Element, options?: MountOptions): IComponent<T, E>;
+    unmount(): void;
+
+    // State management
+    setState(state: T, options?: ActionOptions & EventOptions): void;
+
+    // Event system
+    on(event: E, fn: (...args: any[]) => void, options?: EventOptions): void;
+    run(event: E, ...args: any[]): any;
+    runAsync(event: E, ...args: any[]): Promise<any[]>;
+
+    /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
+    query(event: E, ...args: any[]): Promise<any[]>;
+
+    // Action management
+    add_action(name: string, action: Action<T>, options?: ActionOptions): void;
+    is_global_event(name: string): boolean;
+  }
+
+  export interface IAppRun extends IApp {
+    start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+      options?: AppStartOptions<T>): IComponent<T, E>;
+
+    h(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
+    createElement(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
+    render(element: Element | ShadowRoot, node: VNode, component?: {}): void;
+    Fragment(props: any, ...children: any[]): any[];
+
+    route: Router;
+    basePath?: string;
+    addComponents: (element: Element | string, components: ComponentRoute) => void;
+
+    webComponent(name: string, componentClass: any, options?: CustomElementOptions): void;
     safeHTML(html: string): any[];
-    use_render(render, mode?: 0 | 1);
-    use_react(React, ReactDOM);
+    use_render(render: any, mode?: 0 | 1): void;
+    use_react(React: any, ReactDOM: any): void;
     version: string;
   }
 
-  export class Component<T = any, E = any> {
-    constructor(state?: T, view?: View<T>, update?: Update<T, E>);
+  export class Component<T = any, E = any> implements IComponent<T, E> {
+    constructor(state?: T, view?: View<T>, update?: Update<T, E>, options?: any);
+    readonly element: Element;
     readonly state: T;
-    setState(state: T, options?: { render?: boolean, history?: boolean }): void;
-    mount(element?: Element | string, options?: MountOptions): Component<T, E>;
-    start(element?: Element | string, options?: MountOptions): Component<T, E>;
-    on(name: E, fn: (...args: any[]) => void, options?: any): void;
-    run(name: E, ...args: any[]): number;
+    view?: View<T>;
+    update?: Update<T, E>;
+
+    // Lifecycle hooks
+    rendered?: (state: T) => void;
+    mounted?: (props: any, children: any[], state: T) => T | void;
+    unload?: (state: T) => void;
+
+    // Component lifecycle methods
+    mount(element?: Element, options?: MountOptions): Component<T, E>;
+    start(element?: Element, options?: MountOptions): Component<T, E>;
+    unmount(): void;
+
+    // State management
+    setState(state: T, options?: ActionOptions & EventOptions): void;
+
+    // Event system
+    on(event: E, fn: (...args: any[]) => void, options?: EventOptions): void;
+    run(event: E, ...args: any[]): any;
+    runAsync(event: E, ...args: any[]): Promise<any[]>;
+
     /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
-    query(name: string, ...args): Promise<any[]>;
-    runAsync(name: string, ...args): Promise<any[]>;
-    rendered: (state: T) => void;
-    mounted: (props: any, children: any[], state: T) => T | void;
-    unmount: () => void;
-    unload: (state: T) => void;
+    query(event: E, ...args: any[]): Promise<any[]>;
+
+    // Action management
+    add_action(name: string, action: Action<T>, options?: ActionOptions): void;
+    is_global_event(name: string): boolean;
   }
 
   export function on<E>(name?: E, options?: EventOptions): any;
-  // obsolete
-  export function update<E>(name?: E, options?: EventOptions): any;
-  export function event<E>(name?: E, options?: EventOptions): any;
   export function customElement(name: string, options?: CustomElementOptions):
     <T extends { new(...args: any[]): {} }>(constructor: T) => T;
 
-  export const app: IApp
+  // Deprecated exports (kept for backward compatibility)
+  /** @deprecated Use on() instead */
+  export function update<E>(name?: E, options?: EventOptions): any;
+  /** @deprecated Use on() instead */
+  export function event<E>(name?: E, options?: EventOptions): any;
+
+  export const app: IAppRun;
   export default app;
-  export const App: IApp;
+  export const App: IAppRun;
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
-  export const safeHTML;
-  export function Fragment(props, ...children): [];
+  export const safeHTML: (html: string) => any[];
+  export function Fragment(props: any, ...children: any[]): any[];
 }
 
 declare namespace JSX {
@@ -106,6 +222,14 @@ declare namespace JSX {
 }
 
 declare module 'apprun/react' {
-  import { Component } from 'apprun';
-  export default function toReact(componentClass: Component): Function;
+  import { IComponent } from 'apprun';
+  export default function toReact<T = any>(componentClass: IComponent<T>): Function;
+}
+
+declare module 'apprun/createState' {
+  type Draft<T> = T;
+  export default function createState<T = any>(
+    state: T,
+    updater: (draft: Draft<T>) => void
+  ): Promise<T> | T;
 }

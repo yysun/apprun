@@ -10,6 +10,7 @@
  *    - Router with improved null safety
  *    - Web component support
  *    - Type-safe React integration
+ *    - Component batch mounting system
  *
  * Key exports:
  * - app: Global event system instance
@@ -26,6 +27,7 @@
  * - Web Components integration
  * - React compatibility layer
  * - TypeScript support with strong typing
+ * - Batch component mounting with addComponents(element, components)
  *
  * Type Safety Improvements (v3.35.1):
  * - Added null checks for DOM event targets
@@ -33,6 +35,10 @@
  * - Enhanced React integration parameter validation
  * - Better error handling for invalid event handlers
  * - Safer element access with proper type assertions
+ *
+ * Recent Changes:
+ * - Modified addComponents to accept (element, components) where components is a key-value object with routes as keys and components as values
+ * - Simplified component mounting API for better usability
  *
  * Usage:
  * ```ts
@@ -46,16 +52,25 @@
  *     'event': (state, ...args) => // Handle events
  *   }
  * }
+ *
+ * // Mount multiple components
+ * app.addComponents(document.body, {
+ *   '/home': MyComponent,
+ *   '/about': AnotherComponent
+ * });
  * ```
  */
 
-import app, { App } from './app';
+import _app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
-import { VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions } from './types';
+import {
+  IAppRun, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions,
+  ComponentRoute, Router, CustomElementOptions
+} from './types';
 import { on, update, customElement } from './decorator';
-import webComponent, { CustomElementOptions } from './web-component';
-import { Route, route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import webComponent from './web-component';
+import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 import { APPRUN_VERSION } from './version';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
@@ -63,6 +78,9 @@ type OnDecorator = {
   <T = any>(options?: any): (constructor: Function) => void;
   <E = string>(events?: E, options?: any): (target: any, key: string) => void;
 };
+
+const app: IAppRun = _app as unknown as IAppRun;
+export default app as IAppRun;
 
 export {
   App,
@@ -82,30 +100,6 @@ export {
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement, CustomElementOptions, AppStartOptions };
-export default app as IApp;
-
-export interface IApp {
-  start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
-    options?: AppStartOptions<T>): Component<T, E>;
-  on(name: string, fn: (...args: any[]) => void, options?: any): void;
-  once(name: string, fn: (...args: any[]) => void, options?: any): void;
-  off(name: string, fn: (...args: any[]) => void): void;
-  run(name: string, ...args: any[]): number;
-  find(name: string): any | any[];
-  /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
-  query(name: string, ...args: any[]): Promise<any[]>;
-  runAsync(name: string, ...args: any[]): Promise<any[]>;
-  h(tag: string | Function, props, ...children): VNode | VNode[];
-  createElement(tag: string | Function, props, ...children): VNode | VNode[];
-  render(element: Element | string, node: VNode): void;
-  Fragment(props, ...children): any[];
-  route?: Route;
-  webComponent(name: string, componentClass, options?: CustomElementOptions): void;
-  safeHTML(html: string): any[];
-  use_render(render, mode?: 0 | 1);
-  use_react(React, ReactDOM);
-  version: string;
-}
 
 if (!app.start) {
 
@@ -126,10 +120,6 @@ if (!app.start) {
     component.start(element, opts);
     return component;
   };
-
-  app.once = app.once || ((name: string, fn: (...args: any[]) => void, options: any = {}) => {
-    app.on(name, fn, { ...options, once: true });
-  });
 
   // Deprecated: app.query is deprecated in favor of app.runAsync
   app.query = app.query || app.runAsync;
@@ -188,13 +178,9 @@ if (!app.start) {
     });
   }
 
-  type ComponentType = typeof Component & {
-    <T = any>(options?: any): (constructor: Function) => void;
-  };
-
   if (typeof window === 'object') {
     const globalWindow = window as any;
-    globalWindow['Component'] = Component as ComponentType;
+    globalWindow['Component'] = Component;
     globalWindow['_React'] = globalWindow['React'];
     globalWindow['React'] = app;
     globalWindow['on'] = on as OnDecorator;
@@ -249,4 +235,48 @@ if (!app.start) {
       app.render = (el, vdom) => ReactDOM.render(vdom, el);
     }
   }
+
+  app.addComponents = async (element: Element | string, components: ComponentRoute) => {
+    for (const [route, component] of Object.entries(components)) {
+      if (!component || !route) {
+        console.error(`Invalid component configuration: component=${component}, route=${route}`);
+        continue;
+      }
+      let componentToMount = component;
+
+      // Check if component is a function
+      if (typeof component === 'function') {
+        // Check if it's a component class constructor or a regular function
+        if (component.prototype && component.prototype.constructor === component) {
+          // It's a class constructor, create an instance
+          componentToMount = new component();
+        } else {
+          // It's a regular function, execute it (handle async)
+          try {
+            componentToMount = await component();
+          } catch (error) {
+            console.error(`Error executing component function: ${error}`);
+            continue;
+          }
+
+          // Check the function result
+          if (typeof componentToMount === 'function' &&
+            componentToMount.prototype &&
+            componentToMount.prototype.constructor === componentToMount) {
+            // Function returned a component class, create an instance
+            componentToMount = new componentToMount();
+          }
+        }
+      }
+
+      // At this point, componentToMount should be a component instance
+      if (componentToMount && typeof componentToMount.mount === 'function') {
+        const options = { route };
+        componentToMount.mount(element, options);
+      } else {
+        console.error(`Invalid component: component must be a class, instance, or function that returns a class/instance`);
+      }
+    }
+  }
 }
+
