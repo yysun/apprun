@@ -5,13 +5,17 @@
 		"moduleResolution": "node",
 		"jsx": "react",
 		"reactNamespace": "app",
-		"lib": ["dom", "esnext"],
+		"lib": [
+			"dom",
+			"esnext"
+		],
 		"experimentalDecorators": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"downlevelIteration": true,
 		"allowJs": true,
 		"outDir": "coverage/src",
+		"isolatedModules": true,
 		"strict": true,
 		"noImplicitAny": true,
 		"strictNullChecks": true,
@@ -24,13 +28,18 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
-			"*": ["src/types/*"]
+			"*": [
+				"src/types/*"
+			]
 		},
 		"typeRoots": [
 			"./node_modules/@types",
 			"./src/types"
 		],
-		"types": ["jest", "node"]
+		"types": [
+			"jest",
+			"node"
+		]
 	},
 	"include": [
 		"src/**/*",

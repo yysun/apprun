@@ -8,7 +8,6 @@ module.exports = {
     "^.+\\.(t|j)sx?$": ["ts-jest", {
       useESM: true,
       tsconfig: "tsconfig.jest.json",
-      isolatedModules: true,
       diagnostics: {
         warnOnly: true, // Convert type-check errors to warnings during tests
         ignoreCodes: [
