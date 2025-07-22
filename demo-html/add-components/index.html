@@ -222,12 +222,6 @@
     // Initialize the main app
     const mainApp = new AppComponent();
     mainApp.start(document.body);
-
-    app.basePath = location.pathname;
-    if (app.basePath.endsWith('/')) {
-      app.basePath = app.basePath.slice(0, -1);
-    }
-
     // Use addComponents to register all route-component pairs
     app.addComponents('#pages', {
       '/': HomeComponent,
