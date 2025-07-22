@@ -6,6 +6,8 @@ import { ContactComponent } from './components/ContactComponent.js';
 import { SVUComponent } from './components/SVUComponent.js';
 import functionComponent from './components/FunctionComponent.js';
 
+app.basePath = '/demo-html/add-components'; // Set the base path for the app
+
 // Initialize the main app
 const mainApp = new AppComponent();
 mainApp.start(document.body);

@@ -131,11 +131,6 @@ if (!app.start) {
   app.on('route', url => app['route'] && app['route'](url));
 
   if (typeof document === 'object') {
-    let basePath = location.pathname;
-    if (basePath.endsWith('/')) {
-      basePath = basePath.slice(0, -1);
-    }
-    app.basePath = basePath;
     document.addEventListener("DOMContentLoaded", () => {
       const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
       const use_hash = app.find('#') || app.find('#/') || false;
