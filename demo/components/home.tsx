@@ -1,12 +1,34 @@
-import app from '../../src/apprun';
-declare var $: any;
-let _element;
+import { app, Component, safeHTML } from '../../src/apprun';
+import { marked } from 'marked';
 
-const HTML =  ({ url }) => {
-  _element.innerHTML = '<div></div>';
-  $(_element.firstChild).load(url);
+// Module-level helper function added at the top of the file
+async function getDoc(doc: string) {
+  const response = await fetch(doc);
+  if (!response.ok) {
+    console.error(`Failed to fetch document: ${doc}`);
+    return '404 Not Found';
+  }
+  const text = await response.text();
+  if (doc.endsWith('.md')) {
+    const html = await marked(text);
+    return safeHTML(html);
+  } else {
+    return safeHTML(text);
+  }
 }
-app.on('#', () => app.render(_element, <HTML url='demo/home.html' />));
-app.on('#new', () => app.render(_element, <HTML url='demo/new.html' />));
 
-export default (element) => _element = element;
+class HomeComponent extends Component {
+  state = 'Welcome to AppRun';
+  view = (state) => <div>{state}</div>;
+  update = {
+    '#': () => getDoc('./README.md'),
+    '#new': () => getDoc('./WHATSNEW.md'),
+    '#docs': async (_, ...doc) => {
+      if (!doc || doc.length === 0) return getDoc('./README.md');
+      const docPath = `./docs/${doc.join('/')}`;
+      return getDoc(docPath);
+    }
+  };
+}
+
+export default (element) => new HomeComponent().start(element);
