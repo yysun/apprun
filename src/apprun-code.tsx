@@ -11,6 +11,7 @@ const styles = `
 .apprun-play {
   height: 100%;
   display: flex;
+  font-size: 1.1rem;
 }
 
 .apprun-play .col {

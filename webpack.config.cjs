@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     'dist/apprun': './src/apprun.ts',
     'dist/apprun-play': './src/apprun-play.tsx',
+    'dist/apprun-code': './src/apprun-code.tsx',
     'dist/apprun-html': './src/apprun-html.ts',
     'dist/apprun-dev-tools': './src/apprun-dev-tools.tsx',
     'dist/createState': './src/createState.ts',
