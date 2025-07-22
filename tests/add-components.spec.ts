@@ -171,6 +171,12 @@ describe('addComponents function', () => {
       it('should handle function returning non-component values gracefully', async () => {
         const componentFunction = jest.fn().mockReturnValue("invalid");
 
+        // Mock app.on and app.render to track event registrations
+        const originalOn = app.on;
+        const originalRender = (app as any).render;
+        app.on = jest.fn();
+        (app as any).render = jest.fn();
+
         const components: ComponentRoute = {
           '/test': componentFunction
         };
@@ -178,9 +184,12 @@ describe('addComponents function', () => {
         await app.addComponents(mockElement, components);
 
         expect(componentFunction).toHaveBeenCalled();
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          'Invalid component: component must be a class, instance, or function that returns a class/instance'
-        );
+        // Should register as event handler instead of throwing error
+        expect(app.on).toHaveBeenCalledWith('/test', expect.any(Function));
+
+        // Restore app.on and render
+        app.on = originalOn;
+        (app as any).render = originalRender;
       });
     });
 
@@ -241,6 +250,12 @@ describe('addComponents function', () => {
       it('should handle async function returning invalid values', async () => {
         const asyncComponentFunction = jest.fn().mockResolvedValue(null);
 
+        // Mock app.on and app.render to track event registrations
+        const originalOn = app.on;
+        const originalRender = (app as any).render;
+        app.on = jest.fn();
+        (app as any).render = jest.fn();
+
         const components: ComponentRoute = {
           '/test': asyncComponentFunction
         };
@@ -248,9 +263,12 @@ describe('addComponents function', () => {
         await app.addComponents(mockElement, components);
 
         expect(asyncComponentFunction).toHaveBeenCalled();
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          'Invalid component: component must be a class, instance, or function that returns a class/instance'
-        );
+        // Should register as event handler instead of throwing error
+        expect(app.on).toHaveBeenCalledWith('/test', expect.any(Function));
+
+        // Restore app.on and render
+        app.on = originalOn;
+        (app as any).render = originalRender;
       });
     });
 
@@ -422,10 +440,156 @@ describe('addComponents function', () => {
       await app.addComponents(mockElement, components);
 
       expect(complexFunction).toHaveBeenCalled();
-      // The result should be treated as invalid since it doesn't match expected patterns
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Invalid component: component must be a class, instance, or function that returns a class/instance'
-      );
+      // The function should be resolved and the resulting component class should be instantiated
+      // This should NOT be registered as an event handler since it ultimately returns a component class
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Event Handler Registration', () => {
+    let originalOn: typeof app.on;
+    let originalRender: any;
+
+    beforeEach(() => {
+      // Mock app.on to track event registrations
+      originalOn = app.on;
+      app.on = jest.fn();
+
+      // Mock app.render to track render calls
+      originalRender = (app as any).render;
+      (app as any).render = jest.fn();
+    });
+
+    afterEach(() => {
+      // Restore original app.on and render
+      app.on = originalOn;
+      (app as any).render = originalRender;
+    });
+
+    it('should register function as event handler when it returns another function', async () => {
+      const eventHandler = jest.fn(() => {
+        // This function returns another function (not a component)
+        return () => {
+          console.log('Nested function called');
+        };
+      });
+
+      const components: ComponentRoute = {
+        '/test-event': eventHandler
+      };
+
+      await app.addComponents(mockElement, components);
+
+      // Should have called the original function
+      expect(eventHandler).toHaveBeenCalled();
+
+      // Should have registered a wrapper function as an event handler
+      expect(app.on).toHaveBeenCalledWith('/test-event', expect.any(Function));
+    });
+
+    it('should register simple functions as event handlers', async () => {
+      const simpleHandler = jest.fn((data: any) => {
+        console.log('Event handled:', data);
+        return 'some result';
+      });
+
+      const components: ComponentRoute = {
+        '/simple-event': simpleHandler
+      };
+
+      await app.addComponents(mockElement, components);
+
+      // Should register a wrapper function as an event handler
+      expect(app.on).toHaveBeenCalledWith('/simple-event', expect.any(Function));
+
+      // Test that the wrapper function works correctly
+      const wrapperFunction = (app.on as jest.Mock).mock.calls[0][1];
+      wrapperFunction('test-data');
+
+      // Should call original function
+      expect(simpleHandler).toHaveBeenCalledWith('test-data');
+      // Should call render with the result
+      expect((app as any).render).toHaveBeenCalledWith(mockElement, 'some result');
+    });
+
+    it('should register async functions that return functions as event handlers', async () => {
+      const asyncHandler = jest.fn(async () => {
+        // Simulate async operation
+        await new Promise(resolve => setTimeout(resolve, 10));
+        return (data: any) => {
+          console.log('Async event handled:', data);
+        };
+      });
+
+      const components: ComponentRoute = {
+        '/async-event': asyncHandler
+      };
+
+      await app.addComponents(mockElement, components);
+
+      expect(asyncHandler).toHaveBeenCalled();
+      expect(app.on).toHaveBeenCalledWith('/async-event', expect.any(Function));
+    });
+
+    it('should not register functions that return components as event handlers', async () => {
+      const componentFactory = jest.fn(() => {
+        return {
+          mount: jest.fn(),
+          state: {},
+          view: () => null
+        };
+      });
+
+      const components: ComponentRoute = {
+        '/component-factory': componentFactory
+      };
+
+      await app.addComponents(mockElement, components);
+
+      expect(componentFactory).toHaveBeenCalled();
+      // Should NOT register as event handler since it returns a component
+      expect(app.on).not.toHaveBeenCalled();
+    });
+
+    it('should register functions that return non-component values as event handlers', async () => {
+      const nonComponentFunction = jest.fn(() => 'some string');
+
+      const components: ComponentRoute = {
+        '/non-component': nonComponentFunction
+      };
+
+      await app.addComponents(mockElement, components);
+
+      expect(nonComponentFunction).toHaveBeenCalled();
+      expect(app.on).toHaveBeenCalledWith('/non-component', expect.any(Function));
+    });
+
+    it('should handle mixed components and event handlers in single call', async () => {
+      class ClassComponent extends Component {
+      }
+      ClassComponent.prototype.mount = jest.fn();
+
+      const eventHandler = jest.fn(() => 'event result');
+
+      const componentInstance = new Component();
+      componentInstance.mount = jest.fn();
+
+      const components: ComponentRoute = {
+        '/component-class': ClassComponent,
+        '/event-handler': eventHandler,
+        '/component-instance': componentInstance
+      };
+
+      await app.addComponents(mockElement, components);
+
+      // Component class should be instantiated and mounted
+      expect(ClassComponent.prototype.mount).toHaveBeenCalledWith(mockElement, { route: '/component-class' });
+
+      // Event handler should be registered
+      expect(app.on).toHaveBeenCalledWith('/event-handler', expect.any(Function));
+
+      // Component instance should be mounted
+      expect(componentInstance.mount).toHaveBeenCalledWith(mockElement, { route: '/component-instance' });
     });
   });
 

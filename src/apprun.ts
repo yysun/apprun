@@ -64,13 +64,11 @@
 import _app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
-import {
-  IApp, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions,
-  ComponentRoute, CustomElementOptions
-} from './types';
+import { IApp, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions, CustomElementOptions } from './types';
 import { on, update, customElement } from './decorator';
-import webComponent from './web-component';
 import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import webComponent from './web-component';
+import addComponents from './add-components';
 import { APPRUN_VERSION } from './version';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
@@ -241,47 +239,5 @@ if (!app.start) {
     }
   }
 
-  app.addComponents = async (element: Element | string, components: ComponentRoute) => {
-    for (const [route, component] of Object.entries(components)) {
-      if (!component || !route) {
-        console.error(`Invalid component configuration: component=${component}, route=${route}`);
-        continue;
-      }
-      let componentToMount = component;
-
-      // Check if component is a function
-      if (typeof component === 'function') {
-        // Check if it's a component class constructor or a regular function
-        if (component.prototype && component.prototype.constructor === component) {
-          // It's a class constructor, create an instance
-          componentToMount = new component();
-        } else {
-          // It's a regular function, execute it (handle async)
-          try {
-            componentToMount = await component();
-          } catch (error) {
-            console.error(`Error executing component function: ${error}`);
-            continue;
-          }
-
-          // Check the function result
-          if (typeof componentToMount === 'function' &&
-            componentToMount.prototype &&
-            componentToMount.prototype.constructor === componentToMount) {
-            // Function returned a component class, create an instance
-            componentToMount = new componentToMount();
-          }
-        }
-      }
-
-      // At this point, componentToMount should be a component instance
-      if (componentToMount && typeof componentToMount.mount === 'function') {
-        const options = { route };
-        componentToMount.mount(element, options);
-      } else {
-        console.error(`Invalid component: component must be a class, instance, or function that returns a class/instance`);
-      }
-    }
-  }
+  app.addComponents = addComponents;
 }
-

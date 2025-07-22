@@ -121,6 +121,24 @@ export interface IApp {
   addComponents: (element: Element | string, components: ComponentRoute) => void;
 }
 
+// Define what constitutes a mountable component
+interface ComponentLike {
+  mount(element?: Element | string, options?: any): any;
+}
+
+// Define component constructor type
+type ComponentConstructor<T = any> = new (
+  state?: T,
+  view?: any,
+  update?: any,
+  options?: any
+) => ComponentLike;
+
+// Enhanced ComponentRoute type with clear distinctions
 export type ComponentRoute = {
-  [route: string]: any;
+  [route: string]:
+  | ComponentLike                                    // Component instance
+  | ComponentConstructor                             // Component class constructor
+  | (() => ComponentLike | ComponentConstructor | Promise<ComponentLike | ComponentConstructor>) // Factory function
+  | ((...args: any[]) => any)                       // Event handler function
 };
