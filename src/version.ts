@@ -10,7 +10,7 @@
 
 // Import version from package.json to maintain single source of truth
 // This version string is used across the framework
-export const APPRUN_VERSION = '3.37.0';
+export const APPRUN_VERSION = '3.37.1';
 
 // Version string with prefix for global tracking
 export const APPRUN_VERSION_GLOBAL = `AppRun-${APPRUN_VERSION}`;

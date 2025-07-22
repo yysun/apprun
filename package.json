@@ -44,10 +44,8 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "json-loader": "^0.5.7",
-    "immer": "^10.1.1",
     "lit": "^3.3.1",
     "marked": "^16.0.0",
-    "property-information": "^7.1.0",
     "rollup": "^4.45.1",
     "ts-jest": "^29.4.0",
     "ts-loader": "^9.5.2",
@@ -57,6 +55,8 @@
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
-    "commander": "^14.0.0"
+    "commander": "^14.0.0",
+    "immer": "^10.1.1",
+    "property-information": "^7.1.0"
   }
 }

@@ -1,5 +1,8 @@
 # Change Log
 
+## V3.37.1
+
+* Make `immer` and `property-information` as dependencies
 
 ## V3.37.0
 
