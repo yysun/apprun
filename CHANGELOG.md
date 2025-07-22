@@ -1,17 +1,24 @@
 # Change Log
 
-## Releases
+
+## V3.37.0
+
+* Introduced `createState` helper for simplified immutable state updates using Immer [create-state-immer](#docs/done/blog-create-state-immer.md)
+* Added `addComponents` function for adding components to routes [add-components](#docs/done/blog-addcomponents-feature.md)
+* Improved type definitions for better TypeScript support
+* Moved the component to dev-tools
+* Fixed routing basePath initialization issue
 
 ## 3.36.1
 
 * Continue code review with AI
 * Use property-information to improve property and attribute handling
-* Performance improvements in virtual DOM handling, see [analysis reports](docs/done/framework-reordering-comparison.md)
-* New hierarchical matching behavior, see [hierarchical routing requirements](docs/requirements/req-hierarchical-routing.md)
+* Performance improvements in virtual DOM handling, see [analysis reports](#docs/done/framework-reordering-comparison.md)
+* New hierarchical matching behavior, see [hierarchical routing requirements](#docs/requirements/req-hierarchical-routing.md)
 
 ## 3.36.0
 
-* Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](docs/plan/plan-apprun-bugfixes.md) for details. 
+* Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](#docs/plan/plan-apprun-bugfixes.md) for details. 
 * Enhanced type definitions (apprun.d.ts) for better TypeScript support
 * Fixed minor bugs and edge cases in virtual DOM handling
 * Fixed bugs in router initialization logic
