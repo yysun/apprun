@@ -1,5 +1,14 @@
 ## What's New
 
+> July 22, 2025, V3.37.0
+
+- Introduced `createState` helper for simplified immutable state updates using Immer [create-state-immer](docs/done/blog-create-state-immer.md)
+- Added `addComponents` function for adding components to routes [add-components](docs/done/blog-addcomponents-feature.md)
+- Improved type definitions for better TypeScript support
+- Moved the component to dev-tools
+- Fixed routing basePath initialization issue
+
+
 > July 15, 2025, V3.36.1
 
 - Continue code review with AI
