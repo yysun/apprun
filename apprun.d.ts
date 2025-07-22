@@ -31,6 +31,7 @@
  * - Comprehensive options typing matching implementation
  * - Added proper deprecation warnings
  * - Enhanced error handling and validation
+ * - Added support for async generator and generator functions in Action types
  */
 
 import { TemplateResult } from 'lit-html';
@@ -47,7 +48,7 @@ declare module 'apprun' {
 
   export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResult;
   export type View<T> = (state: T) => VDOM | void;
-  export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
+  export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
   export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
   export type Router = (url: string, ...args: any[]) => any;

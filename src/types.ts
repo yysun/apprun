@@ -4,7 +4,7 @@
  * This file defines the fundamental types used across AppRun:
  * 1. Component Types
  *    - View: Function that renders state to VDOM
- *    - Action: Function that updates state (sync/async)
+ *    - Action: Function that updates state (sync/async/generator)
  *    - Update: Collection of actions (array or object format)
  *    - ActionDef: Tuple definition for action arrays
  * 
@@ -33,6 +33,7 @@
  * - Improved union types for VDOM flexibility
  * - Better callback typing in options
  * - Stricter typing for lifecycle methods
+ * - Added support for async generator and generator functions in Action types
  *
  * Usage:
  * ```ts
@@ -41,9 +42,14 @@
  *   update: Update<State, Events>;
  * }
  * 
- * // Type-safe action definitions
+ * // Type-safe action definitions with async generators
  * const update: Update<State> = {
- *   'event': (state: State, ...args) => newState
+ *   'event': (state: State, ...args) => newState,
+ *   'stream-event': async function* (state: State, ...args) {
+ *     yield { ...state, loading: true };
+ *     const data = await fetchData();
+ *     yield { ...state, data, loading: false };
+ *   }
  * };
  * ```
  */
@@ -57,7 +63,7 @@ export type VNode = {
 }
 export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResult;
 export type View<T> = (state: T) => VDOM | void;
-export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void;
+export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
 export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
 export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
 export type ActionOptions = {
