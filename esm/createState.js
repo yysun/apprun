@@ -1,13 +1,9 @@
-export async function createState(state, updater) {
-    let produce;
-    try {
-        // dynamic ESM import
-        const mod = await import('immer');
-        produce = mod.produce;
-    }
-    catch (_a) {
-        throw new Error("immer is not installed. Please run: npm install immer");
-    }
-    return produce(state, updater);
+import { produce } from 'immer';
+export function createState(fn) {
+    return (state, ...args) => {
+        return produce(state, (draft) => {
+            fn(draft, ...args);
+        });
+    };
 }
 //# sourceMappingURL=createState.js.map

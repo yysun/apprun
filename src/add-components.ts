@@ -1,5 +1,5 @@
-import { ComponentRoute } from './types';
-import app from './apprun'; // ADD: Global app instance access
+import { ComponentRoute, IApp } from './types';
+import app from './app'; // ADD: Global app instance access
 
 // Type guard functions using the enhanced type system
 function isComponentInstance(obj: any): boolean {
@@ -91,7 +91,7 @@ export default async (element: HTMLElement | string, components: ComponentRoute)
             return;
           }
         }
-        return app.render(element, result);
+        return (app as unknown as IApp).render(element, result);
       });
       continue;
     }

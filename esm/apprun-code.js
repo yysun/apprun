@@ -8,6 +8,7 @@ const styles = `
 .apprun-play {
   height: 100%;
   display: flex;
+  font-size: 1.1rem;
 }
 
 .apprun-play .col {
@@ -19,13 +20,19 @@ const styles = `
   height: 100%;
 }
 `;
+const encodeHTML = code => {
+    return code.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+};
 const code_html = code => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.1.2/custom-elements.min.js"></script>
   <title>AppRun Playground</title>
   <style>
     body {
@@ -33,17 +40,47 @@ const code_html = code => `<!DOCTYPE html>
       margin: 2em;
     }
   </style>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@latest"></script>
+  <script src="dist/apprun-html.js"></script>
 </head>
 <body>
-<script>
-  Babel.registerPlugin("d", [Babel.availablePlugins["proposal-decorators"], {legacy: true}]);
-  Babel.registerPlugin("c", [Babel.availablePlugins["proposal-class-properties"], {loose: true}]);
-  Babel.registerPlugin("b", [Babel.availablePlugins["proposal-private-methods"], {loose: true}]);
-</script>
-<script type="text/babel" data-plugins="d, c, b">
-  ${code}
+<pre id="code" style="display:none">${encodeHTML(code)}</pre>
+<script type="module">
+const code = document.getElementById('code').innerText;
+const compiled = ts.transpileModule(code, {
+  compilerOptions: {
+    "jsx": "react",
+    "jsxFactory": "app.h",
+    "jsxFragmentFactory": "app.Fragment",
+    "target": "es2020",
+    "module": "esnext",
+  },
+  reportDiagnostics: true,
+});
+
+if (compiled.diagnostics && compiled.diagnostics.length) {
+  const pre = document.createElement('pre');
+  pre.style = 'font-size: 10px;';
+  pre.innerText = compiled.diagnostics.map(d => {
+    const start = d.start;
+    const end = d.start + d.length;
+    const line = code.substring(0, end).split('\\n').length;
+    const column = code.substring(0, end).split('\\n').pop().length;
+    return \`Line: \${line}, Column: \${column}, \${d.messageText}\`;
+  }).join('\\n');
+  document.body.appendChild(pre);
+} else {
+  window.onerror = function () {
+    const pre = document.createElement('pre');
+    pre.style = 'font-size: 10px;';
+    pre.innerText = compiled.outputText;;
+    document.body.appendChild(pre);
+  };
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.text = compiled.outputText;
+  document.body.appendChild(script);
+}
 </script>
 </body>
 </html>`;
@@ -76,9 +113,8 @@ class Play extends Component {
                 code_area = element.previousElementSibling ||
                     element.parentElement.previousElementSibling;
             }
-            const code = (code_area === null || code_area === void 0 ? void 0 : code_area.innerText // from div
-            )
-                || (code_area === null || code_area === void 0 ? void 0 : code_area.value) // from textarea
+            const code = code_area?.innerText // from div
+                || code_area?.value // from textarea
                 || element.textContent; // from child node
             if (code_area)
                 code_area.style.display = 'none';
@@ -91,11 +127,10 @@ class Play extends Component {
             if (!iframe || !textarea)
                 return;
             const run_code = code => {
-                var _a, _b;
                 const iframe_clone = iframe.cloneNode();
-                (_a = iframe.parentNode) === null || _a === void 0 ? void 0 : _a.replaceChild(iframe_clone, iframe);
+                iframe.parentNode?.replaceChild(iframe_clone, iframe);
                 iframe = iframe_clone;
-                const doc = (_b = iframe.contentWindow) === null || _b === void 0 ? void 0 : _b.document;
+                const doc = iframe.contentWindow?.document;
                 if (!doc)
                     return;
                 doc.open();

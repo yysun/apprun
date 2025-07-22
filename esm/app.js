@@ -85,7 +85,7 @@ export class App {
         return subscribers.length;
     }
     once(name, fn, options = {}) {
-        this.on(name, fn, Object.assign(Object.assign({}, options), { once: true }));
+        this.on(name, fn, { ...options, once: true });
     }
     delay(name, fn, args, options) {
         if (options._t)
@@ -136,7 +136,10 @@ export class App {
         });
         Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
             .sort((a, b) => b.length - a.length)
-            .forEach(evt => subscribers.push(...events[evt].map(sub => (Object.assign(Object.assign({}, sub), { options: Object.assign(Object.assign({}, sub.options), { event: name }) })))));
+            .forEach(evt => subscribers.push(...events[evt].map(sub => ({
+            ...sub,
+            options: { ...sub.options, event: name }
+        }))));
         return subscribers;
     }
 }

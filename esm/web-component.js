@@ -94,7 +94,7 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
             requestAnimationFrame(() => {
                 const children = this.children ? Array.from(this.children) : [];
                 // children.forEach(el => el.parentElement.removeChild(el));
-                this._component = new componentClass(Object.assign(Object.assign({}, props), { children })).mount(this._shadowRoot, opts);
+                this._component = new componentClass({ ...props, children }).mount(this._shadowRoot, opts);
                 // attach props to component
                 this._component._props = props;
                 // expose dispatchEvent
@@ -112,9 +112,8 @@ export const customElement = (componentClass, options = {}) => class CustomEleme
         }
     }
     disconnectedCallback() {
-        var _a, _b, _c, _d;
-        (_b = (_a = this._component) === null || _a === void 0 ? void 0 : _a.unload) === null || _b === void 0 ? void 0 : _b.call(_a);
-        (_d = (_c = this._component) === null || _c === void 0 ? void 0 : _c.unmount) === null || _d === void 0 ? void 0 : _d.call(_c);
+        this._component?.unload?.();
+        this._component?.unmount?.();
         this._component = null;
     }
     attributeChangedCallback(name, oldValue, value) {

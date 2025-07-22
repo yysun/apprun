@@ -4,7 +4,7 @@ var CHANGES;
     CHANGES[CHANGES["NO_TREE_CHANGE"] = 2] = "NO_TREE_CHANGE";
 })(CHANGES || (CHANGES = {}));
 export function patch(vdom1, vdom2) {
-    if (!(vdom1 === null || vdom1 === void 0 ? void 0 : vdom1.length) || !(vdom2 === null || vdom2 === void 0 ? void 0 : vdom2.length))
+    if (!vdom1?.length || !vdom2?.length)
         return;
     const old_len = vdom1.length;
     const new_len = vdom2.length;

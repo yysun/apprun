@@ -1,4 +1,4 @@
-import app from './app';
+import app from './apprun';
 export default (_, children) => {
     const el = document.createElement('section');
     el.attachShadow({ mode: 'open' });

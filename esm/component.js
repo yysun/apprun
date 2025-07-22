@@ -50,14 +50,14 @@
  * new MyComponent().mount('element-id');
  * ```
  */
-import app, { App } from './app';
+import _app, { App } from './app';
 import { Reflect } from './decorator';
 import directive from './directive';
 import { safeQuerySelector, safeGetElementById } from './type-utils';
-const componentCache = new Map();
-if (!app.find('get-components'))
-    app.on('get-components', o => o.components = componentCache);
-const REFRESH = state => state;
+// const componentCache = new Map();
+// if (!app.find('get-components')) app.on('get-components', o => o.components = componentCache);
+export const REFRESH = state => state;
+const app = _app;
 export class Component {
     renderState(state, vdom = null) {
         if (!this.view)
@@ -127,12 +127,12 @@ export class Component {
             }
         };
         const result = state;
-        if (result === null || result === void 0 ? void 0 : result[Symbol.asyncIterator]) {
+        if (result?.[Symbol.asyncIterator]) {
             // handleAsyncIterator(result[Symbol.asyncIterator]());
             this.setState(handleAsyncIterator(result[Symbol.asyncIterator]()), options);
             return;
         }
-        else if ((result === null || result === void 0 ? void 0 : result[Symbol.iterator]) && typeof result.next === "function") {
+        else if (result?.[Symbol.iterator] && typeof result.next === "function") {
             for (const value of result) {
                 this.setState(value, options);
             }
@@ -197,7 +197,7 @@ export class Component {
             }
         };
         this.start = (element = null, options) => {
-            this.mount(element, Object.assign({ render: true }, options));
+            this.mount(element, { render: true, ...options });
             if (this.mounted && typeof this.mounted === 'function') {
                 const new_state = this.mounted({}, [], this.state);
                 (typeof new_state !== 'undefined') && this.setState(new_state);
@@ -206,9 +206,8 @@ export class Component {
         };
     }
     mount(element = null, options) {
-        var _a, _b;
         console.assert(!this.element, 'Component already mounted.');
-        this.options = options = Object.assign(Object.assign({}, this.options), options);
+        this.options = options = { ...this.options, ...options };
         this.element = element;
         this.global_event = options.global_event;
         this.enable_history = !!options.history;
@@ -222,17 +221,12 @@ export class Component {
                 this.update[options.route] = REFRESH;
         }
         this.add_actions();
-        this.state = (_b = (_a = this.state) !== null && _a !== void 0 ? _a : this['model']) !== null && _b !== void 0 ? _b : {};
+        this.state = this.state ?? this['model'] ?? {};
         if (typeof this.state === 'function')
             this.state = this.state();
         this.setState(this.state, { render: !!options.render, history: true });
-        if (app['debug']) {
-            if (componentCache.get(element)) {
-                componentCache.get(element).push(this);
-            }
-            else {
-                componentCache.set(element, [this]);
-            }
+        if (app['debug'] && app.find('debug-create-component')?.length) {
+            app.run('debug-create-component', this);
         }
         return this;
     }
@@ -353,8 +347,7 @@ export class Component {
         return this.runAsync(event, ...args);
     }
     unmount() {
-        var _a;
-        (_a = this.observer) === null || _a === void 0 ? void 0 : _a.disconnect();
+        this.observer?.disconnect();
         this._actions.forEach(action => {
             const { name, fn } = action;
             this.is_global_event(name) ?

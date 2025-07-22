@@ -168,7 +168,7 @@ const directive = (vdom, component) => {
     else {
         let { type, tag, props, children } = vdom;
         tag = tag || type;
-        children = children || (props === null || props === void 0 ? void 0 : props.children);
+        children = children || props?.children;
         if (props)
             Object.keys(props).forEach(key => {
                 if (key.startsWith('$')) {

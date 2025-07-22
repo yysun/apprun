@@ -78,11 +78,10 @@ function update(element, node, isSvg) {
     updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
-    var _a;
-    const old_len = ((_a = element.childNodes) === null || _a === void 0 ? void 0 : _a.length) || 0;
-    const new_len = (children === null || children === void 0 ? void 0 : children.length) || 0;
+    const old_len = element.childNodes?.length || 0;
+    const new_len = children?.length || 0;
     // Handle key-based reordering first if any children have keys
-    const hasKeysInNewChildren = children === null || children === void 0 ? void 0 : children.some(child => child && typeof child === 'object' && child.props && child.props.key !== undefined);
+    const hasKeysInNewChildren = children?.some(child => child && typeof child === 'object' && child.props && child.props.key !== undefined);
     if (hasKeysInNewChildren) {
         // Create a map of existing keyed elements
         const existingKeyedElements = new Map();
@@ -165,13 +164,13 @@ export const safeHTML = (html) => {
     return Array.from(div.children);
 };
 function createText(node) {
-    if ((node === null || node === void 0 ? void 0 : node.indexOf('_html:')) === 0) { // ?
+    if (node?.indexOf('_html:') === 0) { // ?
         const div = document.createElement('div');
         div.insertAdjacentHTML('afterbegin', node.substring(6));
         return div;
     }
     else {
-        return document.createTextNode(node !== null && node !== void 0 ? node : '');
+        return document.createTextNode(node ?? '');
     }
 }
 function create(node, isSvg) {
@@ -182,7 +181,7 @@ function create(node, isSvg) {
         return createText(node);
     // Type guard for VNode objects - handle invalid node types gracefully
     if (!node || typeof node !== 'object' || !node.tag || (typeof node.tag === 'function')) {
-        return createText(typeof node === 'object' ? JSON.stringify(node) : String(node !== null && node !== void 0 ? node : ''));
+        return createText(typeof node === 'object' ? JSON.stringify(node) : String(node ?? ''));
     }
     isSvg = isSvg || node.tag === "svg";
     const element = isSvg
@@ -292,7 +291,7 @@ function render_component(node, parent, idx) {
     let component = parent.__componentCache[key];
     if (!component || !(component instanceof tag) || !component.element) {
         const element = document.createElement(asTag);
-        component = parent.__componentCache[key] = new tag(Object.assign(Object.assign({}, props), { children })).mount(element, { render: true });
+        component = parent.__componentCache[key] = new tag({ ...props, children }).mount(element, { render: true });
     }
     else {
         component.renderState(component.state);
@@ -305,7 +304,6 @@ function render_component(node, parent, idx) {
     return component.element;
 }
 function createComponent(node, parent, idx = 0) {
-    var _a;
     if (typeof node === 'string')
         return node;
     if (Array.isArray(node))
@@ -315,7 +313,7 @@ function createComponent(node, parent, idx = 0) {
         vdom = render_component(node, parent, idx);
     }
     if (vdom && Array.isArray(vdom.children)) {
-        const new_parent = (_a = vdom.props) === null || _a === void 0 ? void 0 : _a._component;
+        const new_parent = vdom.props?._component;
         if (new_parent) {
             let i = 0;
             vdom.children = vdom.children.map(child => createComponent(child, new_parent, i++));

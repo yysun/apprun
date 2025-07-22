@@ -12,7 +12,7 @@
  * Safely cast event target to specific HTML element type with null check
  */
 export function safeEventTarget(event) {
-    return (event === null || event === void 0 ? void 0 : event.target) instanceof HTMLElement ? event.target : null;
+    return event?.target instanceof HTMLElement ? event.target : null;
 }
 /**
  * Type guard to check if an object is a valid function
@@ -40,9 +40,8 @@ export function safeGlobalAssign(globalObj, assignments) {
  * Safely get property from global object with fallback
  */
 export function safeGlobalGet(globalObj, property, fallback) {
-    var _a;
     if (typeof globalObj === 'object' && globalObj !== null) {
-        return (_a = globalObj[property]) !== null && _a !== void 0 ? _a : fallback;
+        return globalObj[property] ?? fallback;
     }
     return fallback;
 }

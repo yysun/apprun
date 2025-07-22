@@ -1,4 +1,3 @@
-var _a;
 import app from './app';
 import toHTML from './vdom-to-html';
 import { _createEventTests, _createStateTests } from './apprun-dev-tools-tests';
@@ -41,7 +40,21 @@ function getVDOM(component) {
     }
     return view;
 }
+const componentCache = new Map();
 app['debug'] = true;
+app.on('debug-create-component', component => {
+    const element = component.element;
+    if (!element) {
+        console.warn('Component created without an element:', component);
+        return;
+    }
+    if (componentCache.get(element)) {
+        componentCache.get(element).push(component);
+    }
+    else {
+        componentCache.set(element, [component]);
+    }
+});
 window['_apprun-help'] = ['', () => {
         Object.keys(window).forEach(cmd => {
             if (cmd.startsWith('_apprun-')) {
@@ -66,12 +79,6 @@ function newWin(html) {
   </html>`);
     win.document.close();
 }
-const get_components = () => {
-    const o = { components: {} };
-    app.run('get-components', o);
-    const { components } = o;
-    return components;
-};
 const viewElement = element => app.h("div", null,
     element.tagName.toLowerCase(),
     element.id ? '#' + element.id : '',
@@ -114,7 +121,7 @@ const viewEvents = state => {
 const _events = (print) => {
     const global_events = app['_events'];
     const events = {};
-    const cache = get_components();
+    const cache = componentCache;
     const add_component = component => component['_actions'].forEach(event => {
         events[event.name] = events[event.name] || [];
         events[event.name].push(component);
@@ -123,9 +130,6 @@ const _events = (print) => {
         for (let [key, comps] of cache) {
             comps.forEach(add_component);
         }
-    }
-    else {
-        Object.keys(cache).forEach(el => cache[el].forEach(add_component));
     }
     const data = [];
     Object.keys(events).forEach(event => {
@@ -146,19 +150,13 @@ const _events = (print) => {
     }
 };
 const _components = (print) => {
-    const components = get_components();
+    const components = componentCache;
     const data = [];
     if (components instanceof Map) {
         for (let [key, comps] of components) {
             const element = typeof key === 'string' ? document.getElementById(key) || document.querySelector(key) : key;
             data.push({ element, comps });
         }
-    }
-    else {
-        Object.keys(components).forEach(el => {
-            const element = typeof el === 'string' ? document.getElementById(el) || document.querySelector(el) : el;
-            data.push({ element, comps: components[el] });
-        });
     }
     if (print) {
         const vdom = viewComponents(data);
@@ -168,21 +166,29 @@ const _components = (print) => {
         data.forEach(({ element, comps }) => console.log(element, comps));
     }
 };
-let debugging = Number((_a = window === null || window === void 0 ? void 0 : window.localStorage) === null || _a === void 0 ? void 0 : _a.getItem('__apprun_debugging__')) || 0;
+let debugging = Number(window?.localStorage?.getItem('__apprun_debugging__')) || 0;
 app.on('debug', p => {
     if (debugging & 1 && p.event)
         console.log(p);
     if (debugging & 2 && p.vdom)
         console.log(p);
 });
-window['_apprun-components'] = ['components [print]', (p) => {
-        _components(p === 'print');
+window['_apprun-components'] = ['components [print|clear]', (p) => {
+        if (p === 'print') {
+            _components(true);
+        }
+        else if (p === 'clear') {
+            componentCache.clear();
+            console.log('Component cache cleared');
+        }
+        else {
+            _components(false);
+        }
     }];
 window['_apprun-events'] = ['events [print]', (p) => {
         _events(p === 'print');
     }];
 window['_apprun-log'] = ['log [event|view] on|off', (a1, a2) => {
-        var _a;
         if (a1 === 'on') {
             debugging = 3;
         }
@@ -206,7 +212,7 @@ window['_apprun-log'] = ['log [event|view] on|off', (a1, a2) => {
             }
         }
         console.log(`* log ${a1} ${a2 || ''}`);
-        (_a = window === null || window === void 0 ? void 0 : window.localStorage) === null || _a === void 0 ? void 0 : _a.setItem('__apprun_debugging__', `${debugging}`);
+        window?.localStorage?.setItem('__apprun_debugging__', `${debugging}`);
     }];
 window['_apprun-create-event-tests'] = ['create-event-tests',
     () => _createEventTests()
@@ -222,7 +228,7 @@ window['_apprun'] = (strings) => {
     else
         window['_apprun-help'][1]();
 };
-console.info('AppRun DevTools 2.27: type "_apprun `help`" to list all available commands.');
+console.info('AppRun DevTools 3.36: type "_apprun `help`" to list all available commands.');
 const reduxExt = window['__REDUX_DEVTOOLS_EXTENSION__'];
 if (reduxExt) {
     let devTools_running = false;
@@ -245,7 +251,7 @@ if (reduxExt) {
                 }
                 else {
                     const { component, state } = buf[idx];
-                    component === null || component === void 0 ? void 0 : component.setState(state);
+                    component?.setState(state);
                 }
             }
         });

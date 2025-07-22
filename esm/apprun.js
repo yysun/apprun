@@ -10,6 +10,7 @@
  *    - Router with improved null safety
  *    - Web component support
  *    - Type-safe React integration
+ *    - Component batch mounting system
  *
  * Key exports:
  * - app: Global event system instance
@@ -26,6 +27,7 @@
  * - Web Components integration
  * - React compatibility layer
  * - TypeScript support with strong typing
+ * - Batch component mounting with addComponents(element, components)
  *
  * Type Safety Improvements (v3.35.1):
  * - Added null checks for DOM event targets
@@ -33,6 +35,10 @@
  * - Enhanced React integration parameter validation
  * - Better error handling for invalid event handlers
  * - Safer element access with proper type assertions
+ *
+ * Recent Changes:
+ * - Modified addComponents to accept (element, components) where components is a key-value object with routes as keys and components as values
+ * - Simplified component mounting API for better usability
  *
  * Usage:
  * ```ts
@@ -46,20 +52,28 @@
  *     'event': (state, ...args) => // Handle events
  *   }
  * }
+ *
+ * // Mount multiple components
+ * app.addComponents(document.body, {
+ *   '/home': MyComponent,
+ *   '/about': AnotherComponent
+ * });
  * ```
  */
-import app, { App } from './app';
+import _app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
 import { on, update, customElement } from './decorator';
-import webComponent from './web-component';
 import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
+import webComponent from './web-component';
+import addComponents from './add-components';
 import { APPRUN_VERSION } from './version';
+const app = _app;
+export default app;
 export { App, app, Component, on, update, Fragment, safeHTML };
 export { update as event };
 export { ROUTER_EVENT, ROUTER_404_EVENT };
 export { customElement };
-export default app;
 if (!app.start) {
     app.version = APPRUN_VERSION;
     app.h = app.createElement = createElement;
@@ -68,7 +82,7 @@ if (!app.start) {
     app.webComponent = webComponent;
     app.safeHTML = safeHTML;
     app.start = (element, model, view, update, options) => {
-        const opts = Object.assign({ render: true, global_event: true }, options);
+        const opts = { render: true, global_event: true, ...options };
         const component = new Component(model, view, update);
         if (options && options.rendered)
             component.rendered = options.rendered;
@@ -77,9 +91,6 @@ if (!app.start) {
         component.start(element, opts);
         return component;
     };
-    app.once = app.once || ((name, fn, options = {}) => {
-        app.on(name, fn, Object.assign(Object.assign({}, options), { once: true }));
-    });
     // Deprecated: app.query is deprecated in favor of app.runAsync
     app.query = app.query || app.runAsync;
     const NOOP = _ => { };
@@ -90,6 +101,11 @@ if (!app.start) {
     app.route = route;
     app.on('route', url => app['route'] && app['route'](url));
     if (typeof document === 'object') {
+        let basePath = location.pathname;
+        if (basePath.endsWith('/')) {
+            basePath = basePath.slice(0, -1);
+        }
+        app.basePath = basePath;
         document.addEventListener("DOMContentLoaded", () => {
             const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
             const use_hash = app.find('#') || app.find('#/') || false;
@@ -185,5 +201,6 @@ if (!app.start) {
             app.render = (el, vdom) => ReactDOM.render(vdom, el);
         }
     };
+    app.addComponents = addComponents;
 }
 //# sourceMappingURL=apprun.js.map
