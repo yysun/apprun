@@ -3,6 +3,9 @@
 [![AppRun Docs](https://img.shields.io/badge/docs-website-blue.svg)](https://apprun.js.org/docs)
 [![AppRun Playground](https://img.shields.io/badge/playground-online-green.svg)](https://apprun.js.org/#play)
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
+🕵️ We now have rule / prompt files that you can use with your AI Coding Agent:
+- [For Components using JSX](ai/apprun.prompt.md)
+- [For Components using HTML](ai/apprun-html.prompt.md)
 
 🚀 July 2025, We have started to improve the codebase using AI. See [whats new](#new) for details.
 

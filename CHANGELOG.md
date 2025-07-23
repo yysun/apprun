@@ -1,5 +1,13 @@
 # Change Log
 
+## V3.37.2
+
+* Include rule / prompt files for AI Coding Agent
+* Improved type definitions for better TypeScript support
+  - Support async function and async generator in `Action<T>` that is used in `Update<T, E>`
+  - Added `State` type to allow the initial state to be a function or an async function
+* Fixed routing basePath initialization issue - not to set basePath to location.pathname by default
+
 ## V3.37.1
 
 * Make `immer` and `property-information` as dependencies
@@ -8,9 +16,8 @@
 
 * Introduced `createState` helper for simplified immutable state updates using Immer [create-state-immer](#docs/done/blog-create-state-immer.md)
 * Added `addComponents` function for adding components to routes [add-components](#docs/done/blog-addcomponents-feature.md)
-* Improved type definitions for better TypeScript support
 * Moved the component to dev-tools
-* Fixed routing basePath initialization issue
+
 
 ## 3.36.1
 

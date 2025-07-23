@@ -81,9 +81,9 @@ if (!app.start) {
     app.Fragment = Fragment;
     app.webComponent = webComponent;
     app.safeHTML = safeHTML;
-    app.start = (element, model, view, update, options) => {
+    app.start = (element, state, view, update, options) => {
         const opts = { render: true, global_event: true, ...options };
-        const component = new Component(model, view, update);
+        const component = new Component(state, view, update);
         if (options && options.rendered)
             component.rendered = options.rendered;
         if (options && options.mounted)
@@ -101,11 +101,6 @@ if (!app.start) {
     app.route = route;
     app.on('route', url => app['route'] && app['route'](url));
     if (typeof document === 'object') {
-        let basePath = location.pathname;
-        if (basePath.endsWith('/')) {
-            basePath = basePath.slice(0, -1);
-        }
-        app.basePath = basePath;
         document.addEventListener("DOMContentLoaded", () => {
             const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
             const use_hash = app.find('#') || app.find('#/') || false;
