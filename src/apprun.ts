@@ -64,7 +64,7 @@
 import _app, { App } from './app';
 import { createElement, render, Fragment, safeHTML } from './vdom';
 import { Component } from './component';
-import { IApp, VNode, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions, CustomElementOptions } from './types';
+import { IApp, VNode, State, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions, CustomElementOptions } from './types';
 import { on, update, customElement } from './decorator';
 import { route, ROUTER_EVENT, ROUTER_404_EVENT } from './router';
 import webComponent from './web-component';
@@ -109,10 +109,10 @@ if (!app.start) {
   app.webComponent = webComponent;
   app.safeHTML = safeHTML;
 
-  app.start = <T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+  app.start = <T, E = any>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): Component<T, E> => {
     const opts = { render: true, global_event: true, ...options };
-    const component = new Component<T, E>(model, view, update);
+    const component = new Component<T, E>(state, view, update);
     if (options && options.rendered) component.rendered = options.rendered;
     if (options && options.mounted) component.mounted = options.mounted;
     component.start(element, opts);

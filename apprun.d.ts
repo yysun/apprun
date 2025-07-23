@@ -40,6 +40,8 @@ declare module 'apprun' {
 
   export type Element = HTMLElement | string;
 
+  export type State<T> = T | Promise<T> | (() => T) | (() => Promise<T>);
+
   export type VNode = {
     tag: string | Function,
     props: {},
@@ -107,7 +109,7 @@ declare module 'apprun' {
     /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
     query(name: string, ...args: any[]): Promise<any[]>;
 
-    start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+    start<T, E = any>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
       options?: AppStartOptions<T>): Component<T, E>;
 
     h(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
@@ -127,9 +129,9 @@ declare module 'apprun' {
   }
 
   export class Component<T = any, E = any> {
-    constructor(state?: T, view?: View<T>, update?: Update<T, E>, options?: any);
+    constructor(state?: State<T>, view?: View<T>, update?: Update<T, E>, options?: any);
     readonly element: Element;
-    readonly state: T;
+    protected state: State<T>;
     view?: View<T>;
     update?: Update<T, E>;
 

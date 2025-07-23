@@ -56,6 +56,7 @@
 
 import { TemplateResult } from 'lit-html';
 export type Element = HTMLElement | string;
+export type State<T> = T | Promise<T> | (() => T) | (() => Promise<T>);
 export type VNode = {
   tag: string | Function,
   props: {},

@@ -55,7 +55,7 @@ import _app, { App } from './app';
 
 
 import { Reflect } from './decorator'
-import { View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IApp } from './types';
+import { State, View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IApp } from './types';
 import directive from './directive';
 import { safeQuerySelector, safeGetElementById } from './type-utils';
 
@@ -210,7 +210,7 @@ export class Component<T = any, E = any> {
   };
 
   constructor(
-    protected state?: T,
+    protected state?: State<T>,
     protected view?: View<T>,
     protected update?: Update<T, E>,
     protected options?) {
@@ -244,10 +244,8 @@ export class Component<T = any, E = any> {
 
     this.add_actions();
     this.state = this.state ?? this['model'] ?? {};
-    if (typeof this.state === 'function') this.state = this.state();
-
-    this.setState(this.state, { render: !!options.render, history: true });
-
+    if (typeof this.state === 'function') this.state = (this.state as Function)();
+    this.setState(this.state as T, { render: !!options.render, history: true });
     if (app['debug'] && app.find('debug-create-component')?.length) {
       app.run('debug-create-component', this);
     }
