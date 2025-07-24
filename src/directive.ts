@@ -34,15 +34,35 @@
  * - Enhanced error handling for invalid event targets
  * - Safer DOM element property access
  *
+ * Nested State Binding Support (v3.37.4):
+ * - Enhanced $bind directive to support nested object and array paths
+ * - Supports dot notation: 'user.name', 'user.profile.settings.theme'
+ * - Supports bracket notation: 'items[0]', 'users[1].name'
+ * - Supports mixed notation: 'users[0].settings.theme', 'data["key"].value'
+ * - Safe traversal with automatic intermediate object/array creation
+ * - Maintains backward compatibility with simple property binding
+ *
  * Usage:
  * ```tsx
  * // Event binding
  * <button $onclick="event-name">Click</button>
  * <input $oninput={e => setState(e.target.value)} />
  * 
- * // Two-way binding
+ * // Simple two-way binding
  * <input $bind="state.property" />
  * <select $bind="selected">...</select>
+ * 
+ * // Nested object binding
+ * <input $bind="user.profile.name" />
+ * <input $bind="user.settings.theme" />
+ * 
+ * // Array element binding
+ * <input $bind="items[0]" />
+ * <input $bind="todos[1].title" />
+ * 
+ * // Mixed nested binding
+ * <input $bind="users[0].profile.settings.notifications.email" />
+ * <select $bind="config.display.mode">...</select>
  * 
  * // Array handlers
  * <button $onclick={['handler', param1, param2]}>Click</button>
@@ -52,18 +72,123 @@
 import app from './app';
 import { safeEventTarget } from './type-utils';
 
+/**
+ * Parse a path string into an array of keys and indices
+ * Supports paths like: 'a.b', 'a[0]', 'a[0].b', 'a["key"]'
+ */
+const parsePath = (path: string): Array<string | number> => {
+  if (!path) return [];
+  
+  const keys: Array<string | number> = [];
+  let current = '';
+  let inBracket = false;
+  let quoteChar = '';
+  
+  for (let i = 0; i < path.length; i++) {
+    const char = path[i];
+    
+    if (char === '[' && !inBracket) {
+      if (current) {
+        keys.push(current);
+        current = '';
+      }
+      inBracket = true;
+    } else if (char === ']' && inBracket) {
+      if (quoteChar) {
+        // Remove quotes from string keys
+        current = current.slice(1, -1);
+      } else if (/^\d+$/.test(current)) {
+        // Convert numeric strings to numbers
+        current = parseInt(current, 10) as any;
+      }
+      keys.push(current);
+      current = '';
+      inBracket = false;
+      quoteChar = '';
+    } else if ((char === '"' || char === "'") && inBracket) {
+      if (!quoteChar) {
+        quoteChar = char;
+      } else if (char === quoteChar) {
+        quoteChar = '';
+      }
+      current += char;
+    } else if (char === '.' && !inBracket) {
+      if (current) {
+        keys.push(current);
+        current = '';
+      }
+    } else {
+      current += char;
+    }
+  }
+  
+  if (current) {
+    keys.push(current);
+  }
+  
+  return keys;
+};
+
+/**
+ * Safely get a nested value from an object using a path
+ */
+const getNestedValue = (obj: any, path: Array<string | number>): any => {
+  let current = obj;
+  for (const key of path) {
+    if (current == null) return undefined;
+    current = current[key];
+  }
+  return current;
+};
+
+/**
+ * Safely set a nested value in an object using a path
+ * Creates intermediate objects/arrays as needed
+ */
+const setNestedValue = (obj: any, path: Array<string | number>, value: any): any => {
+  if (path.length === 0) return value;
+  
+  const result = { ...obj };
+  let current = result;
+  
+  for (let i = 0; i < path.length - 1; i++) {
+    const key = path[i];
+    const nextKey = path[i + 1];
+    
+    if (current[key] == null) {
+      // Create array if next key is numeric, object otherwise
+      current[key] = typeof nextKey === 'number' ? [] : {};
+    } else if (Array.isArray(current[key])) {
+      current[key] = [...current[key]];
+    } else if (typeof current[key] === 'object') {
+      current[key] = { ...current[key] };
+    }
+    
+    current = current[key];
+  }
+  
+  current[path[path.length - 1]] = value;
+  return result;
+};
+
 const getStateValue = (component, name) => {
-  return (name ? component['state'][name] : component['state']) || '';
+  if (!name) return component['state'] || '';
+  
+  const path = parsePath(name);
+  const value = getNestedValue(component['state'], path);
+  return value !== undefined ? value : '';
 }
 
 const setStateValue = (component, name, value) => {
-  if (name) {
-    const state = component['state'] || {};
-    state[name] = value;
-    component.setState(state);
-  } else {
+  if (!name) {
     component.setState(value);
+    return;
   }
+  
+  const path = parsePath(name);
+  const currentState = component['state'] || {};
+  const newState = setNestedValue(currentState, path, value);
+  component.setState(newState);
 }
 
 const apply_directive = (key: string, props: {}, tag, component) => {
