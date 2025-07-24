@@ -34,15 +34,35 @@
  * - Enhanced error handling for invalid event targets
  * - Safer DOM element property access
  *
+ * Nested State Binding Support (v3.37.4):
+ * - Enhanced $bind directive to support nested object and array paths
+ * - Supports dot notation: 'user.name', 'user.profile.settings.theme'
+ * - Supports bracket notation: 'items[0]', 'users[1].name'
+ * - Supports mixed notation: 'users[0].settings.theme', 'data["key"].value'
+ * - Safe traversal with automatic intermediate object/array creation
+ * - Maintains backward compatibility with simple property binding
+ *
  * Usage:
  * ```tsx
  * // Event binding
  * <button $onclick="event-name">Click</button>
  * <input $oninput={e => setState(e.target.value)} />
  * 
- * // Two-way binding
+ * // Simple two-way binding
  * <input $bind="state.property" />
  * <select $bind="selected">...</select>
+ * 
+ * // Nested object binding
+ * <input $bind="user.profile.name" />
+ * <input $bind="user.settings.theme" />
+ * 
+ * // Array element binding
+ * <input $bind="items[0]" />
+ * <input $bind="todos[1].title" />
+ * 
+ * // Mixed nested binding
+ * <input $bind="users[0].profile.settings.notifications.email" />
+ * <select $bind="config.display.mode">...</select>
  * 
  * // Array handlers
  * <button $onclick={['handler', param1, param2]}>Click</button>
