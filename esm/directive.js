@@ -50,18 +50,119 @@
  */
 import app from './app';
 import { safeEventTarget } from './type-utils';
+/**
+ * Parse a path string into an array of keys and indices
+ * Supports paths like: 'a.b', 'a[0]', 'a[0].b', 'a["key"]'
+ */
+const parsePath = (path) => {
+    if (!path)
+        return [];
+    const keys = [];
+    let current = '';
+    let inBracket = false;
+    let quoteChar = '';
+    for (let i = 0; i < path.length; i++) {
+        const char = path[i];
+        if (char === '[' && !inBracket) {
+            if (current) {
+                keys.push(current);
+                current = '';
+            }
+            inBracket = true;
+        }
+        else if (char === ']' && inBracket) {
+            if (quoteChar) {
+                // Remove quotes from string keys
+                current = current.slice(1, -1);
+            }
+            else if (/^\d+$/.test(current)) {
+                // Convert numeric strings to numbers
+                current = parseInt(current, 10);
+            }
+            keys.push(current);
+            current = '';
+            inBracket = false;
+            quoteChar = '';
+        }
+        else if ((char === '"' || char === "'") && inBracket) {
+            if (!quoteChar) {
+                quoteChar = char;
+            }
+            else if (char === quoteChar) {
+                quoteChar = '';
+            }
+            current += char;
+        }
+        else if (char === '.' && !inBracket) {
+            if (current) {
+                keys.push(current);
+                current = '';
+            }
+        }
+        else {
+            current += char;
+        }
+    }
+    if (current) {
+        keys.push(current);
+    }
+    return keys;
+};
+/**
+ * Safely get a nested value from an object using a path
+ */
+const getNestedValue = (obj, path) => {
+    let current = obj;
+    for (const key of path) {
+        if (current == null)
+            return undefined;
+        current = current[key];
+    }
+    return current;
+};
+/**
+ * Safely set a nested value in an object using a path
+ * Creates intermediate objects/arrays as needed
+ */
+const setNestedValue = (obj, path, value) => {
+    if (path.length === 0)
+        return value;
+    const result = { ...obj };
+    let current = result;
+    for (let i = 0; i < path.length - 1; i++) {
+        const key = path[i];
+        const nextKey = path[i + 1];
+        if (current[key] == null) {
+            // Create array if next key is numeric, object otherwise
+            current[key] = typeof nextKey === 'number' ? [] : {};
+        }
+        else if (Array.isArray(current[key])) {
+            current[key] = [...current[key]];
+        }
+        else if (typeof current[key] === 'object') {
+            current[key] = { ...current[key] };
+        }
+        current = current[key];
+    }
+    current[path[path.length - 1]] = value;
+    return result;
+};
 const getStateValue = (component, name) => {
-    return (name ? component['state'][name] : component['state']) || '';
+    if (!name)
+        return component['state'] || '';
+    const path = parsePath(name);
+    const value = getNestedValue(component['state'], path);
+    return value !== undefined ? value : '';
 };
 const setStateValue = (component, name, value) => {
-    if (name) {
-        const state = component['state'] || {};
-        state[name] = value;
-        component.setState(state);
-    }
-    else {
+    if (!name) {
         component.setState(value);
+        return;
     }
+    const path = parsePath(name);
+    const currentState = component['state'] || {};
+    const newState = setNestedValue(currentState, path, value);
+    component.setState(newState);
 };
 const apply_directive = (key, props, tag, component) => {
     if (key.startsWith('$on')) {
