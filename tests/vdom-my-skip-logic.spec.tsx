@@ -1,8 +1,8 @@
 /**
  * Test file: vdom-my-skip-logic.spec.tsx
  * Purpose: Testing the skip logic functionality for preventing user interaction disruption
- * Features: Tests for focus-sensitive props, scroll preservation, and media element handling
- * Created: 2025-01-XX
+ * Features: Tests for focus-sensitive props (selection), scroll preservation, and media element handling
+ * Updated: 2025-01-14 - Removed value property from skip logic, allowing value updates on focused elements
  */
 
 import { updateProps } from '../src/vdom-my-prop-attr';
@@ -24,7 +24,7 @@ describe('VDOM Skip Logic Tests', () => {
   });
 
   describe('Focus-sensitive property skipping', () => {
-    it('should skip value updates on focused input elements', () => {
+    it('should allow value updates on focused input elements', () => {
       const input = document.createElement('input');
       input.type = 'text';
       input.value = 'original';
@@ -34,9 +34,9 @@ describe('VDOM Skip Logic Tests', () => {
       input.focus();
       expect(document.activeElement).toBe(input);
 
-      // Try to update the value - should be skipped
+      // Update the value - should work (value is not skipped)
       updateProps(input, { value: 'new value' }, false);
-      expect(input.value).toBe('original');
+      expect(input.value).toBe('new value');
     });
 
     it('should skip selectionStart updates on focused textarea', () => {
@@ -86,7 +86,7 @@ describe('VDOM Skip Logic Tests', () => {
       expect(input.selectionDirection).toBe('forward');
     });
 
-    it('should allow focus-sensitive updates on unfocused elements', () => {
+    it('should allow value updates on unfocused elements', () => {
       const input = document.createElement('input');
       input.type = 'text';
       input.value = 'original';
@@ -104,15 +104,17 @@ describe('VDOM Skip Logic Tests', () => {
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'original';
+      input.value = 'original';
       container.appendChild(input);
 
       // Focus the input
       input.focus();
       expect(document.activeElement).toBe(input);
 
-      // Update className - should work even when focused
-      updateProps(input, { className: 'new-class' }, false);
+      // Update className and value - both should work
+      updateProps(input, { className: 'new-class', value: 'new value' }, false);
       expect(input.className).toBe('new-class');
+      expect(input.value).toBe('new value');
     });
   });
 
@@ -249,17 +251,19 @@ describe('VDOM Skip Logic Tests', () => {
       textarea.focus();
       expect(document.activeElement).toBe(textarea);
 
-      // Try to update both focus-sensitive and scroll properties
+      // Try to update focus-sensitive (selectionStart), scroll, and value properties
       updateProps(textarea, {
+        selectionStart: 0,
         value: 'new value',
         scrollTop: 0,
         className: 'new-class'
       }, false);
 
-      // Both skip conditions should be respected
-      expect(textarea.value).toBe('original');
-      expect(textarea.scrollTop).toBe(50);
-      // Non-skippable property should update
+      // Only selectionStart and scrollTop should be skipped
+      expect(textarea.selectionStart).not.toBe(0); // Should be skipped
+      expect(textarea.scrollTop).toBe(50); // Should be skipped
+      // value and className should update
+      expect(textarea.value).toBe('new value');
       expect(textarea.className).toBe('new-class');
     });
   });
@@ -285,12 +289,14 @@ describe('VDOM Skip Logic Tests', () => {
       input.focus();
       expect(document.activeElement).toBe(input);
 
-      // Try to update with null/undefined - should be skipped
-      updateProps(input, { value: null }, false);
-      expect(input.value).toBe('original');
+      // Try to update with null/undefined - value should work, but selection properties should be skipped
+      updateProps(input, { value: null, selectionStart: 5 }, false);
+      expect(input.value).toBe(''); // null value should work (converted to empty string)
+      expect(input.selectionStart).not.toBe(5); // Should be skipped
 
-      updateProps(input, { value: undefined }, false);
-      expect(input.value).toBe('original');
+      updateProps(input, { value: undefined, selectionEnd: 3 }, false);
+      expect(input.value).toBe('undefined'); // undefined value gets converted to string 'undefined'
+      expect(input.selectionEnd).not.toBe(3); // Should be skipped
     });
 
     it('should handle elements that are not in the DOM', () => {
@@ -340,27 +346,31 @@ describe('VDOM Skip Logic Tests', () => {
       updateProps(input, {
         value: 'first-value',
         className: 'first-class',
-        'data-test': 'first'
+        'data-test': 'first',
+        selectionStart: 5
       }, false);
 
-      // value should be skipped, others should apply
-      expect(input.value).toBe('original');
+      // Only selectionStart should be skipped, others should apply
+      expect(input.value).toBe('first-value');
       expect(input.className).toBe('first-class');
       expect(input.getAttribute('data-test')).toBe('first');
+      expect(input.selectionStart).not.toBe(5); // Should be skipped
 
       // Second update: merge with new props
       updateProps(input, {
         value: 'second-value',
         className: 'second-class',
         'data-test': 'second',
-        placeholder: 'Enter text'
+        placeholder: 'Enter text',
+        selectionEnd: 10
       }, false);
 
-      // value should still be skipped, others should update
-      expect(input.value).toBe('original');
+      // Only selectionEnd should be skipped, others should update
+      expect(input.value).toBe('second-value');
       expect(input.className).toBe('second-class');
       expect(input.getAttribute('data-test')).toBe('second');
       expect(input.placeholder).toBe('Enter text');
+      expect(input.selectionEnd).not.toBe(10); // Should be skipped
     });
 
     it('should handle cached props correctly with skip logic', () => {
