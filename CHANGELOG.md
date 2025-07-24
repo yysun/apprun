@@ -1,5 +1,9 @@
 # Change Log
 
+## V3.37.3
+
+* Updated skip logic for - removed `value` property
+
 ## V3.37.2
 
 * Include rule / prompt files for AI Coding Agent

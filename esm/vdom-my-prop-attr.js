@@ -3,7 +3,7 @@
  * Standards-compliant property/attribute handling with caching and special element support
  * Features: Skip logic for preserving user interactions during VDOM reconciliation
  * Exports: updateProps - Main function for DOM element property updates
- * Updated: 2025-01-14 - Added skip logic for focus-sensitive, scroll, and media properties
+ * Updated: 2025-01-14 - Skip logic for focus-sensitive (selection), scroll, and media properties
  */
 import { find, html, svg } from 'property-information';
 const ATTR_PROPS = '_props';
@@ -188,7 +188,7 @@ function setAttributeOrProperty(element, name, value, isSvg) {
 // Skip logic for preventing user interaction disruption during VDOM reconciliation
 function shouldSkipPatch(dom, prop) {
     if (document.activeElement === dom) {
-        return ['value', 'selectionStart', 'selectionEnd', 'selectionDirection']
+        return ['selectionStart', 'selectionEnd', 'selectionDirection']
             .includes(prop);
     }
     if (prop === 'scrollTop' || prop === 'scrollLeft') {
