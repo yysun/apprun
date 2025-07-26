@@ -1,5 +1,11 @@
 ## What's New
 
+> July 26, 2025, V3.38.0
+
+- Improved `$bind` directive to support nested objects and arrays: [Effortless Two-Way Data Binding in Apprun with $bind](#docs/done/blog-bind-directive.md)
+- Support for type safe props and children in components: [Typed Props and Children](#docs/done/blog-typed-props-and-children.md)
+- Use `unknown` instead of `any` for generic defaults to enhance type safety: [Why `unknown` is better than `any`](#docs/done/blog-why-unknown-better-than-any.md)
+
 > July 22, 2025, V3.37.0
 
 - Introduced `createState` helper for simplified immutable state updates using Immer [create-state-immer](#docs/done/blog-create-state-immer.md)

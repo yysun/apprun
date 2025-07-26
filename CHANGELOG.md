@@ -1,5 +1,11 @@
 # Change Log
 
+## V3.38.0
+
+* Support for binding to nested objects and arrays with `$bind`
+* Support for type safe props and children in components
+* Use `unknown` instead of `any` for generic defaults
+
 ## V3.37.3
 
 * Updated skip logic for - removed `value` property
