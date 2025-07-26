@@ -181,7 +181,19 @@ declare module 'apprun' {
   export function Fragment(props: any, ...children: any[]): any[];
 }
 
+declare namespace app {
+  namespace JSX {
+    interface ElementAttributesProperty { props: {} }
+    interface ElementChildrenAttribute { children: {} }
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
+}
+
 declare namespace JSX {
+  interface ElementAttributesProperty { props: {} }
+  interface ElementChildrenAttribute { children: {} }
   interface IntrinsicElements {
     [elemName: string]: any;
   }
