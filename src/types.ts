@@ -66,7 +66,7 @@ export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResu
 export type View<T> = (state: T) => VDOM | void;
 export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
 export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
-export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
+export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
 export type ActionOptions = {
   render?: boolean, history?, global?: boolean;
   callback?: (state: any) => void;
@@ -111,7 +111,7 @@ export interface IApp {
   /** @deprecated Use runAsync() instead */
   query(name: string, ...args: any[]): Promise<any[]>;
 
-  start<T, E = any>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
+  start<T, E = unknown>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): any;
 
   h(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
@@ -134,7 +134,7 @@ interface ComponentLike {
 }
 
 // Define component constructor type
-type ComponentConstructor<T = any> = new (
+type ComponentConstructor<T = unknown> = new (
   state?: T,
   view?: any,
   update?: any,

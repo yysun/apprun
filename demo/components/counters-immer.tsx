@@ -33,16 +33,16 @@ const view = (state) => {
 
 const update = {
   '#counters': (model: number[]) => model,
-  'add-counter': createState((state) => {
+  'add-counter': createState<number[]>((state) => {
     state.push(0);
   }),
-  'remove-counter': createState((state, idx) => {
+  'remove-counter': createState<number[]>((state, idx) => {
     state.splice(idx, 1);
   }),
-  '+1': createState((state, idx) => {
+  '+1': createState<number[]>((state, idx) => {
     state[idx] += 1;
   }),
-  '-1': createState((state, idx) => {
+  '-1': createState<number[]>((state, idx) => {
     state[idx] -= 1;
   })
 };

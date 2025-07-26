@@ -194,7 +194,7 @@ const setup_editor = (textarea, iframe, code, hide_src) => {
   }
 }
 
-class Play extends Component {
+class Play extends Component<any> {
   view = (state) => {
     const code_id = state['code-element-id'];
     const element = this.element;
