@@ -1,4 +1,4 @@
-export type Transition<T = any> = (state?: T) => void;
+export type Transition<T = unknown> = (state?: T) => void;
 export type EventStateTransition<E, S> = [E, S, Transition];
 export type StateMachine<S extends string, E> = {
   [key in S]: EventStateTransition<E, S>[];

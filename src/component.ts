@@ -66,7 +66,7 @@ export const REFRESH = state => state;
 
 const app = _app as unknown as IApp;
 
-export class Component<T = any, E = any> {
+export class Component<T = unknown, E = unknown> {
   static __isAppRunComponent = true;
   private _app = new App();
   private _actions = [];

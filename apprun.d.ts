@@ -52,7 +52,7 @@ declare module 'apprun' {
   export type View<T> = (state: T) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
   export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
-  export type Update<T, E = any> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
+  export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
   export type Router = (url: string, ...args: any[]) => any;
 
   export type EventOptions = {
@@ -109,7 +109,7 @@ declare module 'apprun' {
     /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
     query(name: string, ...args: any[]): Promise<any[]>;
 
-    start<T, E = any>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
+    start<T, E = unknown>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
       options?: AppStartOptions<T>): Component<T, E>;
 
     h(tag: string | Function, props?: any, ...children: any[]): VNode | VNode[];
@@ -128,7 +128,7 @@ declare module 'apprun' {
     version: string;
   }
 
-  export class Component<T = any, E = any> {
+  export class Component<T = unknown, E = unknown> {
     constructor(state?: State<T>, view?: View<T>, update?: Update<T, E>, options?: any);
     readonly element: Element;
     protected state: State<T>;
@@ -201,12 +201,12 @@ declare namespace JSX {
 
 declare module 'apprun/react' {
   import { Component } from 'apprun';
-  export default function toReact<T = any>(componentClass: Component<T>): Function;
+  export default function toReact<T = unknown>(componentClass: Component<T>): Function;
 }
 
 declare module 'apprun/createState' {
   type Draft<T> = T;
-  export default function createState<T = any>(
+  export default function createState<T = unknown>(
     state: T,
     updater: (draft: Draft<T>) => void
   ): Promise<T> | T;

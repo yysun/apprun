@@ -73,7 +73,7 @@ import { APPRUN_VERSION } from './version';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
 type OnDecorator = {
-  <T = any>(options?: any): (constructor: Function) => void;
+  <T = unknown>(options?: any): (constructor: Function) => void;
   <E = string>(events?: E, options?: any): (target: any, key: string) => void;
 };
 
@@ -109,7 +109,7 @@ if (!app.start) {
   app.webComponent = webComponent;
   app.safeHTML = safeHTML;
 
-  app.start = <T, E = any>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
+  app.start = <T, E = unknown>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): Component<T, E> => {
     const opts = { render: true, global_event: true, ...options };
     const component = new Component<T, E>(state, view, update);
