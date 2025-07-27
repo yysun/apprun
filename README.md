@@ -5,11 +5,15 @@
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][downloads-url] [![License][license-image]][license-url] [![twitter][twitter-badge]][twitter] [![Discord Chat][discord-image]][discord-invite]
 
 
-🕵️ We now have rule / prompt files that you can use with your AI Coding Agent:
-- [For Components using JSX](ai/apprun.prompt.md)
-- [For Components using HTML](ai/apprun-html.prompt.md)
+⭐ NEW instruction: Step-by-step guide to building a Single Page Application (SPA) using the AppRun pattern, with architectural reasoning for each step: 
 
-🚀 July 2025, We have started to improve the codebase using AI. See [whats new](#new) for details.
+- [Building a SPA Using AppRun](ai/building-apprun-spa.md).
+
+🕵️ We also have rule / prompt files that you can use with your AI Coding Agent:
+
+- [For Components using JSX](ai/apprun.prompt.md)
+
+🚀 July 2025, We have started to improve the codebase using AI - the spec-driven flow. The requirements, implementation plan and final results are stored in the `docs` folder.
 
 ## Introduction
 
