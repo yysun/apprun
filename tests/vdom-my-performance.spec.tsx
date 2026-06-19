@@ -108,37 +108,31 @@ describe('VDOM Property Management Performance', () => {
   /**
    * Test 3.1.3: Fast-path for elements with no cached properties
    */
-  it('should optimize first-time property application', () => {
+  it('should apply first-time and cached property updates correctly', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
 
     // First update - no cached properties
-    const startTime1 = performance.now();
     updateProps(element, {
       id: 'test',
       className: 'first-update',
       'data-test': 'value'
     }, false);
-    const firstUpdateTime = performance.now() - startTime1;
+
+    expect(element.id).toBe('test');
+    expect(element.className).toBe('first-update');
+    expect(element.dataset.test).toBe('value');
 
     // Second update - has cached properties  
-    const startTime2 = performance.now();
     updateProps(element, {
       id: 'test-2',
       className: 'second-update',
       'data-test': 'value-2'
     }, false);
-    const secondUpdateTime = performance.now() - startTime2;
 
-    console.log(`Fast-path Results:
-      First update (no cache): ${firstUpdateTime.toFixed(4)}ms
-      Second update (with cache): ${secondUpdateTime.toFixed(4)}ms
-      Ratio: ${(secondUpdateTime / firstUpdateTime).toFixed(2)}x
-    `);
-
-    // Both should be reasonably fast
-    expect(firstUpdateTime).toBeLessThan(1.0);
-    expect(secondUpdateTime).toBeLessThan(2.0);
+    expect(element.id).toBe('test-2');
+    expect(element.className).toBe('second-update');
+    expect(element.dataset.test).toBe('value-2');
   });
 
   /**

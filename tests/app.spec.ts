@@ -159,7 +159,7 @@ describe('app events', () => {
   it('should mix delay and once option', (done) => {
     const app = new App();
     (app as any).debug = true; // no-subscriber assert is gated behind debug
-    spyOn(console, 'assert');
+    spyOn(console, 'assert').mockImplementation(() => undefined);
     let i = 0;
     app.on('hi', () => { i++; }, {once: true, delay: 200});
     app.run('hi');
@@ -176,8 +176,8 @@ describe('app events', () => {
   it('should remove only subscription that is once', () => {
     const app = new App();
     (app as any).debug = true; // no-subscriber assert is gated behind debug
-    spyOn(console, 'assert');
-    spyOn(console, 'log');
+    spyOn(console, 'assert').mockImplementation(() => undefined);
+    spyOn(console, 'log').mockImplementation(() => undefined);
     app.on('hi', () => {
       console.log('hi');
     });
@@ -191,7 +191,7 @@ describe('app events', () => {
   it('should run only once', () => {
     const app = new App();
     (app as any).debug = true; // no-subscriber assert is gated behind debug
-    spyOn(console, 'assert');
+    spyOn(console, 'assert').mockImplementation(() => undefined);
     app.on('hi', (p1, p2, p3, p4) => {}, {once: true});
     app.run('hi', 1, 'xx', null, {a: 1});
     app.run('hi', 1, 'xx', null, {a: 1});
@@ -210,7 +210,7 @@ describe('app events', () => {
   it('should return 0 subscribers for an invalid event name', () => {
     const app = new App();
     (app as any).debug = true; // no-subscriber assert is gated behind debug
-    spyOn(console, 'assert');
+    spyOn(console, 'assert').mockImplementation(() => undefined);
     const subs: number = app.run('hiiiiiiii');
     expect(console.assert).toHaveBeenCalled();
     expect(subs).toBe(0);
@@ -218,7 +218,7 @@ describe('app events', () => {
 
   it('should not assert on missing subscribers when debug is off', () => {
     const app = new App();
-    spyOn(console, 'assert');
+    spyOn(console, 'assert').mockImplementation(() => undefined);
     const subs: number = app.run('no-such-event');
     // Specific to this event so leaked timers from sibling tests don't interfere
     expect(console.assert).not.toHaveBeenCalledWith(expect.anything(), 'No subscriber for event: no-such-event');
@@ -301,7 +301,7 @@ describe('app events', () => {
   it('should report run errors to console when no error subscriber exists', () => {
     const app = new App();
     const error = new Error('fallback boom');
-    const consoleError = spyOn(console, 'error');
+    const consoleError = spyOn(console, 'error').mockImplementation(() => undefined);
 
     app.on('boom', () => { throw error; });
     app.run('boom');

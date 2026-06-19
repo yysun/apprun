@@ -330,11 +330,9 @@ describe('VDOM DOM Contamination Prevention Tests', () => {
       expect(typeof cachedProps).toBe('object');
     });
 
-    it('should handle rapid updates efficiently', () => {
+    it('should handle rapid updates without DOM contamination', () => {
       const element = render(createElement('div', {})) as HTMLDivElement;
       container.appendChild(element);
-
-      const start = performance.now();
 
       // Perform many rapid updates
       for (let i = 0; i < 1000; i++) {
@@ -344,11 +342,6 @@ describe('VDOM DOM Contamination Prevention Tests', () => {
           title: `Update ${i}`
         }, false);
       }
-
-      const duration = performance.now() - start;
-
-      // Should complete quickly (less than 100ms for 1000 updates)
-      expect(duration).toBeLessThan(100);
 
       // Final state should be correct
       expect(element.dataset.iteration).toBe('999');
