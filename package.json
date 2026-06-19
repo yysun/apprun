@@ -44,6 +44,7 @@
     "./dist/apprun.js",
     "./dist/apprun-html.js",
     "./dist/apprun-play.js",
+    "./src/apprun-html.ts",
     "./esm/apprun.js",
     "./esm/apprun-html.js",
     "./esm/apprun-play.js",

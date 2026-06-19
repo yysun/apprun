@@ -1,4 +1,4 @@
-import app, { ROUTER_EVENT } from '../src/apprun';
+import app, { ROUTER_EVENT } from '../src/apprun-html';
 
 app.on(ROUTER_EVENT, route => {
   const menus = document.querySelectorAll('.navbar-nav li');
