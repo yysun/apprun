@@ -23,7 +23,7 @@
  * - Event-driven architecture with pub/sub pattern
  * - Virtual DOM rendering with multiple renderer support
  * - Component lifecycle management
- * - Client-side routing with hash/path support
+ * - Client-side routing with hash/path support and native link behavior guards
  * - Web Components integration
  * - React compatibility layer
  * - TypeScript support with strong typing
@@ -79,6 +79,30 @@ type OnDecorator = {
 
 const app: IApp = _app as unknown as IApp;
 export default app as IApp;
+
+const shouldRouteLinkClick = (e: MouseEvent, menu?: HTMLAnchorElement): boolean => {
+  if (!menu) return false;
+  if (e.defaultPrevented) return false;
+  if (e.button !== 0) return false;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return false;
+  if (menu.target && menu.target.toLowerCase() !== '_self') return false;
+  if (menu.hasAttribute('download')) return false;
+  if ((menu.getAttribute('rel') || '').toLowerCase().split(/\s+/).includes('external')) return false;
+  return menu.origin === location.origin && !!menu.pathname;
+};
+
+const routeLinkClick = (e: MouseEvent, menu?: HTMLAnchorElement): boolean => {
+  if (!shouldRouteLinkClick(e, menu)) return false;
+  e.preventDefault();
+
+  // Handle base path for navigation
+  const basePath = app.basePath || '';
+  const fullPath = basePath + menu.pathname;
+
+  history.pushState(null, '', fullPath);
+  route(menu.pathname); // Route with relative path (without base path)
+  return true;
+};
 
 export {
   App,
@@ -155,22 +179,12 @@ if (!app.start) {
           route(initialPath);
         })();
         document.body.addEventListener('click', e => {
-          const element = e.target as HTMLElement;
+          const target = e.target as Node;
+          const element = target instanceof Element ? target : target?.parentElement;
           if (!element) return;
 
           const menu = (element.tagName === 'A' ? element : element.closest('a')) as HTMLAnchorElement;
-          if (menu &&
-            menu.origin === location.origin &&
-            menu.pathname) {
-            e.preventDefault();
-
-            // Handle base path for navigation
-            const basePath = app.basePath || '';
-            const fullPath = basePath + menu.pathname;
-
-            history.pushState(null, '', fullPath);
-            route(menu.pathname); // Route with relative path (without base path)
-          }
+          routeLinkClick(e, menu);
         });
       }
     });

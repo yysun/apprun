@@ -26,7 +26,7 @@
  * - Element tracking for cleanup
  * - History navigation support
  * - Global vs local event routing
- * - Async state handling
+ * - Async state handling with latest-pending-promise protection
  * - Memory leak prevention
  * - Component unmounting with cleanup
  *
@@ -58,6 +58,7 @@ import { safeQuerySelector, safeGetElementById } from './type-utils';
 // if (!app.find('get-components')) app.on('get-components', o => o.components = componentCache);
 export const REFRESH = state => state;
 const app = _app;
+let tracking_id_counter = 0;
 export class Component {
     renderState(state, vdom = null) {
         if (!this.view)
@@ -83,7 +84,7 @@ export class Component {
             el.removeAttribute && el.removeAttribute(tracking_attr);
         }
         else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
-            this.tracking_id = new Date().valueOf().toString();
+            this.tracking_id = (++tracking_id_counter).toString(36);
             el.setAttribute(tracking_attr, this.tracking_id);
             if (typeof MutationObserver !== 'undefined') {
                 if (!this.observer)
@@ -141,15 +142,20 @@ export class Component {
         else if (state && state instanceof Promise) {
             // Promise will not be saved or rendered
             // state will be saved and rendered when promise is resolved
-            Promise.resolve(state).then(v => {
-                this.setState(v, options);
-                this._state = state;
+            const pending_state = state;
+            this._pending_state = pending_state;
+            Promise.resolve(pending_state).then(v => {
+                if (this._pending_state === pending_state) {
+                    this._pending_state = null;
+                    this.setState(v, options);
+                }
             });
         }
         else {
             this._state = state;
             if (state == null)
                 return;
+            this._pending_state = null;
             this.state = state;
             if (options.render !== false) {
                 // before render state

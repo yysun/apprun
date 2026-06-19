@@ -297,6 +297,24 @@ describe('Component', () => {
     expect(document.body['_component']).toBe(component);
   })
 
+  it('should generate unique unload tracking ids in the same millisecond', () => {
+    const valueOf = jest.spyOn(Date.prototype, 'valueOf').mockReturnValue(1);
+    class Test extends Component {
+      view = () => <div />;
+      unload = () => { };
+    }
+    const div1 = document.createElement('div');
+    const div2 = document.createElement('div');
+
+    const t1 = new Test().start(div1);
+    const t2 = new Test().start(div2);
+
+    expect(div1.getAttribute('_c')).not.toBe(div2.getAttribute('_c'));
+    t1.unmount();
+    t2.unmount();
+    valueOf.mockRestore();
+  })
+
 
   it('should clean up the element children', () => {
     class Test extends Component {
@@ -373,7 +391,7 @@ describe('Component', () => {
     });
   })
 
-  it('should wait existing promise state to be resolve in sequence', (done) => {
+  it('should ignore stale promise state resolutions', (done) => {
     class Test extends Component {
       state = async () => new Promise(resolve => setTimeout(() => resolve('old'), 35));
       view = state => <div>{state}</div>
@@ -383,16 +401,15 @@ describe('Component', () => {
     t.setState(new Promise(resolve => setTimeout(() => resolve('new'), 25)));
     setTimeout(() => {
       expect(div.innerHTML).toBe('');
-      done();
     }, 20);
 
     setTimeout(() => {
       expect(div.innerHTML).toBe('<div>new</div>');
-      done();
     }, 30);
 
     setTimeout(() => {
-      expect(div.innerHTML).toBe('<div>old</div>');
+      expect(div.innerHTML).toBe('<div>new</div>');
+      expect(t['_state']).toBe('new');
       done();
     }, 40);
 

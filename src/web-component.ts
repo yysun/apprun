@@ -24,7 +24,7 @@
  * Features:
  * - Shadow DOM encapsulation support
  * - Attribute observation and change detection
- * - Lifecycle management and cleanup
+ * - Lifecycle management, queued pre-mount attributes, and cleanup
  * - Property reflection to attributes
  * - Event proxy system
  * - Flexible rendering options
@@ -59,6 +59,8 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
   public _shadowRoot;
   public _component;
   public _attrMap: (arg0: string) => string;
+  public _mountFrame;
+  public _pendingAttributes = [];
   public on;
   public run;
   constructor() {
@@ -73,7 +75,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
   }
 
   connectedCallback() {
-    if (this.isConnected && !this._component) {
+    if (this.isConnected && !this._component && this._mountFrame == null) {
       const opts = options || {};
       this._shadowRoot = opts.shadow ? this.attachShadow({ mode: 'open' }) : this;
       const observedAttributes = (opts.observedAttributes || [])
@@ -106,7 +108,9 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
         });
       })
 
-      requestAnimationFrame(() => {
+      this._mountFrame = requestAnimationFrame(() => {
+        this._mountFrame = null;
+        if (!this.isConnected) return;
         const children = this.children ? Array.from(this.children) : [];
         // children.forEach(el => el.parentElement.removeChild(el));
         this._component = new componentClass({ ...props, children }).mount(this._shadowRoot, opts);
@@ -120,13 +124,23 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
         }
         this.on = this._component.on.bind(this._component);
         this.run = this._component.run.bind(this._component);
+        const pendingAttributes = this._pendingAttributes;
+        this._pendingAttributes = [];
+        pendingAttributes.forEach(({ name, oldValue, value }) => {
+          this.attributeChangedCallback(name, oldValue, value);
+        });
         if (!(opts.render === false)) this._component.run('.');
       });
     }
   }
 
   disconnectedCallback() {
-    this._component?.unload?.();
+    if (this._mountFrame != null) {
+      cancelAnimationFrame(this._mountFrame);
+      this._mountFrame = null;
+    }
+    this._pendingAttributes = [];
+    this._component?.unload?.(this._component.state);
     this._component?.unmount?.();
     this._component = null;
   }
@@ -134,7 +148,7 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
   attributeChangedCallback(name: string, oldValue: unknown, value: unknown) {
     if (this._component) {
       // camelCase attributes arrive only in lowercase
-      const mappedName = this._attrMap(name);
+      const mappedName = this._attrMap ? this._attrMap(name) : name;
       // store the new property/ attribute
       this._component._props[mappedName] = value;
       this._component.run('attributeChanged', mappedName, oldValue, value);
@@ -142,9 +156,11 @@ export const customElement = (componentClass, options: CustomElementOptions = {}
       if (value !== oldValue && !(options.render === false)) {
         window.requestAnimationFrame(() => {
           // re-render state with new combined props on next animation frame
-          this._component.run('.')
+          this._component?.run('.')
         })
       }
+    } else {
+      this._pendingAttributes.push({ name, oldValue, value });
     }
   }
 }

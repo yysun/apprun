@@ -40,6 +40,21 @@ describe('app events', () => {
     expect(app['_events']['hi1'].length).toBe(0);
   });
 
+  it('should run wildcard once handlers only once', () => {
+    const app = new App();
+    const fn = jasmine.createSpy('fn');
+    spyOn(console, 'assert');
+
+    app.once('user/*', fn);
+
+    app.run('user/save', 1);
+    app.run('user/save', 2);
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(1, { once: true, event: 'user/save' });
+    expect(app['_events']['user/*'].length).toBe(0);
+  });
+
   it('should allow off inside run', () => {
     const app = new App();
     const eventName = 'test';

@@ -239,6 +239,29 @@ describe('Directive', () => {
     expect(component.state).toBe('0');
   });
 
+  it('should bind textarea value without parsing state as HTML', () => {
+    class Test extends Component {
+      state = {
+        text: '<img src=x onerror=alert(1)>'
+      };
+
+      view = state => <textarea id='text' $bind='text' />;
+    }
+
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const component = new Test().start(div) as any;
+    const textarea = document.getElementById('text') as HTMLTextAreaElement;
+
+    expect(textarea.value).toBe('<img src=x onerror=alert(1)>');
+    expect(textarea.children.length).toBe(0);
+
+    textarea.value = '<b>literal</b>';
+    textarea.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+
+    expect(component.state.text).toBe('<b>literal</b>');
+  });
+
   it('should use directive in app.render', () => {
     let show = false;
     app.on('$', ({ key, props }) => {

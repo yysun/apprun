@@ -17,7 +17,7 @@
  * Features:
  * - Event wildcards support (events ending with '*')
  * - Delayed event execution with timeout management
- * - Once-only event subscriptions
+ * - Once-only event subscriptions, including wildcard subscriptions
  * - Async event handling with Promise.all
  * - Global event bus shared across components
  * - Memory leak prevention with proper cleanup
@@ -80,7 +80,6 @@ export class App {
                     console.error(`Error in event handler for '${name}':`, error);
                 }
             }
-            return !sub.options.once;
         });
         return subscribers.length;
     }
@@ -136,10 +135,16 @@ export class App {
         });
         Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
             .sort((a, b) => b.length - a.length)
-            .forEach(evt => subscribers.push(...events[evt].map(sub => ({
-            ...sub,
-            options: { ...sub.options, event: name }
-        }))));
+            .forEach(evt => {
+            const wildcardSubscribers = events[evt] || [];
+            events[evt] = wildcardSubscribers.filter((sub) => {
+                return !sub.options.once;
+            });
+            subscribers.push(...wildcardSubscribers.map(sub => ({
+                ...sub,
+                options: { ...sub.options, event: name }
+            })));
+        });
         return subscribers;
     }
 }

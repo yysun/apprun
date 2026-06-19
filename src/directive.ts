@@ -269,7 +269,7 @@ const apply_directive = (key: string, props: {}, tag, component) => {
         }
       };
     } else if (tag === 'textarea') {
-      props['innerHTML'] = getStateValue(component, name);
+      props['value'] = getStateValue(component, name);
       props['oninput'] = e => {
         const target = safeEventTarget<HTMLTextAreaElement>(e);
         if (target) {

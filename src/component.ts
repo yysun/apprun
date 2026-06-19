@@ -26,7 +26,7 @@
  * - Element tracking for cleanup
  * - History navigation support
  * - Global vs local event routing
- * - Async state handling
+ * - Async state handling with latest-pending-promise protection
  * - Memory leak prevention
  * - Component unmounting with cleanup
  *
@@ -65,6 +65,7 @@ import { safeQuerySelector, safeGetElementById } from './type-utils';
 export const REFRESH = state => state;
 
 const app = _app as unknown as IApp;
+let tracking_id_counter = 0;
 
 export class Component<T = unknown, E = unknown> {
   static __isAppRunComponent = true;
@@ -82,6 +83,7 @@ export class Component<T = unknown, E = unknown> {
   public unload;
   private tracking_id;
   private observer;
+  private _pending_state;
 
 
   private renderState(state: T, vdom = null) {
@@ -108,7 +110,7 @@ export class Component<T = unknown, E = unknown> {
     if (!this.unload) {
       el.removeAttribute && el.removeAttribute(tracking_attr);
     } else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
-      this.tracking_id = new Date().valueOf().toString();
+      this.tracking_id = (++tracking_id_counter).toString(36);
       el.setAttribute(tracking_attr, this.tracking_id);
       if (typeof MutationObserver !== 'undefined') {
         if (!this.observer) this.observer = new MutationObserver(changes => {
@@ -165,13 +167,18 @@ export class Component<T = unknown, E = unknown> {
     } else if (state && state instanceof Promise) {
       // Promise will not be saved or rendered
       // state will be saved and rendered when promise is resolved
-      Promise.resolve(state).then(v => {
-        this.setState(v, options);
-        this._state = state;
+      const pending_state = state;
+      this._pending_state = pending_state;
+      Promise.resolve(pending_state).then(v => {
+        if (this._pending_state === pending_state) {
+          this._pending_state = null;
+          this.setState(v, options);
+        }
       });
     } else {
       this._state = state;
       if (state == null) return;
+      this._pending_state = null;
       this.state = state;
       if (options.render !== false) {
         // before render state

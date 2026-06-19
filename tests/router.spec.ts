@@ -6,6 +6,86 @@ describe('router', () => {
   beforeAll(() => {
     // DOMContentLoaded not called in Jest
     window.onpopstate = () => app.run('route', location.hash || location.pathname);
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+  });
+
+  it('should guard path router link interception for native browser behaviors', () => {
+    const fn = jasmine.createSpy('fn');
+    app.on('/native', fn);
+
+    const dispatch = (link: HTMLAnchorElement, event: MouseEvent) => {
+      Object.defineProperty(event, 'target', { value: link });
+      document.body.dispatchEvent(event);
+      return event;
+    };
+
+    const sameOriginLink = document.createElement('a');
+    sameOriginLink.href = '/native';
+    expect(dispatch(sameOriginLink, new MouseEvent('click', { ctrlKey: true, bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const metaLink = document.createElement('a');
+    metaLink.href = '/native';
+    expect(dispatch(metaLink, new MouseEvent('click', { metaKey: true, bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const shiftLink = document.createElement('a');
+    shiftLink.href = '/native';
+    expect(dispatch(shiftLink, new MouseEvent('click', { shiftKey: true, bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const altLink = document.createElement('a');
+    altLink.href = '/native';
+    expect(dispatch(altLink, new MouseEvent('click', { altKey: true, bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const secondaryButtonLink = document.createElement('a');
+    secondaryButtonLink.href = '/native';
+    expect(dispatch(secondaryButtonLink, new MouseEvent('click', { button: 1, bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const preventedLink = document.createElement('a');
+    preventedLink.href = '/native';
+    const prevented = new MouseEvent('click', { bubbles: true, cancelable: true });
+    prevented.preventDefault();
+    expect(dispatch(preventedLink, prevented).defaultPrevented).toBe(true);
+
+    const targetLink = document.createElement('a');
+    targetLink.href = '/native';
+    targetLink.target = '_blank';
+    expect(dispatch(targetLink, new MouseEvent('click', { bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = '/native';
+    downloadLink.setAttribute('download', '');
+    expect(dispatch(downloadLink, new MouseEvent('click', { bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const externalRelLink = document.createElement('a');
+    externalRelLink.href = '/native';
+    externalRelLink.rel = 'external noopener';
+    expect(dispatch(externalRelLink, new MouseEvent('click', { bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    const externalOriginLink = document.createElement('a');
+    externalOriginLink.href = 'https://example.com/native';
+    expect(dispatch(externalOriginLink, new MouseEvent('click', { bubbles: true, cancelable: true })).defaultPrevented).toBe(false);
+
+    expect(fn).not.toHaveBeenCalled();
+    app.off('/native', fn);
+  });
+
+  it('should route plain same-origin path links', () => {
+    const link = document.createElement('a');
+    const event = new MouseEvent('click', { button: 0, bubbles: true, cancelable: true });
+    const fn = jasmine.createSpy('fn');
+    const pushState = jest.spyOn(history, 'pushState').mockImplementation(() => { });
+    link.href = '/plain-link';
+    link.textContent = 'Plain link';
+    app.on('/plain-link', fn);
+    Object.defineProperty(event, 'target', { value: link.firstChild });
+
+    document.body.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(pushState).toHaveBeenCalledWith(null, '', '/plain-link');
+    expect(fn).toHaveBeenCalled();
+
+    app.off('/plain-link', fn);
+    pushState.mockRestore();
   });
 
   it('should not fire event if not initialize', () => {
