@@ -315,6 +315,66 @@ describe('Component', () => {
     valueOf.mockRestore();
   })
 
+  it('should unload removed tracked elements through shared DOM tracking', (done) => {
+    const host = document.createElement('div');
+    const div1 = document.createElement('div');
+    const div2 = document.createElement('div');
+    document.body.appendChild(host);
+    host.appendChild(div1);
+    host.appendChild(div2);
+
+    class Test extends Component {
+      state = 'tracked';
+      view = state => <div>{state}</div>
+      unload = jasmine.createSpy('unload');
+    }
+
+    const t1 = new Test().start(div1);
+    const t2 = new Test().start(div2);
+
+    host.removeChild(div1);
+
+    setTimeout(() => {
+      expect(t1.unload).toHaveBeenCalledTimes(1);
+      expect(t1.unload).toHaveBeenCalledWith('tracked');
+      expect(t2.unload).not.toHaveBeenCalled();
+      t1.unmount();
+      t2.unmount();
+      document.body.removeChild(host);
+      done();
+    }, 0);
+  })
+
+  it('should publish component action errors to the error event', () => {
+    const error = new Error('component boom');
+    const payloads = [];
+    const consoleError = spyOn(console, 'error');
+    const onError = payload => payloads.push(payload);
+    app.on('error', onError);
+
+    class Test extends Component {
+      state = 'ready';
+      update = {
+        'phase2-error': () => {
+          throw error;
+        }
+      }
+    }
+
+    const t = new Test().start();
+    t.run('phase2-error', 'arg');
+    app.off('error', onError);
+
+    expect(payloads.length).toBe(1);
+    expect(payloads[0].event).toBe('phase2-error');
+    expect(payloads[0].phase).toBe('component');
+    expect(payloads[0].component).toBe(t);
+    expect(payloads[0].state).toBe('ready');
+    expect(payloads[0].args).toEqual(['arg']);
+    expect(payloads[0].error).toBe(error);
+    expect(consoleError).not.toHaveBeenCalled();
+  })
+
 
   it('should clean up the element children', () => {
     class Test extends Component {

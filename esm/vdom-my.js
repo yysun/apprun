@@ -23,22 +23,20 @@
  * - Element creation with props, children, and event handling
  * - SVG element support with proper namespace handling
  * - Component lifecycle management and caching
- * - Keyed element optimization with automatic cleanup for memory management
+ * - Parent-scoped keyed element optimization for memory-safe DOM reuse
  * - Safe HTML insertion and text node creation
  * - Directive processing integration
  *
  * Implementation:
- * - Uses plain JavaScript object for keyCache instead of Map for better performance
- * - Implements automatic cleanup of disconnected elements from keyCache
+ * - Builds keyed lookup from the current parent element instead of global state
+ * - Sweeps stale child component cache entries after each parent render
  * - Supports both string and function-based tags
  * - Handles component mounting and state management
  * - Optimized children updating with minimal DOM operations
- * - Memory-efficient caching with configurable thresholds (500 ops, 1000 max size)
+ * - Memory-efficient child component caching tied to latest render usage
  *
  * Recent Changes:
- * - 2025-07-15: Converted keyCache from Map to plain object ({}) for improved performance
- * - Updated cleanup functions to use object property deletion instead of Map methods
- * - Enhanced memory management with automatic cleanup of disconnected elements
+ * - 2026-06-19: Scoped keyed reconciliation to the current parent and added child component cache eviction
  * - Added comprehensive key prop usage documentation and guidelines
  */
 import directive from './directive';
@@ -63,26 +61,8 @@ function collect(children) {
     });
     return ch;
 }
-const keyCache = {};
-let cleanupCounter = 0;
-const CLEANUP_THRESHOLD = 500; // Cleanup every 500 operations
-const MAX_CACHE_SIZE = 1000;
-// Lightweight cleanup function - only runs when needed
-function cleanupKeyCache() {
-    if (Object.keys(keyCache).length <= MAX_CACHE_SIZE)
-        return; // Skip if under limit
-    for (const [key, element] of Object.entries(keyCache)) {
-        if (!element.isConnected) {
-            delete keyCache[key];
-        }
-    }
-}
-// Export cleanup function for manual cleanup if needed
+// Compatibility export. Keyed reconciliation is now parent-scoped and has no global cache.
 export function clearKeyCache() {
-    for (const key in keyCache) {
-        delete keyCache[key];
-    }
-    cleanupCounter = 0;
 }
 export function createElement(tag, props, ...children) {
     const ch = collect(children);
@@ -113,7 +93,9 @@ function render(element, nodes, parent = {}) {
     // tslint:disable-next-line
     if (nodes == null || nodes === false)
         return;
+    beginComponentCacheRender(parent);
     nodes = createComponent(nodes, parent);
+    sweepComponentCache(parent);
     if (!element)
         return;
     const isSvg = element.nodeName === "SVG";
@@ -141,6 +123,11 @@ function update(element, node, isSvg) {
     updateProps(element, node.props, isSvg);
 }
 function updateChildren(element, children, isSvg) {
+    const keyedChildren = {};
+    Array.from(element.childNodes || []).forEach((child) => {
+        if (child.key !== undefined && child.key !== null)
+            keyedChildren[keyId(child.key)] = child;
+    });
     const old_len = element.childNodes?.length || 0;
     const new_len = children?.length || 0;
     const len = Math.min(old_len, new_len);
@@ -161,14 +148,14 @@ function updateChildren(element, children, isSvg) {
             element.insertBefore(child, el);
         }
         else {
-            const key = child.props && child.props['key'];
-            if (key) {
+            const key = child.props ? child.props['key'] : undefined;
+            if (key !== undefined && key !== null) {
                 if (el.key === key) {
                     update(element.childNodes[i], child, isSvg);
                 }
                 else {
                     // console.log(el.key, key);
-                    const old = keyCache[key];
+                    const old = keyedChildren[keyId(key)];
                     if (old) {
                         // const temp = old.nextSibling;
                         element.insertBefore(old, el);
@@ -197,6 +184,9 @@ function updateChildren(element, children, isSvg) {
         }
         element.appendChild(d);
     }
+}
+function keyId(key) {
+    return `${typeof key}:${String(key)}`;
 }
 export const safeHTML = (html) => {
     const div = document.createElement('section');
@@ -228,16 +218,32 @@ function create(node, isSvg) {
     updateProps(element, node.props, isSvg);
     if (node.children)
         node.children.forEach(child => element.appendChild(create(child, isSvg)));
-    if (node.props && node.props.key !== undefined) {
+    if (node.props && node.props.key !== undefined && node.props.key !== null) {
         element.key = node.props.key;
-        keyCache[node.props.key] = element;
-        // Lightweight cleanup - only when counter reaches threshold
-        if (++cleanupCounter >= CLEANUP_THRESHOLD) {
-            cleanupKeyCache();
-            cleanupCounter = 0;
-        }
     }
     return element;
+}
+function beginComponentCacheRender(parent) {
+    if (!parent || !parent.__componentCache)
+        return;
+    parent.__componentCacheUsed = {};
+}
+function markComponentCacheUsed(parent, key) {
+    if (!parent)
+        return;
+    parent.__componentCacheUsed = parent.__componentCacheUsed || {};
+    parent.__componentCacheUsed[key] = true;
+}
+function sweepComponentCache(parent) {
+    if (!parent || !parent.__componentCache || !parent.__componentCacheUsed)
+        return;
+    Object.keys(parent.__componentCache).forEach(key => {
+        if (!parent.__componentCacheUsed[key]) {
+            parent.__componentCache[key]?.unmount?.();
+            delete parent.__componentCache[key];
+        }
+    });
+    parent.__componentCacheUsed = null;
 }
 function render_component(node, parent, idx) {
     const { tag, props, children } = node;
@@ -254,6 +260,7 @@ function render_component(node, parent, idx) {
     }
     if (!parent.__componentCache)
         parent.__componentCache = {};
+    markComponentCacheUsed(parent, key);
     let component = parent.__componentCache[key];
     if (!component || !(component instanceof tag) || !component.element) {
         const element = document.createElement(asTag);

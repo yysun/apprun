@@ -179,6 +179,58 @@ describe('Advanced Keyed Reconciliation Tests', () => {
       expect(element.children[3].textContent).toBe('One Key');
     });
 
+    it('should preserve distinct identities for numeric and string keys during updates', () => {
+      let element = render(createElement('div', null, [
+        createElement('span', { key: 0 }, 'Zero Key'),
+        createElement('span', { key: '0' }, 'String Zero Key')
+      ]));
+
+      (element.children[0] as any).identity = 'number-zero';
+      (element.children[1] as any).identity = 'string-zero';
+
+      element = render(createElement('div', null, [
+        createElement('span', { key: '0' }, 'String Zero Updated'),
+        createElement('span', { key: 0 }, 'Zero Updated')
+      ]));
+
+      expect((element.children[0] as any).identity).toBe('string-zero');
+      expect(element.children[0].textContent).toBe('String Zero Updated');
+      expect((element.children[1] as any).identity).toBe('number-zero');
+      expect(element.children[1].textContent).toBe('Zero Updated');
+    });
+
+    it('should scope keyed lookup to the current parent element', () => {
+      let element = render(createElement('section', null, [
+        createElement('div', { id: 'left' }, [
+          createElement('span', { key: 'shared' }, 'Left A')
+        ]),
+        createElement('div', { id: 'right' }, [
+          createElement('span', { key: 'shared' }, 'Right A')
+        ])
+      ]));
+
+      const leftSpan = element.querySelector('#left span') as HTMLElement;
+      const rightSpan = element.querySelector('#right span') as HTMLElement;
+      (leftSpan as any).owner = 'left';
+      (rightSpan as any).owner = 'right';
+
+      element = render(createElement('section', null, [
+        createElement('div', { id: 'left' }, [
+          createElement('span', { key: 'shared' }, 'Left B')
+        ]),
+        createElement('div', { id: 'right' }, [
+          createElement('span', { key: 'shared' }, 'Right B')
+        ])
+      ]));
+
+      const updatedLeftSpan = element.querySelector('#left span') as HTMLElement;
+      const updatedRightSpan = element.querySelector('#right span') as HTMLElement;
+      expect((updatedLeftSpan as any).owner).toBe('left');
+      expect(updatedLeftSpan.textContent).toBe('Left B');
+      expect((updatedRightSpan as any).owner).toBe('right');
+      expect(updatedRightSpan.textContent).toBe('Right B');
+    });
+
     it('should handle large lists efficiently', () => {
       const start = performance.now();
 

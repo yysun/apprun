@@ -53,6 +53,7 @@ describe('app events', () => {
     expect(fn).toHaveBeenCalledTimes(1);
     expect(fn).toHaveBeenCalledWith(1, { once: true, event: 'user/save' });
     expect(app['_events']['user/*'].length).toBe(0);
+    expect(app['_wildcard_events'].length).toBe(0);
   });
 
   it('should allow off inside run', () => {
@@ -116,6 +117,26 @@ describe('app events', () => {
       expect(i).toBe(1);
       done();
     }, 250);
+  });
+
+  it('should isolate delay timers per subscription when options are shared', (done) => {
+    const app = new App();
+    const options = { delay: 50 };
+    let a = 0;
+    let b = 0;
+
+    app.on('delay-a', () => { a++; }, options);
+    app.on('delay-b', () => { b++; }, options);
+
+    app.run('delay-a');
+    app.run('delay-b');
+
+    setTimeout(() => {
+      expect(a).toBe(1);
+      expect(b).toBe(1);
+      expect((options as any)._t).toBeUndefined();
+      done();
+    }, 100);
   });
 
   it('should mix delay and non-delay events', (done) => {
@@ -224,6 +245,93 @@ describe('app events', () => {
       expect(a[1]).toBe(20);
       expect(a[2]).toBe(10);
       expect(a[3]).toBe(0);
+      done();
+    });
+  });
+
+  it('should keep a wildcard index separate from normal subscriptions', () => {
+    const app = new App();
+    const exact = () => 0;
+    const wildcard = () => 1;
+
+    app.on('phase2/exact', exact);
+    app.on('phase2/*', wildcard);
+
+    expect(app['_wildcard_events'].length).toBe(1);
+    expect(app['_wildcard_events'][0].name).toBe('phase2/*');
+
+    app.off('phase2/*', wildcard);
+
+    expect(app['_wildcard_events'].length).toBe(0);
+    expect(app.find('phase2/exact').length).toBe(1);
+  });
+
+  it('should publish run errors to the error event before falling back to console', () => {
+    const app = new App();
+    const error = new Error('run boom');
+    const payloads = [];
+    const consoleError = spyOn(console, 'error');
+
+    app.on('error', payload => payloads.push(payload));
+    app.on('boom', () => { throw error; });
+
+    app.run('boom', 1);
+
+    expect(payloads.length).toBe(1);
+    expect(payloads[0].event).toBe('boom');
+    expect(payloads[0].phase).toBe('run');
+    expect(payloads[0].args).toEqual([1]);
+    expect(payloads[0].error).toBe(error);
+    expect(consoleError).not.toHaveBeenCalled();
+  });
+
+  it('should report run errors to console when no error subscriber exists', () => {
+    const app = new App();
+    const error = new Error('fallback boom');
+    const consoleError = spyOn(console, 'error');
+
+    app.on('boom', () => { throw error; });
+    app.run('boom');
+
+    expect(consoleError).toHaveBeenCalledWith(`Error in event handler for 'boom':`, error);
+  });
+
+  it('should publish delayed handler errors to the error event', (done) => {
+    const app = new App();
+    const error = new Error('delay boom');
+    const payloads = [];
+    spyOn(console, 'error');
+
+    app.on('error', payload => payloads.push(payload));
+    app.on('delay-boom', () => { throw error; }, { delay: 10 });
+    app.run('delay-boom', 'x');
+
+    setTimeout(() => {
+      expect(payloads.length).toBe(1);
+      expect(payloads[0].event).toBe('delay-boom');
+      expect(payloads[0].phase).toBe('delay');
+      expect(payloads[0].args).toEqual(['x']);
+      expect(payloads[0].error).toBe(error);
+      done();
+    }, 30);
+  });
+
+  it('should publish runAsync rejections to the error event and preserve rejection', (done) => {
+    const app = new App();
+    const error = new Error('async boom');
+    const payloads = [];
+    spyOn(console, 'error');
+
+    app.on('error', payload => payloads.push(payload));
+    app.on('async-boom', () => Promise.reject(error));
+
+    app.runAsync('async-boom', 2).catch(e => {
+      expect(e).toBe(error);
+      expect(payloads.length).toBe(1);
+      expect(payloads[0].event).toBe('async-boom');
+      expect(payloads[0].phase).toBe('runAsync');
+      expect(payloads[0].args).toEqual([2]);
+      expect(payloads[0].error).toBe(error);
       done();
     });
   });

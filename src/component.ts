@@ -12,7 +12,7 @@
  *    - Renders virtual DOM to real DOM with directives
  *    - Handles component lifecycle (mounted, rendered, unload)
  *    - Supports shadow DOM and web components
- *    - DOM change tracking with MutationObserver
+ *    - DOM removal tracking with a shared MutationObserver registry
  *    - View transition API support
  *
  * 3. Event Handling
@@ -27,7 +27,7 @@
  * - History navigation support
  * - Global vs local event routing
  * - Async state handling with latest-pending-promise protection
- * - Memory leak prevention
+ * - Memory leak prevention with shared unload tracking
  * - Component unmounting with cleanup
  *
  * Type Safety Improvements (v3.35.1):
@@ -66,6 +66,58 @@ export const REFRESH = state => state;
 
 const app = _app as unknown as IApp;
 let tracking_id_counter = 0;
+const tracking_attr = '_c';
+const tracked_elements = new Map<any, { component: any, tracking_id: string }>();
+let shared_observer: MutationObserver = null;
+
+function disconnectSharedObserverIfIdle() {
+  if (tracked_elements.size === 0 && shared_observer) {
+    shared_observer.disconnect();
+    shared_observer = null;
+  }
+}
+
+function unloadTrackedElement(el) {
+  const tracked = tracked_elements.get(el);
+  if (!tracked) return;
+  tracked_elements.delete(el);
+  tracked.component.unload?.(tracked.component.state);
+  disconnectSharedObserverIfIdle();
+}
+
+function ensureSharedObserver() {
+  if (shared_observer || typeof MutationObserver === 'undefined' || typeof document !== 'object' || !document.body) return;
+  shared_observer = new MutationObserver(changes => {
+    changes.forEach(change => {
+      if (change.type === 'attributes') {
+        const el = change.target;
+        const tracked = tracked_elements.get(el);
+        if (tracked && change.oldValue === tracked.tracking_id) unloadTrackedElement(el);
+      } else if (change.type === 'childList') {
+        Array.from(tracked_elements.keys()).forEach(el => {
+          if (!document.body.contains(el)) unloadTrackedElement(el);
+        });
+      }
+    });
+  });
+  shared_observer.observe(document.body, {
+    childList: true, subtree: true,
+    attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
+  });
+}
+
+function registerTrackedElement(component, el, tracking_id: string) {
+  const existing = tracked_elements.get(el);
+  if (existing && existing.component !== component) unloadTrackedElement(el);
+  tracked_elements.set(el, { component, tracking_id });
+  ensureSharedObserver();
+}
+
+function unregisterTrackedElement(el) {
+  if (!el) return;
+  tracked_elements.delete(el);
+  disconnectSharedObserverIfIdle();
+}
 
 export class Component<T = unknown, E = unknown> {
   static __isAppRunComponent = true;
@@ -82,7 +134,7 @@ export class Component<T = unknown, E = unknown> {
   public mounted;
   public unload;
   private tracking_id;
-  private observer;
+  private tracking_element;
   private _pending_state;
 
 
@@ -106,25 +158,16 @@ export class Component<T = unknown, E = unknown> {
       console.warn(`Component element not found: ${this.element}`);
       return;
     }
-    const tracking_attr = '_c';
     if (!this.unload) {
+      unregisterTrackedElement(this.tracking_element);
+      this.tracking_element = null;
       el.removeAttribute && el.removeAttribute(tracking_attr);
     } else if (el['_component'] !== this || el.getAttribute(tracking_attr) !== this.tracking_id) {
+      if (this.tracking_element && this.tracking_element !== el) unregisterTrackedElement(this.tracking_element);
       this.tracking_id = (++tracking_id_counter).toString(36);
       el.setAttribute(tracking_attr, this.tracking_id);
-      if (typeof MutationObserver !== 'undefined') {
-        if (!this.observer) this.observer = new MutationObserver(changes => {
-          if (changes[0].oldValue === this.tracking_id || !document.body.contains(el)) {
-            this.unload(this.state);
-            this.observer.disconnect();
-            this.observer = null;
-          }
-        });
-        this.observer.observe(document.body, {
-          childList: true, subtree: true,
-          attributes: true, attributeOldValue: true, attributeFilter: [tracking_attr]
-        });
-      }
+      this.tracking_element = el;
+      registerTrackedElement(this, el, this.tracking_id);
     }
     el['_component'] = this;
 
@@ -296,7 +339,8 @@ export class Component<T = unknown, E = unknown> {
 
         this.setState(newState, options);
       } catch (error) {
-        console.error(`Error in component action '${name}':`, error);
+        const payload = { event: name, error, component: this, state: this.state, args: p, phase: 'component' };
+        app.find('error')?.length ? app.run('error', payload) : console.error(`Error in component action '${name}':`, error);
         app['debug'] && app.run('debug', {
           component: this,
           _: '!',
@@ -384,7 +428,8 @@ export class Component<T = unknown, E = unknown> {
   }
 
   public unmount() {
-    this.observer?.disconnect();
+    unregisterTrackedElement(this.tracking_element);
+    this.tracking_element = null;
     this._actions.forEach(action => {
       const { name, fn } = action;
       this.is_global_event(name) ?

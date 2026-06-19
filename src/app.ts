@@ -5,7 +5,7 @@
  * 1. App class - The core event system implementation with pub/sub capabilities
  *    - on(): Subscribe to events with options (once, delay, global)
  *    - off(): Unsubscribe from events with proper cleanup
- *    - run(): Publish events synchronously with error handling
+ *    - run(): Publish events synchronously with error-event reporting
  *    - runAsync(): Publish events asynchronously with Promise support, returns handler values
  *    - query(): Deprecated alias for runAsync() - use runAsync() instead
  *
@@ -15,10 +15,11 @@
  *    - Prevents duplicate instances across different versions
  *
  * Features:
- * - Event wildcards support (events ending with '*')
- * - Delayed event execution with timeout management
+ * - Event wildcards support with indexed wildcard subscriptions (events ending with '*')
+ * - Delayed event execution with subscription-owned timeout management
  * - Once-only event subscriptions, including wildcard subscriptions
  * - Async event handling with Promise.all
+ * - Central error event reporting with console fallback
  * - Global event bus shared across components
  * - Memory leak prevention with proper cleanup
  *
@@ -48,23 +49,38 @@
 import { EventOptions } from './types'
 import { APPRUN_VERSION_GLOBAL } from './version'
 
+type Subscriber = { fn: (...args: any[]) => any, options: EventOptions, _t?: any };
+type SubscriberCall = Subscriber & { _source?: Subscriber };
+type WildcardSubscriber = { name: string, prefix: string, sub: Subscriber };
+
 export class App {
 
-  _events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
+  _events: { [key: string]: Subscriber[] };
+  private _wildcard_events: WildcardSubscriber[];
+  private _reporting_error = false;
 
   constructor() {
-    this._events = {} as { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> };
+    this._events = {} as { [key: string]: Subscriber[] };
+    this._wildcard_events = [];
   }
 
   on(name: string, fn: (...args: any[]) => any, options: EventOptions = {}): void {
     this._events[name] = this._events[name] || [];
-    this._events[name].push({ fn, options });
+    const sub = { fn, options };
+    this._events[name].push(sub);
+    if (name.endsWith('*')) {
+      this._wildcard_events.push({ name, prefix: name.replace('*', ''), sub });
+      this._wildcard_events.sort((a, b) => b.name.length - a.name.length);
+    }
   }
 
   off(name: string, fn: (...args: any[]) => any): void {
     const subscribers = this._events[name] || [];
 
     this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
+    if (name.endsWith('*')) {
+      this._wildcard_events = this._wildcard_events.filter(item => !(item.name === name && item.sub.fn === fn));
+    }
   }
 
   find(name: string): any {
@@ -81,12 +97,12 @@ export class App {
         return false;
       }
       if (options.delay) {
-        this.delay(name, fn, args, options);
+        this.delay(name, sub, args);
       } else {
         try {
           Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
         } catch (error) {
-          console.error(`Error in event handler for '${name}':`, error);
+          this.reportError(name, error, { phase: 'run', args });
         }
       }
     });
@@ -98,14 +114,17 @@ export class App {
     this.on(name, fn, { ...options, once: true });
   }
 
-  private delay(name: string, fn: (...args: any[]) => any, args: any[], options: EventOptions): void {
-    if (options._t) clearTimeout(options._t);
-    options._t = setTimeout(() => {
-      clearTimeout(options._t);
+  private delay(name: string, sub: SubscriberCall, args: any[]): void {
+    const source = sub._source || sub;
+    const { fn, options } = sub;
+    if (source._t) clearTimeout(source._t);
+    source._t = setTimeout(() => {
+      clearTimeout(source._t);
+      source._t = null;
       try {
         Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
       } catch (error) {
-        console.error(`Error in delayed event handler for '${name}':`, error);
+        this.reportError(name, error, { phase: 'delay', args });
       }
     }, options.delay);
   }
@@ -120,13 +139,42 @@ export class App {
         return Promise.resolve(null);
       }
       try {
-        return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+        const result = Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+        return Promise.resolve(result).catch(error => {
+          this.reportError(name, error, { phase: 'runAsync', args });
+          return Promise.reject(error);
+        });
       } catch (error) {
-        console.error(`Error in async event handler for '${name}':`, error);
+        this.reportError(name, error, { phase: 'runAsync', args });
         return Promise.reject(error);
       }
     });
     return Promise.all(promises);
+  }
+
+  private reportError(name: string, error: any, context: any = {}): void {
+    const payload = { event: name, error, app: this, ...context };
+    const errorSubscribers = name === 'error' || this._reporting_error ? [] : this.getSubscribers('error', this._events);
+    if (errorSubscribers.length > 0) {
+      this._reporting_error = true;
+      try {
+        errorSubscribers.forEach(sub => {
+          try {
+            sub.fn.call(this, payload);
+          } catch (errorHandlerError) {
+            console.error(`Error in error event handler:`, errorHandlerError);
+          }
+        });
+      } finally {
+        this._reporting_error = false;
+      }
+    } else if (context.phase === 'delay') {
+      console.error(`Error in delayed event handler for '${name}':`, error);
+    } else if (context.phase === 'runAsync') {
+      console.error(`Error in async event handler for '${name}':`, error);
+    } else {
+      console.error(`Error in event handler for '${name}':`, error);
+    }
   }
 
   /**
@@ -137,8 +185,14 @@ export class App {
     return this.runAsync(name, ...args);
   }
 
-  private getSubscribers(name: string, events: { [key: string]: Array<{ fn: (...args: any[]) => any, options: EventOptions }> }): Array<{ fn: (...args: any[]) => any, options: EventOptions }> {
+  private removeOnceWildcardSubscriber(evt: string, sub: Subscriber): void {
+    this._events[evt] = (this._events[evt] || []).filter(item => item !== sub);
+    this._wildcard_events = this._wildcard_events.filter(item => item.sub !== sub);
+  }
+
+  private getSubscribers(name: string, events: { [key: string]: Subscriber[] }): SubscriberCall[] {
     const subscribers = events[name] || [];
+    const calls: SubscriberCall[] = subscribers.slice();
 
     // Update the list of subscribers by pulling out those which will run once.
     // We must do this update prior to running any of the events in case they
@@ -146,19 +200,16 @@ export class App {
     events[name] = subscribers.filter((sub) => {
       return !sub.options.once;
     });
-    Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
-      .sort((a, b) => b.length - a.length)
-      .forEach(evt => {
-        const wildcardSubscribers = events[evt] || [];
-        events[evt] = wildcardSubscribers.filter((sub) => {
-          return !sub.options.once;
-        });
-        subscribers.push(...wildcardSubscribers.map(sub => ({
+    this._wildcard_events.filter(({ prefix }) => name.startsWith(prefix))
+      .forEach(({ name: evt, sub }) => {
+        if (sub.options.once) this.removeOnceWildcardSubscriber(evt, sub);
+        calls.push({
           ...sub,
+          _source: sub,
           options: { ...sub.options, event: name }
-        })));
+        });
       });
-    return subscribers;
+    return calls;
   }
 }
 

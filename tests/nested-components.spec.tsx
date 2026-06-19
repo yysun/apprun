@@ -114,4 +114,40 @@ describe('Nested Stateful Component', () => {
 
   })
 
+  it('should unmount removed child components and evict them from the parent cache', () => {
+    let calls = 0;
+
+    class ChildWithEvent extends Component {
+      view = () => <div>child</div>
+      update = {
+        '@phase2-child-event': () => {
+          calls++;
+          return {};
+        }
+      }
+    }
+
+    class Main extends Component {
+      state = true;
+      view = state => <div>{state ? <ChildWithEvent id="phase2-child" /> : null}</div>
+      update = {
+        toggle: state => !state
+      }
+    }
+
+    const el = document.createElement('div');
+    const main = new Main().start(el);
+
+    expect(main['__componentCache']['phase2-child']).toBeDefined();
+
+    app.run('@phase2-child-event');
+    expect(calls).toBe(1);
+
+    main.run('toggle');
+
+    expect(main['__componentCache']['phase2-child']).toBeUndefined();
+    app.run('@phase2-child-event');
+    expect(calls).toBe(1);
+  })
+
 })

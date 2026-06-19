@@ -5,7 +5,7 @@
  * 1. App class - The core event system implementation with pub/sub capabilities
  *    - on(): Subscribe to events with options (once, delay, global)
  *    - off(): Unsubscribe from events with proper cleanup
- *    - run(): Publish events synchronously with error handling
+ *    - run(): Publish events synchronously with error-event reporting
  *    - runAsync(): Publish events asynchronously with Promise support, returns handler values
  *    - query(): Deprecated alias for runAsync() - use runAsync() instead
  *
@@ -15,10 +15,11 @@
  *    - Prevents duplicate instances across different versions
  *
  * Features:
- * - Event wildcards support (events ending with '*')
- * - Delayed event execution with timeout management
+ * - Event wildcards support with indexed wildcard subscriptions (events ending with '*')
+ * - Delayed event execution with subscription-owned timeout management
  * - Once-only event subscriptions, including wildcard subscriptions
  * - Async event handling with Promise.all
+ * - Central error event reporting with console fallback
  * - Global event bus shared across components
  * - Memory leak prevention with proper cleanup
  *
@@ -47,15 +48,25 @@
 import { APPRUN_VERSION_GLOBAL } from './version';
 export class App {
     constructor() {
+        this._reporting_error = false;
         this._events = {};
+        this._wildcard_events = [];
     }
     on(name, fn, options = {}) {
         this._events[name] = this._events[name] || [];
-        this._events[name].push({ fn, options });
+        const sub = { fn, options };
+        this._events[name].push(sub);
+        if (name.endsWith('*')) {
+            this._wildcard_events.push({ name, prefix: name.replace('*', ''), sub });
+            this._wildcard_events.sort((a, b) => b.name.length - a.name.length);
+        }
     }
     off(name, fn) {
         const subscribers = this._events[name] || [];
         this._events[name] = subscribers.filter((sub) => sub.fn !== fn);
+        if (name.endsWith('*')) {
+            this._wildcard_events = this._wildcard_events.filter(item => !(item.name === name && item.sub.fn === fn));
+        }
     }
     find(name) {
         return this._events[name];
@@ -70,14 +81,14 @@ export class App {
                 return false;
             }
             if (options.delay) {
-                this.delay(name, fn, args, options);
+                this.delay(name, sub, args);
             }
             else {
                 try {
                     Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
                 }
                 catch (error) {
-                    console.error(`Error in event handler for '${name}':`, error);
+                    this.reportError(name, error, { phase: 'run', args });
                 }
             }
         });
@@ -86,16 +97,19 @@ export class App {
     once(name, fn, options = {}) {
         this.on(name, fn, { ...options, once: true });
     }
-    delay(name, fn, args, options) {
-        if (options._t)
-            clearTimeout(options._t);
-        options._t = setTimeout(() => {
-            clearTimeout(options._t);
+    delay(name, sub, args) {
+        const source = sub._source || sub;
+        const { fn, options } = sub;
+        if (source._t)
+            clearTimeout(source._t);
+        source._t = setTimeout(() => {
+            clearTimeout(source._t);
+            source._t = null;
             try {
                 Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
             }
             catch (error) {
-                console.error(`Error in delayed event handler for '${name}':`, error);
+                this.reportError(name, error, { phase: 'delay', args });
             }
         }, options.delay);
     }
@@ -109,14 +123,47 @@ export class App {
                 return Promise.resolve(null);
             }
             try {
-                return Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+                const result = Object.keys(options).length > 0 ? fn.apply(this, [...args, options]) : fn.apply(this, args);
+                return Promise.resolve(result).catch(error => {
+                    this.reportError(name, error, { phase: 'runAsync', args });
+                    return Promise.reject(error);
+                });
             }
             catch (error) {
-                console.error(`Error in async event handler for '${name}':`, error);
+                this.reportError(name, error, { phase: 'runAsync', args });
                 return Promise.reject(error);
             }
         });
         return Promise.all(promises);
+    }
+    reportError(name, error, context = {}) {
+        const payload = { event: name, error, app: this, ...context };
+        const errorSubscribers = name === 'error' || this._reporting_error ? [] : this.getSubscribers('error', this._events);
+        if (errorSubscribers.length > 0) {
+            this._reporting_error = true;
+            try {
+                errorSubscribers.forEach(sub => {
+                    try {
+                        sub.fn.call(this, payload);
+                    }
+                    catch (errorHandlerError) {
+                        console.error(`Error in error event handler:`, errorHandlerError);
+                    }
+                });
+            }
+            finally {
+                this._reporting_error = false;
+            }
+        }
+        else if (context.phase === 'delay') {
+            console.error(`Error in delayed event handler for '${name}':`, error);
+        }
+        else if (context.phase === 'runAsync') {
+            console.error(`Error in async event handler for '${name}':`, error);
+        }
+        else {
+            console.error(`Error in event handler for '${name}':`, error);
+        }
     }
     /**
      * @deprecated Use runAsync() instead. app.query() will be removed in a future version.
@@ -125,27 +172,30 @@ export class App {
         console.warn('app.query() is deprecated. Use app.runAsync() instead.');
         return this.runAsync(name, ...args);
     }
+    removeOnceWildcardSubscriber(evt, sub) {
+        this._events[evt] = (this._events[evt] || []).filter(item => item !== sub);
+        this._wildcard_events = this._wildcard_events.filter(item => item.sub !== sub);
+    }
     getSubscribers(name, events) {
         const subscribers = events[name] || [];
+        const calls = subscribers.slice();
         // Update the list of subscribers by pulling out those which will run once.
         // We must do this update prior to running any of the events in case they
         // cause additional events to be turned off or on.
         events[name] = subscribers.filter((sub) => {
             return !sub.options.once;
         });
-        Object.keys(events).filter(evt => evt.endsWith('*') && name.startsWith(evt.replace('*', '')))
-            .sort((a, b) => b.length - a.length)
-            .forEach(evt => {
-            const wildcardSubscribers = events[evt] || [];
-            events[evt] = wildcardSubscribers.filter((sub) => {
-                return !sub.options.once;
-            });
-            subscribers.push(...wildcardSubscribers.map(sub => ({
+        this._wildcard_events.filter(({ prefix }) => name.startsWith(prefix))
+            .forEach(({ name: evt, sub }) => {
+            if (sub.options.once)
+                this.removeOnceWildcardSubscriber(evt, sub);
+            calls.push({
                 ...sub,
+                _source: sub,
                 options: { ...sub.options, event: name }
-            })));
+            });
         });
-        return subscribers;
+        return calls;
     }
 }
 const AppRunVersions = APPRUN_VERSION_GLOBAL;
