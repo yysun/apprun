@@ -249,10 +249,12 @@ npm test
 ```
 Unit tests can serve as functional specifications.
 
-Finally, to build optimized js files to the dist folder, just run:
+Finally, to build the generated package artifacts, run:
 ```sh
 npm run build
 ```
+
+The build writes `dist`, `esm`, `jsx-runtime.js`, and the demo bundle. They are generated artifacts and are intentionally ignored in source commits. `npm pack --dry-run` runs the same build through `prepack` and verifies the files that will be published.
 
 Have fun and send pull requests.
 

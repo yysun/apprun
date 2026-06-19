@@ -1,5 +1,17 @@
 ## What's New
 
+> June 19, 2026, V6.0.0
+
+Version 6.0.0 is a release-readiness cleanup for the breaking API work. It makes the migration contract explicit, tightens npm packaging, and turns release checks into CI gates instead of local convention.
+
+- Browser globals are no longer installed by import side effect. Script-tag and legacy integrations can call `app.use_globals()` when they want the old globals.
+- `_html:` string-prefix rendering is removed. Use `trustedHTML()` for caller-owned trusted markup.
+- `safeHTML()` remains as a deprecated alias for one migration window, but the preferred name is `trustedHTML()` because AppRun does not sanitize HTML.
+- `query()` is removed. Use `runAsync()` for event result collection.
+- Router patterns now support `:param` and `*`, with exact routes still taking precedence.
+- The npm package now publishes only the intended generated assets, exposes CJS/ESM entry points through `exports`, treats `immer` as an optional peer for `createState`, and keeps generated `dist`, `esm`, `jsx-runtime.js`, and demo bundles out of source commits.
+- CI now runs tests, build, lint, and `npm pack --dry-run`.
+
 > July 26, 2025, V3.38.0
 
 - Improved `$bind` directive to support nested objects and arrays: [Effortless Two-Way Data Binding in Apprun with $bind](#docs/done/blog-bind-directive.md)
@@ -363,5 +375,4 @@ Published on Jul 2, 2017 · 5 min read
 
 * [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
 * [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
-
 

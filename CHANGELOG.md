@@ -1,5 +1,16 @@
 # Change Log
 
+## V6.0.0
+
+* Removed implicit browser global writes; script-tag users now opt in with `app.use_globals()`
+* Removed `_html:` string-prefix rendering; use `trustedHTML()` for caller-owned trusted markup
+* Deprecated misleading `safeHTML()` naming in favor of `trustedHTML()`
+* Removed `query()` in favor of `runAsync()`
+* Added router support for `:param` and `*` patterns
+* Hardened package exports, package contents, side-effect metadata, and generated artifact hygiene
+* Made `immer` an optional peer dependency for `createState`
+* Added CI checks for lint and package dry-run validation
+
 ## V3.38.0
 
 * Support for binding to nested objects and arrays with `$bind`

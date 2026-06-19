@@ -1,6 +1,6 @@
 # Migration Guide
 
-## 4.0 Breaking API Changes
+## 6.0 Breaking API Changes
 
 ### `_html:` String Prefix Removed
 
@@ -10,7 +10,7 @@ Old behavior:
 const view = () => <div>{'_html:<b>trusted</b>'}</div>;
 ```
 
-In 4.0, string children render as text. The example above displays `_html:<b>trusted</b>` literally.
+In 6.0, string children render as text. The example above displays `_html:<b>trusted</b>` literally.
 
 New behavior:
 
