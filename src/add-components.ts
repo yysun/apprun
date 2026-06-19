@@ -84,14 +84,14 @@ export default async (element: HTMLElement | string, components: ComponentRoute)
       // If resolved result is still a function or anything else, treat original as event handler with render wrapper
       app.on(route, (...args: any[]) => {
         const result = (component as any)(...args);
-        if (typeof element === 'string') {
-          element = document.querySelector(element) as HTMLElement;
-          if (!element) {
-            console.error(`Element not found: ${element}`);
-            return;
-          }
+        const target = typeof element === 'string'
+          ? document.querySelector(element) as HTMLElement
+          : element;
+        if (!target) {
+          console.error(`Element not found: ${element}`);
+          return;
         }
-        return (app as unknown as IApp).render(element, result);
+        return (app as unknown as IApp).render(target, result);
       });
       continue;
     }

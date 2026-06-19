@@ -88,7 +88,7 @@ export class App {
 
   run(name: string, ...args: any[]): number {
     const subscribers = this.getSubscribers(name, this._events);
-    console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
+    if ((this as any).debug) console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     subscribers.forEach((sub) => {
       const { fn, options } = sub;
       if (!fn || typeof fn !== 'function') {
@@ -130,7 +130,7 @@ export class App {
 
   runAsync(name: string, ...args: any[]): Promise<any[]> {
     const subscribers = this.getSubscribers(name, this._events);
-    console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
+    if ((this as any).debug) console.assert(subscribers && subscribers.length > 0, 'No subscriber for event: ' + name);
     const promises = subscribers.map(sub => {
       const { fn, options } = sub;
       if (!fn || typeof fn !== 'function') {

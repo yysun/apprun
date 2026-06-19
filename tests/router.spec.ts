@@ -9,6 +9,10 @@ describe('router', () => {
     document.dispatchEvent(new Event('DOMContentLoaded'));
   });
 
+  afterEach(() => {
+    delete app['debug'];
+  });
+
   it('should guard path router link interception for native browser behaviors', () => {
     const fn = jasmine.createSpy('fn');
     app.on('/native', fn);
@@ -210,6 +214,7 @@ describe('router', () => {
   it('should invoke a default route handler if there is no event handler for # based URI', () => {
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
+    app['debug'] = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
 
     app.on(ROUTER_EVENT, fn1);
@@ -228,6 +233,7 @@ describe('router', () => {
   it('should invoke a default route handler if there is no event handler for / based URI', () => {
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
+    app['debug'] = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
 
     app.on(ROUTER_EVENT, fn1);
@@ -246,6 +252,7 @@ describe('router', () => {
   it('should invoke a default route handler if there is no event handler for a non # or / based URI', () => {
     const fn1 = jasmine.createSpy('fn1');
     const fn2 = jasmine.createSpy('fn2');
+    app['debug'] = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
 
     app.on(ROUTER_EVENT, fn1);

@@ -242,10 +242,8 @@ function sweepComponentCache(parent) {
 
 function render_component(node, parent, idx) {
   const { tag, props, children } = node;
-  let key = `_${idx}`;
-  let id = props && props['id'];
-  if (!id) id = `_${idx}${Date.now()}`;
-  else key = id;
+  const id = props && props['id'];
+  const key = id || `_${idx}`;
   let asTag = 'section';
   if (props && props['as']) {
     asTag = props['as'];

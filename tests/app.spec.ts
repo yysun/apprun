@@ -158,6 +158,7 @@ describe('app events', () => {
 
   it('should mix delay and once option', (done) => {
     const app = new App();
+    (app as any).debug = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
     let i = 0;
     app.on('hi', () => { i++; }, {once: true, delay: 200});
@@ -174,6 +175,7 @@ describe('app events', () => {
 
   it('should remove only subscription that is once', () => {
     const app = new App();
+    (app as any).debug = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
     spyOn(console, 'log');
     app.on('hi', () => {
@@ -188,6 +190,7 @@ describe('app events', () => {
 
   it('should run only once', () => {
     const app = new App();
+    (app as any).debug = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
     app.on('hi', (p1, p2, p3, p4) => {}, {once: true});
     app.run('hi', 1, 'xx', null, {a: 1});
@@ -206,9 +209,19 @@ describe('app events', () => {
 
   it('should return 0 subscribers for an invalid event name', () => {
     const app = new App();
+    (app as any).debug = true; // no-subscriber assert is gated behind debug
     spyOn(console, 'assert');
     const subs: number = app.run('hiiiiiiii');
     expect(console.assert).toHaveBeenCalled();
+    expect(subs).toBe(0);
+  });
+
+  it('should not assert on missing subscribers when debug is off', () => {
+    const app = new App();
+    spyOn(console, 'assert');
+    const subs: number = app.run('no-such-event');
+    // Specific to this event so leaked timers from sibling tests don't interfere
+    expect(console.assert).not.toHaveBeenCalledWith(expect.anything(), 'No subscriber for event: no-such-event');
     expect(subs).toBe(0);
   });
 

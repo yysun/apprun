@@ -24,6 +24,9 @@ describe('Router - Existing Behavior (Before Hierarchical)', () => {
     // Mock console.warn for 404 tests
     mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
 
+    // Router diagnostics are gated behind debug mode
+    app['debug'] = true;
+
     // Reset lastUrl to prevent duplicate routing prevention
     delete app['lastUrl'];
   });
@@ -31,6 +34,7 @@ describe('Router - Existing Behavior (Before Hierarchical)', () => {
   afterEach(() => {
     // Clean up mocks
     mockConsoleWarn.mockRestore();
+    delete app['debug'];
   });
 
   describe('Hash-based Routing (#path)', () => {

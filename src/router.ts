@@ -288,7 +288,7 @@ function handleEmptyPath(): void {
   }
 
   // Fire 404 if no handlers found
-  console.warn('No subscribers for event: ');
+  if (app['debug']) console.warn('No subscribers for event: ');
   app.run(ROUTER_404_EVENT, '');
   app.run(ROUTER_EVENT, '');
 }
@@ -336,7 +336,7 @@ function routeWithHierarchy(url: string): void {
     // No handler found - fire 404 with original URL
     if (hierarchy.length > 0) {
       const minimalRoute = hierarchy[hierarchy.length - 1];
-      console.warn(`No subscribers for event: ${minimalRoute}`);
+      if (app['debug']) console.warn(`No subscribers for event: ${minimalRoute}`);
       app.run(ROUTER_404_EVENT, url);
       app.run(ROUTER_EVENT, url);
     } else {
@@ -349,7 +349,7 @@ const publishRoute = (name: string, ...args: any[]) => {
   if (!name || name === ROUTER_EVENT || name === ROUTER_404_EVENT) return;
   const subscribers = app.find(name);
   if (!subscribers || subscribers.length === 0) {
-    console.warn(`No subscribers for event: ${name}`);
+    if (app['debug']) console.warn(`No subscribers for event: ${name}`);
     app.run(ROUTER_404_EVENT, name, ...args);
   } else {
     app.run(name, ...args);
