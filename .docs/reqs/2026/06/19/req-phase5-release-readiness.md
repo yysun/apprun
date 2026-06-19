@@ -12,13 +12,13 @@ Phase 5 must turn the completed implementation work into a coherent release cand
 
 ## Acceptance Criteria
 
-- [ ] `package.json`, `package-lock.json`, and `src/version.ts` all report version `6.0.0`.
-- [ ] CI runs install, tests, build, lint, and package dry-run checks.
-- [ ] Changelog/release docs describe the 6.0.0 breaking API changes, package hygiene changes, explicit globals, router pattern support, and optional `immer` dependency.
-- [ ] README release-facing package guidance does not contradict the untracked generated artifact policy or the package export/prepack flow.
-- [ ] RPD docs record Phase 5 scope, validation, commit boundaries, and final evidence.
-- [ ] Changes are committed step by step instead of as one large mixed commit.
-- [ ] Verification evidence includes focused version checks, CI gate commands, `npm pack --dry-run`, and `git diff --check`.
+- [x] `package.json`, `package-lock.json`, and `src/version.ts` all report version `6.0.0`.
+- [x] CI runs install, tests, build, lint, and package dry-run checks.
+- [x] Changelog/release docs describe the 6.0.0 breaking API changes, package hygiene changes, explicit globals, router pattern support, and optional `immer` dependency.
+- [x] README release-facing package guidance does not contradict the untracked generated artifact policy or the package export/prepack flow.
+- [x] RPD docs record Phase 5 scope, validation, commit boundaries, and final evidence.
+- [x] Changes are committed step by step instead of as one large mixed commit.
+- [x] Verification evidence includes focused version checks, CI gate commands, `npm pack --dry-run`, and `git diff --check`.
 
 ## Constraints
 
@@ -34,3 +34,17 @@ Phase 5 must turn the completed implementation work into a coherent release cand
 - Creating GitHub releases or release notes outside the repository.
 - Adding coverage thresholds, browser E2E, benchmark gates, or deployment automation.
 - Redesigning the README or rewriting historical changelog entries.
+
+## Final Evidence
+
+- Version consistency check printed `version ok`.
+- `npm test -- --runInBand` passed: 46 test suites, 565 tests.
+- `npm run build` passed for `apprun@6.0.0`.
+- `npm run lint` passed with 0 errors and 91 existing warnings.
+- `npm pack --dry-run` passed and reported `apprun@6.0.0`, `apprun-6.0.0.tgz`, 72 files.
+- `git diff --check` passed.
+- Phase 5 commit boundaries:
+  - `5eba13f docs: plan phase 5 release readiness`
+  - `d10be72 ci: verify lint and package dry run`
+  - `1203e12 chore: release 6.0.0`
+  - final RPD evidence commit

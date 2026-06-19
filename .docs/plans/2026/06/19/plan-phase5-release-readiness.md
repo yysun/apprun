@@ -6,21 +6,22 @@ Make the repository ready for a `6.0.0` breaking release candidate. The version,
 
 ## Current Context
 
-- `master` is ahead of `origin/master` by four commits: Phase 1, Phase 2, Phase 3, and Phase 4.
-- `package.json`, `package-lock.json`, and `src/version.ts` still report `3.38.0`.
-- `.github/workflows/ci.yml` already exists and runs `npm ci`, full Jest, and `npm run build`, but does not run `npm run lint` or `npm pack --dry-run`.
-- Phase 3 removed generated artifacts from git and added `prepack`; release checks must prove packaging still includes generated files.
-- Phase 4 added `MIGRATION.md` for 4.0-era breaking API changes, but the requested release number is now `6.0.0`.
-- `CHANGELOG.md`, `WHATSNEW.md`, and `README.md` still lead with the 3.38 stream and do not describe the completed breaking release boundary.
+- `master` was ahead of `origin/master` by four commits before Phase 5: Phase 1, Phase 2, Phase 3, and Phase 4.
+- `package.json`, `package-lock.json`, and `src/version.ts` now report `6.0.0`.
+- `.github/workflows/ci.yml` runs `npm ci`, full Jest, build, lint, and `npm pack --dry-run`.
+- Phase 3 removed generated artifacts from git and added `prepack`; Phase 5 proves packaging still includes generated files.
+- Phase 4 added `MIGRATION.md` for 4.0-era breaking API changes; Phase 5 retitles that release boundary to `6.0.0`.
+- `CHANGELOG.md`, `WHATSNEW.md`, and `README.md` now describe the completed breaking release boundary and generated package artifact policy.
 - This story is release readiness. It does not reopen runtime behavior decisions from earlier phases.
 
 ## Decisions
 
 - Use `6.0.0` exactly because the user requested it. Do not pick `4.0.0` even though Phase 4 originally used that wording.
-- Commit step by step in three boundaries:
+- Commit step by step in four boundaries:
   1. RPD docs and plan.
   2. CI/package gate enforcement.
   3. Version bump plus release-facing docs.
+  4. Final RPD evidence.
 - Add CI steps for `npm run lint` and `npm pack --dry-run` after build. This mirrors local verification and catches package output drift.
 - Keep `prepack` as the package generation mechanism. Do not re-track generated package outputs.
 - Update migration/release docs to say `6.0.0` while preserving the already documented breaking behaviors.
@@ -30,28 +31,28 @@ Make the repository ready for a `6.0.0` breaking release candidate. The version,
 
 ### Phase 1 - RPD contract and first commit
 
-- [ ] Create `.docs/reqs/2026/06/19/req-phase5-release-readiness.md` with testable release-readiness acceptance criteria.
-- [ ] Create `.docs/plans/2026/06/19/plan-phase5-release-readiness.md` with commit boundaries, validation commands, and risks.
-- [ ] Run `git diff --check` on the RPD docs and commit only the Phase 5 RPD docs.
+- [x] Create `.docs/reqs/2026/06/19/req-phase5-release-readiness.md` with testable release-readiness acceptance criteria.
+- [x] Create `.docs/plans/2026/06/19/plan-phase5-release-readiness.md` with commit boundaries, validation commands, and risks.
+- [x] Run `git diff --check` on the RPD docs and commit only the Phase 5 RPD docs.
 
 ### Phase 2 - CI/package gate commit
 
-- [ ] Inspect `.github/workflows/ci.yml` and `package.json` scripts to confirm the CI gate commands exist locally.
-- [ ] Update `.github/workflows/ci.yml` so CI runs `npm run lint` and `npm pack --dry-run` in addition to install, tests, and build.
-- [ ] Run `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the CI gate change.
+- [x] Inspect `.github/workflows/ci.yml` and `package.json` scripts to confirm the CI gate commands exist locally.
+- [x] Update `.github/workflows/ci.yml` so CI runs `npm run lint` and `npm pack --dry-run` in addition to install, tests, and build.
+- [x] Run `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the CI gate change.
 
 ### Phase 3 - Version and release docs commit
 
-- [ ] Update `package.json`, `package-lock.json`, and `src/version.ts` to version `6.0.0`.
-- [ ] Update `CHANGELOG.md`, `WHATSNEW.md`, `MIGRATION.md`, and README package guidance so release-facing docs describe `6.0.0`, breaking API changes, package hygiene, and optional `immer`.
-- [ ] Run a focused version consistency check that reads `package.json`, `package-lock.json`, and `src/version.ts`.
-- [ ] Run `npm test -- --runInBand`, `npm run build`, `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the version/docs release change.
+- [x] Update `package.json`, `package-lock.json`, and `src/version.ts` to version `6.0.0`.
+- [x] Update `CHANGELOG.md`, `WHATSNEW.md`, `MIGRATION.md`, and README package guidance so release-facing docs describe `6.0.0`, breaking API changes, package hygiene, and optional `immer`.
+- [x] Run a focused version consistency check that reads `package.json`, `package-lock.json`, and `src/version.ts`.
+- [x] Run `npm test -- --runInBand`, `npm run build`, `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the version/docs release change.
 
 ### Phase 4 - Final verification
 
-- [ ] Confirm `git log --oneline` shows the Phase 5 commits after Phase 4.
-- [ ] Confirm the working tree is clean.
-- [ ] Record final evidence in the REQ/AP after the last verification command.
+- [x] Confirm `git log --oneline` shows the Phase 5 commits after Phase 4.
+- [x] Confirm the working tree contains only RPD evidence docs before the final evidence commit.
+- [x] Record final evidence in the REQ/AP after the last verification command.
 
 ## Validation
 
@@ -63,6 +64,22 @@ Make the repository ready for a `6.0.0` breaking release candidate. The version,
 - `git diff --check`
 
 Expected evidence: version check prints `version ok`; Jest, build, lint, pack dry-run, and diff check pass; CI file includes lint and pack dry-run steps.
+
+Actual evidence:
+
+- Version consistency check printed `version ok`.
+- `npm test -- --runInBand` passed: 46 test suites, 565 tests.
+- `npm run build` passed for `apprun@6.0.0`.
+- `npm run lint` passed with 0 errors and 91 existing warnings.
+- `npm pack --dry-run` passed and reported `apprun@6.0.0`, `apprun-6.0.0.tgz`, 72 files.
+- `git diff --check` passed.
+- `git log --oneline -6` showed:
+  - `1203e12 chore: release 6.0.0`
+  - `d10be72 ci: verify lint and package dry run`
+  - `5eba13f docs: plan phase 5 release readiness`
+  - `8d529ec feat: prepare phase 4 breaking api`
+  - `b9d9aff chore: harden types and package hygiene`
+  - `1441829 fix: patch phase 2 memory architecture`
 
 ## Rollback / Risk
 
