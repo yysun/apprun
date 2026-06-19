@@ -110,7 +110,7 @@ polygon#blue:hover, polygon#blue:active {
   padding-bottom: 10px;
 }
 
-.playground .textarea {
+.playground textarea {
   display: none;
 }
 
@@ -128,4 +128,3 @@ polygon#blue:hover, polygon#blue:active {
 img {
   max-width: 100%
 }
-
