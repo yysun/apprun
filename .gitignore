@@ -3,7 +3,8 @@ node_modules
 coverage
 dist
 esm
-demo/app.js*
+demo/app.js.LICENSE.txt
+demo/app.js.map
 jsx-runtime.js*
 *.tgz
 *.log
