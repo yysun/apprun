@@ -150,4 +150,20 @@ describe('Nested Stateful Component', () => {
     expect(calls).toBe(1);
   })
 
+  it('should preserve explicit falsy child component ids as cache keys', () => {
+    class ZeroIdChild extends Component {
+      view = () => <div>zero</div>
+    }
+
+    class Main extends Component {
+      view = () => <div><span>before</span><ZeroIdChild id={0 as any} /></div>
+    }
+
+    const el = document.createElement('div');
+    const main = new Main().start(el);
+
+    expect(main['__componentCache']['0']).toBeDefined();
+    expect(main['__componentCache']['_1']).toBeUndefined();
+  })
+
 })

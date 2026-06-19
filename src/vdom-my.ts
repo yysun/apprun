@@ -38,6 +38,7 @@
  * Recent Changes:
  * - 2026-06-19: Added trustedHTML alias and removed _html: text-prefix parsing
  * - 2026-06-19: Scoped keyed reconciliation to the current parent and added child component cache eviction
+ * - 2026-06-19: Preserved explicit falsy component ids such as 0 in child component cache keys
  * - Added comprehensive key prop usage documentation and guidelines
  */
 
@@ -243,7 +244,7 @@ function sweepComponentCache(parent) {
 function render_component(node, parent, idx) {
   const { tag, props, children } = node;
   const id = props && props['id'];
-  const key = id || `_${idx}`;
+  const key = id !== undefined && id !== null ? String(id) : `_${idx}`;
   let asTag = 'section';
   if (props && props['as']) {
     asTag = props['as'];
