@@ -1,4 +1,4 @@
-import { createElement, updateElement, safeHTML } from '../src/vdom-my';
+import { createElement, updateElement, trustedHTML, safeHTML } from '../src/vdom-my';
 
 describe('vdom-my', () => {
   let root;
@@ -298,13 +298,23 @@ describe('vdom-my', () => {
     expect(element.id).toBe('');
   });
 
-  it('it should render safe html', () => {
+  it('it should render _html-prefixed strings as text', () => {
     const element = document.createElement('div');
-    const html = `<p>safe html</p>
-    <p>safe html</p>`;
-    const safe_html = safeHTML(html) as any;
-    updateElement(element, safe_html);
-    expect(element.innerHTML).toBe('<p>safe html</p><p>safe html</p>');
+    updateElement(element, createElement('div', null, '_html:<b>text</b>'));
+    expect(element.innerHTML).toBe('<div>_html:&lt;b&gt;text&lt;/b&gt;</div>');
+  });
+
+  it('it should render trusted html', () => {
+    const element = document.createElement('div');
+    const html = `<p>trusted html</p>
+    <p>trusted html</p>`;
+    const trusted_html = trustedHTML(html) as any;
+    updateElement(element, trusted_html);
+    expect(element.innerHTML).toBe('<p>trusted html</p><p>trusted html</p>');
+  });
+
+  it('it should keep safeHTML as a trustedHTML alias', () => {
+    expect(safeHTML).toBe(trustedHTML);
   });
 
 });

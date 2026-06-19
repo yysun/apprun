@@ -432,15 +432,6 @@ export class Component<T = any, E = any> {
       this._app.runAsync(name, ...args);
   }
 
-  // obsolete
-  /**
-   * @deprecated Use runAsync() instead. query() will be removed in a future version.
-   */
-  public query(event: E, ...args) {
-    console.warn('component.query() is deprecated. Use component.runAsync() instead.');
-    return this.runAsync(event, ...args);
-  }
-
   public unmount() {
     unregisterTrackedElement(this.tracking_element);
     this.tracking_element = null;

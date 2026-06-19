@@ -29,7 +29,7 @@
  * - Added routing system types with ComponentRoute
  * - Better integration with external libraries
  * - Comprehensive options typing matching implementation
- * - Added proper deprecation warnings
+ * - Added 4.0 trustedHTML and explicit global installation declarations
  * - Enhanced error handling and validation
  * - Added support for async generator and generator functions in Action types
  * - Phase 3 removed public option `any` escape hatches and typed history options
@@ -112,9 +112,6 @@ declare module 'apprun' {
     run(name: string, ...args: any[]): number;
     runAsync(name: string, ...args: any[]): Promise<any[]>;
 
-    /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
-    query(name: string, ...args: any[]): Promise<any[]>;
-
     start<T, E = unknown>(element?: Element | string, state?: State<T>, view?: View<T>, update?: Update<T, E>,
       options?: AppStartOptions<T>): Component<T, E>;
 
@@ -128,7 +125,10 @@ declare module 'apprun' {
     addComponents: (element: Element | string, components: ComponentRoute) => void;
 
     webComponent(name: string, componentClass: any, options?: CustomElementOptions): void;
+    trustedHTML(html: string): any[];
+    /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
     safeHTML(html: string): any[];
+    use_globals(): void;
     use_render(render: any, mode?: 0 | 1): void;
     use_react(React: any, ReactDOM: any): void;
     version: string;
@@ -159,9 +159,6 @@ declare module 'apprun' {
     run(event: E, ...args: any[]): any;
     runAsync(event: E, ...args: any[]): Promise<any[]>;
 
-    /** @deprecated Use runAsync() instead. query() will be removed in a future version. */
-    query(event: E, ...args: any[]): Promise<any[]>;
-
     // Action management
     add_action(name: string, action: Action<T>, options?: ActionOptions): void;
     is_global_event(name: string): boolean;
@@ -183,6 +180,8 @@ declare module 'apprun' {
 
   export const ROUTER_EVENT: string;
   export const ROUTER_404_EVENT: string;
+  export const trustedHTML: (html: string) => any[];
+  /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
   export const safeHTML: (html: string) => any[];
   export function Fragment(props: any, ...children: any[]): any[];
 }

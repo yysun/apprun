@@ -34,6 +34,7 @@ describe('Router - Hierarchical Behavior (New Feature)', () => {
 
     // Clear all event handlers to ensure test isolation
     app['_events'] = {};
+    app['_wildcard_events'] = [];
   });
 
   afterEach(() => {
@@ -111,6 +112,79 @@ describe('Router - Hierarchical Behavior (New Feature)', () => {
   });
 
   describe('Path-based Hierarchical Routing (/a/b/c/d)', () => {
+    it('should match colon parameter routes before parent fallback', () => {
+      const patternHandler = jest.fn();
+      const parentHandler = jest.fn();
+      const routerHandler = jest.fn();
+
+      app.on('/users/:id', patternHandler);
+      app.on('/users', parentHandler);
+      app.on(ROUTER_EVENT, routerHandler);
+
+      route('/users/123');
+
+      expect(patternHandler).toHaveBeenCalledWith('123');
+      expect(parentHandler).not.toHaveBeenCalled();
+      expect(routerHandler).toHaveBeenCalledWith('/users/:id', '123');
+
+      app.off('/users/:id', patternHandler);
+      app.off('/users', parentHandler);
+      app.off(ROUTER_EVENT, routerHandler);
+    });
+
+    it('should match wildcard routes with the remaining path as one parameter', () => {
+      const wildcardHandler = jest.fn();
+      const parentHandler = jest.fn();
+      const routerHandler = jest.fn();
+
+      app.on('/files/*', wildcardHandler);
+      app.on('/files', parentHandler);
+      app.on(ROUTER_EVENT, routerHandler);
+
+      route('/files/a/b/c');
+
+      expect(wildcardHandler).toHaveBeenCalledTimes(1);
+      expect(wildcardHandler).toHaveBeenCalledWith('a/b/c');
+      expect(parentHandler).not.toHaveBeenCalled();
+      expect(routerHandler).toHaveBeenCalledWith('/files/*', 'a/b/c');
+
+      app.off('/files/*', wildcardHandler);
+      app.off('/files', parentHandler);
+      app.off(ROUTER_EVENT, routerHandler);
+    });
+
+    it('should prefer exact routes over pattern routes', () => {
+      const exactHandler = jest.fn();
+      const patternHandler = jest.fn();
+
+      app.on('/users/123', exactHandler);
+      app.on('/users/:id', patternHandler);
+
+      route('/users/123');
+
+      expect(exactHandler).toHaveBeenCalledWith();
+      expect(patternHandler).not.toHaveBeenCalled();
+
+      app.off('/users/123', exactHandler);
+      app.off('/users/:id', patternHandler);
+    });
+
+    it('should preserve parent fallback when no pattern route matches', () => {
+      const parentHandler = jest.fn();
+      const patternHandler = jest.fn();
+
+      app.on('/api', parentHandler);
+      app.on('/users/:id', patternHandler);
+
+      route('/api/v1/users');
+
+      expect(parentHandler).toHaveBeenCalledWith('v1', 'users');
+      expect(patternHandler).not.toHaveBeenCalled();
+
+      app.off('/api', parentHandler);
+      app.off('/users/:id', patternHandler);
+    });
+
     it('should match exact route when available', () => {
       const exactHandler = jest.fn();
       const parentHandler = jest.fn();

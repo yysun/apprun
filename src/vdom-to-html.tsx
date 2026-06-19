@@ -1,4 +1,12 @@
 
+/**
+ * VDOM to HTML string renderer
+ *
+ * Converts AppRun VDOM, arrays, strings, and lit templates to HTML strings.
+ * String nodes are rendered literally; trusted markup must be supplied through
+ * explicit trusted-HTML helpers before reaching this renderer.
+ */
+
 import { VDOM } from './types';
 import { TemplateResult } from 'lit-html';
 
@@ -37,7 +45,7 @@ function toHTML (vdom) {
   clean(vdom);
   if (Array.isArray(vdom)) return toHTMLArray(vdom);
   if (typeof vdom === 'string') {
-    return vdom.startsWith('_html:') ? vdom.substring(6) : vdom;
+    return vdom;
   } else if (vdom.tag) {
     const props = vdom.props ? toProps(vdom.props) : '';
     const children = vdom.children ? toHTMLArray(vdom.children) : '';

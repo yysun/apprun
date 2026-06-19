@@ -1,3 +1,10 @@
+/**
+ * Optional AppRun browser global declarations
+ *
+ * These globals are installed only when app.use_globals() is called. Normal module
+ * imports should use named exports instead of relying on ambient browser globals.
+ */
+
 import { App } from './app';
 import { Component } from './component';
 
@@ -17,6 +24,8 @@ declare global {
       <E = string>(events?: E, options?: any): (target: any, key: string) => void;
     };
     customElement: (name: string) => (constructor: Function) => void;
+    trustedHTML: (html: string) => any[];
+    /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
     safeHTML: (html: string) => any[];
   }
 }

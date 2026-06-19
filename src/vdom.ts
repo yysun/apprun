@@ -5,7 +5,7 @@
  * 1. createElement: Creates virtual DOM nodes
  * 2. Fragment: Support for fragments
  * 3. render: Renders virtual DOM to real DOM
- * 4. safeHTML: Safely renders HTML strings
+ * 4. trustedHTML: Parses caller-owned trusted HTML strings
  * 
  * The virtual DOM system:
  * - Provides efficient DOM updates
@@ -23,6 +23,6 @@
  * ```
  */
 
-import { createElement, updateElement, Fragment, safeHTML } from './vdom-my';
-export { createElement, Fragment, updateElement as render, safeHTML };
+import { createElement, updateElement, Fragment, trustedHTML, safeHTML } from './vdom-my';
+export { createElement, Fragment, updateElement as render, trustedHTML, safeHTML };
 export { createElement as jsx, createElement as jsxs };

@@ -25,6 +25,7 @@ describe('React Compatibility Coverage', () => {
   afterEach(() => {
     document.body.removeChild(mockElement);
     delete (mockElement as any)._root;
+    delete (window as any)._React;
   });
 
   describe('React 18+ Integration', () => {
@@ -317,28 +318,39 @@ describe('React Compatibility Coverage', () => {
   });
 
   describe('Global React Preservation', () => {
-    it('should preserve existing global React before overwriting', () => {
+    it('should not overwrite global React without explicit global installation', () => {
       const originalReact = { existing: 'react' };
       (window as any).React = originalReact;
+      delete (window as any)._React;
 
-      const mockReact = {
-        version: '18.2.0',
-        createElement: jest.fn(),
-        Fragment: 'React.Fragment'
-      };
+      jest.isolateModules(() => {
+        require('../src/apprun');
+      });
 
-      const mockReactDOM = {
-        createRoot: jest.fn().mockReturnValue({ render: jest.fn() })
-      };
-
-      // Global React should be preserved as _React before being overwritten
+      expect((window as any).React).toBe(originalReact);
       expect((window as any)._React).toBeUndefined();
+    });
 
-      app.use_react(mockReact, mockReactDOM);
+    it('should install legacy globals through app.use_globals', () => {
+      const originalReact = { existing: 'react' };
+      (window as any).React = originalReact;
+      delete (window as any)._React;
 
-      // Note: This test verifies the framework handles React integration
-      // The actual global overwriting is handled in apprun.ts initialization
-      expect(app.h).toBe(mockReact.createElement);
+      app.use_globals();
+
+      expect((window as any)._React).toBe(originalReact);
+      expect((window as any).React).toBe(app);
+      expect((window as any).Component).toBeDefined();
+      expect((window as any).on).toBeDefined();
+      expect((window as any).customElement).toBeDefined();
+      expect(typeof (window as any).trustedHTML).toBe('function');
+      expect((window as any).safeHTML).toBe((window as any).trustedHTML);
+
+      delete (window as any).Component;
+      delete (window as any).on;
+      delete (window as any).customElement;
+      delete (window as any).trustedHTML;
+      delete (window as any).safeHTML;
     });
   });
 

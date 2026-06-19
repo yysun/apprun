@@ -40,7 +40,7 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof app.once).toBe('function');
       expect(typeof app.off).toBe('function');
       expect(typeof app.run).toBe('function');
-      expect(typeof app.query).toBe('function');
+      expect((app as any).query).toBeUndefined();
       expect(typeof app.runAsync).toBe('function');
       expect(typeof app.find).toBe('function');
       expect(typeof app.h).toBe('function');
@@ -48,7 +48,9 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof app.render).toBe('function');
       expect(typeof app.Fragment).toBe('function');
       expect(typeof app.webComponent).toBe('function');
+      expect(typeof app.trustedHTML).toBe('function');
       expect(typeof app.safeHTML).toBe('function');
+      expect(typeof app.use_globals).toBe('function');
       expect(typeof app.use_render).toBe('function');
       expect(typeof app.use_react).toBe('function');
       expect(typeof app.version).toBe('string');
@@ -75,19 +77,14 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(subscribers).toEqual([]); // Should be empty array when no subscribers
     });
 
-    it('should implement query method as alias for runAsync', () => {
-      // Test that query method exists and works like runAsync
-      expect(typeof app.query).toBe('function');
+    it('should use runAsync without the removed query alias', async () => {
+      const handler = () => 'runAsync-result';
+      app.on('test-runAsync-only', handler);
 
-      app.on('test-query', () => 'query-result');
+      await expect(app.runAsync('test-runAsync-only')).resolves.toEqual(['runAsync-result']);
+      expect((app as any).query).toBeUndefined();
 
-      return Promise.all([
-        app.query('test-query'),
-        app.runAsync('test-query')
-      ]).then(([queryResult, runAsyncResult]) => {
-        expect(queryResult).toEqual(runAsyncResult);
-        app.off('test-query', () => { });
-      });
+      app.off('test-runAsync-only', handler);
     });
   });
 
@@ -189,7 +186,7 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof component.start).toBe('function');
       expect(typeof component.on).toBe('function');
       expect(typeof component.run).toBe('function');
-      expect(typeof component.query).toBe('function');
+      expect((component as any).query).toBeUndefined();
       expect(typeof component.runAsync).toBe('function');
 
       // Test that methods can be called
@@ -380,7 +377,7 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
     });
   });
 
-  describe('Fragment and safeHTML Type Accuracy', () => {
+  describe('Fragment and trustedHTML Type Accuracy', () => {
     it('should support Fragment typing', () => {
       // Fragment might be a string or function depending on renderer
       expect(app.Fragment).toBeDefined();
@@ -390,13 +387,15 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof app.Fragment).toBe('string'); // Fragment is actually a string 'React.Fragment'
     });
 
-    it('should support safeHTML typing', () => {
+    it('should support trustedHTML typing and safeHTML compatibility alias', () => {
+      expect(typeof app.trustedHTML).toBe('function');
       expect(typeof app.safeHTML).toBe('function');
+      expect(app.safeHTML).toBe(app.trustedHTML);
 
-      const htmlString = '<div>Safe HTML</div>';
+      const htmlString = '<div>Trusted HTML</div>';
 
       expect(() => {
-        const result = app.safeHTML(htmlString);
+        const result = app.trustedHTML(htmlString);
         expect(Array.isArray(result)).toBe(true);
       }).not.toThrow();
     });

@@ -20,9 +20,10 @@
  * - 404 handling via ROUTER_404_EVENT for unmatched routes
  * - History API integration for seamless navigation
  * - Route parameter parsing and injection into events
- * - URL pattern matching with parameter support
+ * - URL pattern matching with :param and * rest support
  * - Global and component-level route handling
  * - **NEW: Hierarchical route matching** - progressively tries parent routes
+ * - 2026-06-19: Added :param and * route-pattern matching before hierarchical fallback
  *
  * Type Safety Improvements (v3.35.1):
  * - Enhanced route type definitions
@@ -167,6 +168,71 @@ function generateRouteHierarchy(segments: string[], routeType: 'path' | 'hash' |
   return hierarchy;
 }
 
+function getRouteType(url: string): 'path' | 'hash' | 'hash-slash' | 'non-prefixed' {
+  if (url.startsWith('#/')) return 'hash-slash';
+  if (url.startsWith('#')) return 'hash';
+  if (url.startsWith('/')) return 'path';
+  return 'non-prefixed';
+}
+
+function isPatternRoute(routeName: string): boolean {
+  return parsePathSegments(routeName).some(segment => segment === '*' || segment.startsWith(':'));
+}
+
+function matchPatternRoute(pattern: string, routeType: 'path' | 'hash' | 'hash-slash' | 'non-prefixed', segments: string[]):
+  { eventName: string; parameters: string[]; score: number } | null {
+  if (getRouteType(pattern) !== routeType || !isPatternRoute(pattern)) return null;
+
+  const patternSegments = parsePathSegments(pattern);
+  const parameters: string[] = [];
+  let staticSegments = 0;
+
+  for (let i = 0; i < patternSegments.length; i++) {
+    const patternSegment = patternSegments[i];
+
+    if (patternSegment === '*') {
+      parameters.push(segments.slice(i).join('/'));
+      return {
+        eventName: pattern,
+        parameters,
+        score: staticSegments * 10 + patternSegments.length
+      };
+    }
+
+    const segment = segments[i];
+    if (segment === undefined) return null;
+
+    if (patternSegment.startsWith(':')) {
+      parameters.push(segment);
+    } else if (patternSegment === segment) {
+      staticSegments++;
+    } else {
+      return null;
+    }
+  }
+
+  if (patternSegments.length !== segments.length) return null;
+
+  return {
+    eventName: pattern,
+    parameters,
+    score: staticSegments * 10 + patternSegments.length
+  };
+}
+
+function findPatternHandler(routeType: 'path' | 'hash' | 'hash-slash' | 'non-prefixed', segments: string[]):
+  { eventName: string; parameters: string[] } | null {
+  const matches = Object.keys(app['_events'] || {})
+    .map(routeName => matchPatternRoute(routeName, routeType, segments))
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score || b.eventName.length - a.eventName.length);
+
+  return matches.length > 0 ? {
+    eventName: matches[0].eventName,
+    parameters: matches[0].parameters
+  } : null;
+}
+
 /**
  * Find handler in hierarchy and return handler info
  * @param hierarchy - Array of route names to try
@@ -252,22 +318,16 @@ function routeWithHierarchy(url: string): void {
   validateHierarchyDepth(segments);
 
   // Determine route type
-  let routeType: 'path' | 'hash' | 'hash-slash' | 'non-prefixed';
-  if (url.startsWith('#/')) {
-    routeType = 'hash-slash';
-  } else if (url.startsWith('#')) {
-    routeType = 'hash';
-  } else if (url.startsWith('/')) {
-    routeType = 'path';
-  } else {
-    routeType = 'non-prefixed';
-  }
+  const routeType = getRouteType(url);
 
   // Generate hierarchy
   const hierarchy = generateRouteHierarchy(segments, routeType);
 
-  // Find handler in hierarchy
-  const handlerInfo = findHandlerInHierarchy(hierarchy, segments);
+  const exactRoute = hierarchy[0];
+  const exactSubscribers = app.find(exactRoute);
+  const handlerInfo = exactSubscribers && exactSubscribers.length > 0 ?
+    { eventName: exactRoute, parameters: [] } :
+    findPatternHandler(routeType, segments) || findHandlerInHierarchy(hierarchy.slice(1), segments);
 
   if (handlerInfo) {
     // Found handler - publish route with parameters

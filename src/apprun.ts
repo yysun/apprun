@@ -18,6 +18,7 @@
  * - Decorators: @on, @update, @customElement
  * - Router events and configuration
  * - Web component registration
+ * - trustedHTML: Parses caller-owned trusted HTML
  *
  * Features:
  * - Event-driven architecture with pub/sub pattern
@@ -25,13 +26,13 @@
  * - Component lifecycle management
  * - Client-side routing with hash/path support and native link behavior guards
  * - Web Components integration
- * - React compatibility layer
+ * - React compatibility layer with explicit global installation
  * - TypeScript support with strong typing
  * - Batch component mounting with addComponents(element, components)
  *
  * Type Safety Improvements (v3.35.1):
  * - Added null checks for DOM event targets
- * - Improved global window object assignments with proper typing
+ * - Global window object assignments are opt-in through app.use_globals()
  * - Enhanced React integration parameter validation
  * - Better error handling for invalid event handlers
  * - Safer element access with proper type assertions
@@ -62,7 +63,7 @@
  */
 
 import _app, { App } from './app';
-import { createElement, render, Fragment, safeHTML } from './vdom';
+import { createElement, render, Fragment, trustedHTML, safeHTML } from './vdom';
 import { Component } from './component';
 import { IApp, VNode, State, View, Action, Update, EventOptions, ActionOptions, MountOptions, AppStartOptions, CustomElementOptions, Element as AppRunElement } from './types';
 import { on, update, customElement } from './decorator';
@@ -117,6 +118,7 @@ export {
   ActionOptions,
   MountOptions,
   Fragment,
+  trustedHTML,
   safeHTML
 }
 export { update as event };
@@ -131,6 +133,7 @@ if (!app.start) {
   app.render = render;
   app.Fragment = Fragment;
   app.webComponent = webComponent;
+  app.trustedHTML = trustedHTML;
   app.safeHTML = safeHTML;
 
   app.start = <T, E = unknown>(element?: AppRunElement, state?: State<T>, view?: View<T>, update?: Update<T, E>,
@@ -142,9 +145,6 @@ if (!app.start) {
     component.start(element, opts);
     return component;
   };
-
-  // Deprecated: app.query is deprecated in favor of app.runAsync
-  app.query = app.query || app.runAsync;
 
   const NOOP = _ => {/* Intentionally empty */ }
   app.on('/', NOOP);
@@ -190,15 +190,17 @@ if (!app.start) {
     });
   }
 
-  if (typeof window === 'object') {
+  app.use_globals = () => {
+    if (typeof window !== 'object') return;
     const globalWindow = window as any;
+    if (globalWindow['_React'] === undefined) globalWindow['_React'] = globalWindow['React'];
     globalWindow['Component'] = Component;
-    globalWindow['_React'] = globalWindow['React'];
     globalWindow['React'] = app;
     globalWindow['on'] = on as OnDecorator;
     globalWindow['customElement'] = customElement;
+    globalWindow['trustedHTML'] = trustedHTML;
     globalWindow['safeHTML'] = safeHTML;
-  }
+  };
 
   app.use_render = (render, mode = 0) => {
     if (mode === 0) {

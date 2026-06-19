@@ -7,7 +7,6 @@
  *    - off(): Unsubscribe from events with proper cleanup
  *    - run(): Publish events synchronously with error-event reporting
  *    - runAsync(): Publish events asynchronously with Promise support, returns handler values
- *    - query(): Deprecated alias for runAsync() - use runAsync() instead
  *
  * 2. Default app singleton - Global event bus instance
  *    - Created once and reused across the application
@@ -177,14 +176,6 @@ export class App {
     }
   }
 
-  /**
-   * @deprecated Use runAsync() instead. app.query() will be removed in a future version.
-   */
-  query(name: string, ...args: any[]): Promise<any[]> {
-    console.warn('app.query() is deprecated. Use app.runAsync() instead.');
-    return this.runAsync(name, ...args);
-  }
-
   private removeOnceWildcardSubscriber(evt: string, sub: Subscriber): void {
     this._events[evt] = (this._events[evt] || []).filter(item => item !== sub);
     this._wildcard_events = this._wildcard_events.filter(item => item.sub !== sub);
@@ -200,7 +191,7 @@ export class App {
     events[name] = subscribers.filter((sub) => {
       return !sub.options.once;
     });
-    this._wildcard_events.filter(({ prefix }) => name.startsWith(prefix))
+    this._wildcard_events.filter(({ name: evt, prefix }) => evt !== name && name.startsWith(prefix))
       .forEach(({ name: evt, sub }) => {
         if (sub.options.once) this.removeOnceWildcardSubscriber(evt, sub);
         calls.push({

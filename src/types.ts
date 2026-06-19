@@ -119,9 +119,6 @@ export interface IApp {
   once(name: string, fn: (...args: any[]) => any, options?: EventOptions): void;
   find(name: string): any;
 
-  /** @deprecated Use runAsync() instead */
-  query(name: string, ...args: any[]): Promise<any[]>;
-
   start<T, E = unknown>(element?: Element | string, model?: T, view?: View<T>, update?: Update<T, E>,
     options?: AppStartOptions<T>): any;
 
@@ -131,7 +128,10 @@ export interface IApp {
   Fragment(props: any, ...children: any[]): any[];
   route: Router;
   webComponent(name: string, componentClass: any, options?: CustomElementOptions): void;
+  trustedHTML(html: string): any[];
+  /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
   safeHTML(html: string): any[];
+  use_globals(): void;
   use_render(render: any, mode?: 0 | 1): void;
   use_react(React: any, ReactDOM: any): void;
   version: string;

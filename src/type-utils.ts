@@ -120,6 +120,7 @@ export interface SafeGlobalWindow {
   React?: any;
   on?: any;
   customElement?: any;
+  trustedHTML?: any;
   safeHTML?: any;
   html?: any;
   svg?: any;

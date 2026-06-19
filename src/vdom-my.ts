@@ -24,7 +24,7 @@
  * - SVG element support with proper namespace handling
  * - Component lifecycle management and caching
  * - Parent-scoped keyed element optimization for memory-safe DOM reuse
- * - Safe HTML insertion and text node creation
+ * - Trusted HTML insertion and text node creation
  * - Directive processing integration
  * 
  * Implementation:
@@ -36,6 +36,7 @@
  * - Memory-efficient child component caching tied to latest render usage
  * 
  * Recent Changes:
+ * - 2026-06-19: Added trustedHTML alias and removed _html: text-prefix parsing
  * - 2026-06-19: Scoped keyed reconciliation to the current parent and added child component cache eviction
  * - Added comprehensive key prop usage documentation and guidelines
  */
@@ -185,20 +186,17 @@ function keyId(key) {
   return `${typeof key}:${String(key)}`;
 }
 
-export const safeHTML = (html: string) => {
+export const trustedHTML = (html: string) => {
   const div = document.createElement('section');
   div.insertAdjacentHTML('afterbegin', html)
   return Array.from(div.children);
 }
 
+/** @deprecated Use trustedHTML() for caller-owned trusted markup. */
+export const safeHTML = trustedHTML;
+
 function createText(node) {
-  if (node?.indexOf('_html:') === 0) { // ?
-    const div = document.createElement('div');
-    div.insertAdjacentHTML('afterbegin', node.substring(6))
-    return div;
-  } else {
-    return document.createTextNode(node ?? '');
-  }
+  return document.createTextNode(node ?? '');
 }
 
 function create(node: VNode | string | HTMLElement | SVGElement, isSvg: boolean): Element {
