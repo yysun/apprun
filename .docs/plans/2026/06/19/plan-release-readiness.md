@@ -1,16 +1,16 @@
-# Phase 5 Release Readiness Plan
+# 6.0.0 Release Readiness Plan
 
 ## Goal
 
-Make the repository ready for a `6.0.0` breaking release candidate. The version, CI gates, package dry-run behavior, and release-facing docs must agree with the Phase 1-4 implementation already committed.
+Make the repository ready for a `6.0.0` breaking release candidate. The version, CI gates, package dry-run behavior, and release-facing docs must agree with the roadmap implementation already committed.
 
 ## Current Context
 
-- `master` was ahead of `origin/master` by four commits before Phase 5: Phase 1, Phase 2, Phase 3, and Phase 4.
+- `master` was ahead of `origin/master` by four roadmap commits before release-readiness work started.
 - `package.json`, `package-lock.json`, and `src/version.ts` now report `6.0.0`.
 - `.github/workflows/ci.yml` runs `npm ci`, full Jest, build, lint, and `npm pack --dry-run`.
-- Phase 3 removed generated artifacts from git and added `prepack`; Phase 5 proves packaging still includes generated files.
-- Phase 4 added `MIGRATION.md` for 4.0-era breaking API changes; Phase 5 retitles that release boundary to `6.0.0`.
+- The packaging roadmap work removed generated artifacts from git and added `prepack`; release-readiness checks prove packaging still includes generated files.
+- The breaking-change roadmap work added `MIGRATION.md` for 4.0-era breaking API changes; release readiness retitles that release boundary to `6.0.0`.
 - `CHANGELOG.md`, `WHATSNEW.md`, and `README.md` now describe the completed breaking release boundary and generated package artifact policy.
 - This story is release readiness. It does not reopen runtime behavior decisions from earlier phases.
 
@@ -21,36 +21,36 @@ Make the repository ready for a `6.0.0` breaking release candidate. The version,
   1. RPD docs and plan.
   2. CI/package gate enforcement.
   3. Version bump plus release-facing docs.
-  4. Final RPD evidence.
+  4. Final release-readiness evidence.
 - Add CI steps for `npm run lint` and `npm pack --dry-run` after build. This mirrors local verification and catches package output drift.
 - Keep `prepack` as the package generation mechanism. Do not re-track generated package outputs.
 - Update migration/release docs to say `6.0.0` while preserving the already documented breaking behaviors.
 - Do not create tags, publish, or push in this story.
 
-## Phased Tasks
+## Commit Tasks
 
-### Phase 1 - RPD contract and first commit
+### Task 1 - RPD contract and first commit
 
-- [x] Create `.docs/reqs/2026/06/19/req-phase5-release-readiness.md` with testable release-readiness acceptance criteria.
-- [x] Create `.docs/plans/2026/06/19/plan-phase5-release-readiness.md` with commit boundaries, validation commands, and risks.
-- [x] Run `git diff --check` on the RPD docs and commit only the Phase 5 RPD docs.
+- [x] Create `.docs/reqs/2026/06/19/req-release-readiness.md` with testable release-readiness acceptance criteria.
+- [x] Create `.docs/plans/2026/06/19/plan-release-readiness.md` with commit boundaries, validation commands, and risks.
+- [x] Run `git diff --check` on the RPD docs and commit only the release-readiness RPD docs.
 
-### Phase 2 - CI/package gate commit
+### Task 2 - CI/package gate commit
 
 - [x] Inspect `.github/workflows/ci.yml` and `package.json` scripts to confirm the CI gate commands exist locally.
 - [x] Update `.github/workflows/ci.yml` so CI runs `npm run lint` and `npm pack --dry-run` in addition to install, tests, and build.
 - [x] Run `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the CI gate change.
 
-### Phase 3 - Version and release docs commit
+### Task 3 - Version and release docs commit
 
 - [x] Update `package.json`, `package-lock.json`, and `src/version.ts` to version `6.0.0`.
 - [x] Update `CHANGELOG.md`, `WHATSNEW.md`, `MIGRATION.md`, and README package guidance so release-facing docs describe `6.0.0`, breaking API changes, package hygiene, and optional `immer`.
 - [x] Run a focused version consistency check that reads `package.json`, `package-lock.json`, and `src/version.ts`.
 - [x] Run `npm test -- --runInBand`, `npm run build`, `npm run lint`, `npm pack --dry-run`, and `git diff --check`, then commit only the version/docs release change.
 
-### Phase 4 - Final verification
+### Task 4 - Final verification
 
-- [x] Confirm `git log --oneline` shows the Phase 5 commits after Phase 4.
+- [x] Confirm `git log --oneline` shows the release-readiness commits after the roadmap commits.
 - [x] Confirm the working tree contains only RPD evidence docs before the final evidence commit.
 - [x] Record final evidence in the REQ/AP after the last verification command.
 
@@ -76,17 +76,17 @@ Actual evidence:
 - `git log --oneline -6` showed:
   - `1203e12 chore: release 6.0.0`
   - `d10be72 ci: verify lint and package dry run`
-  - `5eba13f docs: plan phase 5 release readiness`
-  - `8d529ec feat: prepare phase 4 breaking api`
+  - `5eba13f` release-readiness RPD requirements and plan
+  - `8d529ec feat: prepare roadmap breaking api`
   - `b9d9aff chore: harden types and package hygiene`
-  - `1441829 fix: patch phase 2 memory architecture`
+  - `1441829 fix: patch roadmap memory architecture`
 
 ## Rollback / Risk
 
 - `6.0.0` is a major-version jump from `3.38.0`. That is intentional per the user request, but it should not be tagged or published by this story.
 - `npm pack --dry-run` runs `prepack`, which regenerates ignored build outputs. `.gitignore` must keep those outputs out of source control.
-- CI pack checks add build time but catch exactly the artifact drift Phase 3 was designed to prevent.
-- Release docs can easily overclaim. Keep them tied to committed Phase 1-4 behavior and avoid promising publishing, tags, or future compatibility windows.
+- CI pack checks add build time but catch exactly the artifact drift the packaging roadmap work was designed to prevent.
+- Release docs can easily overclaim. Keep them tied to committed roadmap behavior and avoid promising publishing, tags, or future compatibility windows.
 
 ## Architecture Review
 

@@ -27,7 +27,7 @@ Phase 3 must make the library's type contract, package boundary, and repository 
 - Do not introduce compatibility flags, fallback publishing modes, or duplicate lint systems.
 - Keep package subpaths aligned with files the build actually emits.
 - Do not publish or commit generated `dist`, `esm`, `coverage`, or log artifacts as source truth.
-- Keep the change scoped to Phase 3; do not take on Phase 5 docs/CI/versioning work unless required to keep Phase 3 verifiable.
+- Keep the change scoped to Phase 3; do not take on release-readiness docs/CI/versioning work unless required to keep Phase 3 verifiable.
 
 ## Non-Goals
 
