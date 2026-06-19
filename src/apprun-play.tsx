@@ -1,3 +1,10 @@
+/**
+ * AppRun play popup component for running embedded examples.
+ *
+ * Builds the popup preview/editor UI and uses explicit HTMLElement casts for
+ * mounted DOM access under the Phase 3 component typing contract.
+ */
+
 import { app, Component } from './apprun';
 
 const popup_div = `<div id="play-popup" class="overlay">
@@ -197,7 +204,7 @@ const setup_editor = (textarea, iframe, code, hide_src) => {
 class Play extends Component<any> {
   view = (state) => {
     const code_id = state['code-element-id'];
-    const element = this.element;
+    const element = this.element as HTMLElement;
     let code_area, code;
     if (code_id) {
       code_area = document.getElementById(code_id);
@@ -231,7 +238,7 @@ class Play extends Component<any> {
     const iframe = document.createElement('iframe');
     iframe.classList.add('apprun-preview');
     iframe.style.cssText = style;
-    this.element.before(iframe);
+    (this.element as HTMLElement).before(iframe);
     if (hide_src) code_area.style.display = 'none';
     setup_editor(code_area, iframe, code, hide_src);
   }

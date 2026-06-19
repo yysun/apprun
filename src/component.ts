@@ -29,6 +29,7 @@
  * - Async state handling with latest-pending-promise protection
  * - Memory leak prevention with shared unload tracking
  * - Component unmounting with cleanup
+ * - Phase 3 concrete component field and history option typing
  *
  * Type Safety Improvements (v3.35.1):
  * - Enhanced element access with null checks and warnings
@@ -55,7 +56,7 @@ import _app, { App } from './app';
 
 
 import { Reflect } from './decorator'
-import { State, View, Update, ActionDef, ActionOptions, MountOptions, EventOptions, IApp } from './types';
+import { State, View, Update, Action, ActionDef, ActionOptions, MountOptions, EventOptions, IApp, Element as AppRunElement, HistoryOptions } from './types';
 import directive from './directive';
 import { safeQuerySelector, safeGetElementById } from './type-utils';
 
@@ -67,8 +68,20 @@ export const REFRESH = state => state;
 const app = _app as unknown as IApp;
 let tracking_id_counter = 0;
 const tracking_attr = '_c';
-const tracked_elements = new Map<any, { component: any, tracking_id: string }>();
-let shared_observer: MutationObserver = null;
+type TrackedElement = globalThis.Element & {
+  _component?: Component<any, any>;
+  getAttribute?: (name: string) => string | null;
+  setAttribute?: (name: string, value: string) => void;
+  removeAttribute?: (name: string) => void;
+};
+type MountedElement = AppRunElement | null | undefined;
+
+const tracked_elements = new Map<TrackedElement, { component: Component<any, any>, tracking_id: string }>();
+let shared_observer: MutationObserver | null = null;
+
+function getHistoryOptions(history: HistoryOptions): { prev?: string; next?: string } {
+  return typeof history === 'object' && history !== null ? history : {};
+}
 
 function disconnectSharedObserverIfIdle() {
   if (tracked_elements.size === 0 && shared_observer) {
@@ -77,7 +90,7 @@ function disconnectSharedObserverIfIdle() {
   }
 }
 
-function unloadTrackedElement(el) {
+function unloadTrackedElement(el: TrackedElement) {
   const tracked = tracked_elements.get(el);
   if (!tracked) return;
   tracked_elements.delete(el);
@@ -90,7 +103,7 @@ function ensureSharedObserver() {
   shared_observer = new MutationObserver(changes => {
     changes.forEach(change => {
       if (change.type === 'attributes') {
-        const el = change.target;
+        const el = change.target as TrackedElement;
         const tracked = tracked_elements.get(el);
         if (tracked && change.oldValue === tracked.tracking_id) unloadTrackedElement(el);
       } else if (change.type === 'childList') {
@@ -106,36 +119,36 @@ function ensureSharedObserver() {
   });
 }
 
-function registerTrackedElement(component, el, tracking_id: string) {
+function registerTrackedElement(component: Component<any, any>, el: TrackedElement, tracking_id: string) {
   const existing = tracked_elements.get(el);
   if (existing && existing.component !== component) unloadTrackedElement(el);
   tracked_elements.set(el, { component, tracking_id });
   ensureSharedObserver();
 }
 
-function unregisterTrackedElement(el) {
+function unregisterTrackedElement(el?: TrackedElement | null) {
   if (!el) return;
   tracked_elements.delete(el);
   disconnectSharedObserverIfIdle();
 }
 
-export class Component<T = unknown, E = unknown> {
+export class Component<T = any, E = any> {
   static __isAppRunComponent = true;
   private _app = new App();
-  private _actions = [];
-  private _global_events = [];
-  private _state;
-  private _history = [];
+  private _actions: Array<{ name: string, fn: (...args: any[]) => void }> = [];
+  private _global_events: string[] = [];
+  private _state?: State<T>;
+  private _history: T[] = [];
   private _history_idx = -1;
-  private enable_history;
-  private global_event;
-  public element;
-  public rendered;
-  public mounted;
-  public unload;
-  private tracking_id;
-  private tracking_element;
-  private _pending_state;
+  private enable_history = false;
+  private global_event = false;
+  public element: MountedElement;
+  public rendered?: (state: T) => void;
+  public mounted?: (props: any, children: any[], state: T) => T | Promise<T> | void;
+  public unload?: (state: T) => void;
+  private tracking_id?: string;
+  private tracking_element: TrackedElement | null = null;
+  private _pending_state?: Promise<T> | null;
 
 
   private renderState(state: T, vdom = null) {
@@ -151,8 +164,8 @@ export class Component<T = unknown, E = unknown> {
 
     if (typeof document !== 'object') return;
 
-    const el = (typeof this.element === 'string' && this.element) ?
-      safeGetElementById(this.element) || safeQuerySelector(this.element) : this.element;
+    const el = ((typeof this.element === 'string' && this.element) ?
+      safeGetElementById(this.element) || safeQuerySelector(this.element) : this.element) as TrackedElement | null;
 
     if (!el) {
       console.warn(`Component element not found: ${this.element}`);
@@ -174,12 +187,12 @@ export class Component<T = unknown, E = unknown> {
     if (!vdom && html) {
       html = directive(html, this);
       if (this.options.transition && document && document['startViewTransition']) {
-        document['startViewTransition'](() => app.render(el, html, this));
+        document['startViewTransition'](() => app.render(el as HTMLElement, html, this));
       } else {
-        app.render(el, html, this);
+        app.render(el as HTMLElement, html, this);
       }
     }
-    this.rendered && this.rendered(this.state);
+    this.rendered && this.rendered(this.state as T);
   }
 
   public setState(state: T, options: ActionOptions & EventOptions
@@ -215,7 +228,7 @@ export class Component<T = unknown, E = unknown> {
       Promise.resolve(pending_state).then(v => {
         if (this._pending_state === pending_state) {
           this._pending_state = null;
-          this.setState(v, options);
+          this.setState(v as T, options);
         }
       });
     } else {
@@ -260,22 +273,22 @@ export class Component<T = unknown, E = unknown> {
   };
 
   constructor(
-    protected state?: State<T>,
-    protected view?: View<T>,
-    protected update?: Update<T, E>,
-    protected options?) {
+    public state?: State<T>,
+    public view?: View<T>,
+    public update?: Update<T, E>,
+    protected options: MountOptions = {}) {
   }
 
-  start = (element = null, options?: MountOptions): Component<T, E> => {
+  start = (element: MountedElement = null, options?: MountOptions): Component<T, E> => {
     this.mount(element, { render: true, ...options });
     if (this.mounted && typeof this.mounted === 'function') {
-      const new_state = this.mounted({}, [], this.state);
-      (typeof new_state !== 'undefined') && this.setState(new_state);
+      const new_state = this.mounted({}, [], this.state as T);
+      (typeof new_state !== 'undefined') && this.setState(new_state as T);
     }
     return this;
   }
 
-  public mount(element = null, options?: MountOptions): Component<T, E> {
+  public mount(element: MountedElement = null, options?: MountOptions): Component<T, E> {
     console.assert(!this.element, 'Component already mounted.')
     this.options = options = { ...this.options, ...options };
     this.element = element;
@@ -283,8 +296,9 @@ export class Component<T = unknown, E = unknown> {
     this.enable_history = !!options.history;
 
     if (this.enable_history) {
-      this.on(options.history.prev || 'history-prev', this._history_prev);
-      this.on(options.history.next || 'history-next', this._history_next);
+      const history = getHistoryOptions(options.history);
+      this.on((history.prev || 'history-prev') as E, this._history_prev);
+      this.on((history.next || 'history-next') as E, this._history_next);
     }
 
     if (options.route) {
@@ -309,7 +323,7 @@ export class Component<T = unknown, E = unknown> {
       name.startsWith('#') || name.startsWith('/') || name.startsWith('@'));
   }
 
-  add_action(name: string, action, options: ActionOptions = {}) {
+  add_action(name: string, action: Action<T>, options: ActionOptions = {}) {
     if (!action || typeof action !== 'function') {
       console.warn(`Component action for '${name}' is not a valid function:`, action);
       return;
@@ -326,7 +340,7 @@ export class Component<T = unknown, E = unknown> {
       });
 
       try {
-        const newState = action(this.state, ...p);
+        const newState = action(this.state as T, ...p);
 
         app['debug'] && app.run('debug', {
           component: this,
@@ -337,7 +351,7 @@ export class Component<T = unknown, E = unknown> {
           options
         });
 
-        this.setState(newState, options);
+        this.setState(newState as T, options);
       } catch (error) {
         const payload = { event: name, error, component: this, state: this.state, args: p, phase: 'component' };
         app.find('error')?.length ? app.run('error', payload) : console.error(`Error in component action '${name}':`, error);
@@ -389,7 +403,7 @@ export class Component<T = unknown, E = unknown> {
     });
   }
 
-  public run(event: E, ...args) {
+  public run(event: E, ...args: any[]) {
     if (this.state instanceof Promise) {
       return Promise.resolve(this.state).then(state => {
         this.state = state;
@@ -403,7 +417,7 @@ export class Component<T = unknown, E = unknown> {
     }
   }
 
-  public on(event: E, fn: (...args) => void, options?: any) {
+  public on(event: E, fn: (...args: any[]) => void, options?: EventOptions) {
     const name = event.toString();
     this._actions.push({ name, fn });
     return this.is_global_event(name) ?
@@ -411,7 +425,7 @@ export class Component<T = unknown, E = unknown> {
       this._app.on(name, fn, options);
   }
 
-  public runAsync(event: E, ...args) {
+  public runAsync(event: E, ...args: any[]) {
     const name = event.toString();
     return this.is_global_event(name) ?
       app.runAsync(name, ...args) :

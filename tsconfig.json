@@ -11,6 +11,9 @@
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"downlevelIteration": true,
+		"strictBindCallApply": true,
+		"noImplicitThis": true,
+		"strictFunctionTypes": true,
 		"skipLibCheck": true
 	}
 }

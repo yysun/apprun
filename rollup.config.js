@@ -5,6 +5,8 @@
  * - Minification (controlled by MINIFY env var, defaults to true)
  * - Sourcemaps (enabled by default)
  * - Property mangling for properties starting with '__'
+ * - Phase 3 removed the stale apprun-play-html ESM entry that was only present
+ *   because generated files had been committed.
  * 
  * Usage:
  * - Default build (minified): rollup -c
@@ -51,12 +53,4 @@ module.exports = [{
     sourcemap: true
     },
   plugins
-  }, {
-    input: 'esm/apprun-play-html.js',
-    output: {
-      file: 'dist/apprun-play-html.esm.js',
-      format: 'esm',
-      sourcemap: true
-    },
-    plugins
-}]
+  }]

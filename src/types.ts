@@ -15,7 +15,7 @@
  *    - TemplateResult: Lit-html template support
  * 
  * 3. Configuration Types
- *    - EventOptions: Event handler options (once, delay, transition)
+ *    - EventOptions: Event handler options (once, delay, transition, global)
  *    - ActionOptions: Action behavior options (render, history, global, callback)
  *    - MountOptions: Component mounting options (global events, routing, transitions)
  *    - AppStartOptions: Application startup configuration with lifecycle hooks
@@ -34,6 +34,7 @@
  * - Better callback typing in options
  * - Stricter typing for lifecycle methods
  * - Added support for async generator and generator functions in Action types
+ * - Phase 3 removed `any` escape hatches from public options and typed history.
  *
  * Usage:
  * ```ts
@@ -56,38 +57,48 @@
 
 import { TemplateResult } from 'lit-html';
 export type Element = HTMLElement | string;
+export type HistoryOptions = boolean | { prev?: string; next?: string };
 export type State<T> = T | Promise<T> | (() => T) | (() => Promise<T>);
 export type VNode = {
-  tag: string | Function,
-  props: {},
-  children: Array<VNode | string>
+  tag: string | Function;
+  props: Record<string, any>;
+  children: Array<VNode | string>;
 }
 export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResult;
 export type View<T> = (state: T) => VDOM | void;
 export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
-export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
-export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
+export type ActionDef<T, E> = (readonly [E, Action<T>, EventOptions?]);
+export type ActionUpdate<T> = Action<T> | [Action<T>, EventOptions?] | (Action<T> | EventOptions)[];
+export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: ActionUpdate<T> } | (E | Action<T> | EventOptions)[];
 export type ActionOptions = {
-  render?: boolean, history?, global?: boolean;
+  render?: boolean;
+  history?: HistoryOptions;
+  global?: boolean;
   callback?: (state: any) => void;
 };
 export type EventOptions = {
   once?: boolean;
   transition?: boolean;
   delay?: number;
-} | any;
+  global?: boolean;
+  event?: string;
+  [name: string]: any;
+};
 export type MountOptions = {
-  render?: boolean, history?, global_event?: boolean, route?: string;
+  render?: boolean;
+  history?: HistoryOptions;
+  global_event?: boolean;
+  route?: string;
   transition?: boolean;
 };
 
 export type AppStartOptions<T> = {
   render?: boolean;
-  history?;
+  history?: HistoryOptions;
   transition?: boolean;
   route?: string;
   rendered?: (state: T) => void
-  mounted?: (props: any, children: any, state: T) => T
+  mounted?: (props: any, children: any, state: T) => T | Promise<T> | void
 };
 export type Router = (url: string, ...args: any[]) => any;
 

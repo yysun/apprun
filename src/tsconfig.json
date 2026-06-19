@@ -11,6 +11,9 @@
 		"esModuleInterop": true,
 		"outDir": "../esm",
 		"sourceMap": true,
+		"strictBindCallApply": true,
+		"noImplicitThis": true,
+		"strictFunctionTypes": true,
 		"skipLibCheck": true
 	}
 }

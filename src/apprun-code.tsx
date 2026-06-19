@@ -1,3 +1,10 @@
+/**
+ * Inline AppRun code playground component.
+ *
+ * Renders editable source alongside an iframe preview and keeps DOM element
+ * access explicit now that Component.element is concretely typed.
+ */
+
 import { app, Component } from './apprun';
 
 declare var CodeMirror;
@@ -112,7 +119,7 @@ class Play extends Component {
   }
 
   mounted = props => {
-    const element = this['element'];
+    const element = this.element as HTMLElement;
     const code_id = props['code-id'];
     const hide_code = props['hide-code'];
     const code_width = props['code-width'];
@@ -136,14 +143,14 @@ class Play extends Component {
 
 
   rendered = ({ code, hide_code, code_width }) => {
-    const element = this['element'];
+    const element = this.element as HTMLElement;
 
     const textarea = element.querySelector(".apprun-play .editor") as any;
-    let iframe = element.querySelector('.apprun-play .preview');
+    let iframe = element.querySelector('.apprun-play .preview') as HTMLIFrameElement | null;
     if (!iframe || !textarea) return;
 
     const run_code = code => {
-      const iframe_clone = iframe.cloneNode();
+      const iframe_clone = iframe.cloneNode() as HTMLIFrameElement;
       iframe.parentNode?.replaceChild(iframe_clone, iframe);
       iframe = iframe_clone;
       const doc = iframe.contentWindow?.document;

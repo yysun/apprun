@@ -7,21 +7,7 @@ module.exports = {
   transform: {
     "^.+\\.(t|j)sx?$": ["ts-jest", {
       useESM: true,
-      tsconfig: "tsconfig.jest.json",
-      diagnostics: {
-        warnOnly: true, // Convert type-check errors to warnings during tests
-        ignoreCodes: [
-          "TS7006", // Parameter implicitly has an 'any' type
-          "TS7015", // Element implicitly has an 'any' type because index expression is not of type 'number'
-          "TS7031", // Binding element implicitly has an 'any' type
-          "TS7053", // Element implicitly has an 'any' type because expression of type can't be used to index type
-          "TS2683", // 'this' implicitly has type 'any' because it does not have a type annotation
-          "TS2345", // Argument of type is not assignable to parameter of type
-          "TS2322", // Type is not assignable to type
-          "TS18047", // Object is possibly 'null'
-          "TS18048" // Property is possibly 'undefined'
-        ]
-      }
+      tsconfig: "tsconfig.jest.json"
     }]
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",

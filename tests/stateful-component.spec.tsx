@@ -260,7 +260,7 @@ describe('Stateful Component', () => {
         '@child_event': () => { app.run('@@_pranet_event') }
       }
       mounted = async () => {
-        if (this.state == 0) return new Promise(resolve =>
+        if (this.state === 0) return new Promise(resolve =>
           setTimeout(() => resolve(100)))
       }
     }

@@ -11,8 +11,27 @@
 
 import app from '../src/apprun';
 import { Component } from '../src/component';
+import { EventOptions, HistoryOptions, MountOptions } from '../src/types';
+
+type IsAny<T> = 0 extends (1 & T) ? true : false;
+
+const eventOptionsAreTyped: IsAny<EventOptions> = false;
+const typedHistoryBoolean: HistoryOptions = true;
+const typedHistoryEvents: HistoryOptions = { prev: 'back', next: 'forward' };
+const typedMountOptions: MountOptions = { history: typedHistoryEvents, render: true };
+const typedEventOptions: EventOptions = { once: true, delay: 10, transition: false, event: 'custom', custom: 'value' };
 
 describe('TypeScript Declaration Accuracy Coverage', () => {
+  describe('Public option type regressions', () => {
+    it('should keep EventOptions and history options typed', () => {
+      expect(eventOptionsAreTyped).toBe(false);
+      expect(typedHistoryBoolean).toBe(true);
+      expect(typedHistoryEvents).toEqual({ prev: 'back', next: 'forward' });
+      expect(typedMountOptions.history).toEqual(typedHistoryEvents);
+      expect(typedEventOptions.delay).toBe(10);
+    });
+  });
+
   describe('IApp Interface Compliance', () => {
     it('should implement all IApp interface methods', () => {
       // Test that app implements all required methods from IApp interface

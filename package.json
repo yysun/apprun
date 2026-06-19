@@ -5,11 +5,57 @@
   "main": "dist/apprun.js",
   "module": "esm/apprun.js",
   "types": "apprun.d.ts",
+  "exports": {
+    ".": {
+      "types": "./apprun.d.ts",
+      "import": "./esm/apprun.js",
+      "require": "./dist/apprun.js"
+    },
+    "./jsx-runtime": {
+      "types": "./apprun.d.ts",
+      "import": "./jsx-runtime.js",
+      "require": "./jsx-runtime.js"
+    },
+    "./createState": {
+      "types": "./apprun.d.ts",
+      "import": "./esm/createState.js",
+      "require": "./dist/createState.js"
+    },
+    "./apprun-html": {
+      "types": "./apprun.d.ts",
+      "import": "./esm/apprun-html.js",
+      "require": "./dist/apprun-html.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "apprun.d.ts",
+    "cli/",
+    "dist/",
+    "esm/",
+    "jsx-runtime.js",
+    "jsx-runtime.js.map",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "./dist/apprun.js",
+    "./dist/apprun-html.js",
+    "./dist/apprun-play.js",
+    "./esm/apprun.js",
+    "./esm/apprun-html.js",
+    "./esm/apprun-play.js",
+    "./jsx-runtime.js"
+  ],
   "bin": {
     "apprun": "cli/index.js"
   },
   "scripts": {
     "build": "tsc -p src && rollup -c && webpack --mode production",
+    "prepack": "npm run build",
+    "lint": "eslint .",
     "test": "jest",
     "jest": "jest --watch",
     "jest:debug": "node --inspect node_modules/.bin/jest --runInBand",
@@ -41,6 +87,8 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^29.5.14",
+    "eslint": "^10.5.0",
+    "immer": "^10.1.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "json-loader": "^0.5.7",
@@ -50,13 +98,21 @@
     "ts-jest": "^29.4.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.61.1",
     "webpack": "^5.100.2",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
     "commander": "^14.0.0",
-    "immer": "^10.1.1",
     "property-information": "^7.1.0"
+  },
+  "peerDependencies": {
+    "immer": "^10.1.1"
+  },
+  "peerDependenciesMeta": {
+    "immer": {
+      "optional": true
+    }
   }
 }

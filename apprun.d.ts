@@ -32,6 +32,7 @@
  * - Added proper deprecation warnings
  * - Enhanced error handling and validation
  * - Added support for async generator and generator functions in Action types
+ * - Phase 3 removed public option `any` escape hatches and typed history options
  */
 
 import { TemplateResult } from 'lit-html';
@@ -39,38 +40,43 @@ import { TemplateResult } from 'lit-html';
 declare module 'apprun' {
 
   export type Element = HTMLElement | string;
+  export type HistoryOptions = boolean | { prev?: string; next?: string };
 
   export type State<T> = T | Promise<T> | (() => T) | (() => Promise<T>);
 
   export type VNode = {
-    tag: string | Function,
-    props: {},
-    children: Array<VNode | string>
+    tag: string | Function;
+    props: Record<string, any>;
+    children: Array<VNode | string>;
   };
 
   export type VDOM = false | string | VNode | Array<VNode | string> | TemplateResult;
   export type View<T> = (state: T) => VDOM | void;
   export type Action<T> = (state: T, ...p: any[]) => T | Promise<T> | void | AsyncGenerator<T> | Generator<T>;
-  export type ActionDef<T, E> = (readonly [E, Action<T>, {}?]);
-  export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: Action<T> | {}[] } | (E | Action<T> | {})[];
+  export type ActionDef<T, E> = (readonly [E, Action<T>, EventOptions?]);
+  export type ActionUpdate<T> = Action<T> | [Action<T>, EventOptions?] | (Action<T> | EventOptions)[];
+  export type Update<T, E = unknown> = ActionDef<T, E>[] | { [name: string]: ActionUpdate<T> } | (E | Action<T> | EventOptions)[];
   export type Router = (url: string, ...args: any[]) => any;
 
   export type EventOptions = {
     once?: boolean;
     transition?: boolean;
     delay?: number;
-  } | any;
+    global?: boolean;
+    event?: string;
+    [name: string]: any;
+  };
 
   export type ActionOptions = {
     render?: boolean;
-    history?;
+    history?: HistoryOptions;
     global?: boolean;
     callback?: (state: any) => void;
   };
 
   export type MountOptions = {
     render?: boolean;
-    history?;
+    history?: HistoryOptions;
     global_event?: boolean;
     route?: string;
     transition?: boolean;
@@ -78,11 +84,11 @@ declare module 'apprun' {
 
   export type AppStartOptions<T> = {
     render?: boolean;
-    history?;
+    history?: HistoryOptions;
     transition?: boolean;
     route?: string;
     rendered?: (state: T) => void;
-    mounted?: (props: any, children: any, state: T) => T;
+    mounted?: (props: any, children: any, state: T) => T | Promise<T> | void;
   };
 
   export type CustomElementOptions = {
@@ -128,16 +134,16 @@ declare module 'apprun' {
     version: string;
   }
 
-  export class Component<T = unknown, E = unknown> {
-    constructor(state?: State<T>, view?: View<T>, update?: Update<T, E>, options?: any);
-    readonly element: Element;
-    protected state: State<T>;
+  export class Component<T = any, E = any> {
+    constructor(state?: State<T>, view?: View<T>, update?: Update<T, E>, options?: MountOptions);
+    readonly element: Element | null | undefined;
+    state: State<T>;
     view?: View<T>;
     update?: Update<T, E>;
 
     // Lifecycle hooks
     rendered?: (state: T) => void;
-    mounted?: (props: any, children: any[], state: T) => T | void;
+    mounted?: (props: any, children: any[], state: T) => T | Promise<T> | void;
     unload?: (state: T) => void;
 
     // Component lifecycle methods
