@@ -143,13 +143,13 @@ with a deprecation alias), and point users at DOMPurify for untrusted input.
 ## 3. API & Behavior Cleanups (P1)
 
 ### 3.1 Stop replacing `window.React`
-`src/apprun.ts:179-187` — on load, AppRun saves `window.React` to `_React` and sets
-`window.React = app`, plus writes `Component`, `on`, `customElement`, `safeHTML` onto
-`window`. This breaks coexistence with real React on the same page and is surprising
-global pollution for a library import.
+Resolved for 6.0.0. AppRun no longer saves `window.React` to `_React`, no longer sets
+`window.React = app`, and no longer writes `Component`, `on`, `customElement`, or
+`safeHTML` onto `window`.
 
-**Fix:** make the global JSX shim opt-in (e.g. only in the browser/script-tag bundle, or
-behind `app.use_globals()`), and remove it from the ESM entry used by bundlers.
+The remaining browser global contract is deliberately small: core keeps the `app`
+singleton, and the `apprun-html` script-tag build adds only `html`, `run`, and `svg`.
+Everything else requires imports.
 
 ### 3.2 Error handling swallows everything
 `src/app.ts:86-91, 123-128` and `src/component.ts:278-301` — every handler error is

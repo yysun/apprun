@@ -2,6 +2,13 @@ import { app, html, svg, render, run, Component } from '../src/apprun-html';
 
 describe('vdom-lit-html', () => {
 
+  it('should install the script-tag browser globals', () => {
+    expect((window as any).app).toBe(app);
+    expect((window as any).html).toBe(html);
+    expect((window as any).svg).toBe(svg);
+    expect((window as any).run).toBe(run);
+  })
+
   it('should create first child element', () => {
     const element = document.createElement('div');
     render(element, '<div>a</div>');

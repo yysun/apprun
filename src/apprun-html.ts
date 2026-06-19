@@ -1,9 +1,8 @@
 /**
  * AppRun lit-html renderer entry point
  *
- * Provides the AppRun public API with lit-html rendering primitives. Browser global
- * installation is explicit through app.use_globals(), which extends the core globals
- * with html, svg, and run for script-tag users without mutating globals on import.
+ * Provides the AppRun public API with lit-html rendering primitives. The script-tag
+ * build keeps the small browser authoring surface: app, html, svg, and run.
  */
 
 import app from './apprun'
@@ -22,10 +21,10 @@ app.Fragment = Fragment;
 
 export default app;
 
-const useAppGlobals = app.use_globals;
-app.use_globals = () => {
-  useAppGlobals && useAppGlobals();
+const installHtmlGlobals = () => {
   if (typeof window !== 'object') return;
   const globalWindow = window as SafeGlobalContext;
   safeGlobalAssign(globalWindow, { html, svg, run });
 };
+
+installHtmlGlobals();

@@ -26,13 +26,13 @@
  * - Component lifecycle management
  * - Client-side routing with hash/path support and native link behavior guards
  * - Web Components integration
- * - React compatibility layer with explicit global installation
+ * - React compatibility layer
  * - TypeScript support with strong typing
  * - Batch component mounting with addComponents(element, components)
  *
  * Type Safety Improvements (v3.35.1):
  * - Added null checks for DOM event targets
- * - Global window object assignments are opt-in through app.use_globals()
+ * - Browser script-tag globals are limited to the app singleton in core builds
  * - Enhanced React integration parameter validation
  * - Better error handling for invalid event handlers
  * - Safer element access with proper type assertions
@@ -73,10 +73,6 @@ import addComponents from './add-components';
 import { APPRUN_VERSION } from './version';
 
 export type StatelessComponent<T = {}> = (args: T) => string | VNode | void;
-type OnDecorator = {
-  <T = unknown>(options?: any): (constructor: Function) => void;
-  <E = string>(events?: E, options?: any): (target: any, key: string) => void;
-};
 
 const app: IApp = _app as unknown as IApp;
 export default app as IApp;
@@ -189,18 +185,6 @@ if (!app.start) {
       }
     });
   }
-
-  app.use_globals = () => {
-    if (typeof window !== 'object') return;
-    const globalWindow = window as any;
-    if (globalWindow['_React'] === undefined) globalWindow['_React'] = globalWindow['React'];
-    globalWindow['Component'] = Component;
-    globalWindow['React'] = app;
-    globalWindow['on'] = on as OnDecorator;
-    globalWindow['customElement'] = customElement;
-    globalWindow['trustedHTML'] = trustedHTML;
-    globalWindow['safeHTML'] = safeHTML;
-  };
 
   app.use_render = (render, mode = 0) => {
     if (mode === 0) {

@@ -318,7 +318,7 @@ describe('React Compatibility Coverage', () => {
   });
 
   describe('Global React Preservation', () => {
-    it('should not overwrite global React without explicit global installation', () => {
+    it('should not overwrite global React on import', () => {
       const originalReact = { existing: 'react' };
       (window as any).React = originalReact;
       delete (window as any)._React;
@@ -331,20 +331,24 @@ describe('React Compatibility Coverage', () => {
       expect((window as any)._React).toBeUndefined();
     });
 
-    it('should install legacy globals through app.use_globals', () => {
+    it('should not expose the removed global installer or install legacy globals', () => {
       const originalReact = { existing: 'react' };
       (window as any).React = originalReact;
       delete (window as any)._React;
+      delete (window as any).Component;
+      delete (window as any).on;
+      delete (window as any).customElement;
+      delete (window as any).trustedHTML;
+      delete (window as any).safeHTML;
 
-      app.use_globals();
-
-      expect((window as any)._React).toBe(originalReact);
-      expect((window as any).React).toBe(app);
-      expect((window as any).Component).toBeDefined();
-      expect((window as any).on).toBeDefined();
-      expect((window as any).customElement).toBeDefined();
-      expect(typeof (window as any).trustedHTML).toBe('function');
-      expect((window as any).safeHTML).toBe((window as any).trustedHTML);
+      expect((app as any).use_globals).toBeUndefined();
+      expect((window as any).React).toBe(originalReact);
+      expect((window as any)._React).toBeUndefined();
+      expect((window as any).Component).toBeUndefined();
+      expect((window as any).on).toBeUndefined();
+      expect((window as any).customElement).toBeUndefined();
+      expect((window as any).trustedHTML).toBeUndefined();
+      expect((window as any).safeHTML).toBeUndefined();
 
       delete (window as any).Component;
       delete (window as any).on;

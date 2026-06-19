@@ -182,7 +182,7 @@ AppRun is distributed on npm. To get it, run:
 npm install apprun
 ```
 
-When you want to do a rapid prototyping or demo, you can use AppRun directly in the browser without JSX or any build step. The `app`, `html` and `run` functions are available globally. The `html` is a HTML template from lit-html. The `run` function is a equivalent to the `$on` directive, which can be used to invoke state update functions.
+When you want to do a rapid prototyping or demo, you can use AppRun directly in the browser without JSX or any build step. The `app`, `html`, `run`, and `svg` functions are available globally in the script-tag build. The `html` and `svg` functions are lit templates. The `run` function is equivalent to the `$on` directive and invokes state update functions.
 
 ```js
 <html>

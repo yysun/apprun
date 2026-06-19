@@ -1,31 +1,24 @@
 /**
- * Optional AppRun browser global declarations
+ * AppRun browser global declarations
  *
- * These globals are installed only when app.use_globals() is called. Normal module
- * imports should use named exports instead of relying on ambient browser globals.
+ * Core builds install the app singleton. The apprun-html script-tag build also
+ * installs html, svg, and run for no-build browser apps.
  */
 
 import { App } from './app';
-import { Component } from './component';
+import { html as litHtml, svg as litSvg, run as litRun } from './vdom-lit-html';
 
 declare global {
   var app: App;
   var _AppRunVersions: string;
+  var html: typeof litHtml;
+  var svg: typeof litSvg;
+  var run: typeof litRun;
   interface Window {
     app: App;
     _AppRunVersions: string;
-    Component: typeof Component & {
-      <T = unknown>(options?: any): (constructor: Function) => void;
-    };
-    _React: any;
-    React: App;
-    on: {
-      <T = unknown>(options?: any): (constructor: Function) => void;
-      <E = string>(events?: E, options?: any): (target: any, key: string) => void;
-    };
-    customElement: (name: string) => (constructor: Function) => void;
-    trustedHTML: (html: string) => any[];
-    /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
-    safeHTML: (html: string) => any[];
+    html: typeof litHtml;
+    svg: typeof litSvg;
+    run: typeof litRun;
   }
 }

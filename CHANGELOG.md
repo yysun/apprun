@@ -2,7 +2,7 @@
 
 ## V6.0.0
 
-* Removed implicit browser global writes; script-tag users now opt in with `app.use_globals()`
+* Kept script-tag globals to `app`, `html`, `run`, and `svg`; removed legacy `React`, `Component`, decorator, and HTML helper globals
 * Removed `_html:` string-prefix rendering; use `trustedHTML()` for caller-owned trusted markup
 * Deprecated misleading `safeHTML()` naming in favor of `trustedHTML()`
 * Removed `query()` in favor of `runAsync()`

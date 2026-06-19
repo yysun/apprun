@@ -115,13 +115,8 @@ export function safeExecute<T extends any[], R>(
  * Type definitions for improved global object safety
  */
 export interface SafeGlobalWindow {
-  Component?: any;
-  _React?: any;
-  React?: any;
-  on?: any;
-  customElement?: any;
-  trustedHTML?: any;
-  safeHTML?: any;
+  app?: any;
+  _AppRunVersions?: any;
   html?: any;
   svg?: any;
   run?: any;

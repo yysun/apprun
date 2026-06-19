@@ -29,13 +29,32 @@
  * - Added routing system types with ComponentRoute
  * - Better integration with external libraries
  * - Comprehensive options typing matching implementation
- * - Added 4.0 trustedHTML and explicit global installation declarations
+ * - Added trustedHTML and smaller script-tag browser global declarations
  * - Enhanced error handling and validation
  * - Added support for async generator and generator functions in Action types
  * - Phase 3 removed public option `any` escape hatches and typed history options
  */
 
 import { TemplateResult } from 'lit-html';
+
+type LitTemplateFunction = (strings: TemplateStringsArray, ...values: any[]) => TemplateResult;
+type AppRunRunDirective = (...args: any[]) => any;
+
+declare global {
+  var app: import('apprun').IApp;
+  var _AppRunVersions: string;
+  var html: LitTemplateFunction;
+  var svg: LitTemplateFunction;
+  var run: AppRunRunDirective;
+
+  interface Window {
+    app: import('apprun').IApp;
+    _AppRunVersions: string;
+    html: LitTemplateFunction;
+    svg: LitTemplateFunction;
+    run: AppRunRunDirective;
+  }
+}
 
 declare module 'apprun' {
 
@@ -128,7 +147,6 @@ declare module 'apprun' {
     trustedHTML(html: string): any[];
     /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
     safeHTML(html: string): any[];
-    use_globals(): void;
     use_render(render: any, mode?: 0 | 1): void;
     use_react(React: any, ReactDOM: any): void;
     version: string;
@@ -184,6 +202,15 @@ declare module 'apprun' {
   /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
   export const safeHTML: (html: string) => any[];
   export function Fragment(props: any, ...children: any[]): any[];
+}
+
+declare module 'apprun/apprun-html' {
+  export * from 'apprun';
+  export { default } from 'apprun';
+  export const html: LitTemplateFunction;
+  export const svg: LitTemplateFunction;
+  export const run: AppRunRunDirective;
+  export const render: (element: Element | ShadowRoot, node: import('apprun').VDOM, component?: {}) => void;
 }
 
 declare namespace app {

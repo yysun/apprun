@@ -131,7 +131,6 @@ export interface IApp {
   trustedHTML(html: string): any[];
   /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
   safeHTML(html: string): any[];
-  use_globals(): void;
   use_render(render: any, mode?: 0 | 1): void;
   use_react(React: any, ReactDOM: any): void;
   version: string;

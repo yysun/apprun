@@ -34,19 +34,26 @@ const nodes = trustedHTML('<p>trusted markup</p>');
 
 `safeHTML()` remains as a deprecated alias for one minor migration window.
 
-### Browser Globals Are Explicit
+### Browser Globals Are Smaller
 
-Old behavior: importing AppRun wrote globals such as `window.React`, `window.Component`, `window.on`, `window.customElement`, and `window.safeHTML`.
+Old behavior: loading the browser bundles wrote a broad set of globals, including `window.React`, `window.Component`, `window.on`, `window.customElement`, and `window.safeHTML`.
 
-New behavior: imports do not mutate browser globals. Script-tag users can opt in:
+New behavior: the script-tag `apprun-html` build keeps the no-build authoring globals:
 
-```ts
-import app from 'apprun';
-
-app.use_globals();
+```html
+<script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+<script>
+  app.start(document.body, 0, state => html`<div>${state}</div>`);
+</script>
 ```
 
-`app.use_globals()` preserves the existing `window.React` value under `window._React`, then installs the legacy AppRun globals intentionally.
+The supported browser globals are `app`, `html`, `run`, and `svg`. Use module imports for everything else:
+
+```ts
+import app, { Component, customElement, trustedHTML } from 'apprun';
+```
+
+AppRun no longer aliases itself to `window.React` or installs the decorator and HTML helper APIs as globals. That avoids collisions while preserving the script-tag workflow most existing examples use.
 
 ### `query()` Removed
 

@@ -50,7 +50,7 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof app.webComponent).toBe('function');
       expect(typeof app.trustedHTML).toBe('function');
       expect(typeof app.safeHTML).toBe('function');
-      expect(typeof app.use_globals).toBe('function');
+      expect((app as any).use_globals).toBeUndefined();
       expect(typeof app.use_render).toBe('function');
       expect(typeof app.use_react).toBe('function');
       expect(typeof app.version).toBe('string');
