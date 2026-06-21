@@ -120,7 +120,7 @@ const code_html = code => `<!DOCTYPE html>
       margin: 2em;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/typescript@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@5.8.3"></script>
   <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
 </head>
 <body>
