@@ -9,6 +9,7 @@ Version 6.0.0 is a release-readiness cleanup for the breaking API work. It makes
 - `safeHTML()` remains as a deprecated alias for one migration window, but the preferred name is `trustedHTML()` because AppRun does not sanitize HTML.
 - `query()` is removed. Use `runAsync()` for event result collection.
 - Router patterns now support `:param` and `*`, with exact routes still taking precedence.
+- Added the AppRun Agent Skill for AI coding agents. Install it with `npx skills add yysun/apprun` to get AppRun-specific guidance for MVU components, events, routing, custom elements, and repo test coverage.
 - The npm package now publishes only the intended generated assets, exposes CJS/ESM entry points through `exports`, treats `immer` as an optional peer for `createState`, and keeps generated `dist`, `esm`, `jsx-runtime.js`, and demo bundles out of source commits.
 - CI now runs tests, build, lint, and `npm pack --dry-run`.
 
