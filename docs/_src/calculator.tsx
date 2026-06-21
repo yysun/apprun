@@ -1,4 +1,4 @@
-import app, { Component } from '../../src/apprun';
+import { app, Component } from '../../src/apprun';
 import { StateMachine, find_transition } from './state-machine';
 
 type Events = 'NUM' | 'OP' | 'DOT' | 'CE' | 'EQ' | '+/-';

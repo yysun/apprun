@@ -4,6 +4,11 @@ describe('vdom-lit-html', () => {
 
   it('should install the script-tag browser globals', () => {
     expect((window as any).app).toBe(app);
+    expect((window as any).Component).toBe(Component);
+    expect((window as any).on).toBeDefined();
+    expect((window as any).customElement).toBeDefined();
+    expect((window as any).trustedHTML).toBe(app.trustedHTML);
+    expect((window as any).safeHTML).toBe(app.safeHTML);
     expect((window as any).html).toBe(html);
     expect((window as any).svg).toBe(svg);
     expect((window as any).run).toBe(run);

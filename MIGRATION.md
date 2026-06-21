@@ -36,7 +36,7 @@ const nodes = trustedHTML('<p>trusted markup</p>');
 
 ### Browser Globals Are Smaller
 
-Old behavior: loading the browser bundles wrote a broad set of globals, including `window.React`, `window.Component`, `window.on`, `window.customElement`, and `window.safeHTML`.
+Old behavior: loading the browser bundles aliased AppRun through React globals such as `window.React` and `window._React`.
 
 New behavior: the script-tag `apprun-html` build keeps the no-build authoring globals:
 
@@ -47,13 +47,13 @@ New behavior: the script-tag `apprun-html` build keeps the no-build authoring gl
 </script>
 ```
 
-The supported browser globals are `app`, `html`, `run`, and `svg`. Use module imports for everything else:
+The supported browser globals are `app`, `Component`, `on`, `customElement`, `trustedHTML`, `safeHTML`, `html`, `run`, and `svg`. Use module imports for APIs outside that list:
 
 ```ts
-import app, { Component, customElement, trustedHTML } from 'apprun';
+import { ROUTER_EVENT } from 'apprun';
 ```
 
-AppRun no longer aliases itself to `window.React` or installs the decorator and HTML helper APIs as globals. That avoids collisions while preserving the script-tag workflow most existing examples use.
+AppRun no longer aliases itself to `window.React` or stores the previous React value under `window._React`. That avoids React collisions while preserving the script-tag workflow existing examples use.
 
 ### `query()` Removed
 

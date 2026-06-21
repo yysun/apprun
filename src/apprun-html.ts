@@ -2,7 +2,8 @@
  * AppRun lit-html renderer entry point
  *
  * Provides the AppRun public API with lit-html rendering primitives. The script-tag
- * build keeps the small browser authoring surface: app, html, svg, and run.
+ * build keeps the browser authoring surface: app, Component, on, customElement,
+ * trustedHTML, safeHTML, html, svg, and run.
  */
 
 import app from './apprun'

@@ -43,6 +43,12 @@ type AppRunRunDirective = (...args: any[]) => any;
 declare global {
   var app: import('apprun').IApp;
   var _AppRunVersions: string;
+  var Component: typeof import('apprun').Component;
+  var on: typeof import('apprun').on;
+  var customElement: typeof import('apprun').customElement;
+  var trustedHTML: typeof import('apprun').trustedHTML;
+  /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
+  var safeHTML: typeof import('apprun').safeHTML;
   var html: LitTemplateFunction;
   var svg: LitTemplateFunction;
   var run: AppRunRunDirective;
@@ -50,6 +56,12 @@ declare global {
   interface Window {
     app: import('apprun').IApp;
     _AppRunVersions: string;
+    Component: typeof import('apprun').Component;
+    on: typeof import('apprun').on;
+    customElement: typeof import('apprun').customElement;
+    trustedHTML: typeof import('apprun').trustedHTML;
+    /** @deprecated Use trustedHTML() for caller-owned trusted markup. */
+    safeHTML: typeof import('apprun').safeHTML;
     html: LitTemplateFunction;
     svg: LitTemplateFunction;
     run: AppRunRunDirective;

@@ -159,15 +159,15 @@ Finally, you can use AppRun with [React](https://reactjs.org/). The `app.use_rea
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import app from 'apprun';
-use_react(React, ReactDOM);
+import { app } from 'apprun';
+app.use_react(React, ReactDOM);
 ```
 
 The `app.use_render` function allows you to use a other render library for rendering the view. Enjoy the rich ecosystem of React.
 
 ```js
 import { render } from 'preact'
-import app from 'apprun';
+import { app } from 'apprun';
 app.use_render(render);
 ```
 
@@ -182,7 +182,7 @@ AppRun is distributed on npm. To get it, run:
 npm install apprun
 ```
 
-When you want to do a rapid prototyping or demo, you can use AppRun directly in the browser without JSX or any build step. The `app`, `html`, `run`, and `svg` functions are available globally in the script-tag build. The `html` and `svg` functions are lit templates. The `run` function is equivalent to the `$on` directive and invokes state update functions.
+When you want to do a rapid prototyping or demo, you can use AppRun directly in the browser without JSX or any build step. The `app`, `Component`, `on`, `customElement`, `trustedHTML`, `safeHTML`, `html`, `run`, and `svg` APIs are available globally in the script-tag build. The `html` and `svg` functions are lit templates. The `run` function is equivalent to the `$on` directive and invokes state update functions.
 
 ```js
 <html>

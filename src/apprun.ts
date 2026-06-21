@@ -186,6 +186,15 @@ if (!app.start) {
     });
   }
 
+  if (typeof window === 'object') {
+    const globalWindow = window as any;
+    globalWindow['Component'] = Component;
+    globalWindow['on'] = on;
+    globalWindow['customElement'] = customElement;
+    globalWindow['trustedHTML'] = trustedHTML;
+    globalWindow['safeHTML'] = safeHTML;
+  }
+
   app.use_render = (render, mode = 0) => {
     if (mode === 0) {
       app.render = (el, vdom) => render(vdom, el); // react style

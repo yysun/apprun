@@ -117,6 +117,11 @@ export function safeExecute<T extends any[], R>(
 export interface SafeGlobalWindow {
   app?: any;
   _AppRunVersions?: any;
+  Component?: any;
+  on?: any;
+  customElement?: any;
+  trustedHTML?: any;
+  safeHTML?: any;
   html?: any;
   svg?: any;
   run?: any;

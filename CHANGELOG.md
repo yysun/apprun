@@ -2,7 +2,7 @@
 
 ## V6.0.0
 
-* Kept script-tag globals to `app`, `html`, `run`, and `svg`; removed legacy `React`, `Component`, decorator, and HTML helper globals
+* Kept AppRun script-tag globals; removed legacy `React` and `_React` browser aliases
 * Removed `_html:` string-prefix rendering; use `trustedHTML()` for caller-owned trusted markup
 * Deprecated misleading `safeHTML()` naming in favor of `trustedHTML()`
 * Removed `query()` in favor of `runAsync()`

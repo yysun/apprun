@@ -4,7 +4,7 @@
 
 Version 6.0.0 is a release-readiness cleanup for the breaking API work. It makes the migration contract explicit, tightens npm packaging, and turns release checks into CI gates instead of local convention.
 
-- Script-tag browser globals are now limited to the AppRun authoring surface: `app`, `html`, `run`, and `svg`. Legacy globals such as `React`, `Component`, `on`, `customElement`, and `safeHTML` are no longer installed on `window`.
+- Script-tag browser globals keep the AppRun authoring surface: `app`, `Component`, `on`, `customElement`, `trustedHTML`, `safeHTML`, `html`, `run`, and `svg`. The legacy `React` and `_React` browser aliases are no longer installed.
 - `_html:` string-prefix rendering is removed. Use `trustedHTML()` for caller-owned trusted markup.
 - `safeHTML()` remains as a deprecated alias for one migration window, but the preferred name is `trustedHTML()` because AppRun does not sanitize HTML.
 - `query()` is removed. Use `runAsync()` for event result collection.
@@ -158,8 +158,8 @@ The `app.use_render` function allows you to use a custom render function for ren
 ```js
 import ReactDOM from 'react-dom/client'
 import { flushSync } from 'react-dom';
-import app from 'apprun';
-use_react(React, ReactDOM);
+import { app } from 'apprun';
+app.use_react(React, ReactDOM);
 ```
 
 See https://github.com/yysun/apprun-antd-demo-js for an example.

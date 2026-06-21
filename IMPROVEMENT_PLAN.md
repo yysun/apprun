@@ -143,13 +143,12 @@ with a deprecation alias), and point users at DOMPurify for untrusted input.
 ## 3. API & Behavior Cleanups (P1)
 
 ### 3.1 Stop replacing `window.React`
-Resolved for 6.0.0. AppRun no longer saves `window.React` to `_React`, no longer sets
-`window.React = app`, and no longer writes `Component`, `on`, `customElement`, or
-`safeHTML` onto `window`.
+Resolved for 6.0.0. AppRun no longer saves `window.React` to `_React` and no longer
+sets `window.React = app`.
 
-The remaining browser global contract is deliberately small: core keeps the `app`
-singleton, and the `apprun-html` script-tag build adds only `html`, `run`, and `svg`.
-Everything else requires imports.
+The remaining browser global contract is AppRun-owned: core keeps `app`, `Component`,
+`on`, `customElement`, `trustedHTML`, and `safeHTML`; the `apprun-html` script-tag
+build adds `html`, `run`, and `svg`.
 
 ### 3.2 Error handling swallows everything
 `src/app.ts:86-91, 123-128` and `src/component.ts:278-301` — every handler error is
@@ -360,7 +359,7 @@ The codebase advertises TypeScript support, but type checking is effectively off
 | # | Item | Notes |
 |---|------|-------|
 | 1 | Remove `_html:` prefix (§2.1) | Provide codemod note → `safeHTML` |
-| 2 | Opt-in globals; stop replacing `window.React` (§3.1) | Keep behavior in script-tag bundle only |
+| 2 | Remove `window.React` aliasing (§3.1) | Keep AppRun-owned script-tag globals |
 | 3 | Remove `query()` (§3.7) | Deprecated since 3.35 |
 | 4 | Decide and implement router `:param` matching (§1.4) | Or formally document positional-only params |
 | 5 | Rename/alias `safeHTML` trust model (§2.3) | Deprecation alias for one minor |
