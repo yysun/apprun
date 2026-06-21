@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../tutorial/">
+      
+      
+        <link rel="next" href="../create-apprun-app/">
       
       
       <link rel="icon" href="../assets/favicon.ico">
@@ -16,7 +20,7 @@
     
     
       
-        <title>Use AppRun in the browser - AppRun Docs</title>
+        <title>Use in the Browser (ESM) - AppRun Docs</title>
       
     
     
@@ -44,16 +48,6 @@
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
-  
-
-
-  
-  
-
-<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","UA-123786786-1"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","UA-123786786-1",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=UA-123786786-1",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
-  
-    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
-  
 
     
     
@@ -105,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Use AppRun in the browser
+              Use in the Browser (ESM)
             
           </span>
         </div>
@@ -238,6 +232,269 @@
       
   
   
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Use in the Browser (ESM)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Use in the Browser (ESM)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#which-bundle-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which bundle to use
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-apprun-from-cdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get AppRun from CDN
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-esm-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use the ESM version
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-other-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Other Libraries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use Other Libraries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lit-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      lit-html
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#htm" class="md-nav__link">
+    <span class="md-ellipsis">
+      htm
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../create-apprun-app/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Create AppRun App
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Single Page App
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
   
   
     
@@ -253,10 +510,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -267,8 +524,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Concepts
           </label>
@@ -290,10 +547,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -304,8 +561,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
             <span class="md-nav__icon md-icon"></span>
             Architecture
           </label>
@@ -402,6 +659,48 @@
   
   
     <li class="md-nav__item">
+      <a href="../routing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Routing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-practices/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Practices
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reactivity/" class="md-nav__link">
         
   
@@ -440,10 +739,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -454,8 +753,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
             <span class="md-nav__icon md-icon"></span>
             Examples
           </label>
@@ -590,137 +889,6 @@
           </ul>
         </nav>
       
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Getting started
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            Getting started
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Installation
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tutorial/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Tutorial
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../create-apprun-app/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Create AppRun App
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../spa/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Single Page App
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -953,6 +1121,27 @@
   
   <span class="md-ellipsis">
     Notebooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
   </span>
   
 
@@ -1209,6 +1398,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#which-bundle-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which bundle to use
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#get-apprun-from-cdn" class="md-nav__link">
     <span class="md-ellipsis">
       Get AppRun from CDN
@@ -1287,6 +1485,48 @@
 
 
 <h1 id="use-apprun-in-the-browser">Use AppRun in the browser<a class="headerlink" href="#use-apprun-in-the-browser" title="Permanent link">&para;</a></h1>
+<h2 id="which-bundle-to-use">Which bundle to use<a class="headerlink" href="#which-bundle-to-use" title="Permanent link">&para;</a></h2>
+<p>AppRun ships several builds. Choose by how you write your views and whether you want ES
+modules:</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>Globals exposed</th>
+<th>Template style</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dist/apprun-html.js</code></td>
+<td><code>app</code>, <code>html</code>, <code>svg</code>, <code>run</code>, <code>Component</code></td>
+<td><code>html</code> template literals</td>
+<td>Quick start in a <code>&lt;script&gt;</code> tag, no build step.</td>
+</tr>
+<tr>
+<td><code>dist/apprun-html.esm.js</code></td>
+<td>(ESM imports)</td>
+<td><code>html</code> template literals</td>
+<td><code>&lt;script type="module"&gt;</code>, no build step.</td>
+</tr>
+<tr>
+<td><code>dist/apprun.esm.js</code></td>
+<td>(ESM imports)</td>
+<td>Bring your own renderer</td>
+<td>ESM + a third-party renderer via <code>app.use_render</code>.</td>
+</tr>
+<tr>
+<td><code>npm install apprun</code></td>
+<td>(ESM imports)</td>
+<td>JSX (with a compiler)</td>
+<td>Projects using Vite/webpack/esbuild and JSX.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>html</code> and <code>svg</code> functions are lit-html template tags. The <code>run</code> function is the
+lit-html equivalent of the <code>$on</code> directive. JSX requires a compiler, so it is not available
+in the script-tag builds.</p>
 <h2 id="get-apprun-from-cdn">Get AppRun from CDN<a class="headerlink" href="#get-apprun-from-cdn" title="Permanent link">&para;</a></h2>
 <p>You can use AppRun directly from the unpkg.com CDN:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/apprun/dist/apprun-html.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
@@ -1370,8 +1610,6 @@
 
 
 
-  
-
 
 
 
@@ -1392,7 +1630,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2015 - 2025 Yiyi Sun
+      Copyright &copy; 2015 - 2026 Yiyi Sun
     </div>
   
   
@@ -1427,8 +1665,6 @@
         <script src="../assets/vendor/codemirror/mode/jsx/jsx.js"></script>
       
         <script src="../assets/apprun-play.js"></script>
-      
-        <script src="../assets/apprun-code.js"></script>
       
     
   </body>
