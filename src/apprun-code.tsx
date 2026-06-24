@@ -39,7 +39,9 @@ const encodeHTML = code => {
   .replace(/'/g, '&#039;');
 }
 
-const code_html = code => `<!DOCTYPE html>
+const encodeAttribute = value => `${value}`.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+const code_html = (code, apprun_html_src = 'dist/apprun-html.js') => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -53,7 +55,7 @@ const code_html = code => `<!DOCTYPE html>
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/typescript@latest"></script>
-  <script src="dist/apprun-html.js"></script>
+  <script src="${encodeAttribute(apprun_html_src)}"></script>
 </head>
 <body>
 <pre id="code" style="display:none">${encodeHTML(code)}</pre>
@@ -123,6 +125,7 @@ class Play extends Component {
     const code_id = props['code-id'];
     const hide_code = props['hide-code'];
     const code_width = props['code-width'];
+    const apprun_html_src = props['apprun-html-src'];
 
     let code_area;
     if (code_id) {
@@ -138,11 +141,11 @@ class Play extends Component {
 
     if (code_area) code_area.style.display = 'none';
 
-    return { code, hide_code, code_width };
+    return { code, hide_code, code_width, apprun_html_src };
   }
 
 
-  rendered = ({ code, hide_code, code_width }) => {
+  rendered = ({ code, hide_code, code_width, apprun_html_src }) => {
     const element = this.element as HTMLElement;
 
     const textarea = element.querySelector(".apprun-play .editor") as any;
@@ -159,7 +162,7 @@ class Play extends Component {
       if (code.indexOf('<html') >= 0)
         doc.write(code);
       else
-        doc.write(code_html(code));
+        doc.write(code_html(code, apprun_html_src));
       doc.close();
     }
 

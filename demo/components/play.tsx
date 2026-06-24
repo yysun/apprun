@@ -18,8 +18,8 @@ const html = code => `<!DOCTYPE html>
     img { width: 100%; }
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="dist/apprun-dev-tools.js"></script>
-  <script src="dist/apprun-html.js"></script>
+  <script src="docs/assets/apprun-dev-tools.js"></script>
+  <script src="docs/assets/apprun-html.js"></script>
 </head>
 <body>
 <script>
@@ -44,6 +44,7 @@ const editor = (e) => {
   const editor = document.createElement('apprun-code');
   editor.style.height = '80vh';
   editor.setAttribute('code-width', '60%');
+  editor.setAttribute('apprun-html-src', 'docs/assets/apprun-html.js');
   e.appendChild(editor)
 };
 

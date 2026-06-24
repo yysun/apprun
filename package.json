@@ -58,6 +58,7 @@
   },
   "scripts": {
     "build": "tsc -p src && rollup -c && webpack --mode production",
+    "postbuild": "node scripts/sync-pages-assets.js",
     "prepack": "npm run build",
     "lint": "eslint .",
     "test": "jest",
