@@ -56,6 +56,8 @@
  * }
  *
  * // Mount multiple components
+ * // Required only when browser /path links should use SPA navigation.
+ * app.use_prettyLink();
  * app.addComponents(document.body, {
  *   '/home': MyComponent,
  *   '/about': AnotherComponent

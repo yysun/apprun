@@ -1,3 +1,9 @@
+/**
+ * Standalone addComponents demo bootstrap.
+ *
+ * Enables pretty-link routing before mounting because the demo navigation uses
+ * browser path links under a configured base path.
+ */
 import { AppComponent } from './components/AppComponent.js';
 import { HomeComponent } from './components/HomeComponent.js';
 import { AboutComponent } from './components/AboutComponent.js';
@@ -7,6 +13,7 @@ import { SVUComponent } from './components/SVUComponent.js';
 import functionComponent from './components/FunctionComponent.js';
 
 app.basePath = '/demo-html/add-components'; // Set the base path for the app
+app.use_prettyLink();
 
 // Initialize the main app
 const mainApp = new AppComponent();

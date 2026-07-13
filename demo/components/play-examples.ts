@@ -1,3 +1,14 @@
+/**
+ * Interactive source examples shown in the AppRun Playground.
+ *
+ * Routing examples intentionally demonstrate both startup modes:
+ * - Hash anchors use AppRun's default hash routing.
+ * - Ordinary path anchors explicitly enable pretty-link routing before rendering.
+ *
+ * Recent Changes:
+ * - Added the required pretty-link opt-in to the path-based mount-options example.
+ * - Corrected JSX text in the SVG xlink example so the full catalog compiles.
+ */
 export default [
   {
     name: 'Hello World ($bind)',
@@ -439,6 +450,7 @@ const App = () => <>
   <div id="pages"></div>
 </>
 
+app.use_prettyLink();
 app.render(document.body, <App />);
 
 app.addComponents('#pages', {
@@ -479,7 +491,7 @@ app.start(document.body, {}, view);
     code: `// SVG - xlink
 const view = () => <svg viewBox="0 0 150 20">
   <a xlinkHref="https://apprun.js.org/">
-    <text x="10" y="10" font-size="5">Click => AppRun</text></a>
+    <text x="10" y="10" font-size="5">Click {'=>'} AppRun</text></a>
 </svg>
 
 app.start(document.body, {}, view);
@@ -616,5 +628,3 @@ app.start(document.body, state, view, update, {transition: true});
 `
   }
 ];
-
-

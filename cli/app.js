@@ -1,3 +1,9 @@
+/**
+ * AppRun CLI starter application.
+ *
+ * Demonstrates component-event routing with browser path links. Pretty-link
+ * routing is enabled before the first mount so those links stay in the SPA.
+ */
 const { app, html } = window["apprun"];
 
 // Routing (component event)
@@ -24,6 +30,7 @@ const App = () => html`<div id="menus">
 `;
 
 // app.basePath = '/'; // Uncomment this line if you want to set a base path for routing
+app.use_prettyLink();
 app.start('#app', {}, App);
 
 [About, Contact, Home].map(C => new C().start('pages'));

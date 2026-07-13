@@ -116,7 +116,7 @@ app.start(document.body, state, view);
 ```
 <apprun-code></apprun-code>
 
-And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle the routing events. AppRun routes `/<path>`, `#<path>`, and `#/<path>` URLs to components. AppRun also does this with [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
+And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle routing events. Hash URLs work by default. To intercept ordinary `/<path>` links for SPA navigation, call `app.use_prettyLink()` before AppRun initializes. AppRun also supports [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
 
 ```js
 class Home extends Component {
@@ -142,6 +142,7 @@ const App = () => <>
   <div id="pages"></div>
 </>
 
+app.use_prettyLink();
 app.render(document.body, <App />);
 [About, Contact, Home].map(C => new C().start('pages'));
 ```

@@ -16,6 +16,12 @@ AppRun must preserve normal browser navigation and legacy hash routing by defaul
 - [x] `apprun-no-init` and `app['no-init-route']` continue to suppress only the initial route call in either routing mode.
 - [x] Path-mode base-path stripping and pushed navigation paths retain their current behavior.
 - [x] The public TypeScript declarations expose `use_prettyLink(enabled?: boolean): void`.
+- [x] Every maintained runnable example that uses ordinary `/path` anchors for AppRun SPA navigation opts into pretty-link routing before rendering or mounting route components, including README, What's New, the CLI starter, the standalone add-components demo, and the Play catalog.
+- [x] Hash-routing examples remain hash-based and do not opt into pretty-link routing.
+- [x] Public API documentation distinguishes direct route dispatch from automatic browser path navigation, which requires `app.use_prettyLink()` before initialization.
+- [x] Generated Play bundles contain the corrected mount-options example so locally served Playground and documentation Play surfaces match their sources.
+- [x] Both TypeScript-backed Play renderers execute compiled examples before their preview document reaches `DOMContentLoaded`, allowing startup configuration such as `app.use_prettyLink()` to take effect.
+- [x] Every maintained Play catalog example compiles under the synchronous script-mode compiler options.
 - [x] Targeted tests execute AppRun's real `DOMContentLoaded`, click, hashchange, and popstate wiring rather than duplicating the implementation logic inside the test.
 - [x] With its workaround temporarily removed, rlp-com's production build succeeds against the corrected local AppRun package, proving the workaround can be deleted after a fixed AppRun version is published and consumed.
 - [x] AppRun's focused router tests, full unit suite, and production build pass.
@@ -27,6 +33,8 @@ AppRun must preserve normal browser navigation and legacy hash routing by defaul
 - Keep the event bus and direct `app.run('route', ...)` behavior available in both modes.
 - Preserve the existing `basePath`, router-event, and 404 contracts.
 - Keep changes surgical across the AppRun routing bootstrap and the obsolete rlp-com build shim.
+- Keep example changes surgical: opt in only examples that depend on browser `/path` anchor interception.
+- Treat historical plans, external links, explicit `window.location` navigation, and direct programmatic route dispatch as non-SPA-link examples; do not add pretty-link configuration to them.
 - Do not commit an rlp-com cleanup that still resolves the broken published `apprun@3.38.0`; consumer cleanup must follow a fixed package release.
 
 ## Non-Goals

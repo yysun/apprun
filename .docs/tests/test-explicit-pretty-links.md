@@ -28,3 +28,24 @@
 2. Confirm neither page dispatches an initial route on `DOMContentLoaded`.
 3. Confirm subsequent hash navigation works on the default-mode page.
 4. Confirm subsequent click and Back navigation work through AppRun on the opt-in page.
+
+## Scenario 5 - Play mount-options example opts into path routing
+
+1. Build AppRun and open the local Playground at `http://localhost:8080/#play`.
+2. Select `Routing (mount options)`.
+3. Confirm the example source calls `app.use_prettyLink()` before rendering or mounting its path-routed components.
+4. Click the Contact and About links in the preview.
+5. Confirm each link updates the preview URL and content without navigating the outer Playground page or performing a full-page load.
+6. Select `Routing (component event)` and confirm it remains a hash-routing example without a pretty-link opt-in.
+
+## Scenario 6 - Standalone add-components demo uses its base path
+
+1. Open `/demo-html/add-components/` from the local AppRun server.
+2. Confirm the Home component renders at the configured base path.
+3. Click About.
+4. Confirm the URL becomes `/demo-html/add-components/about` and the About component renders without a full-page load.
+
+## Execution - 2026-07-13
+
+- Scenario 5 passed on `http://localhost:8081/#play/20` because port 8080 was already occupied: Contact and About rendered in-place, and the hash-routing example still rendered Contact through `#contact`.
+- Scenario 6 passed: About rendered in-place at `/demo-html/add-components/about`.

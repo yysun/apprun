@@ -11,6 +11,11 @@ Restore normal browser navigation and hash routing as AppRun's default while mak
 - AppRun v3.30.2 also registered a `#` no-op fallback. The current `/` no-op fallback alone would make an empty default hash initialization dispatch `/`, so the `#` fallback must be restored without removing the current path fallback.
 - `src/types.ts` and `apprun.d.ts` define the public `IApp` contract but currently expose no pretty-link configuration.
 - `tests/router-fix.spec.ts` copies the old routing conditionals instead of executing listeners registered by `src/apprun.ts`; the behavior-level bootstrap suite will replace it so stale auto-detection assertions do not survive the fix.
+- `README.md` and the Play `Routing (mount options)` example use ordinary `/path` anchors but do not call `app.use_prettyLink()`, so both examples contradict the restored explicit opt-in contract.
+- `cli/app.js` and `demo-html/add-components` are maintained runnable path-anchor examples and also need an explicit opt-in before their first AppRun mount.
+- The Play `Routing (component event)` example uses hash anchors and must remain in default hash mode.
+- The usage comments in `src/apprun.ts` and `src/router.ts` show path routes without clearly separating direct event routing from automatic browser path interception.
+- `src/apprun-code.tsx` and `src/apprun-play.tsx` dynamically append compiled code as a second module. The preview document can therefore fire `DOMContentLoaded` before `app.use_prettyLink()` runs, making an otherwise-correct path example navigate its iframe instead of routing in place.
 - rlp-com has eight esbuild entry points. `_esbuild.js` injects `src/apprun-disable-pretty-links.ts`, which registers a fake `#` route, and `src/__tests__/apprun-disable-pretty-links.spec.ts` locks in that workaround.
 - AppRun uses Jest/jsdom, `npm test`, and `npm run build`. rlp-com uses Jest and `npm run build` with AppRun 3.38.0 from `node_modules`.
 - rlp-com's only remaining non-shim unit file is `src/__tests__/search.spec.ts`, so its complete Jest suite is the narrowest honest post-cleanup test command.
@@ -26,6 +31,10 @@ Restore normal browser navigation and hash routing as AppRun's default while mak
 - Keep `apprun-no-init` and `app['no-init-route']` independent of mode selection so they suppress the initial call without disabling later navigation listeners.
 - Preserve the existing click eligibility and `basePath` implementation; tightening anchor interception is a separate behavior change.
 - Prove the rlp-com injected fake route and its test can be removed by building all entries against the corrected local checkout, then restore the workaround until a fixed AppRun package version is published. Do not commit a consumer state that still resolves the broken published 3.38.0 package.
+- Keep examples explicit at the point of use: runnable examples with ordinary path anchors call `app.use_prettyLink()` before rendering or mounting, while hash and programmatic routing examples remain unchanged.
+- Classify examples by navigation behavior, not slash-prefixed strings: CLI and standalone demo path anchors need opt-in; historical documentation, direct `route(...)`, and deliberate `window.location` navigation do not.
+- Clarify the API comments instead of implying that every slash-prefixed route requires pretty-link mode; direct `route(...)` and `app.run(...)` calls continue to work in either startup mode.
+- Compile TypeScript-backed Play examples as script-style code and append them synchronously from each bootstrap module, so startup configuration executes before the preview document's `DOMContentLoaded` boundary. The example surfaces use browser globals and contain no imports or exports; preserving dynamically inserted module semantics would keep the startup race. Detecting API names inside source strings is rejected as brittle.
 
 ## Phased Tasks
 
@@ -75,6 +84,21 @@ Restore normal browser navigation and hash routing as AppRun's default while mak
 - [x] Create `.docs/done/2026/07/13/explicit-pretty-links.md` with the implemented contract, exact verification results, and any concrete residual risk.
 - [x] Commit the AppRun framework, tests, declarations, and RPD artifacts with `fix: make pretty-link routing explicit`.
 
+### Phase 7 - Align runnable examples and API documentation
+
+- [x] Update `README.md` so its SPA path-anchor example calls `app.use_prettyLink()` before rendering and states that automatic browser path routing is opt-in.
+- [x] Update `demo/components/play-examples.ts` with the required file comment block and make only `Routing (mount options)` opt into pretty-link routing before rendering.
+- [x] Update the CLI starter and standalone add-components demo to opt in before their first AppRun mount.
+- [x] Update `src/apprun.ts` and `src/router.ts` file comments so path-link startup, direct route dispatch, and hash routing have distinct documented contracts.
+- [x] Add `tests/pretty-link-examples.spec.ts` to prove all maintained path-anchor examples opt in before rendering, hash and deliberate browser-navigation examples remain opt-in free, and every Play catalog entry compiles in script mode.
+- [x] Update both `src/apprun-code.tsx` and `src/apprun-play.tsx` so compiled script-style examples execute synchronously before `DOMContentLoaded` can complete.
+- [x] Run `npm test -- --runInBand tests/pretty-link-examples.spec.ts tests/apprun-routing-bootstrap.spec.ts tests/router.spec.ts`: 3 suites and 33 tests passed.
+- [x] Run `npm run build`, verify the generated Play bundles contain the corrected example/runtime, and restore generated artifacts according to repository convention.
+- [x] Execute the Playground scenario added to `.docs/tests/test-explicit-pretty-links.md` and confirm mount-options links route in-place; smoke-test the standalone add-components demo.
+- [x] Run the full unit suite (48 suites and 548 tests), `git diff --check`, CR, and VR against the expanded acceptance criteria.
+- [x] Update `.docs/done/2026/07/13/explicit-pretty-links.md` with the example-alignment changes and exact verification evidence.
+- [x] Commit the example, Play runtime source, documentation, tests, and updated RPD artifacts as one scoped follow-up.
+
 ## Validation
 
 - Pre-fix proof: `npm test -- --runInBand tests/apprun-routing-bootstrap.spec.ts` must fail because default startup selects path interception and `use_prettyLink` is absent.
@@ -83,6 +107,7 @@ Restore normal browser navigation and hash routing as AppRun's default while mak
 - AppRun build: `npm run build`.
 - rlp-com compatibility proof: temporarily remove the shim and its spec, run `npm test -- --runInBand`, temporarily replace `node_modules/apprun` with a symlink to the built local AppRun checkout, run `npm run build`, then restore the installed package and tracked workaround so the repo remains reproducible until release.
 - Browser E2E: execute `.docs/tests/test-explicit-pretty-links.md` with built AppRun assets and verify URL, default prevention state, path routing events, and back navigation.
+- Example verification: `npm test -- --runInBand tests/pretty-link-examples.spec.ts tests/apprun-routing-bootstrap.spec.ts tests/router.spec.ts`, then run the Playground mount-options scenario against the rebuilt `demo/app.js`.
 - Diff hygiene: `git diff --check` in both repositories plus requirement-focused code review.
 
 ## Rollback / Risk

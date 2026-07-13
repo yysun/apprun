@@ -9,7 +9,7 @@
  * 2. Path-based routing (/path) 
  *    - Works with browser history API
  *    - Requires server configuration for SPA routing
- *    - Handles popstate events automatically
+ *    - Handles browser links and popstate after app.use_prettyLink() opts in before initialization
  * 3. Event-based navigation
  *    - Routes trigger corresponding component events
  *    - Automatic route parameter extraction
@@ -38,7 +38,7 @@
  * 
  * // Navigate programmatically  
  * app.run('route', '#/home');
- * route('/users/123'); // Direct routing
+ * route('/users/123'); // Direct routing does not require pretty-link mode
  * 
  * // Hierarchical matching examples
  * app.on('/api', (operation, id) => // Handle /api/users/123);
@@ -50,6 +50,7 @@
  * // If handler found at /api, it receives: ('v1', 'users', '123')
  * 
  * // Base Path Support (NEW):
+ * app.use_prettyLink(); // Enable automatic browser path navigation before initialization
  * app.basePath = '/myapp'; // For sub-directory deployments
  * // Links: <a href="/users/123"> (relative paths)
  * // Navigation: /myapp/users/123 (full path)

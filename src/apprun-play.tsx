@@ -1,3 +1,9 @@
+/**
+ * AppRun documentation playground custom element.
+ *
+ * Compiles browser-global TypeScript/JSX examples into synchronous scripts so
+ * startup configuration runs before the preview document's DOMContentLoaded.
+ */
 import { app, Component } from './apprun';
 
 const popup_div = `<div id="play-popup" class="overlay">
@@ -126,7 +132,7 @@ const compiled = ts.transpileModule(code, {
     "jsxFactory": "app.h",
     "jsxFragmentFactory": "app.Fragment",
     "target": "es2020",
-    "module": "esnext",
+    "module": "none",
   },
   reportDiagnostics: true,
 });
@@ -150,7 +156,7 @@ if (compiled.diagnostics && compiled.diagnostics.length) {
     document.body.appendChild(pre);
   };
   const script = document.createElement('script');
-  script.type = 'module';
+  script.type = 'text/javascript';
   script.text = compiled.outputText;
   document.body.appendChild(script);
 }
