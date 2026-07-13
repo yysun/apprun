@@ -19,6 +19,7 @@
  *    - ActionOptions: Action behavior options (render, history, global, callback)
  *    - MountOptions: Component mounting options (global events, routing, transitions)
  *    - AppStartOptions: Application startup configuration with lifecycle hooks
+ *    - IApp.use_prettyLink: Explicit startup selection for path-link routing
  *
  * Features:
  * - Strong typing for component lifecycle

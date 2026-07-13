@@ -1,3 +1,15 @@
+/**
+ * AppRun playground custom element.
+ *
+ * Generates an isolated preview document, compiles JSX/TypeScript in the
+ * browser, and renders the result with AppRun. The TypeScript CDN dependency
+ * uses an explicit version and browser bundle path so the `ts` global is
+ * available before preview compilation begins.
+ *
+ * Recent Changes:
+ * - Executes compiled script-style examples synchronously before the preview
+ *   document finishes DOMContentLoaded, preserving startup configuration.
+ */
 import { app, Component } from './apprun';
 const styles = `
 .CodeMirror, .apprun-play iframe {
@@ -40,7 +52,7 @@ const code_html = code => `<!DOCTYPE html>
       margin: 2em;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/typescript@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@5.8.3/lib/typescript.js"></script>
   <script src="dist/apprun-html.js"></script>
 </head>
 <body>
@@ -53,7 +65,7 @@ const compiled = ts.transpileModule(code, {
     "jsxFactory": "app.h",
     "jsxFragmentFactory": "app.Fragment",
     "target": "es2020",
-    "module": "esnext",
+    "module": "none",
   },
   reportDiagnostics: true,
 });
@@ -77,7 +89,7 @@ if (compiled.diagnostics && compiled.diagnostics.length) {
     document.body.appendChild(pre);
   };
   const script = document.createElement('script');
-  script.type = 'module';
+  script.type = 'text/javascript';
   script.text = compiled.outputText;
   document.body.appendChild(script);
 }

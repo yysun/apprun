@@ -3,24 +3,18 @@
  * Standards-compliant property/attribute handling with caching and special element support
  * Features: Skip logic for preserving user interactions during VDOM reconciliation
  * Exports: updateProps - Main function for DOM element property updates
- * Updated: 2025-01-14 - Skip logic for focus-sensitive (selection), scroll, and media properties
+ * Updated: 2026-07-13 - Restore stale class cleanup when first-render VDOM props are null
  */
 import { find, html, svg } from 'property-information';
 const ATTR_PROPS = '_props';
 const propertyInfoCache = new Map();
 // Merge old and new props, handling className -> class conversion and null cleanup
 function mergeProps(oldProps, newProps) {
-    if (newProps) {
-        newProps['class'] = newProps['class'] || newProps['className'];
-        delete newProps['className'];
-    }
+    newProps = newProps || {};
+    newProps['class'] = newProps['class'] || newProps['className'];
+    delete newProps['className'];
     if (!oldProps || Object.keys(oldProps).length === 0)
-        return newProps || {};
-    if (!newProps || Object.keys(newProps).length === 0) {
-        const props = {};
-        Object.keys(oldProps).forEach(p => props[p] = null);
-        return props;
-    }
+        return newProps;
     const props = {};
     Object.keys(oldProps).forEach(p => {
         if (!(p in newProps))
