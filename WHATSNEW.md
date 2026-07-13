@@ -5,6 +5,7 @@
 - Improved `$bind` directive to support nested objects and arrays: [Effortless Two-Way Data Binding in Apprun with $bind](#docs/done/blog-bind-directive.md)
 - Support for type safe props and children in components: [Typed Props and Children](#docs/done/blog-typed-props-and-children.md)
 - Use `unknown` instead of `any` for generic defaults to enhance type safety: [Why `unknown` is better than `any`](#docs/done/blog-why-unknown-better-than-any.md)
+- Restored hash routing and normal browser navigation as the default. Call `app.use_prettyLink()` before `DOMContentLoaded` to opt into SPA path-link routing; pass `false` to opt out explicitly.
 
 > July 22, 2025, V3.37.0
 
@@ -33,9 +34,15 @@ Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](
 > July 11, 2025, V3.35.0
 
 
-### Support auto use router for pretty links
+### Support routing with pretty links
 
 AppRun now supports pretty links. 
+
+Enable pretty-link routing before AppRun initializes:
+
+```js
+app.use_prettyLink();
+```
 
 ```html
 <a href="/about">About</a>
@@ -75,9 +82,7 @@ app.render(document.body, <App />);
 
 
 
-AppRun will catch the `'/about'` route as event and render the component that is subscribed to it.
-
-If you have components subscribe to '#', or '#/', Apprun will fallback to the hash-based routing.
+AppRun will catch the `'/about'` route as an event and render the component that is subscribed to it. Without the explicit opt-in, AppRun uses hash routing and leaves ordinary links to the browser.
 
 > July 6, 2025, V3.33.10
 
@@ -363,5 +368,4 @@ Published on Jul 2, 2017 · 5 min read
 
 * [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
 * [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
-
 

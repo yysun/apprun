@@ -15,6 +15,7 @@
  *    - ActionOptions: Action behavior settings
  *    - MountOptions: Component mounting configuration
  *    - CustomElementOptions: Web component settings
+ *    - use_prettyLink: Explicit startup selection for path-link routing
  * 
  * 4. Integration Support
  *    - React integration types
@@ -125,6 +126,8 @@ declare module 'apprun' {
     safeHTML(html: string): any[];
     use_render(render: any, mode?: 0 | 1): void;
     use_react(React: any, ReactDOM: any): void;
+    /** Select SPA path-link routing before DOMContentLoaded; hash routing is the default. */
+    use_prettyLink(enabled?: boolean): void;
     version: string;
   }
 

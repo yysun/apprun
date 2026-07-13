@@ -7,6 +7,7 @@
  * - Parameter types are accurate
  * - Return types are correct
  * - Generic type constraints work properly
+ * - Explicit pretty-link routing configuration matches the public interface
  */
 
 import app from '../src/apprun';
@@ -32,6 +33,7 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       expect(typeof app.safeHTML).toBe('function');
       expect(typeof app.use_render).toBe('function');
       expect(typeof app.use_react).toBe('function');
+      expect(typeof app.use_prettyLink).toBe('function');
       expect(typeof app.version).toBe('string');
     });
 
@@ -113,6 +115,14 @@ describe('TypeScript Declaration Accuracy Coverage', () => {
       // This should match the TypeScript declaration: use_react(React, ReactDOM)
       expect(() => {
         app.use_react(mockReact, mockReactDOM);
+      }).not.toThrow();
+    });
+
+    it('should accept omitted or boolean pretty-link configuration', () => {
+      expect(() => {
+        app.use_prettyLink();
+        app.use_prettyLink(true);
+        app.use_prettyLink(false);
       }).not.toThrow();
     });
 
