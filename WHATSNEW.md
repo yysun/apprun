@@ -1,11 +1,28 @@
 ## What's New
 
+> July 13, 2026, V3.38.1
+
+### Routing compatibility
+
+AppRun again uses hash routing and normal browser navigation by default. Applications that intentionally use SPA `/path` links must opt into pretty-link routing before AppRun initializes:
+
+```js
+app.use_prettyLink();
+```
+
+This restores the explicit routing contract and prevents AppRun from intercepting ordinary same-origin links unless the application requests it.
+
+### Fixes
+
+- Fixed the first client render so stale server-rendered or loading classes are removed when the new vnode has null or undefined props.
+- Fixed Play by loading a pinned TypeScript browser runtime and running browser-global examples early enough for startup configuration such as `app.use_prettyLink()` to take effect.
+- Updated the README, CLI starter, standalone add-components demo, and Play routing examples for explicit pretty-link routing; also repaired the SVG xlink example.
+
 > July 26, 2025, V3.38.0
 
 - Improved `$bind` directive to support nested objects and arrays: [Effortless Two-Way Data Binding in Apprun with $bind](#docs/done/blog-bind-directive.md)
 - Support for type safe props and children in components: [Typed Props and Children](#docs/done/blog-typed-props-and-children.md)
 - Use `unknown` instead of `any` for generic defaults to enhance type safety: [Why `unknown` is better than `any`](#docs/done/blog-why-unknown-better-than-any.md)
-- Restored hash routing and normal browser navigation as the default. Call `app.use_prettyLink()` before `DOMContentLoaded` to opt into SPA path-link routing; pass `false` to opt out explicitly.
 
 > July 22, 2025, V3.37.0
 
@@ -368,4 +385,3 @@ Published on Jul 2, 2017 · 5 min read
 
 * [Building Applications with AppRun, Part 1 - Getting Started](https://www.youtube.com/watch?v=RuRmXEN2-xI)
 * [Building Applications with AppRun, Part 2 - Components](https://www.youtube.com/watch?v=qkP6HvZmhtY)
-

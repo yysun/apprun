@@ -1,5 +1,12 @@
 # Change Log
 
+## V3.38.1
+
+* Restore hash routing and normal browser navigation as the default; SPA `/path` interception now requires `app.use_prettyLink()` before AppRun initializes
+* Restore first-render removal of stale DOM classes when the new vnode has null or undefined props
+* Fix Play's TypeScript runtime and startup timing so browser-global examples and routing configuration run reliably
+* Align path-routing examples with the explicit pretty-link contract and repair the SVG xlink example
+
 ## V3.38.0
 
 * Support for binding to nested objects and arrays with `$bind`
