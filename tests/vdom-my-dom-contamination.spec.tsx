@@ -1,8 +1,8 @@
 /**
  * Test file: vdom-my-dom-contamination.spec.tsx
  * Purpose: Comprehensive testing of DOM contamination prevention
- * Features: Tests property nullification, DOM/VDOM exact matching, and property caching
- * Created: 2024-07-13 - Tests for restored mergeProps pattern
+ * Features: Tests property nullification, first-render class cleanup, and property caching
+ * Updated: 2026-07-14 - Covers null-props reconciliation over server placeholders
  */
 
 import { createElement, updateElement } from '../src/vdom-my';
@@ -24,6 +24,34 @@ describe('VDOM DOM Contamination Prevention Tests', () => {
 
   afterEach(() => {
     document.body.removeChild(container);
+  });
+
+  describe('First Reconciliation of Existing DOM', () => {
+    it.each([
+      ['null', null],
+      ['undefined', undefined]
+    ])('should remove a stale server class when VDOM props are %s', (_label, props) => {
+      container.innerHTML = '<div class="loader-ripple spinner" data-server="keep"></div>';
+
+      updateElement(container, createElement('div', props,
+        createElement('span', null, 'Ready')
+      ));
+
+      const element = container.firstElementChild as HTMLDivElement;
+      expect(element.className).toBe('');
+      expect(element.dataset.server).toBe('keep');
+      expect(element.outerHTML).toBe('<div data-server="keep"><span>Ready</span></div>');
+    });
+
+    it('should replace a stale server class with the first className prop', () => {
+      container.innerHTML = '<div class="loading" title="server-owned"></div>';
+
+      updateElement(container, createElement('div', { className: 'ready' }, 'Continue'));
+
+      const element = container.firstElementChild as HTMLDivElement;
+      expect(element.className).toBe('ready');
+      expect(element.title).toBe('server-owned');
+    });
   });
 
   describe('Property Nullification (Core Requirement)', () => {
