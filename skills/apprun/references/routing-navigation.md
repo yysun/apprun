@@ -2,6 +2,14 @@
 
 Use this reference when work touches AppRun routing, links, route params, or navigation guards.
 
+## Routing Mode
+
+AppRun 6.0 keeps hash routing and native browser links by default, matching 3.38.1. No call or `app.use_prettyLink(false)` keeps that mode. Call `app.use_prettyLink()` or `app.use_prettyLink(true)` to enable pretty-link path routing.
+
+Select the mode once in the application startup entry point before `DOMContentLoaded`. The last call before that event wins; calls after it do not rewire listeners. Do not infer mode from `#` route registration—hash handlers no longer switch the browser-routing mode.
+
+Generic components and examples do not need this call. Add it where the application owns routing or where routing behavior is the point of the example.
+
 ## Route Registration
 
 Prefer clear central registration when an app has routed pages:
@@ -12,6 +20,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Details from './pages/Details';
 
+app.use_prettyLink(true); // required when browser /path links use SPA navigation
 app.render('#root', <Layout />);
 
 app.addComponents('#pages', {
@@ -40,6 +49,8 @@ AppRun should not break native browser expectations. Preserve:
 - downloads
 - external URLs
 - hash-only behavior when the app does not own it
+
+When the browser should own ordinary same-origin links, select `false` at startup instead of fighting AppRun's path-link interceptor with another click handler.
 
 If fixing router click handling in the AppRun library, add tests for native behavior.
 

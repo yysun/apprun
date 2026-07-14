@@ -1,4 +1,12 @@
+/**
+ * AppRun CLI starter application.
+ *
+ * Demonstrates SPA path navigation and declares pretty-link mode before the
+ * first app mount so copied starter code keeps the same routing contract.
+ */
 const { app, html } = window["apprun"];
+
+app.use_prettyLink(true);
 
 // Routing (component event)
 class Home extends Component {

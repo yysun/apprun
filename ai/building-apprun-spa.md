@@ -42,6 +42,7 @@
 * Mount it in `main.tsx`:
 
   ```tsx
+  app.use_prettyLink(true); // required when browser /path links use SPA navigation
   app.render('#root', <Layout />);
   app.addComponents('#pages', {
     '/': HomePage,
@@ -53,6 +54,7 @@
 ### 💡 Thinking:
 
 * AppRun’s `app.addComponents()` uses declarative route-to-component mapping.
+* Pretty links are opt-in in 6.0. Call `use_prettyLink(true)` before `DOMContentLoaded`; no call or `false` keeps hash routing and native browser navigation.
 * Avoid global layout logic inside each page—separation of layout and logic helps reusability.
 
 ---

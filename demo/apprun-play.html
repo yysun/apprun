@@ -1,3 +1,8 @@
+<!--
+  AppRun Play custom-element examples.
+  The host and wrapped snippets inherit AppRun's hash/native default. Complete
+  documents only configure routing when routing is part of the example.
+-->
 <!doctype html>
 <html>
 <head>
@@ -31,7 +36,7 @@
   <textarea>
 <html>
 <body>
-<script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+<script src="../dist/apprun-html.js"></script>
 <script>
   const view = state => `<div>${state}</div>`;
   app.start(document.body, 'hello world', view);

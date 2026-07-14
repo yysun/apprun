@@ -55,6 +55,30 @@ import { ROUTER_EVENT } from 'apprun';
 
 AppRun no longer aliases itself to `window.React` or stores the previous React value under `window._React`. That avoids React collisions while preserving the script-tag workflow existing examples use.
 
+### Routing Mode Is Explicit
+
+AppRun 6.0 keeps the 3.38.1 default: hash routing and native browser links unless the application explicitly enables pretty links.
+
+The startup API has two modes:
+
+- No call or `app.use_prettyLink(false)`: hash routing and native browser handling for ordinary links.
+- `app.use_prettyLink()` or `app.use_prettyLink(true)`: pretty-link path routing.
+
+Registering a `#` or `#/` handler no longer switches modes. Hash applications need no configuration, but can state the default explicitly:
+
+```ts
+import { app } from 'apprun';
+
+app.use_prettyLink(false);
+app.on('#home', () => {
+  // render home
+});
+```
+
+The last call before `DOMContentLoaded` determines the mode. Calls after that event do not remove or replace installed listeners. Put the selection in one startup entry point, immediately after loading or importing AppRun.
+
+Use argument-free or explicit `true` when an application owns `/path` navigation. Generic examples and Play previews need no call.
+
 ### `query()` Removed
 
 `app.query()` and `component.query()` have been removed. Use `runAsync()`.

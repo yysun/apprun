@@ -1,8 +1,15 @@
+/**
+ * Playground catalog page and new-tab preview bootstrap.
+ *
+ * Ordinary previews inherit AppRun's hash/native default. Path-routing examples
+ * explicitly opt in without adding routing boilerplate to every sample.
+ */
+
 import app, { Component } from '../../src/apprun';
 import examples from './play-examples';
 
 
-const html = code => `<!DOCTYPE html>
+const html = (code, prettyLinks = false) => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -20,6 +27,7 @@ const html = code => `<!DOCTYPE html>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="docs/assets/apprun-dev-tools.js"></script>
   <script src="docs/assets/apprun-html.js"></script>
+  ${prettyLinks ? '<script>app.use_prettyLink(true);</script>' : ''}
 </head>
 <body>
 <script>
@@ -33,10 +41,10 @@ const html = code => `<!DOCTYPE html>
 </body>
 </html>`;
 
-const tab = ({ code }) => {
+const tab = ({ code, prettyLinks = false }) => {
   const doc = window.open().document;
   doc.open();
-  doc.write(html(code));
+  doc.write(html(code, prettyLinks));
   doc.close();
 };
 

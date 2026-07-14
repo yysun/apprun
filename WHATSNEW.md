@@ -9,6 +9,7 @@ Version 6.0.0 is a release-readiness cleanup for the breaking API work. It makes
 - `safeHTML()` remains as a deprecated alias for one migration window, but the preferred name is `trustedHTML()` because AppRun does not sanitize HTML.
 - `query()` is removed. Use `runAsync()` for event result collection.
 - Router patterns now support `:param` and `*`, with exact routes still taking precedence.
+- Hash routing and native links remain the default, matching 3.38.1. Call `app.use_prettyLink()` or pass `true` before `DOMContentLoaded` to enable pretty-link `/path` navigation; `false` explicitly selects the default mode.
 - Added the AppRun Agent Skill for AI coding agents. Install it with `npx skills add yysun/apprun` to get AppRun-specific guidance for MVU components, events, routing, custom elements, and repo test coverage.
 - The npm package now publishes only the intended generated assets, exposes CJS/ESM entry points through `exports`, treats `immer` as an optional peer for `createState`, and keeps generated `dist`, `esm`, `jsx-runtime.js`, and demo bundles out of source commits.
 - CI now runs tests, build, lint, and `npm pack --dry-run`.
@@ -46,9 +47,11 @@ Code review by using Copilot and Claude Sonnet 4, see [plan-apprun-bugfixes.md](
 > July 11, 2025, V3.35.0
 
 
-### Support auto use router for pretty links
+### Support routing with pretty links
 
 AppRun now supports pretty links. 
+
+AppRun 6.0 keeps this mode opt-in, matching 3.38.1. The explicit `true` below enables `/path` navigation. Unrelated examples do not need routing configuration.
 
 ```html
 <a href="/about">About</a>
@@ -58,6 +61,8 @@ You can subscribe components to events like `'/about'`.
 
 ```js
 // Routing (component event)
+app.use_prettyLink(true);
+
 class Home extends Component {
   view = () => <div>Home</div>;
   update = {'/, /home': state => state };
@@ -88,9 +93,7 @@ app.render(document.body, <App />);
 
 
 
-AppRun will catch the `'/about'` route as event and render the component that is subscribed to it.
-
-If you have components subscribe to '#', or '#/', Apprun will fallback to the hash-based routing.
+AppRun will catch the `'/about'` route as an event and render the component that is subscribed to it. In 6.0, registering `#` handlers no longer changes routing mode. Making no call keeps hash routing and native browser navigation; `app.use_prettyLink(false)` states that default explicitly.
 
 > July 6, 2025, V3.33.10
 

@@ -2,7 +2,10 @@
  * Inline AppRun code playground component.
  *
  * Renders editable source alongside an iframe preview and keeps DOM element
- * access explicit now that Component.element is concretely typed.
+ * access explicit now that Component.element is concretely typed. Compiled
+ * examples run as synchronous classic scripts before DOMContentLoaded. Preview
+ * documents inherit AppRun's default hash/native mode; routing examples can
+ * opt into pretty links explicitly without changing the embedding host.
  */
 
 import { app, Component } from './apprun';
@@ -54,7 +57,7 @@ const code_html = (code, apprun_html_src = 'dist/apprun-html.js') => `<!DOCTYPE 
       margin: 2em;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/typescript@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@5.8.3/lib/typescript.js"></script>
   <script src="${encodeAttribute(apprun_html_src)}"></script>
 </head>
 <body>
@@ -67,7 +70,8 @@ const compiled = ts.transpileModule(code, {
     "jsxFactory": "app.h",
     "jsxFragmentFactory": "app.Fragment",
     "target": "es2020",
-    "module": "esnext",
+    "module": "none",
+    "experimentalDecorators": true,
   },
   reportDiagnostics: true,
 });
@@ -91,7 +95,7 @@ if (compiled.diagnostics && compiled.diagnostics.length) {
     document.body.appendChild(pre);
   };
   const script = document.createElement('script');
-  script.type = 'module';
+  script.type = 'text/javascript';
   script.text = compiled.outputText;
   document.body.appendChild(script);
 }

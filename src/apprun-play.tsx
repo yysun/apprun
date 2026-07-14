@@ -2,7 +2,10 @@
  * AppRun play popup component for running embedded examples.
  *
  * Builds the popup preview/editor UI and uses explicit HTMLElement casts for
- * mounted DOM access under the Phase 3 component typing contract.
+ * mounted DOM access under the Phase 3 component typing contract. Compiled
+ * examples run as synchronous classic scripts before DOMContentLoaded. Preview
+ * documents inherit AppRun's default hash/native mode without changing the
+ * embedding host. The iframe loads AppRun beside this bundle to prevent skew.
  */
 
 import { app, Component } from './apprun';
@@ -107,6 +110,31 @@ const encodeHTML = code => {
   .replace(/'/g, '&#039;');
 }
 
+const get_apprun_html_src = (): string => {
+  const currentScript = document.currentScript as HTMLScriptElement | null;
+  const playScript = currentScript || Array.from(document.scripts)
+    .reverse()
+    .find(script => /\/apprun-play(?:\.min)?\.js(?:[?#]|$)/.test(script.src));
+
+  if (playScript?.src) {
+    const bundleUrl = new URL(playScript.src, document.baseURI);
+    const htmlPath = bundleUrl.pathname.replace(
+      /apprun-play(?:\.min)?\.js$/,
+      'apprun-html.js'
+    );
+    if (htmlPath !== bundleUrl.pathname) {
+      bundleUrl.pathname = htmlPath;
+      bundleUrl.search = '';
+      bundleUrl.hash = '';
+      return bundleUrl.href;
+    }
+  }
+
+  return new URL('dist/apprun-html.js', document.baseURI).href;
+};
+
+const apprun_html_src = get_apprun_html_src();
+
 const code_html = code => `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,8 +148,8 @@ const code_html = code => `<!DOCTYPE html>
       margin: 2em;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/typescript@5.8.3"></script>
-  <script src="https://unpkg.com/apprun/dist/apprun-html.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@5.8.3/lib/typescript.js"></script>
+  <script src="${apprun_html_src}"></script>
 </head>
 <body>
 <pre id="code" style="display:none">${encodeHTML(code)}</pre>
@@ -133,7 +161,8 @@ const compiled = ts.transpileModule(code, {
     "jsxFactory": "app.h",
     "jsxFragmentFactory": "app.Fragment",
     "target": "es2020",
-    "module": "esnext",
+    "module": "none",
+    "experimentalDecorators": true,
   },
   reportDiagnostics: true,
 });
@@ -157,7 +186,7 @@ if (compiled.diagnostics && compiled.diagnostics.length) {
     document.body.appendChild(pre);
   };
   const script = document.createElement('script');
-  script.type = 'module';
+  script.type = 'text/javascript';
   script.text = compiled.outputText;
   document.body.appendChild(script);
 }

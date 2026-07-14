@@ -1,3 +1,9 @@
+/**
+ * Runnable examples for the AppRun playground.
+ *
+ * Generic snippets stay focused on their subject. Only routing examples expose
+ * the routing-mode API; the Play preview owns the non-routing default.
+ */
 export default [
   {
     name: 'Hello World ($bind)',
@@ -388,6 +394,7 @@ app.start(document.body, state, view);
   {
     name: 'Routing (component event)',
     code: `// Routing (component event)
+app.use_prettyLink(false);
 class Home extends Component {
   view = () => <div>Home</div>;
   update = {'#, #home': state => state };
@@ -418,7 +425,9 @@ app.render(document.body, <App />);
 
   {
     name: 'Routing (mount options)',
+    prettyLinks: true,
     code: `// Routing (mount options)
+app.use_prettyLink(true);
 class Home extends Component {
   view = () => <div>Home</div>;
 }
@@ -479,7 +488,7 @@ app.start(document.body, {}, view);
     code: `// SVG - xlink
 const view = () => <svg viewBox="0 0 150 20">
   <a xlinkHref="https://apprun.js.org/">
-    <text x="10" y="10" font-size="5">Click => AppRun</text></a>
+    <text x="10" y="10" font-size="5">Click =&gt; AppRun</text></a>
 </svg>
 
 app.start(document.body, {}, view);

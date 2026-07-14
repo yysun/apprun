@@ -1,3 +1,9 @@
+/**
+ * Router behavior tests.
+ *
+ * Enables pretty links explicitly for legacy click and listener coverage. The
+ * default-off bootstrap contract is covered in apprun-routing-bootstrap.spec.ts.
+ */
 import app from '../src/apprun';
 import { ROUTER_EVENT, ROUTER_404_EVENT } from '../src/router';
 
@@ -5,6 +11,7 @@ describe('router', () => {
 
   beforeAll(() => {
     // DOMContentLoaded not called in Jest
+    app.use_prettyLink(true);
     window.onpopstate = () => app.run('route', location.hash || location.pathname);
     document.dispatchEvent(new Event('DOMContentLoaded'));
   });

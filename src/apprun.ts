@@ -24,7 +24,7 @@
  * - Event-driven architecture with pub/sub pattern
  * - Virtual DOM rendering with multiple renderer support
  * - Component lifecycle management
- * - Client-side routing with hash/path support and native link behavior guards
+ * - Hash/native browser routing by default with explicit pretty-link opt-in
  * - Web Components integration
  * - React compatibility layer
  * - TypeScript support with strong typing
@@ -38,6 +38,7 @@
  * - Safer element access with proper type assertions
  *
  * Recent Changes:
+ * - Added app.use_prettyLink(enabled) with the 3.38.1-compatible default-off behavior
  * - Modified addComponents to accept (element, components) where components is a key-value object with routes as keys and components as values
  * - Simplified component mounting API for better usability
  *
@@ -55,6 +56,7 @@
  * }
  *
  * // Mount multiple components
+ * app.use_prettyLink(true);
  * app.addComponents(document.body, {
  *   '/home': MyComponent,
  *   '/about': AnotherComponent
@@ -144,24 +146,25 @@ if (!app.start) {
 
   const NOOP = _ => {/* Intentionally empty */ }
   app.on('/', NOOP);
+  app.on('#', NOOP);
   app.on('debug', _ => NOOP);
   app.on(ROUTER_EVENT, NOOP);
   app.on(ROUTER_404_EVENT, NOOP);
   app.route = route;
   app.on('route', url => app['route'] && app['route'](url));
 
+  let prettyLinks = false;
+  /** Enable path-link routing before DOMContentLoaded; no call or false preserves hash/native mode. */
+  app.use_prettyLink = (enabled = true) => {
+    prettyLinks = enabled;
+  };
+
   if (typeof document === 'object') {
     document.addEventListener("DOMContentLoaded", () => {
       const no_init_route = document.body.hasAttribute('apprun-no-init') || app['no-init-route'] || false;
-      const use_hash = app.find('#') || app.find('#/') || false;
 
-      // console.log(`AppRun ${app.version} started with ${use_hash ? 'hash' : 'path'} routing. Initial load: ${init_load ? 'disabled' : 'enabled'}.`);
-      window.addEventListener('hashchange', () => route(location.hash));
-      window.addEventListener('popstate', () => route(location.pathname));
-
-      if (use_hash) {
-        !no_init_route && route(location.hash);
-      } else {
+      if (prettyLinks) {
+        window.addEventListener('popstate', () => route(location.pathname));
         !no_init_route && (() => {
           const basePath = app.basePath || '';
           let initialPath = location.pathname;
@@ -182,6 +185,9 @@ if (!app.start) {
           const menu = (element.tagName === 'A' ? element : element.closest('a')) as HTMLAnchorElement;
           routeLinkClick(e, menu);
         });
+      } else {
+        window.addEventListener('hashchange', () => route(location.hash));
+        !no_init_route && route(location.hash);
       }
     });
   }

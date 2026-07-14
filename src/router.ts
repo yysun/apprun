@@ -4,12 +4,12 @@
  * This file provides URL routing capabilities:
  * 1. Hash-based routing (#/path)
  *    - Works with SPA mode using hash fragments
- *    - Handles hashchange events automatically
+ *    - Handles hashchange events by default or after app.use_prettyLink(false)
  *    - No server configuration required
  * 2. Path-based routing (/path) 
  *    - Works with browser history API
  *    - Requires server configuration for SPA routing
- *    - Handles popstate events automatically
+ *    - Enabled through app.use_prettyLink() or true and handles popstate
  * 3. Event-based navigation
  *    - Routes trigger corresponding component events
  *    - Automatic route parameter extraction
@@ -24,6 +24,7 @@
  * - Global and component-level route handling
  * - **NEW: Hierarchical route matching** - progressively tries parent routes
  * - 2026-06-19: Added :param and * route-pattern matching before hierarchical fallback
+ * - 2026-07-14: Kept 3.38.1-compatible default-off browser routing in 6.0.0
  *
  * Type Safety Improvements (v3.35.1):
  * - Enhanced route type definitions
@@ -33,13 +34,14 @@
  * Usage:
  * ```ts
  * // Basic routing
+ * app.use_prettyLink(false);
  * app.on('#/home', () => // Show home page);
  * app.on('#/users/:id', (id) => // Show user profile);
  * app.on('/api/*', (path) => // Handle API routes);
  * 
  * // Navigate programmatically  
  * app.run('route', '#/home');
- * route('/users/123'); // Direct routing
+ * route('/users/123'); // Direct dispatch does not depend on browser routing mode
  * 
  * // Hierarchical matching examples
  * app.on('/api', (operation, id) => // Handle /api/users/123);
@@ -51,6 +53,7 @@
  * // If handler found at /api, it receives: ('v1', 'users', '123')
  * 
  * // Base Path Support (NEW):
+ * app.use_prettyLink(true);
  * app.basePath = '/myapp'; // For sub-directory deployments
  * // Links: <a href="/users/123"> (relative paths)
  * // Navigation: /myapp/users/123 (full path)

@@ -1,3 +1,11 @@
+/**
+ * GitHub Pages runtime asset publisher.
+ *
+ * Copies only browser bundles and source maps required by the deployed
+ * documentation and Play surfaces from ignored build output into the tracked
+ * Pages asset directory.
+ */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -8,6 +16,8 @@ const assets = [
   'apprun-html.js.map',
   'apprun-dev-tools.js',
   'apprun-dev-tools.js.map',
+  'apprun-play.js',
+  'apprun-play.js.map',
 ];
 
 fs.mkdirSync(assetsDir, { recursive: true });

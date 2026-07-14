@@ -1,3 +1,10 @@
+/*
+ * Demo site styles.
+ *
+ * The Play page hides only its direct source textarea so CodeMirror's internal
+ * input remains focusable and editable.
+ */
+
 /*html,body{height:100%;margin:20px;overflow:hidden;font-family:"Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";font-size:12px}*/
 
 /*.typeahead {
@@ -110,7 +117,7 @@ polygon#blue:hover, polygon#blue:active {
   padding-bottom: 10px;
 }
 
-.playground textarea {
+.playground > textarea {
   display: none;
 }
 

@@ -19,6 +19,7 @@
  *    - ActionOptions: Action behavior options (render, history, global, callback)
  *    - MountOptions: Component mounting options (global events, routing, transitions)
  *    - AppStartOptions: Application startup configuration with lifecycle hooks
+ *    - IApp.use_prettyLink: Explicit startup opt-in for pretty-link routing
  * 
  * Features:
  * - Strong typing for component lifecycle
@@ -133,6 +134,12 @@ export interface IApp {
   safeHTML(html: string): any[];
   use_render(render: any, mode?: 0 | 1): void;
   use_react(React: any, ReactDOM: any): void;
+  /**
+   * Select browser routing before DOMContentLoaded. With no call, AppRun keeps
+   * hash routing and native links. Calling with no argument or true enables
+   * pretty-link paths; false selects the default mode. The last pre-startup call wins.
+   */
+  use_prettyLink(enabled?: boolean): void;
   version: string;
   basePath?: string;
   addComponents: (element: Element | string, components: ComponentRoute) => void;

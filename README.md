@@ -122,9 +122,21 @@ app.start(document.body, state, view);
 ```
 <apprun-code></apprun-code>
 
-And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle the routing events. AppRun routes `/<path>`, `#<path>`, and `#/<path>` URLs to components. AppRun also does this with [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
+And, of course, you can use Components to encapsulate the logic blocks, e.g., SPA pages. Each component can have its own state, view, and update functions. Each component has its own handlers to handle routing events. AppRun also supports [hierarchical routing](docs/requirements/req-hierarchical-routing.md).
+
+### Routing mode
+
+AppRun 6.0 preserves hash routing and native browser links by default, matching 3.38.1. Making no call or calling `app.use_prettyLink(false)` keeps that mode.
+
+Call `app.use_prettyLink()` or `app.use_prettyLink(true)` when the application owns pretty-link `/path` navigation. AppRun then initializes from `location.pathname`, handles `popstate`, and intercepts eligible same-origin links for SPA navigation.
+
+Choose the mode before `DOMContentLoaded`, typically immediately after loading or importing AppRun. The last call before `DOMContentLoaded` wins; later calls do not rewire listeners. Registering a `#` or `#/` handler no longer selects hash mode automatically.
+
+Generic examples omit this API because they inherit the safe hash/native default. Routing examples declare a mode when the distinction is part of the lesson.
 
 ```js
+app.use_prettyLink(true); // required when browser /path links use SPA navigation
+
 class Home extends Component {
   view = () => <div>Home</div>;
   update = {'/, /home': state => state };
